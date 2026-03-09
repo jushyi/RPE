@@ -200,3 +200,13 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 8. Alarms + Accountability | 0/3 | Not started | - |
 | 9. Polish | 0/2 | Not started | - |
 | 10. Distribution | 0/2 | Not started | - |
+
+### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 10
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 11 to break down)
