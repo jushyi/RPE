@@ -27,11 +27,41 @@ export interface ExerciseRow {
   id: string; // UUID
   user_id: string | null; // UUID, NULL = global seed exercise
   name: string;
-  muscle_group: string;
+  muscle_groups: string[];
   equipment: string;
   notes: string | null;
   created_at: string; // TIMESTAMPTZ
   updated_at: string; // TIMESTAMPTZ
+}
+
+export interface WorkoutPlanRow {
+  id: string; // UUID
+  user_id: string; // UUID, references auth.users(id)
+  name: string;
+  is_active: boolean;
+  created_at: string; // TIMESTAMPTZ
+  updated_at: string; // TIMESTAMPTZ
+}
+
+export interface PlanDayRow {
+  id: string; // UUID
+  plan_id: string; // UUID, references workout_plans(id)
+  day_name: string;
+  weekday: number | null; // SMALLINT, nullable
+  sort_order: number; // SMALLINT
+  created_at: string; // TIMESTAMPTZ
+}
+
+export interface PlanDayExerciseRow {
+  id: string; // UUID
+  plan_day_id: string; // UUID, references plan_days(id)
+  exercise_id: string; // UUID, references exercises(id)
+  sort_order: number; // SMALLINT
+  target_sets: any; // JSONB - TargetSet[]
+  notes: string | null;
+  unit_override: string | null;
+  weight_progression: string; // 'manual' | 'carry_previous'
+  created_at: string; // TIMESTAMPTZ
 }
 
 export interface Database {
@@ -68,6 +98,41 @@ export interface Database {
         Update: Partial<Omit<ExerciseRow, 'id' | 'user_id' | 'created_at'>> & {
           updated_at?: string;
         };
+      };
+      workout_plans: {
+        Row: WorkoutPlanRow;
+        Insert: Omit<WorkoutPlanRow, 'id' | 'created_at' | 'updated_at'> & {
+          id?: string;
+          is_active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<WorkoutPlanRow, 'id' | 'user_id' | 'created_at'>> & {
+          updated_at?: string;
+        };
+      };
+      plan_days: {
+        Row: PlanDayRow;
+        Insert: Omit<PlanDayRow, 'id' | 'created_at'> & {
+          id?: string;
+          weekday?: number | null;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: Partial<Omit<PlanDayRow, 'id' | 'plan_id' | 'created_at'>>;
+      };
+      plan_day_exercises: {
+        Row: PlanDayExerciseRow;
+        Insert: Omit<PlanDayExerciseRow, 'id' | 'created_at'> & {
+          id?: string;
+          sort_order?: number;
+          target_sets?: any;
+          notes?: string | null;
+          unit_override?: string | null;
+          weight_progression?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<PlanDayExerciseRow, 'id' | 'plan_day_id' | 'created_at'>>;
       };
     };
     Views: Record<string, never>;
