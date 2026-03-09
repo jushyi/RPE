@@ -23,8 +23,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Workout Planning
 
-- [ ] **PLAN-01**: User can create a named workout plan
-- [ ] **PLAN-02**: User can assign training days (Mon/Tue/Wed etc.) to a plan
+- [x] **PLAN-01**: User can create a named workout plan
+- [x] **PLAN-02**: User can assign training days (Mon/Tue/Wed etc.) to a plan
 - [ ] **PLAN-03**: User can add exercises to each training day from the exercise library
 - [ ] **PLAN-04**: User can set target sets, reps, weight, RPE, and notes per exercise in the plan
 - [ ] **PLAN-05**: User can edit and delete existing plans
@@ -105,8 +105,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-06 | Phase 1 | Complete |
 | EXER-01 | Phase 2 | Complete |
 | EXER-02 | Phase 2 | Complete |
-| PLAN-01 | Phase 3 | Pending |
-| PLAN-02 | Phase 3 | Pending |
+| PLAN-01 | Phase 3 | Complete |
+| PLAN-02 | Phase 3 | Complete |
 | PLAN-03 | Phase 3 | Pending |
 | PLAN-04 | Phase 3 | Pending |
 | PLAN-05 | Phase 3 | Pending |
