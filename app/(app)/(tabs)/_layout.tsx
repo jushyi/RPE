@@ -1,5 +1,5 @@
-import { Text } from 'react-native';
 import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
 export default function TabsLayout() {
@@ -21,7 +21,7 @@ export default function TabsLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 20, color }}>{'⌂'}</Text>
+            <Ionicons name="home-outline" size={20} color={color} />
           ),
         }}
       />
@@ -30,7 +30,16 @@ export default function TabsLayout() {
         options={{
           title: 'Exercises',
           tabBarIcon: ({ color }) => (
-            <Text style={{ fontSize: 20, color }}>{'⚡'}</Text>
+            <Ionicons name="barbell-outline" size={20} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="plans"
+        options={{
+          title: 'Plans',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="clipboard-outline" size={20} color={color} />
           ),
         }}
       />
