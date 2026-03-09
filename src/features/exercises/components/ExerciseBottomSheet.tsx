@@ -12,11 +12,12 @@ import { colors } from '@/constants/theme';
 import { useExercises } from '../hooks/useExercises';
 import { MUSCLE_GROUPS, MUSCLE_GROUP_COLORS } from '../constants/muscleGroups';
 import { EQUIPMENT_TYPES } from '../constants/equipmentTypes';
+import { isCustomExercise } from '../types';
 import type { Exercise, MuscleGroup, Equipment } from '../types';
 
 const exerciseSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  muscle_group: z.string().min(1, 'Muscle group is required'),
+  muscle_groups: z.array(z.string()).min(1, 'At least one muscle group is required'),
   equipment: z.string().min(1, 'Equipment is required'),
   notes: z.string().optional(),
 });
@@ -25,11 +26,13 @@ type ExerciseFormData = z.infer<typeof exerciseSchema>;
 
 interface ExerciseBottomSheetProps {
   exerciseToEdit: Exercise | null;
+  readOnly?: boolean;
   onSave: () => void;
+  onDelete?: (id: string) => void;
 }
 
 export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSheetProps>(
-  ({ exerciseToEdit, onSave }, ref) => {
+  ({ exerciseToEdit, readOnly, onSave, onDelete }, ref) => {
     const { exercises, createExercise, updateExercise } = useExercises();
     const [duplicateWarning, setDuplicateWarning] = useState(false);
     const snapPoints = useMemo(() => ['70%'], []);
@@ -47,7 +50,7 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
       resolver: zodResolver(exerciseSchema),
       defaultValues: {
         name: '',
-        muscle_group: '',
+        muscle_groups: [],
         equipment: '',
         notes: '',
       },
@@ -75,14 +78,14 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
       if (exerciseToEdit) {
         reset({
           name: exerciseToEdit.name,
-          muscle_group: exerciseToEdit.muscle_group,
+          muscle_groups: exerciseToEdit.muscle_groups,
           equipment: exerciseToEdit.equipment,
           notes: exerciseToEdit.notes ?? '',
         });
       } else {
         reset({
           name: '',
-          muscle_group: '',
+          muscle_groups: [],
           equipment: '',
           notes: '',
         });
@@ -95,14 +98,14 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
           if (isEditMode && exerciseToEdit) {
             await updateExercise(exerciseToEdit.id, {
               name: data.name.trim(),
-              muscle_group: data.muscle_group as MuscleGroup,
+              muscle_groups: data.muscle_groups as MuscleGroup[],
               equipment: data.equipment as Equipment,
               notes: data.notes?.trim() || null,
             });
           } else {
             await createExercise({
               name: data.name.trim(),
-              muscle_group: data.muscle_group as MuscleGroup,
+              muscle_groups: data.muscle_groups as MuscleGroup[],
               equipment: data.equipment as Equipment,
               notes: data.notes?.trim() || null,
             });
@@ -116,6 +119,229 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
       [isEditMode, exerciseToEdit, createExercise, updateExercise, onSave, ref]
     );
 
+    const handleDelete = useCallback(() => {
+      if (!exerciseToEdit || !onDelete) return;
+      Alert.alert(
+        'Delete Exercise',
+        `Are you sure you want to delete "${exerciseToEdit.name}"?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => {
+              onDelete(exerciseToEdit.id);
+              (ref as React.RefObject<BottomSheetModal>)?.current?.dismiss();
+            },
+          },
+        ]
+      );
+    }, [exerciseToEdit, onDelete, ref]);
+
+    const renderReadOnly = () => {
+      if (!exerciseToEdit) return null;
+      const groups = exerciseToEdit.muscle_groups ?? [];
+      return (
+        <>
+          <Text style={s.readOnlyLabel}>Built-in exercise</Text>
+          <Text style={s.title}>{exerciseToEdit.name}</Text>
+
+          <Text style={s.label}>Muscle Groups</Text>
+          <View style={s.readOnlyChipRow}>
+            {groups.map((group) => {
+              const groupColor = MUSCLE_GROUP_COLORS[group];
+              return (
+                <View
+                  key={group}
+                  style={[s.chip, { backgroundColor: groupColor + 'CC' }]}
+                >
+                  <Text style={[s.chipText, { color: '#ffffff', fontWeight: '700' }]}>
+                    {group}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+
+          <Text style={s.label}>Equipment</Text>
+          <Text style={s.readOnlyValue}>{exerciseToEdit.equipment}</Text>
+
+          {exerciseToEdit.notes ? (
+            <>
+              <Text style={s.label}>Notes</Text>
+              <Text style={s.readOnlyValue}>{exerciseToEdit.notes}</Text>
+            </>
+          ) : null}
+        </>
+      );
+    };
+
+    const renderForm = () => (
+      <>
+        <Text style={s.title}>
+          {isEditMode ? 'Edit Exercise' : 'New Exercise'}
+        </Text>
+
+        {/* Name field */}
+        <Text style={s.label}>Name</Text>
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <BottomSheetTextInput
+              style={[s.input, errors.name && s.inputError]}
+              placeholder="Exercise name"
+              placeholderTextColor={colors.textMuted}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              autoCapitalize="words"
+            />
+          )}
+        />
+        {errors.name && (
+          <Text style={s.errorText}>{errors.name.message}</Text>
+        )}
+        {duplicateWarning && (
+          <Text style={s.warningText}>
+            An exercise with this name already exists
+          </Text>
+        )}
+
+        {/* Muscle Group picker (multi-select) */}
+        <Text style={s.label}>Muscle Groups</Text>
+        <Controller
+          control={control}
+          name="muscle_groups"
+          render={({ field: { value } }) => (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={s.chipRow}
+            >
+              {MUSCLE_GROUPS.map((group) => {
+                const isActive = value.includes(group);
+                const groupColor = MUSCLE_GROUP_COLORS[group];
+                return (
+                  <Pressable
+                    key={group}
+                    onPress={() => {
+                      const updated = isActive
+                        ? value.filter((g) => g !== group)
+                        : [...value, group];
+                      setValue('muscle_groups', updated, { shouldValidate: true });
+                    }}
+                    style={[
+                      s.chip,
+                      isActive
+                        ? { backgroundColor: groupColor + 'CC' }
+                        : s.chipInactive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        s.chipText,
+                        isActive
+                          ? { color: '#ffffff', fontWeight: '700' }
+                          : { color: colors.textSecondary },
+                      ]}
+                    >
+                      {group}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          )}
+        />
+        {errors.muscle_groups && (
+          <Text style={s.errorText}>{errors.muscle_groups.message}</Text>
+        )}
+
+        {/* Equipment picker */}
+        <Text style={s.label}>Equipment</Text>
+        <Controller
+          control={control}
+          name="equipment"
+          render={({ field: { value } }) => (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={s.chipRow}
+            >
+              {EQUIPMENT_TYPES.map((equip) => {
+                const isActive = value === equip;
+                return (
+                  <Pressable
+                    key={equip}
+                    onPress={() => setValue('equipment', equip)}
+                    style={[
+                      s.chip,
+                      isActive ? s.chipEquipmentActive : s.chipInactive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        s.chipText,
+                        isActive
+                          ? { color: '#ffffff', fontWeight: '700' }
+                          : { color: colors.textSecondary },
+                      ]}
+                    >
+                      {equip}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          )}
+        />
+        {errors.equipment && (
+          <Text style={s.errorText}>{errors.equipment.message}</Text>
+        )}
+
+        {/* Notes field */}
+        <Text style={s.label}>Notes (optional)</Text>
+        <Controller
+          control={control}
+          name="notes"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <BottomSheetTextInput
+              style={[s.input, s.inputMultiline]}
+              placeholder="Additional notes..."
+              placeholderTextColor={colors.textMuted}
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              multiline
+              numberOfLines={3}
+              textAlignVertical="top"
+            />
+          )}
+        />
+
+        {/* Submit button */}
+        <Pressable
+          onPress={handleSubmit(onSubmit)}
+          style={({ pressed }) => [s.submitButton, pressed && s.submitPressed]}
+        >
+          <Text style={s.submitText}>
+            {isEditMode ? 'Save Changes' : 'Add Exercise'}
+          </Text>
+        </Pressable>
+
+        {/* Delete button (edit mode only) */}
+        {isEditMode && exerciseToEdit && (
+          <Pressable
+            onPress={handleDelete}
+            style={({ pressed }) => [s.deleteButton, pressed && s.deletePressed]}
+          >
+            <Text style={s.deleteText}>Delete Exercise</Text>
+          </Pressable>
+        )}
+      </>
+    );
+
     return (
       <BottomSheetModal
         ref={ref}
@@ -126,152 +352,7 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
         android_keyboardInputMode="adjustResize"
       >
         <BottomSheetScrollView contentContainerStyle={s.content}>
-          <Text style={s.title}>
-            {isEditMode ? 'Edit Exercise' : 'New Exercise'}
-          </Text>
-
-          {/* Name field */}
-          <Text style={s.label}>Name</Text>
-          <Controller
-            control={control}
-            name="name"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <BottomSheetTextInput
-                style={[s.input, errors.name && s.inputError]}
-                placeholder="Exercise name"
-                placeholderTextColor={colors.textMuted}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCapitalize="words"
-              />
-            )}
-          />
-          {errors.name && (
-            <Text style={s.errorText}>{errors.name.message}</Text>
-          )}
-          {duplicateWarning && (
-            <Text style={s.warningText}>
-              An exercise with this name already exists
-            </Text>
-          )}
-
-          {/* Muscle Group picker */}
-          <Text style={s.label}>Muscle Group</Text>
-          <Controller
-            control={control}
-            name="muscle_group"
-            render={({ field: { value } }) => (
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={s.chipRow}
-              >
-                {MUSCLE_GROUPS.map((group) => {
-                  const isActive = value === group;
-                  const groupColor = MUSCLE_GROUP_COLORS[group];
-                  return (
-                    <Pressable
-                      key={group}
-                      onPress={() => setValue('muscle_group', group)}
-                      style={[
-                        s.chip,
-                        isActive
-                          ? { backgroundColor: groupColor + 'CC' }
-                          : s.chipInactive,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          s.chipText,
-                          isActive
-                            ? { color: '#ffffff', fontWeight: '700' }
-                            : { color: colors.textSecondary },
-                        ]}
-                      >
-                        {group}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </ScrollView>
-            )}
-          />
-          {errors.muscle_group && (
-            <Text style={s.errorText}>{errors.muscle_group.message}</Text>
-          )}
-
-          {/* Equipment picker */}
-          <Text style={s.label}>Equipment</Text>
-          <Controller
-            control={control}
-            name="equipment"
-            render={({ field: { value } }) => (
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={s.chipRow}
-              >
-                {EQUIPMENT_TYPES.map((equip) => {
-                  const isActive = value === equip;
-                  return (
-                    <Pressable
-                      key={equip}
-                      onPress={() => setValue('equipment', equip)}
-                      style={[
-                        s.chip,
-                        isActive ? s.chipEquipmentActive : s.chipInactive,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          s.chipText,
-                          isActive
-                            ? { color: '#ffffff', fontWeight: '700' }
-                            : { color: colors.textSecondary },
-                        ]}
-                      >
-                        {equip}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
-              </ScrollView>
-            )}
-          />
-          {errors.equipment && (
-            <Text style={s.errorText}>{errors.equipment.message}</Text>
-          )}
-
-          {/* Notes field */}
-          <Text style={s.label}>Notes (optional)</Text>
-          <Controller
-            control={control}
-            name="notes"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <BottomSheetTextInput
-                style={[s.input, s.inputMultiline]}
-                placeholder="Additional notes..."
-                placeholderTextColor={colors.textMuted}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                multiline
-                numberOfLines={3}
-                textAlignVertical="top"
-              />
-            )}
-          />
-
-          {/* Submit button */}
-          <Pressable
-            onPress={handleSubmit(onSubmit)}
-            style={({ pressed }) => [s.submitButton, pressed && s.submitPressed]}
-          >
-            <Text style={s.submitText}>
-              {isEditMode ? 'Save Changes' : 'Add Exercise'}
-            </Text>
-          </Pressable>
+          {readOnly ? renderReadOnly() : renderForm()}
         </BottomSheetScrollView>
       </BottomSheetModal>
     );
@@ -364,5 +445,39 @@ const s = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '700',
+  },
+  deleteButton: {
+    backgroundColor: 'transparent',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.error,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  deletePressed: {
+    opacity: 0.7,
+  },
+  deleteText: {
+    color: colors.error,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  readOnlyLabel: {
+    color: colors.textMuted,
+    fontSize: 13,
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  readOnlyValue: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    marginTop: 4,
+  },
+  readOnlyChipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    paddingVertical: 4,
   },
 });

@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
 import type { Exercise } from '../types';
@@ -7,18 +8,22 @@ import { EquipmentBadge } from './EquipmentBadge';
 
 interface ExerciseListItemProps {
   exercise: Exercise;
-  onLongPress?: () => void;
+  onPress?: () => void;
 }
 
-export function ExerciseListItem({ exercise, onLongPress }: ExerciseListItemProps) {
+export const ExerciseListItem = React.memo(function ExerciseListItem({ exercise, onPress }: ExerciseListItemProps) {
+  const groups = exercise.muscle_groups ?? ((exercise as any).muscle_group ? [(exercise as any).muscle_group] : []);
+
   return (
     <Pressable
-      onLongPress={onLongPress}
+      onPress={onPress}
       style={({ pressed }) => [s.container, pressed && s.pressed]}
     >
       <Text style={s.name}>{exercise.name}</Text>
       <View style={s.badges}>
-        <MuscleGroupBadge muscleGroup={exercise.muscle_group} />
+        {groups.map((group: string) => (
+          <MuscleGroupBadge key={group} muscleGroup={group as any} />
+        ))}
         <EquipmentBadge equipment={exercise.equipment} />
         {isCustomExercise(exercise) && (
           <View style={s.customBadge}>
@@ -28,7 +33,7 @@ export function ExerciseListItem({ exercise, onLongPress }: ExerciseListItemProp
       </View>
     </Pressable>
   );
-}
+});
 
 const s = StyleSheet.create({
   container: {
@@ -52,7 +57,8 @@ const s = StyleSheet.create({
   badges: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    flexWrap: 'wrap',
+    gap: 6,
   },
   customBadge: {
     paddingHorizontal: 6,

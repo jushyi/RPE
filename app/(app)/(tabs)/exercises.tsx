@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
-import { View, FlatList, Text, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, FlatList, Text, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { colors } from '@/constants/theme';
@@ -17,6 +17,7 @@ export default function ExercisesScreen() {
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<MuscleGroup | null>(null);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const [exerciseToEdit, setExerciseToEdit] = useState<Exercise | null>(null);
+  const [readOnly, setReadOnly] = useState(false);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function ExercisesScreen() {
     let result = exercises;
 
     if (selectedMuscleGroup) {
-      result = result.filter((e) => e.muscle_group === selectedMuscleGroup);
+      result = result.filter((e) => (e.muscle_groups ?? []).includes(selectedMuscleGroup));
     }
     if (selectedEquipment) {
       result = result.filter((e) => e.equipment === selectedEquipment);
@@ -44,45 +45,17 @@ export default function ExercisesScreen() {
 
   const handleAddExercise = useCallback(() => {
     setExerciseToEdit(null);
+    setReadOnly(false);
     bottomSheetRef.current?.present();
   }, []);
 
-  const handleLongPress = useCallback(
+  const handlePress = useCallback(
     (exercise: Exercise) => {
-      if (isCustomExercise(exercise)) {
-        Alert.alert(exercise.name, undefined, [
-          {
-            text: 'Edit',
-            onPress: () => {
-              setExerciseToEdit(exercise);
-              bottomSheetRef.current?.present();
-            },
-          },
-          {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: () => {
-              Alert.alert(
-                'Delete Exercise',
-                `Are you sure you want to delete "${exercise.name}"?`,
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: () => deleteExercise(exercise.id),
-                  },
-                ]
-              );
-            },
-          },
-          { text: 'Cancel', style: 'cancel' },
-        ]);
-      } else {
-        Alert.alert(exercise.name, 'This is a built-in exercise and cannot be edited or deleted.');
-      }
+      setExerciseToEdit(exercise);
+      setReadOnly(!isCustomExercise(exercise));
+      bottomSheetRef.current?.present();
     },
-    [deleteExercise]
+    []
   );
 
   const handleSave = useCallback(() => {
@@ -93,10 +66,10 @@ export default function ExercisesScreen() {
     ({ item }: { item: Exercise }) => (
       <ExerciseListItem
         exercise={item}
-        onLongPress={() => handleLongPress(item)}
+        onPress={() => handlePress(item)}
       />
     ),
-    [handleLongPress]
+    [handlePress]
   );
 
   return (
@@ -137,7 +110,9 @@ export default function ExercisesScreen() {
       <ExerciseBottomSheet
         ref={bottomSheetRef}
         exerciseToEdit={exerciseToEdit}
+        readOnly={readOnly}
         onSave={handleSave}
+        onDelete={deleteExercise}
       />
     </SafeAreaView>
   );
