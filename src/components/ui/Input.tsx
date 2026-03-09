@@ -1,6 +1,7 @@
-import { View, Text, TextInput, type TextInputProps } from 'react-native';
+import { View, Text, TextInput, StyleSheet, type TextInputProps } from 'react-native';
+import { colors } from '@/constants/theme';
 
-interface InputProps extends Omit<TextInputProps, 'className'> {
+interface InputProps extends Omit<TextInputProps, 'style'> {
   label?: string;
   error?: string;
 }
@@ -15,18 +16,14 @@ export function Input({
   ...rest
 }: InputProps) {
   return (
-    <View className="mb-4">
+    <View style={s.container}>
       {label && (
-        <Text className="text-text-secondary text-sm mb-1.5 font-medium">
-          {label}
-        </Text>
+        <Text style={s.label}>{label}</Text>
       )}
       <TextInput
-        className={`bg-surface text-text-primary text-base px-4 py-3.5 rounded-xl ${
-          error ? 'border border-error' : 'border border-surface-elevated'
-        }`}
+        style={[s.input, error ? s.inputError : s.inputNormal]}
         placeholder={placeholder}
-        placeholderTextColor="#737373"
+        placeholderTextColor={colors.textMuted}
         secureTextEntry={secureTextEntry}
         value={value}
         onChangeText={onChangeText}
@@ -34,8 +31,40 @@ export function Input({
         {...rest}
       />
       {error && (
-        <Text className="text-error text-xs mt-1">{error}</Text>
+        <Text style={s.error}>{error}</Text>
       )}
     </View>
   );
 }
+
+const s = StyleSheet.create({
+  container: {
+    marginBottom: 16,
+  },
+  label: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    marginBottom: 6,
+    fontWeight: '500',
+  },
+  input: {
+    backgroundColor: colors.surface,
+    color: colors.textPrimary,
+    fontSize: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  inputNormal: {
+    borderColor: colors.surfaceElevated,
+  },
+  inputError: {
+    borderColor: colors.error,
+  },
+  error: {
+    color: colors.error,
+    fontSize: 12,
+    marginTop: 4,
+  },
+});

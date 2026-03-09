@@ -1,5 +1,5 @@
-import { View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthForm } from '@/features/auth/components/AuthForm';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
@@ -24,20 +24,17 @@ export default function LoginScreen() {
     photoUri?: string;
   }) => {
     await signUp(data);
-    if (!hasCompletedOnboarding) {
-      router.replace('/(app)/onboarding/pr-baseline');
-    } else {
-      router.replace('/(app)/(tabs)/dashboard');
-    }
+    // Route to email confirmation screen — session activates after confirm
+    router.replace('/(auth)/confirm');
   };
 
   return (
-    <View className="flex-1 bg-background">
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#0a0a0a' }}>
       <AuthForm
         onSignIn={handleSignIn}
         onSignUp={handleSignUp}
         isOffline={!isConnected}
       />
-    </View>
+    </SafeAreaView>
   );
 }

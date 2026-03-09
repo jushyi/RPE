@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { View, Text, Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, Pressable, ScrollView, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { ProfilePhotoPicker } from './ProfilePhotoPicker';
+import { colors } from '@/constants/theme';
 
 const authSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -95,17 +96,17 @@ export function AuthForm({ onSignIn, onSignUp, isOffline = false }: AuthFormProp
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1"
+      style={s.flex1}
     >
       <ScrollView
-        contentContainerClassName="flex-grow justify-center px-6 py-8"
+        contentContainerStyle={s.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <View className="mb-8">
-          <Text className="text-text-primary text-3xl font-bold text-center">
+        <View style={s.header}>
+          <Text style={s.title}>
             {isSignUp ? 'Create Account' : 'Welcome Back'}
           </Text>
-          <Text className="text-text-secondary text-base text-center mt-2">
+          <Text style={s.subtitle}>
             {isSignUp
               ? 'Start tracking your gains'
               : 'Sign in to continue your journey'}
@@ -113,16 +114,16 @@ export function AuthForm({ onSignIn, onSignUp, isOffline = false }: AuthFormProp
         </View>
 
         {isSignUp && isOffline && (
-          <View className="bg-warning/10 border border-warning rounded-xl p-4 mb-6">
-            <Text className="text-warning text-sm font-medium text-center">
+          <View style={[s.alertBox, { borderColor: colors.warning }]}>
+            <Text style={[s.alertText, { color: colors.warning }]}>
               Connect to the internet to create your account
             </Text>
           </View>
         )}
 
         {formError && (
-          <View className="bg-error/10 border border-error rounded-xl p-4 mb-6">
-            <Text className="text-error text-sm text-center">{formError}</Text>
+          <View style={[s.alertBox, { borderColor: colors.error }]}>
+            <Text style={[s.alertText, { color: colors.error }]}>{formError}</Text>
           </View>
         )}
 
@@ -182,7 +183,7 @@ export function AuthForm({ onSignIn, onSignUp, isOffline = false }: AuthFormProp
           )}
         />
 
-        <View className="mt-2">
+        <View style={{ marginTop: 8 }}>
           <Button
             title={isSignUp ? 'Create Account' : 'Sign In'}
             onPress={handleSubmit(onSubmit)}
@@ -191,12 +192,12 @@ export function AuthForm({ onSignIn, onSignUp, isOffline = false }: AuthFormProp
           />
         </View>
 
-        <Pressable onPress={toggleMode} className="mt-6 py-2">
-          <Text className="text-text-secondary text-sm text-center">
+        <Pressable onPress={toggleMode} style={s.toggleBtn}>
+          <Text style={s.toggleText}>
             {isSignUp
               ? 'Already have an account? '
               : "Don't have an account? "}
-            <Text className="text-accent font-semibold">
+            <Text style={s.toggleAccent}>
               {isSignUp ? 'Sign in' : 'Sign up'}
             </Text>
           </Text>
@@ -205,3 +206,49 @@ export function AuthForm({ onSignIn, onSignUp, isOffline = false }: AuthFormProp
     </KeyboardAvoidingView>
   );
 }
+
+const s = StyleSheet.create({
+  flex1: { flex: 1 },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
+  header: { marginBottom: 32 },
+  title: {
+    color: colors.textPrimary,
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  subtitle: {
+    color: colors.textSecondary,
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  alertBox: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+  },
+  alertText: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  toggleBtn: {
+    marginTop: 24,
+    paddingVertical: 8,
+  },
+  toggleText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  toggleAccent: {
+    color: colors.accent,
+    fontWeight: '600',
+  },
+});

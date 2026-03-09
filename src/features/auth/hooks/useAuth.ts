@@ -35,6 +35,11 @@ export function useAuth() {
   const { isAuthenticated, setAuthenticated, clearAuth } = useAuthStore();
 
   useEffect(() => {
+    if (!supabase) {
+      setIsLoading(false);
+      return;
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event: AuthChangeEvent, session: Session | null) => {
         if (session?.user) {

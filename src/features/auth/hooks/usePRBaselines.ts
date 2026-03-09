@@ -15,20 +15,27 @@ interface UsePRBaselinesReturn {
   isLoading: boolean;
 }
 
+async function resolveUserId(storeUserId: string | null): Promise<string | null> {
+  if (storeUserId) return storeUserId;
+  if (!supabase) return null;
+  const { data } = await supabase.auth.getSession();
+  return data.session?.user?.id ?? null;
+}
+
 export function usePRBaselines(): UsePRBaselinesReturn {
   const [isLoading, setIsLoading] = useState(false);
-  const userId = useAuthStore((s) => s.userId);
+  const storeUserId = useAuthStore((s) => s.userId);
 
   const savePRBaselines = useCallback(
     async (baselines: PRBaselineInput[]): Promise<{ success: boolean; error?: string }> => {
+      const userId = await resolveUserId(storeUserId);
       if (!userId) {
         return { success: false, error: 'Not authenticated' };
       }
 
-      // Filter to only non-zero weight entries
       const nonZero = baselines.filter((b) => b.weight > 0);
       if (nonZero.length === 0) {
-        return { success: true }; // Nothing to save
+        return { success: true };
       }
 
       setIsLoading(true);
@@ -40,7 +47,6 @@ export function usePRBaselines(): UsePRBaselinesReturn {
           unit: b.unit,
         }));
 
-        // Upsert using UNIQUE(user_id, exercise_name) constraint
         const { error } = await (supabase.from('pr_baselines') as any).upsert(rows, {
           onConflict: 'user_id,exercise_name',
         });
@@ -59,10 +65,11 @@ export function usePRBaselines(): UsePRBaselinesReturn {
         setIsLoading(false);
       }
     },
-    [userId]
+    [storeUserId]
   );
 
   const getPRBaselines = useCallback(async (): Promise<PRBaseline[]> => {
+    const userId = await resolveUserId(storeUserId);
     if (!userId) return [];
 
     try {
@@ -80,7 +87,7 @@ export function usePRBaselines(): UsePRBaselinesReturn {
       console.warn('PR baseline fetch failed:', err);
       return [];
     }
-  }, [userId]);
+  }, [storeUserId]);
 
   return { savePRBaselines, getPRBaselines, isLoading };
 }

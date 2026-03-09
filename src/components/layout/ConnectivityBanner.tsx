@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -7,60 +7,71 @@ import Animated, {
   withDelay,
   runOnJS,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import { colors } from '@/constants/theme';
 
-/**
- * Animated toast banner for connectivity changes.
- *
- * - "You're offline" (amber) when device goes offline
- * - "Back online" (green) when connectivity restored, auto-dismiss after 3s
- * - Slides in from top using react-native-reanimated
- */
+const BANNER_HEIGHT = 36;
+
 export function ConnectivityBanner() {
-  const { justWentOffline, justCameOnline, isConnected } = useNetworkStatus();
-  const [bannerState, setBannerState] = useState<'offline' | 'online' | 'hidden'>(
-    'hidden'
-  );
-  const translateY = useSharedValue(-80);
+  const { justWentOffline, justCameOnline } = useNetworkStatus();
+  const [bannerState, setBannerState] = useState<'offline' | 'online' | 'hidden'>('hidden');
+  const insets = useSafeAreaInsets();
+  const height = useSharedValue(0);
+
+  const totalHeight = insets.top + BANNER_HEIGHT;
 
   useEffect(() => {
     if (justWentOffline) {
       setBannerState('offline');
-      translateY.value = withTiming(0, { duration: 300 });
+      height.value = withTiming(totalHeight, { duration: 300 });
     } else if (justCameOnline) {
       setBannerState('online');
-      translateY.value = withTiming(0, { duration: 300 });
-
-      // Auto-dismiss after 3 seconds
-      translateY.value = withDelay(
+      height.value = withTiming(totalHeight, { duration: 300 });
+      height.value = withDelay(
         3000,
-        withTiming(-80, { duration: 300 }, (finished) => {
+        withTiming(0, { duration: 300 }, (finished) => {
           if (finished) {
             runOnJS(setBannerState)('hidden');
           }
         })
       );
     }
-  }, [justWentOffline, justCameOnline, translateY]);
+  }, [justWentOffline, justCameOnline, height, totalHeight]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
+    height: height.value,
+    overflow: 'hidden' as const,
   }));
 
   if (bannerState === 'hidden') return null;
 
-  const isOfflineBanner = bannerState === 'offline';
+  const isOffline = bannerState === 'offline';
 
   return (
     <Animated.View
-      style={animatedStyle}
-      className={`absolute top-0 left-0 right-0 z-50 px-4 pt-12 pb-3 ${
-        isOfflineBanner ? 'bg-warning' : 'bg-success'
-      }`}
+      style={[
+        {
+          backgroundColor: isOffline ? colors.warning : colors.success,
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          paddingBottom: 8,
+        },
+        animatedStyle,
+      ]}
     >
-      <Text className="text-white text-sm font-semibold text-center">
-        {isOfflineBanner ? "You're offline" : 'Back online'}
+      <Text style={s.text}>
+        {isOffline ? "You're offline" : 'Back online'}
       </Text>
     </Animated.View>
   );
 }
+
+const s = StyleSheet.create({
+  text: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+});

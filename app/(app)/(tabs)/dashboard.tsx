@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Image, Pressable } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import { useAuthStore } from '@/stores/authStore';
 import { usePRBaselines } from '@/features/auth/hooks/usePRBaselines';
+import { colors } from '@/constants/theme';
 import type { PRBaseline } from '@/lib/supabase/types/database';
 
 function AvatarPlaceholder({ displayName }: { displayName: string }) {
@@ -18,8 +18,8 @@ function AvatarPlaceholder({ displayName }: { displayName: string }) {
     .slice(0, 2);
 
   return (
-    <View className="w-12 h-12 rounded-full bg-accent items-center justify-center mr-3">
-      <Text className="text-white font-bold text-lg">{initials || '?'}</Text>
+    <View style={ds.avatar}>
+      <Text style={ds.avatarText}>{initials || '?'}</Text>
     </View>
   );
 }
@@ -30,14 +30,14 @@ function PRCard({ baselines }: { baselines: PRBaseline[] }) {
   if (baselines.length === 0) {
     return (
       <Card title="Personal Records">
-        <Text className="text-text-secondary text-sm mb-3">
-          Set your starting PRs to track progress
-        </Text>
-        <Button
-          title="Set PRs"
-          onPress={() => router.push('/(app)/onboarding/pr-baseline')}
-          variant="secondary"
-        />
+        <Text style={ds.cardDesc}>Set your starting PRs to track progress</Text>
+        <View style={{ marginTop: 12 }}>
+          <Button
+            title="Set PRs"
+            onPress={() => router.push('/(app)/onboarding/pr-baseline')}
+            variant="secondary"
+          />
+        </View>
       </Card>
     );
   }
@@ -48,25 +48,12 @@ function PRCard({ baselines }: { baselines: PRBaseline[] }) {
     deadlift: 'Deadlift',
   };
 
-  const liftIcons: Record<string, string> = {
-    bench_press: '🏋️',
-    squat: '🦵',
-    deadlift: '💪',
-  };
-
   return (
     <Card title="Personal Records">
       {baselines.map((b) => (
-        <View key={b.exercise_name} className="flex-row items-center justify-between py-2">
-          <View className="flex-row items-center">
-            <Text className="text-xl mr-2">{liftIcons[b.exercise_name] ?? '🏋️'}</Text>
-            <Text className="text-text-primary text-base">
-              {liftLabels[b.exercise_name] ?? b.exercise_name}
-            </Text>
-          </View>
-          <Text className="text-accent font-bold text-base">
-            {b.weight} {b.unit}
-          </Text>
+        <View key={b.exercise_name} style={ds.prRow}>
+          <Text style={ds.prLabel}>{liftLabels[b.exercise_name] ?? b.exercise_name}</Text>
+          <Text style={ds.prValue}>{b.weight} {b.unit}</Text>
         </View>
       ))}
     </Card>
@@ -74,7 +61,7 @@ function PRCard({ baselines }: { baselines: PRBaseline[] }) {
 }
 
 export default function DashboardScreen() {
-  const { signOut, user, isLoading: authLoading } = useAuth();
+  const { signOut, user } = useAuth();
   const { getPRBaselines } = usePRBaselines();
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
   const [signingOut, setSigningOut] = useState(false);
@@ -98,83 +85,84 @@ export default function DashboardScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+    <SafeAreaView style={ds.safe} edges={['top']}>
       <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingBottom: 40 }}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 24, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <View className="px-6 pt-6">
-          {/* Header with avatar and greeting */}
-          <View className="flex-row items-center justify-between mb-8">
-            <View className="flex-row items-center flex-1">
-              {avatarUrl ? (
-                <Image
-                  source={{ uri: avatarUrl }}
-                  className="w-12 h-12 rounded-full mr-3"
-                />
-              ) : (
-                <AvatarPlaceholder displayName={displayName} />
-              )}
-              <View className="flex-1">
-                <Text className="text-text-secondary text-sm">Welcome back,</Text>
-                <Text className="text-text-primary text-xl font-bold" numberOfLines={1}>
-                  {displayName}
-                </Text>
-              </View>
+        <View style={ds.header}>
+          <View style={ds.headerLeft}>
+            {avatarUrl ? (
+              <Image source={{ uri: avatarUrl }} style={ds.avatarImg} />
+            ) : (
+              <AvatarPlaceholder displayName={displayName} />
+            )}
+            <View style={{ flex: 1 }}>
+              <Text style={ds.greeting}>Welcome back,</Text>
+              <Text style={ds.name} numberOfLines={1}>{displayName}</Text>
             </View>
           </View>
-
-          {/* Today's Workout placeholder */}
-          <View className="mb-4">
-            <Card title="Today's Workout">
-              <View className="flex-row items-center">
-                <Text className="text-3xl mr-3">📋</Text>
-                <Text className="text-text-secondary text-sm flex-1">
-                  No plan set up yet — coming soon!
-                </Text>
-              </View>
-            </Card>
-          </View>
-
-          {/* Recent Activity placeholder */}
-          <View className="mb-4">
-            <Card title="Recent Activity">
-              <View className="flex-row items-center">
-                <Text className="text-3xl mr-3">📊</Text>
-                <Text className="text-text-secondary text-sm flex-1">
-                  Start logging workouts to see your history here
-                </Text>
-              </View>
-            </Card>
-          </View>
-
-          {/* Progress placeholder */}
-          <View className="mb-4">
-            <Card title="Progress">
-              <View className="flex-row items-center">
-                <Text className="text-3xl mr-3">📈</Text>
-                <Text className="text-text-secondary text-sm flex-1">
-                  Your progress charts will appear here
-                </Text>
-              </View>
-            </Card>
-          </View>
-
-          {/* Personal Records */}
-          <View className="mb-8">
-            <PRCard baselines={baselines} />
-          </View>
-
-          {/* Sign out */}
-          <Button
-            title="Sign Out"
-            onPress={handleSignOut}
-            variant="ghost"
-            loading={signingOut}
-          />
         </View>
+
+        <View style={ds.cardWrap}>
+          <Card title="Today's Workout">
+            <Text style={ds.cardDesc}>No plan set up yet -- coming soon!</Text>
+          </Card>
+        </View>
+
+        <View style={ds.cardWrap}>
+          <Card title="Recent Activity">
+            <Text style={ds.cardDesc}>Start logging workouts to see your history here</Text>
+          </Card>
+        </View>
+
+        <View style={ds.cardWrap}>
+          <Card title="Progress">
+            <Text style={ds.cardDesc}>Your progress charts will appear here</Text>
+          </Card>
+        </View>
+
+        <View style={{ marginBottom: 32 }}>
+          <PRCard baselines={baselines} />
+        </View>
+
+        <Button title="Sign Out" onPress={handleSignOut} variant="ghost" loading={signingOut} />
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const ds = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: colors.background },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 32,
+  },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
+  avatarImg: { width: 48, height: 48, borderRadius: 24, marginRight: 12 },
+  greeting: { color: colors.textSecondary, fontSize: 14 },
+  name: { color: colors.textPrimary, fontSize: 20, fontWeight: 'bold' },
+  cardWrap: { marginBottom: 16 },
+  cardDesc: { color: colors.textSecondary, fontSize: 14 },
+  prRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+  },
+  prLabel: { color: colors.textPrimary, fontSize: 16 },
+  prValue: { color: colors.accent, fontWeight: 'bold', fontSize: 16 },
+});

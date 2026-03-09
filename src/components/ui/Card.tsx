@@ -1,27 +1,32 @@
-import { View, Text, type ViewProps } from 'react-native';
+import { View, Text, StyleSheet, type ViewProps } from 'react-native';
+import { colors } from '@/constants/theme';
 
-interface CardProps extends Omit<ViewProps, 'className'> {
+interface CardProps extends Omit<ViewProps, 'style'> {
   title?: string;
   children: React.ReactNode;
-  className?: string;
 }
 
-/**
- * Reusable dark-themed card component.
- * Surface background with rounded corners and subtle border.
- */
-export function Card({ title, children, className = '', ...rest }: CardProps) {
+export function Card({ title, children, ...rest }: CardProps) {
   return (
-    <View
-      className={`bg-surface rounded-2xl p-4 border border-surface-elevated ${className}`}
-      {...rest}
-    >
-      {title && (
-        <Text className="text-text-primary text-lg font-bold mb-3">
-          {title}
-        </Text>
-      )}
+    <View style={s.card} {...rest}>
+      {title && <Text style={s.title}>{title}</Text>}
       {children}
     </View>
   );
 }
+
+const s = StyleSheet.create({
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: colors.surfaceElevated,
+  },
+  title: {
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+});
