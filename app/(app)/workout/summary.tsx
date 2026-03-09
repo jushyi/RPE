@@ -1,34 +1,113 @@
-import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+/**
+ * Post-workout summary screen.
+ * Shows session stats, weight target prompts for manual progression exercises,
+ * and handles session sync + previous performance caching on completion.
+ */
+import React, { useState, useEffect } from 'react';
+import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import SessionSummaryCard, {
+  computeSessionSummary,
+} from '@/features/workout/components/SessionSummary';
+import WeightTargetPrompt from '@/features/workout/components/WeightTargetPrompt';
+import { enqueueCompletedSession, flushSyncQueue } from '@/features/workout/hooks/useSyncQueue';
+import { cachePreviousPerformance } from '@/features/workout/hooks/usePreviousPerformance';
+import { supabase } from '@/lib/supabase/client';
+import type { WorkoutSession } from '@/features/workout/types';
 
-/**
- * Post-workout summary screen shell.
- * Stats and weight target prompts will be filled in Plan 04-04.
- */
+// Module-level storage for the completed session
+// Set by useWorkoutSession.finishWorkout() before navigating here
+let _completedSession: WorkoutSession | null = null;
+
+export function setCompletedSession(session: WorkoutSession) {
+  _completedSession = session;
+}
+
+export function getCompletedSession(): WorkoutSession | null {
+  return _completedSession;
+}
+
 export default function WorkoutSummaryScreen() {
   const router = useRouter();
+  const [session] = useState<WorkoutSession | null>(() => getCompletedSession());
+  const [showTargets, setShowTargets] = useState(true);
+
+  // Cache previous performance and enqueue sync on mount
+  useEffect(() => {
+    if (!session) return;
+
+    // Cache each exercise's logged sets for next session's previous performance display
+    for (const exercise of session.exercises) {
+      if (exercise.logged_sets.length > 0) {
+        cachePreviousPerformance(exercise.exercise_id, {
+          exercise_id: exercise.exercise_id,
+          sets: exercise.logged_sets,
+          session_date: session.started_at.split('T')[0],
+        });
+      }
+    }
+
+    // Enqueue session for background sync
+    enqueueCompletedSession(session);
+
+    // Attempt to flush immediately
+    flushSyncQueue(supabase).catch(() => {
+      // Will retry on next connectivity event
+    });
+  }, [session]);
 
   const handleDone = () => {
+    _completedSession = null;
     router.replace('/(app)/(tabs)' as any);
   };
 
+  if (!session) {
+    return (
+      <SafeAreaView style={s.container}>
+        <View style={s.content}>
+          <Ionicons name="checkmark-circle" size={64} color={colors.success} />
+          <Text style={s.heading}>Workout Complete</Text>
+          <Text style={s.subheading}>Great work!</Text>
+          <Pressable
+            onPress={handleDone}
+            style={({ pressed }) => [s.doneButton, pressed && s.doneButtonPressed]}
+          >
+            <Text style={s.doneButtonText}>Done</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const summary = computeSessionSummary(session);
+
   return (
     <SafeAreaView style={s.container}>
-      <View style={s.content}>
-        <View style={s.iconContainer}>
+      <ScrollView
+        contentContainerStyle={s.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={s.headerSection}>
           <Ionicons name="checkmark-circle" size={64} color={colors.success} />
+          <Text style={s.heading}>Workout Complete</Text>
+          <Text style={s.subheading}>Great work! Here is your session summary.</Text>
         </View>
-        <Text style={s.heading}>Workout Complete</Text>
-        <Text style={s.subheading}>Great work! Your session has been saved.</Text>
 
-        {/* Placeholder for stats card - filled in Plan 04-04 */}
-        <View style={s.statsPlaceholder}>
-          <Text style={s.placeholderText}>Session stats coming soon</Text>
-        </View>
+        <SessionSummaryCard session={session} />
+
+        {showTargets &&
+          summary.exercises_with_manual_progression.length > 0 && (
+            <View style={s.targetSection}>
+              <WeightTargetPrompt
+                exercises={summary.exercises_with_manual_progression}
+                planDayId={session.plan_day_id}
+                onDone={() => setShowTargets(false)}
+              />
+            </View>
+          )}
 
         <Pressable
           onPress={handleDone}
@@ -36,7 +115,7 @@ export default function WorkoutSummaryScreen() {
         >
           <Text style={s.doneButtonText}>Done</Text>
         </Pressable>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -52,34 +131,29 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
   },
-  iconContainer: {
-    marginBottom: 16,
+  scrollContent: {
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 40,
+    alignItems: 'center',
+    gap: 24,
+  },
+  headerSection: {
+    alignItems: 'center',
+    gap: 8,
   },
   heading: {
     color: colors.textPrimary,
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 8,
   },
   subheading: {
     color: colors.textSecondary,
     fontSize: 16,
     textAlign: 'center',
-    marginBottom: 40,
   },
-  statsPlaceholder: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 24,
+  targetSection: {
     width: '100%',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.surfaceElevated,
-    marginBottom: 40,
-  },
-  placeholderText: {
-    color: colors.textMuted,
-    fontSize: 14,
   },
   doneButton: {
     backgroundColor: colors.accent,
@@ -87,6 +161,7 @@ const s = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 48,
     alignItems: 'center',
+    marginTop: 8,
   },
   doneButtonPressed: {
     opacity: 0.8,

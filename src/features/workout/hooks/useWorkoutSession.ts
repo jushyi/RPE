@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useWorkoutStore } from '@/stores/workoutStore';
 import { useAuthStore } from '@/stores/authStore';
+import { setCompletedSession } from '@/../app/(app)/workout/summary';
 import type { PlanDay } from '@/features/plans/types';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionExercise, SetLog } from '@/features/workout/types';
@@ -70,6 +71,7 @@ export function useWorkoutSession() {
   const finishWorkout = useCallback(() => {
     const completed = finishSessionAction();
     if (completed) {
+      setCompletedSession(completed);
       router.replace('/workout/summary' as any);
     }
   }, [finishSessionAction, router]);

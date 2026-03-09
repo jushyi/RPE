@@ -52,5 +52,10 @@ export interface SessionSummary {
   total_volume: number;
   exercises_completed: number;
   prs_hit: number;
-  exercises_with_manual_progression: number;
+  exercises_with_manual_progression: Array<{
+    exercise_id: string;
+    exercise_name: string;
+    last_weight: number;
+    unit: string;
+  }>;
 }
