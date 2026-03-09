@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { colors } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
@@ -33,20 +35,20 @@ export default function RootLayout() {
 
   if (isLoading) {
     return (
-      <View
-        style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' }}
-      >
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' }}>
         <StatusBar style="light" />
         <ActivityIndicator size="large" color={colors.accent} />
-      </View>
+      </GestureHandlerRootView>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <StatusBar style="light" />
-      <ConnectivityBanner />
-      <Slot />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
+      <BottomSheetModalProvider>
+        <StatusBar style="light" />
+        <ConnectivityBanner />
+        <Slot />
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }

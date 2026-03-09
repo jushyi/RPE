@@ -1,18 +1,23 @@
-import { useEffect, useState, useMemo } from 'react';
-import { View, FlatList, Text, Pressable, StyleSheet } from 'react-native';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import { View, FlatList, Text, Pressable, Alert, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { colors } from '@/constants/theme';
 import { useExercises } from '@/features/exercises/hooks/useExercises';
 import { ExerciseFilterBar } from '@/features/exercises/components/ExerciseFilterBar';
 import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem';
 import { EmptyState } from '@/features/exercises/components/EmptyState';
+import { ExerciseBottomSheet } from '@/features/exercises/components/ExerciseBottomSheet';
+import { isCustomExercise } from '@/features/exercises/types';
 import type { MuscleGroup, Equipment, Exercise } from '@/features/exercises/types';
 
 export default function ExercisesScreen() {
-  const { exercises, isLoading, fetchExercises } = useExercises();
+  const { exercises, isLoading, fetchExercises, deleteExercise } = useExercises();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<MuscleGroup | null>(null);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [exerciseToEdit, setExerciseToEdit] = useState<Exercise | null>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
 
   useEffect(() => {
     fetchExercises();
@@ -37,21 +42,67 @@ export default function ExercisesScreen() {
 
   const hasFilters = !!(selectedMuscleGroup || selectedEquipment || searchQuery.trim());
 
-  const handleAddExercise = () => {
-    // Placeholder: Plan 02-02 wires this to bottom sheet
-  };
+  const handleAddExercise = useCallback(() => {
+    setExerciseToEdit(null);
+    bottomSheetRef.current?.present();
+  }, []);
 
-  const renderItem = ({ item }: { item: Exercise }) => (
-    <ExerciseListItem exercise={item} />
+  const handleLongPress = useCallback(
+    (exercise: Exercise) => {
+      if (isCustomExercise(exercise)) {
+        Alert.alert(exercise.name, undefined, [
+          {
+            text: 'Edit',
+            onPress: () => {
+              setExerciseToEdit(exercise);
+              bottomSheetRef.current?.present();
+            },
+          },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => {
+              Alert.alert(
+                'Delete Exercise',
+                `Are you sure you want to delete "${exercise.name}"?`,
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: () => deleteExercise(exercise.id),
+                  },
+                ]
+              );
+            },
+          },
+          { text: 'Cancel', style: 'cancel' },
+        ]);
+      } else {
+        Alert.alert(exercise.name, 'This is a built-in exercise and cannot be edited or deleted.');
+      }
+    },
+    [deleteExercise]
+  );
+
+  const handleSave = useCallback(() => {
+    setExerciseToEdit(null);
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Exercise }) => (
+      <ExerciseListItem
+        exercise={item}
+        onLongPress={() => handleLongPress(item)}
+      />
+    ),
+    [handleLongPress]
   );
 
   return (
     <SafeAreaView style={s.safeArea} edges={['top']}>
       <View style={s.header}>
         <Text style={s.headerTitle}>Exercises</Text>
-        <Pressable onPress={handleAddExercise} style={s.addButton}>
-          <Text style={s.addButtonText}>+</Text>
-        </Pressable>
       </View>
 
       <ExerciseFilterBar
@@ -74,6 +125,20 @@ export default function ExercisesScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
+
+      {/* FAB */}
+      <Pressable
+        onPress={handleAddExercise}
+        style={({ pressed }) => [s.fab, pressed && s.fabPressed]}
+      >
+        <Text style={s.fabText}>+</Text>
+      </Pressable>
+
+      <ExerciseBottomSheet
+        ref={bottomSheetRef}
+        exerciseToEdit={exerciseToEdit}
+        onSave={handleSave}
+      />
     </SafeAreaView>
   );
 }
@@ -96,22 +161,34 @@ const s = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
   },
-  addButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  list: {
+    paddingTop: 4,
+    paddingBottom: 80,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 24,
+    right: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
-  addButtonText: {
+  fabPressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.95 }],
+  },
+  fabText: {
     color: '#ffffff',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '600',
-    lineHeight: 26,
-  },
-  list: {
-    paddingTop: 4,
-    paddingBottom: 24,
+    lineHeight: 30,
   },
 });
