@@ -5,7 +5,7 @@ milestone_name: milestone
 status: completed
 stopped_at: Phase 2 context gathered
 last_updated: "2026-03-09T18:09:13.741Z"
-last_activity: "2026-03-09 - Completed quick task 1: fix dashboard profile pic change"
+last_activity: "2026-03-09 - Completed quick task 2: make PR card editable from dashboard"
 progress:
   total_phases: 10
   completed_phases: 1
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 1 of 10 (Foundation)
 Plan: 4 of 4 in current phase
 Status: Phase Complete
-Last activity: 2026-03-09 - Completed quick task 1: fix dashboard profile pic change
+Last activity: 2026-03-09 - Completed quick task 2: make PR card editable from dashboard
 
 Progress: [██████████] 100%
 
@@ -89,9 +89,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | tapping the profile pic to change on dashboard doesn't seem to work properly | 2026-03-09 | 1789739 | [1-tapping-the-profile-pic-to-change-on-das](./quick/1-tapping-the-profile-pic-to-change-on-das/) |
+| 2 | make tapping on PRs in dashboard allow editing | 2026-03-09 | 13df943 | [2-make-tapping-on-prs-in-dashboard-allow-e](./quick/2-make-tapping-on-prs-in-dashboard-allow-e/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T18:09:13.739Z
-Stopped at: Phase 2 context gathered
+Last session: 2026-03-09T18:02:20Z
+Stopped at: Completed quick task 2
 Resume file: .planning/phases/02-exercise-library/02-CONTEXT.md
