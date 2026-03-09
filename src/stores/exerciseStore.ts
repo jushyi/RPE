@@ -52,7 +52,20 @@ export const useExerciseStore = create<ExerciseState & ExerciseActions>()(
     }),
     {
       name: 'exercise-storage',
+      version: 1,
       storage: createJSONStorage(() => mmkvStorage),
+      migrate: (persisted: any, version: number) => {
+        if (version === 0 && persisted?.state?.exercises) {
+          // v0 → v1: muscle_group (string) → muscle_groups (string[])
+          persisted.state.exercises = persisted.state.exercises.map((e: any) => {
+            if (e.muscle_group && !e.muscle_groups) {
+              return { ...e, muscle_groups: [e.muscle_group], muscle_group: undefined };
+            }
+            return e;
+          });
+        }
+        return persisted;
+      },
     }
   )
 );
