@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, Pressable, ScrollView, Alert, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, Pressable, ScrollView, Alert, Keyboard, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuthStore } from '@/stores/authStore';
@@ -92,6 +92,7 @@ export function PRBaselineForm({ onComplete, initialValues, mode = 'onboarding' 
   };
 
   const handleSave = async () => {
+    Keyboard.dismiss();
     const baselines = lifts.map((l) => ({
       exercise_name: l.exercise_name,
       weight: parseFloat(l.weight) || 0,
@@ -114,11 +115,12 @@ export function PRBaselineForm({ onComplete, initialValues, mode = 'onboarding' 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior="padding"
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
     >
     <ScrollView
       style={{ flex: 1 }}
-      contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 48, paddingBottom: 40 }}
+      contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 48, paddingBottom: 120 }}
       keyboardShouldPersistTaps="handled"
     >
       <Text style={s.title}>{isEdit ? 'Edit Your PRs' : 'Set Your Starting PRs'}</Text>

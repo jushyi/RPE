@@ -107,9 +107,6 @@ function PRCard({ baselines }: { baselines: PRBaseline[] }) {
       android_ripple={{ color: colors.surfaceElevated }}
     >
       <Card title="Personal Records">
-        <View style={ds.editHintRow}>
-          <Text style={ds.editHint}>Edit &gt;</Text>
-        </View>
         {baselines.map((b) => (
           <View key={b.exercise_name} style={ds.prRow}>
             <Text style={ds.prLabel}>{liftLabels[b.exercise_name] ?? b.exercise_name}</Text>
@@ -268,14 +265,4 @@ const ds = StyleSheet.create({
   },
   prLabel: { color: colors.textPrimary, fontSize: 16 },
   prValue: { color: colors.accent, fontWeight: 'bold', fontSize: 16 },
-  editHintRow: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
-  },
-  editHint: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: '500',
-  },
 });
