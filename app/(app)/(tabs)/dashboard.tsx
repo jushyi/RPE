@@ -1,15 +1,25 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { usePRBaselines } from '@/features/auth/hooks/usePRBaselines';
+import { supabase } from '@/lib/supabase/client';
 import { colors } from '@/constants/theme';
 import type { PRBaseline } from '@/lib/supabase/types/database';
 
-function AvatarPlaceholder({ displayName }: { displayName: string }) {
+function TappableAvatar({
+  displayName,
+  avatarUrl,
+  onPhotoChanged,
+}: {
+  displayName: string;
+  avatarUrl: string | null;
+  onPhotoChanged: (uri: string) => void;
+}) {
   const initials = displayName
     .split(' ')
     .map((n) => n[0])
@@ -17,10 +27,38 @@ function AvatarPlaceholder({ displayName }: { displayName: string }) {
     .toUpperCase()
     .slice(0, 2);
 
+  const handlePress = () => {
+    Alert.alert('Profile Photo', 'Choose a photo source', [
+      { text: 'Take Photo', onPress: () => pickPhoto('camera') },
+      { text: 'Choose from Gallery', onPress: () => pickPhoto('gallery') },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  };
+
+  const pickPhoto = async (source: 'camera' | 'gallery') => {
+    if (source === 'camera') {
+      const { granted } = await ImagePicker.requestCameraPermissionsAsync();
+      if (!granted) { Alert.alert('Permission Required', 'Camera access is needed.'); return; }
+      const result = await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+      if (!result.canceled && result.assets[0]) onPhotoChanged(result.assets[0].uri);
+    } else {
+      const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!granted) { Alert.alert('Permission Required', 'Gallery access is needed.'); return; }
+      const result = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
+      if (!result.canceled && result.assets[0]) onPhotoChanged(result.assets[0].uri);
+    }
+  };
+
   return (
-    <View style={ds.avatar}>
-      <Text style={ds.avatarText}>{initials || '?'}</Text>
-    </View>
+    <Pressable onPress={handlePress} style={{ opacity: 1 }}>
+      {avatarUrl ? (
+        <Image source={{ uri: avatarUrl }} style={ds.avatarImg} />
+      ) : (
+        <View style={ds.avatar}>
+          <Text style={ds.avatarText}>{initials || '?'}</Text>
+        </View>
+      )}
+    </Pressable>
   );
 }
 
@@ -69,7 +107,27 @@ export default function DashboardScreen() {
   const displayName =
     user?.user_metadata?.display_name ?? user?.email?.split('@')[0] ?? 'Athlete';
 
-  const avatarUrl = user?.user_metadata?.avatar_url ?? null;
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(
+    user?.user_metadata?.avatar_url ?? null
+  );
+
+  const handlePhotoChanged = async (uri: string) => {
+    setAvatarUrl(uri); // Show immediately
+    if (!supabase || !user) return;
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const filePath = `${user.id}/avatar.jpg`;
+      await supabase.storage.from('avatars').upload(filePath, blob, { contentType: 'image/jpeg', upsert: true });
+      const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      if (urlData?.publicUrl) {
+        await supabase.auth.updateUser({ data: { avatar_url: urlData.publicUrl } });
+        setAvatarUrl(urlData.publicUrl);
+      }
+    } catch (err) {
+      console.warn('Avatar upload failed:', err);
+    }
+  };
 
   useEffect(() => {
     getPRBaselines().then(setBaselines).catch(() => {});
@@ -93,12 +151,12 @@ export default function DashboardScreen() {
       >
         <View style={ds.header}>
           <View style={ds.headerLeft}>
-            {avatarUrl ? (
-              <Image source={{ uri: avatarUrl }} style={ds.avatarImg} />
-            ) : (
-              <AvatarPlaceholder displayName={displayName} />
-            )}
-            <View style={{ flex: 1 }}>
+            <TappableAvatar
+              displayName={displayName}
+              avatarUrl={avatarUrl}
+              onPhotoChanged={handlePhotoChanged}
+            />
+            <View style={{ flex: 1, marginLeft: 12 }}>
               <Text style={ds.greeting}>Welcome back,</Text>
               <Text style={ds.name} numberOfLines={1}>{displayName}</Text>
             </View>
@@ -152,7 +210,7 @@ const ds = StyleSheet.create({
     marginRight: 12,
   },
   avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
-  avatarImg: { width: 48, height: 48, borderRadius: 24, marginRight: 12 },
+  avatarImg: { width: 48, height: 48, borderRadius: 24 },
   greeting: { color: colors.textSecondary, fontSize: 14 },
   name: { color: colors.textPrimary, fontSize: 20, fontWeight: 'bold' },
   cardWrap: { marginBottom: 16 },
