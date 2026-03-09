@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { colors } from '@/constants/theme';
 import { useWorkoutStore } from '@/stores/workoutStore';
+import { ExercisePage } from './ExercisePage';
 import type { SessionExercise } from '@/features/workout/types';
 
 interface ExercisePagerProps {
@@ -12,7 +13,8 @@ interface ExercisePagerProps {
 }
 
 /**
- * Stub ExercisePager - full implementation in Task 2.
+ * PagerView wrapper providing horizontal exercise navigation with progress dots.
+ * Each page renders an ExercisePage for one exercise.
  */
 export function ExercisePager({ exercises, onLogSet, pagerRef }: ExercisePagerProps) {
   const currentIndex = useWorkoutStore((s) => s.currentExerciseIndex);
@@ -29,19 +31,22 @@ export function ExercisePager({ exercises, onLogSet, pagerRef }: ExercisePagerPr
       >
         {exercises.map((exercise) => (
           <View key={exercise.id} style={s.page}>
-            <Text style={s.exerciseName}>{exercise.exercise_name}</Text>
+            <ExercisePage exercise={exercise} onLogSet={onLogSet} />
           </View>
         ))}
       </PagerView>
+
       {/* Progress dots */}
-      <View style={s.dotsContainer}>
-        {exercises.map((_, index) => (
-          <View
-            key={index}
-            style={[s.dot, index === currentIndex ? s.dotActive : s.dotInactive]}
-          />
-        ))}
-      </View>
+      {exercises.length > 1 && (
+        <View style={s.dotsContainer}>
+          {exercises.map((_, index) => (
+            <View
+              key={index}
+              style={[s.dot, index === currentIndex ? s.dotActive : s.dotInactive]}
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 }
@@ -55,17 +60,11 @@ const s = StyleSheet.create({
   },
   page: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  exerciseName: {
-    color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '600',
   },
   dotsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: 12,
     gap: 8,
   },
