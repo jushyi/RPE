@@ -52,7 +52,7 @@ Plans:
   1. App launches with a pre-populated library of common exercises (bench press, squat, deadlift, etc.) searchable by name and muscle group
   2. User can create a custom exercise by providing a name, muscle group, and equipment type, and it immediately appears in the library
   3. Custom exercises persist across app restarts and sync to Supabase
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 02-01-PLAN.md — Exercise data layer (Supabase migration with ~35 seed exercises, types, Zustand store) and library screen with search/filter
@@ -191,7 +191,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-03-09 |
-| 2. Exercise Library | 0/2 | Not started | - |
+| 2. Exercise Library | 1/2 | In Progress|  |
 | 3. Plan Builder | 0/3 | Not started | - |
 | 4. Active Workout | 0/4 | Not started | - |
 | 5. Workout History | 0/2 | Not started | - |
