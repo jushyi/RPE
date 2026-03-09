@@ -117,12 +117,12 @@ Plans:
   2. User can log their bodyweight and view a bodyweight trend chart over time
   3. Home screen shows a progress summary including recent PRs, streak count, and recent stats
   4. Home screen shows today's planned workout (from the active plan) with a quick-start button that launches the active workout screen
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 06-01: Per-exercise progress charts (Victory Native XL, Skia, working-set filtering, Supabase server-side aggregation)
-- [ ] 06-02: Bodyweight log entry and bodyweight trend chart
-- [ ] 06-03: Dashboard home screen (today's planned workout, PR summary, recent stats)
+- [ ] 06-01-PLAN.md — Data layer: Victory Native XL + Skia install, types, chartHelpers, bodyweight migration, chart RPC aggregation, bodyweightStore, all data hooks (chart data, bodyweight, today's workout, progress summary), unit tests
+- [ ] 06-02-PLAN.md — Chart UI: exercise progress chart screen (metric tabs, time ranges, empty states), Sparkline component, BodyweightCard with inline logging
+- [ ] 06-03-PLAN.md — Dashboard refactor: TodaysWorkoutCard (3 states), ProgressSummaryCard (streak + PRs + stats + sparklines), compose cards in locked order, remove Sign Out
 
 ### Phase 7: Body Metrics
 **Goal**: Users can track body composition changes — measurements and progress photos — with photos stored privately in Supabase Storage accessible only to the owning user.
