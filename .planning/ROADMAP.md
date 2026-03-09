@@ -12,7 +12,7 @@ Build a React Native gym companion app for a small friend group using Expo SDK 5
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Expo project scaffold, Supabase schema, RLS, auth screens, offline session handling, PR baseline setup
+- [x] **Phase 1: Foundation** - Expo project scaffold, Supabase schema, RLS, auth screens, offline session handling, PR baseline setup (completed 2026-03-09)
 - [ ] **Phase 2: Exercise Library** - Pre-loaded exercise database, custom exercise creation, searchable exercise picker
 - [ ] **Phase 3: Plan Builder** - Named plans, day assignment, per-day exercise configuration with full detail, plan CRUD
 - [ ] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes
@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User data automatically syncs to Supabase when the device is online
   5. The app opens and is usable (no crash, no forced logout) when the device has no network connectivity
   6. During account setup, user can enter current 1RM values for key lifts and see them saved as PR baselines
-**Plans:** 4 plans
+**Plans:** 4/4 plans complete
 
 Plans:
 - [ ] 01-00-PLAN.md — Wave 0: Test infrastructure (Jest + RNTL install, global mocks, 5 behavioral test stubs)
@@ -190,7 +190,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Planning complete | - |
+| 1. Foundation | 4/4 | Complete   | 2026-03-09 |
 | 2. Exercise Library | 0/2 | Not started | - |
 | 3. Plan Builder | 0/3 | Not started | - |
 | 4. Active Workout | 0/4 | Not started | - |
