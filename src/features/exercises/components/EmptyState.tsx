@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { Button } from '@/components/ui/Button';
 
@@ -10,7 +11,7 @@ interface EmptyStateProps {
 export function EmptyState({ hasFilters, onAddExercise }: EmptyStateProps) {
   return (
     <View style={s.container}>
-      <Text style={s.icon}>{'🏋️'}</Text>
+      <Ionicons name="barbell-outline" size={48} color={colors.textMuted} />
       <Text style={s.title}>No exercises found</Text>
       <Text style={s.subtitle}>
         {hasFilters
