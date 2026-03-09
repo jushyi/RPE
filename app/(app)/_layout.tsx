@@ -28,6 +28,10 @@ export default function AppLayout() {
         name="plans"
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="workout"
+        options={{ headerShown: false, presentation: 'fullScreenModal' }}
+      />
     </Stack>
   );
 }
