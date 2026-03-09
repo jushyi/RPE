@@ -27,7 +27,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **PLAN-02**: User can assign training days (Mon/Tue/Wed etc.) to a plan
 - [x] **PLAN-03**: User can add exercises to each training day from the exercise library
 - [x] **PLAN-04**: User can set target sets, reps, weight, RPE, and notes per exercise in the plan
-- [ ] **PLAN-05**: User can edit and delete existing plans
+- [x] **PLAN-05**: User can edit and delete existing plans
 
 ### Active Workout
 
@@ -109,7 +109,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLAN-02 | Phase 3 | Complete |
 | PLAN-03 | Phase 3 | Complete |
 | PLAN-04 | Phase 3 | Complete |
-| PLAN-05 | Phase 3 | Pending |
+| PLAN-05 | Phase 3 | Complete |
 | WORK-01 | Phase 4 | Pending |
 | WORK-02 | Phase 4 | Pending |
 | WORK-03 | Phase 4 | Pending |

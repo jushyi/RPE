@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Expo project scaffold, Supabase schema, RLS, auth screens, offline session handling, PR baseline setup (completed 2026-03-09)
 - [x] **Phase 2: Exercise Library** - Pre-loaded exercise database, custom exercise creation, searchable exercise picker (completed 2026-03-09)
-- [ ] **Phase 3: Plan Builder** - Named plans, day assignment, per-day exercise configuration with full detail, plan CRUD
+- [x] **Phase 3: Plan Builder** - Named plans, day assignment, per-day exercise configuration with full detail, plan CRUD (completed 2026-03-09)
 - [ ] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes
 - [ ] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation
 - [ ] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen
@@ -68,7 +68,7 @@ Plans:
   3. User can view all created plans and navigate to any plan's detail
   4. User can edit an existing plan (change exercises, days, or targets) and delete a plan entirely
   5. Plan edits do not alter previously logged workout sessions (plans and actuals remain separate)
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 03-01-PLAN.md — Schema (3 tables + RLS + active trigger), types, planStore, usePlans hook, Plans tab with list screen and empty state
@@ -192,7 +192,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-03-09 |
 | 2. Exercise Library | 2/2 | Complete   | 2026-03-09 |
-| 3. Plan Builder | 2/3 | In Progress|  |
+| 3. Plan Builder | 3/3 | Complete   | 2026-03-09 |
 | 4. Active Workout | 0/4 | Not started | - |
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 0/3 | Not started | - |
