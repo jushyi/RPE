@@ -86,13 +86,13 @@ Plans:
   4. Previous session's weight and reps for the current exercise are displayed inline while logging
   5. When a logged set exceeds the user's stored PR, the app immediately flags it as a personal record
   6. All set logging writes to local storage instantly and syncs to Supabase in the background — logging never waits for a network response
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 04-01: Active workout session state (Zustand store, MMKV persistence, crash recovery on app launch)
-- [ ] 04-02: Focus mode screen (one exercise at a time, oversized tap targets, set logging UI)
-- [ ] 04-03: Previous performance reference (last session inline display) and PR detection
-- [ ] 04-04: Offline-first sync (MMKV write buffer, NetInfo connectivity detection, TanStack Query mutation queue)
+- [ ] 04-01-PLAN.md — Database schema (workout_sessions, session_exercises, set_logs + RLS), TypeScript types, workoutStore with MMKV persistence
+- [ ] 04-02-PLAN.md — Focus mode screen (PagerView exercise navigation, swipe-to-log set cards, oversized inputs, freestyle picker)
+- [ ] 04-03-PLAN.md — Previous performance inline display and PR detection with celebration overlay
+- [ ] 04-04-PLAN.md — Offline sync queue, session summary, weight target prompts, crash recovery, human verification
 
 ### Phase 5: Workout History
 **Goal**: Users can review every past workout session in a scrollable log and see estimated 1RM calculations — the foundation that makes progress charts meaningful.
