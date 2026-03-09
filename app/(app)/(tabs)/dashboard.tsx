@@ -112,20 +112,39 @@ export default function DashboardScreen() {
   );
 
   const handlePhotoChanged = async (uri: string) => {
-    setAvatarUrl(uri); // Show immediately
+    const previousUrl = avatarUrl;
+    setAvatarUrl(uri); // Show immediately (optimistic)
     if (!supabase || !user) return;
     try {
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      const filePath = `${user.id}/avatar.jpg`;
-      await supabase.storage.from('avatars').upload(filePath, blob, { contentType: 'image/jpeg', upsert: true });
+      const ext = uri.split('.').pop() ?? 'jpg';
+      const formData = new FormData();
+      formData.append('file', {
+        uri,
+        name: `avatar.${ext}`,
+        type: `image/${ext === 'png' ? 'png' : 'jpeg'}`,
+      } as any);
+
+      const filePath = `${user.id}/avatar.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, formData, { contentType: 'multipart/form-data', upsert: true });
+
+      if (uploadError) {
+        setAvatarUrl(previousUrl);
+        Alert.alert('Upload Failed', 'Could not update your profile photo. Please try again.');
+        return;
+      }
+
       const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(filePath);
       if (urlData?.publicUrl) {
-        await supabase.auth.updateUser({ data: { avatar_url: urlData.publicUrl } });
-        setAvatarUrl(urlData.publicUrl);
+        const cacheBustedUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+        await supabase.auth.updateUser({ data: { avatar_url: cacheBustedUrl } });
+        setAvatarUrl(cacheBustedUrl);
       }
     } catch (err) {
       console.warn('Avatar upload failed:', err);
+      setAvatarUrl(previousUrl);
+      Alert.alert('Upload Failed', 'Could not update your profile photo. Please try again.');
     }
   };
 
