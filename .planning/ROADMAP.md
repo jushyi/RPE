@@ -68,12 +68,12 @@ Plans:
   3. User can view all created plans and navigate to any plan's detail
   4. User can edit an existing plan (change exercises, days, or targets) and delete a plan entirely
   5. Plan edits do not alter previously logged workout sessions (plans and actuals remain separate)
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 03-01: Plan creation flow (name, day assignment) and plan list screen
-- [ ] 03-02: Per-day exercise assignment with full detail (sets/reps/weight/RPE/notes)
-- [ ] 03-03: Plan edit and delete operations
+- [ ] 03-01-PLAN.md — Schema (3 tables + RLS + active trigger), types, planStore, usePlans hook, Plans tab with list screen and empty state
+- [ ] 03-02-PLAN.md — Plan creation screen (name + day slots + weekday mapping), exercise picker bottom sheet, inline set editing, drag-to-reorder, plan detail with collapsible day sections
+- [ ] 03-03-PLAN.md — Edit mode (view/edit toggle, save/cancel, draft isolation), delete with confirmation, active plan toggle, human verification
 
 ### Phase 4: Active Workout
 **Goal**: Users can run a live workout session in focus mode — logging sets with large tap targets, seeing their previous performance inline, getting instant PR flags — with every set saved locally the moment it's logged regardless of network state.
