@@ -41,10 +41,12 @@ Create structured workout plans with named day slots (optionally mapped to weekd
 
 ### Per-exercise weight progression mode
 - Each exercise in a plan has a weight_progression setting chosen on first add: 'manual' or 'carry_previous'
-- 'manual': user sets a specific target weight for next week (explicit goal)
-- 'carry_previous': system uses the weight from the previous week's logged session (auto-carry)
-- Default to 'manual' on first add — user picks during exercise configuration
-- This setting is stored per plan_day_exercise and drives future workout sessions
+- 'manual': after logging a workout session (Phase 4+), the app prompts "What weight next week?" per exercise — user sets an explicit goal post-session
+- 'carry_previous': system automatically uses the weight from the previous week's logged session (no prompt)
+- Default to 'manual' on first add — user picks during exercise configuration in the plan builder
+- This setting is stored per plan_day_exercise; the plan builder only stores the mode, NOT the actual target weight
+- The set row weight/reps/RPE fields in the plan builder are initial template values for the first session only
+- Post-session prompt and weight carry logic are Phase 4+ concerns — Phase 3 just stores the flag
 
 ### Claude's Discretion
 - Card styling and summary layout details
