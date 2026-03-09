@@ -5,7 +5,7 @@ milestone_name: milestone
 status: completed
 stopped_at: Completed quick-1 (avatar upload fix)
 last_updated: "2026-03-09T17:54:13.696Z"
-last_activity: 2026-03-09 — Completed 01-03 PR baseline and dashboard plan (Phase 1 complete)
+last_activity: 2026-03-09 - Completed quick task 1: fix dashboard profile pic change
 progress:
   total_phases: 10
   completed_phases: 1
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 1 of 10 (Foundation)
 Plan: 4 of 4 in current phase
 Status: Phase Complete
-Last activity: 2026-03-09 — Completed 01-03 PR baseline and dashboard plan (Phase 1 complete)
+Last activity: 2026-03-09 - Completed quick task 1: fix dashboard profile pic change
 
 Progress: [██████████] 100%
 
@@ -83,6 +83,12 @@ None yet.
 - [Phase 4]: notifee + Expo managed workflow compatibility needs validation before Phase 8 planning — may require bare workflow migration affecting project structure
 - [Phase 8]: iOS Critical Alerts entitlement (sound through DND) requires Apple review; fallback is best-effort notification delivery
 - [Phase 8]: Missed workout nudge background task reliability on iOS is uncertain — Supabase Edge Function cron may be required as fallback
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | tapping the profile pic to change on dashboard doesn't seem to work properly | 2026-03-09 | 1789739 | [1-tapping-the-profile-pic-to-change-on-das](./quick/1-tapping-the-profile-pic-to-change-on-das/) |
 
 ## Session Continuity
 
