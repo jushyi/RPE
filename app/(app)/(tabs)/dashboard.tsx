@@ -111,23 +111,24 @@ export default function DashboardScreen() {
     user?.user_metadata?.avatar_url ?? null
   );
 
+  // Sync avatar with auth user metadata on session refresh / reload
+  useEffect(() => {
+    const url = user?.user_metadata?.avatar_url ?? null;
+    if (url) setAvatarUrl(url);
+  }, [user?.user_metadata?.avatar_url]);
+
   const handlePhotoChanged = async (uri: string) => {
     const previousUrl = avatarUrl;
     setAvatarUrl(uri); // Show immediately (optimistic)
     if (!supabase || !user) return;
     try {
-      const ext = uri.split('.').pop() ?? 'jpg';
-      const formData = new FormData();
-      formData.append('file', {
-        uri,
-        name: `avatar.${ext}`,
-        type: `image/${ext === 'png' ? 'png' : 'jpeg'}`,
-      } as any);
+      const response = await fetch(uri);
+      const arrayBuffer = await response.arrayBuffer();
 
-      const filePath = `${user.id}/avatar.${ext}`;
+      const filePath = `${user.id}/avatar.jpg`;
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, formData, { contentType: 'multipart/form-data', upsert: true });
+        .upload(filePath, arrayBuffer, { contentType: 'image/jpeg', upsert: true });
 
       if (uploadError) {
         setAvatarUrl(previousUrl);
