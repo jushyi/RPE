@@ -36,9 +36,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User data automatically syncs to Supabase when the device is online
   5. The app opens and is usable (no crash, no forced logout) when the device has no network connectivity
   6. During account setup, user can enter current 1RM values for key lifts and see them saved as PR baselines
-**Plans:** 3 plans
+**Plans:** 4 plans
 
 Plans:
+- [ ] 01-00-PLAN.md — Wave 0: Test infrastructure (Jest + RNTL install, global mocks, 5 behavioral test stubs)
 - [ ] 01-01-PLAN.md — Project scaffold, dependencies, NativeWind config, Supabase client, Zustand/MMKV store, database migrations, Expo Router file structure
 - [ ] 01-02-PLAN.md — Auth screens (sign-in/sign-up toggle), session persistence, route guards, connectivity indicators (cloud icon + toast banner)
 - [ ] 01-03-PLAN.md — PR baseline entry flow (Big 3 lifts with unit selector), empty state dashboard shell
@@ -189,7 +190,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Planning complete | - |
+| 1. Foundation | 0/4 | Planning complete | - |
 | 2. Exercise Library | 0/2 | Not started | - |
 | 3. Plan Builder | 0/3 | Not started | - |
 | 4. Active Workout | 0/4 | Not started | - |
