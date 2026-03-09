@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 3 of 10 (Workout Plans)
 Plan: 1 of 3 in current phase
 Status: In Progress
-Last activity: 2026-03-09 - Completed 02-02: custom exercise CRUD via bottom sheet
+Last activity: 2026-03-09 - Completed quick task 3: Single-tap to edit/delete exercises
 
 Progress: [███████░░░] 67%
 
@@ -81,6 +81,10 @@ Recent decisions affecting current work:
 - [02-02]: Used BottomSheetModal (not BottomSheet) for overlay behavior with BottomSheetModalProvider
 - [02-02]: Chip-based pickers for muscle group and equipment selection in bottom sheet form
 - [02-02]: Duplicate name warning is non-blocking per EXER-02 requirements
+
+### Roadmap Evolution
+
+- Phase 11 added: Add settings tab, move sign out to it and have a delete account option with data export
 
 ### Pending Todos
 
