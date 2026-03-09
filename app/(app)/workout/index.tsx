@@ -13,7 +13,9 @@ import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet
 import PagerView from 'react-native-pager-view';
 import { colors } from '@/constants/theme';
 import { useWorkoutStore } from '@/stores/workoutStore';
+import { useAuthStore } from '@/stores/authStore';
 import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
+import { usePRDetection } from '@/features/workout/hooks/usePRDetection';
 import { WorkoutHeader } from '@/features/workout/components/WorkoutHeader';
 import { ExercisePager } from '@/features/workout/components/ExercisePager';
 import { FreestyleExercisePicker } from '@/features/workout/components/FreestyleExercisePicker';
@@ -23,6 +25,8 @@ export default function WorkoutScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ plan_day_id?: string }>();
   const activeSession = useWorkoutStore((s) => s.activeSession);
+  const userId = useAuthStore((s) => s.userId);
+  const { detectPR, loadBaselines } = usePRDetection(userId ?? undefined);
   const {
     session,
     currentExercise,
@@ -43,6 +47,11 @@ export default function WorkoutScreen() {
       router.back();
     }
   }, [activeSession, params.plan_day_id]);
+
+  // Load PR baselines when workout starts
+  useEffect(() => {
+    loadBaselines();
+  }, [loadBaselines]);
 
   const handleLogSet = useCallback(
     (exerciseId: string, weight: number, reps: number, unit: 'kg' | 'lbs') => {
@@ -112,6 +121,7 @@ export default function WorkoutScreen() {
             <ExercisePager
               exercises={session.exercises}
               onLogSet={handleLogSet}
+              onDetectPR={detectPR}
               pagerRef={pagerRef}
             />
           ) : (
