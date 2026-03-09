@@ -17,6 +17,8 @@ interface LiftEntry {
 
 interface PRBaselineFormProps {
   onComplete: () => void;
+  initialValues?: Array<{ exercise_name: string; weight: number; unit: 'kg' | 'lbs' }>;
+  mode?: 'onboarding' | 'edit';
 }
 
 const LIFTS = [
@@ -54,20 +56,26 @@ function UnitToggle({
   );
 }
 
-export function PRBaselineForm({ onComplete }: PRBaselineFormProps) {
+export function PRBaselineForm({ onComplete, initialValues, mode = 'onboarding' }: PRBaselineFormProps) {
+  const isEdit = mode === 'edit';
   const preferredUnit = useAuthStore((s) => s.preferredUnit);
   const setPreferredUnit = useAuthStore((s) => s.setPreferredUnit);
   const { savePRBaselines, isLoading } = usePRBaselines();
 
-  const [globalUnit, setGlobalUnit] = useState<Unit>(preferredUnit);
-  const [lifts, setLifts] = useState<LiftEntry[]>(
-    LIFTS.map((l) => ({
-      exercise_name: l.exercise_name,
-      label: l.label,
-      weight: '',
-      unit: preferredUnit,
-    }))
-  );
+  const initialUnit = initialValues?.[0]?.unit ?? preferredUnit;
+  const [globalUnit, setGlobalUnit] = useState<Unit>(initialUnit);
+  const [lifts, setLifts] = useState<LiftEntry[]>(() => {
+    const valueMap = new Map(initialValues?.map((v) => [v.exercise_name, v]));
+    return LIFTS.map((l) => {
+      const existing = valueMap.get(l.exercise_name);
+      return {
+        exercise_name: l.exercise_name,
+        label: l.label,
+        weight: existing ? String(existing.weight) : '',
+        unit: existing?.unit ?? initialUnit,
+      };
+    });
+  });
 
   const handleGlobalUnitChange = (unit: Unit) => {
     setGlobalUnit(unit);
@@ -113,8 +121,8 @@ export function PRBaselineForm({ onComplete }: PRBaselineFormProps) {
       contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 48, paddingBottom: 40 }}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={s.title}>Set Your Starting PRs</Text>
-      <Text style={s.subtitle}>Enter your current 1RM for each lift (optional)</Text>
+      <Text style={s.title}>{isEdit ? 'Edit Your PRs' : 'Set Your Starting PRs'}</Text>
+      <Text style={s.subtitle}>{isEdit ? 'Update your personal records' : 'Enter your current 1RM for each lift (optional)'}</Text>
 
       <View style={s.globalUnitRow}>
         <Text style={s.globalUnitLabel}>Default Unit</Text>
@@ -141,10 +149,12 @@ export function PRBaselineForm({ onComplete }: PRBaselineFormProps) {
       ))}
 
       <View style={{ marginTop: 16 }}>
-        <Button title="Save & Continue" onPress={handleSave} loading={isLoading} />
-        <View style={{ marginTop: 12 }}>
-          <Button title="Skip" onPress={handleSkip} variant="ghost" disabled={isLoading} />
-        </View>
+        <Button title={isEdit ? 'Save' : 'Save & Continue'} onPress={handleSave} loading={isLoading} />
+        {!isEdit && (
+          <View style={{ marginTop: 12 }}>
+            <Button title="Skip" onPress={handleSkip} variant="ghost" disabled={isLoading} />
+          </View>
+        )}
       </View>
     </ScrollView>
     </KeyboardAvoidingView>
