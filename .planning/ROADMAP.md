@@ -13,7 +13,7 @@ Build a React Native gym companion app for a small friend group using Expo SDK 5
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Expo project scaffold, Supabase schema, RLS, auth screens, offline session handling, PR baseline setup (completed 2026-03-09)
-- [ ] **Phase 2: Exercise Library** - Pre-loaded exercise database, custom exercise creation, searchable exercise picker
+- [x] **Phase 2: Exercise Library** - Pre-loaded exercise database, custom exercise creation, searchable exercise picker (completed 2026-03-09)
 - [ ] **Phase 3: Plan Builder** - Named plans, day assignment, per-day exercise configuration with full detail, plan CRUD
 - [ ] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes
 - [ ] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation
@@ -52,7 +52,7 @@ Plans:
   1. App launches with a pre-populated library of common exercises (bench press, squat, deadlift, etc.) searchable by name and muscle group
   2. User can create a custom exercise by providing a name, muscle group, and equipment type, and it immediately appears in the library
   3. Custom exercises persist across app restarts and sync to Supabase
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 02-01-PLAN.md — Exercise data layer (Supabase migration with ~35 seed exercises, types, Zustand store) and library screen with search/filter
@@ -191,7 +191,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-03-09 |
-| 2. Exercise Library | 1/2 | In Progress|  |
+| 2. Exercise Library | 2/2 | Complete   | 2026-03-09 |
 | 3. Plan Builder | 0/3 | Not started | - |
 | 4. Active Workout | 0/4 | Not started | - |
 | 5. Workout History | 0/2 | Not started | - |

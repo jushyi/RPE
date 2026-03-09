@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 4 context gathered
-last_updated: "2026-03-09T19:05:33.721Z"
+last_updated: "2026-03-09T19:24:17.957Z"
 last_activity: "2026-03-09 - Completed 02-01: exercise data layer and library screen"
 progress:
   total_phases: 10
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 9
-  completed_plans: 5
+  completed_plans: 6
   percent: 83
 ---
 
@@ -21,37 +21,38 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09)
 
 **Core value:** Users can log every workout session in detail and see their progress over time
-**Current focus:** Phase 2 — Exercise Library
+**Current focus:** Phase 3 — Workout Plans
 
 ## Current Position
 
-Phase: 2 of 10 (Exercise Library)
-Plan: 1 of 2 in current phase
+Phase: 3 of 10 (Workout Plans)
+Plan: 1 of 3 in current phase
 Status: In Progress
-Last activity: 2026-03-09 - Completed 02-01: exercise data layer and library screen
+Last activity: 2026-03-09 - Completed 02-02: custom exercise CRUD via bottom sheet
 
-Progress: [████████░░] 83%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 11min
-- Total execution time: 53min
+- Total plans completed: 6
+- Average duration: 10min
+- Total execution time: 61min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation | 4/4 | 48min | 12min |
-| 02-exercise-library | 1/2 | 5min | 5min |
+| 02-exercise-library | 2/2 | 13min | 7min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (7min), 01-02 (5min), 01-03 (30min), 02-01 (5min)
-- Trend: 02-01 fast execution, straightforward data layer + UI
+- Last 5 plans: 01-02 (5min), 01-03 (30min), 02-01 (5min), 02-02 (8min)
+- Trend: Phase 02 completed quickly, exercise library feature complete
 
 *Updated after each plan completion*
 | Phase 02 P01 | 5min | 2 tasks | 17 files |
+| Phase 02 P02 | 8min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Added email confirmation screen for Supabase auth verification flow
 - [02-01]: Used as-any pattern for Supabase .from() calls matching existing codebase convention
 - [02-01]: Used unicode characters for tab bar icons per Phase 1 no-vector-icons decision
+- [02-02]: Used BottomSheetModal (not BottomSheet) for overlay behavior with BottomSheetModalProvider
+- [02-02]: Chip-based pickers for muscle group and equipment selection in bottom sheet form
+- [02-02]: Duplicate name warning is non-blocking per EXER-02 requirements
 
 ### Pending Todos
 
@@ -97,6 +101,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T19:05:33.719Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-active-workout/04-CONTEXT.md
+Last session: 2026-03-09T19:23:17Z
+Stopped at: Completed 02-02-PLAN.md
+Resume file: .planning/phases/03-workout-plans/
