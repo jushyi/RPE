@@ -34,7 +34,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **WORK-01**: User can start a workout session from a plan or as a freestyle session
 - [x] **WORK-02**: Active workout shows one exercise at a time in focus mode with large tap targets
 - [x] **WORK-03**: User can log weight and reps for each set
-- [ ] **WORK-04**: Previous session's weight/reps shown inline while logging
+- [x] **WORK-04**: Previous session's weight/reps shown inline while logging
 - [x] **WORK-05**: App auto-detects and flags personal records during a session (compared against baselines from AUTH-06 and historical logs)
 
 ### History & Progress
@@ -113,7 +113,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WORK-01 | Phase 4 | Complete |
 | WORK-02 | Phase 4 | Complete |
 | WORK-03 | Phase 4 | Complete |
-| WORK-04 | Phase 4 | Pending |
+| WORK-04 | Phase 4 | Complete |
 | WORK-05 | Phase 4 | Complete |
 | HIST-01 | Phase 5 | Pending |
 | HIST-06 | Phase 5 | Pending |
