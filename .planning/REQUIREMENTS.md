@@ -9,12 +9,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication & Infrastructure
 
-- [ ] **AUTH-01**: User can create account with email and password
-- [ ] **AUTH-02**: User can log in and stay logged in across app restarts
-- [ ] **AUTH-03**: User can log out from any screen
-- [ ] **AUTH-04**: User data syncs to Supabase cloud automatically
+- [x] **AUTH-01**: User can create account with email and password
+- [x] **AUTH-02**: User can log in and stay logged in across app restarts
+- [x] **AUTH-03**: User can log out from any screen
+- [x] **AUTH-04**: User data syncs to Supabase cloud automatically
 - [ ] **AUTH-05**: All workout logging works offline and syncs when connected
-- [ ] **AUTH-06**: During account setup, user can enter current 1RM personal records for key lifts to establish PR baselines
+- [x] **AUTH-06**: During account setup, user can enter current 1RM personal records for key lifts to establish PR baselines
 
 ### Exercise Library
 
@@ -97,12 +97,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
 | AUTH-05 | Phase 1 | Pending |
-| AUTH-06 | Phase 1 | Pending |
+| AUTH-06 | Phase 1 | Complete |
 | EXER-01 | Phase 2 | Pending |
 | EXER-02 | Phase 2 | Pending |
 | PLAN-01 | Phase 3 | Pending |
