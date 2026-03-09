@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed quick task 3
-last_updated: "2026-03-09T19:29:30.584Z"
-last_activity: "2026-03-09 - Completed 02-02: custom exercise CRUD via bottom sheet"
+stopped_at: Phase 5 context gathered
+last_updated: "2026-03-09T19:44:39.932Z"
+last_activity: "2026-03-09 - Completed 03-02: Plan creation flow and detail screen"
 progress:
   total_phases: 11
   completed_phases: 2
-  total_plans: 9
-  completed_plans: 7
-  percent: 78
+  total_plans: 13
+  completed_plans: 8
+  percent: 82
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 ## Current Position
 
 Phase: 3 of 10 (Workout Plans)
-Plan: 2 of 3 in current phase
+Plan: 3 of 3 in current phase
 Status: In Progress
-Last activity: 2026-03-09 - Completed 03-01: Plan data foundation (schema, store, tab)
+Last activity: 2026-03-09 - Completed 03-02: Plan creation flow and detail screen
 
-Progress: [████████░░] 78%
+Progress: [████████░░] 82%
 
 ## Performance Metrics
 
@@ -54,6 +54,7 @@ Progress: [████████░░] 78%
 | Phase 02 P01 | 5min | 2 tasks | 17 files |
 | Phase 02 P02 | 8min | 2 tasks | 6 files |
 | Phase 03 P01 | 4min | 2 tasks | 13 files |
+| Phase 03 P02 | 5min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,10 @@ Recent decisions affecting current work:
 - [03-01]: Used Ionicons (clipboard-outline) for Plans tab icon per project convention
 - [03-01]: PlanCard swipe-to-delete is a stub until Plan 03-03 wires confirmation dialog
 - [03-01]: PlanSummary computed from Plan data in hook rather than separate Supabase query
+- [03-02]: Used react-native-draggable-flatlist for exercise reorder within days (ScaleDecorator + long-press)
+- [03-02]: ExercisePicker reuses ExerciseFilterBar and ExerciseListItem from Phase 2 for consistent UX
+- [03-02]: LayoutAnimation for collapsible sections (simpler than Reanimated per RESEARCH.md)
+- [03-02]: Edit button on plan detail rendered disabled as placeholder for Plan 03-03
 
 ### Roadmap Evolution
 
@@ -110,6 +115,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-09T19:35:25Z
-Stopped at: Completed 03-01-PLAN.md
-Resume file: .planning/phases/03-plan-builder/
+Last session: 2026-03-09T19:44:39.931Z
+Stopped at: Phase 5 context gathered
+Resume file: .planning/phases/05-workout-history/05-CONTEXT.md
