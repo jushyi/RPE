@@ -5,9 +5,10 @@ const mockExercise = (overrides: Partial<Exercise> = {}): Exercise => ({
   id: 'test-id-1',
   user_id: null,
   name: 'Bench Press',
-  muscle_group: 'Chest',
+  muscle_groups: ['Chest', 'Triceps'],
   equipment: 'Barbell',
   notes: null,
+  track_prs: false,
   created_at: '2026-01-01T00:00:00Z',
   updated_at: '2026-01-01T00:00:00Z',
   ...overrides,
@@ -28,7 +29,7 @@ describe('Exercise CRUD operations', () => {
         id: 'custom-1',
         user_id: 'user-123',
         name: 'Landmine Press',
-        muscle_group: 'Delts',
+        muscle_groups: ['Delts', 'Chest'],
         equipment: 'Barbell',
       });
 
@@ -38,12 +39,13 @@ describe('Exercise CRUD operations', () => {
       expect(exercises).toHaveLength(1);
       expect(exercises[0].name).toBe('Landmine Press');
       expect(exercises[0].user_id).toBe('user-123');
+      expect(exercises[0].muscle_groups).toEqual(['Delts', 'Chest']);
     });
 
     it('appends to existing exercises without replacing', () => {
       useExerciseStore.getState().setExercises([mockExercise()]);
       useExerciseStore.getState().addExercise(
-        mockExercise({ id: 'custom-2', name: 'Cable Fly' })
+        mockExercise({ id: 'custom-2', name: 'Cable Fly', muscle_groups: ['Chest'] })
       );
 
       const { exercises } = useExerciseStore.getState();
@@ -57,7 +59,7 @@ describe('Exercise CRUD operations', () => {
     it('modifies the correct exercise by id', () => {
       useExerciseStore.getState().setExercises([
         mockExercise({ id: 'e1', name: 'Bench Press' }),
-        mockExercise({ id: 'e2', name: 'Squat' }),
+        mockExercise({ id: 'e2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] }),
       ]);
 
       useExerciseStore.getState().updateExercise('e1', {
@@ -74,7 +76,7 @@ describe('Exercise CRUD operations', () => {
     it('does not modify other exercises', () => {
       useExerciseStore.getState().setExercises([
         mockExercise({ id: 'e1', name: 'Bench Press' }),
-        mockExercise({ id: 'e2', name: 'Squat' }),
+        mockExercise({ id: 'e2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] }),
       ]);
 
       useExerciseStore.getState().updateExercise('e1', { name: 'Changed' });
@@ -89,7 +91,7 @@ describe('Exercise CRUD operations', () => {
     it('removes the exercise from the store', () => {
       useExerciseStore.getState().setExercises([
         mockExercise({ id: 'e1', name: 'Bench Press' }),
-        mockExercise({ id: 'e2', name: 'Squat' }),
+        mockExercise({ id: 'e2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] }),
       ]);
 
       useExerciseStore.getState().removeExercise('e1');
@@ -112,7 +114,7 @@ describe('Exercise CRUD operations', () => {
     it('detects case-insensitive duplicate names', () => {
       const exercises = [
         mockExercise({ id: 'e1', name: 'Bench Press' }),
-        mockExercise({ id: 'e2', name: 'Squat' }),
+        mockExercise({ id: 'e2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] }),
       ];
 
       const checkDuplicate = (name: string, excludeId?: string) => {
@@ -131,7 +133,7 @@ describe('Exercise CRUD operations', () => {
     it('excludes current exercise when editing', () => {
       const exercises = [
         mockExercise({ id: 'e1', name: 'Bench Press' }),
-        mockExercise({ id: 'e2', name: 'Squat' }),
+        mockExercise({ id: 'e2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] }),
       ];
 
       const checkDuplicate = (name: string, excludeId?: string) => {

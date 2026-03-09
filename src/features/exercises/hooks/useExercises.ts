@@ -40,12 +40,12 @@ export function useExercises() {
 
   const createExercise = useCallback(
     async (
-      exercise: Omit<Exercise, 'id' | 'user_id' | 'created_at' | 'updated_at'>
+      exercise: Omit<Exercise, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'track_prs'> & { track_prs?: boolean }
     ) => {
       if (!supabase || !userId) return;
 
       const { data, error } = await (supabase.from('exercises') as any)
-        .insert({ ...exercise, user_id: userId })
+        .insert({ track_prs: false, ...exercise, user_id: userId })
         .select()
         .single();
 
@@ -57,7 +57,7 @@ export function useExercises() {
   );
 
   const updateExercise = useCallback(
-    async (id: string, updates: Partial<Pick<Exercise, 'name' | 'muscle_group' | 'equipment' | 'notes'>>) => {
+    async (id: string, updates: Partial<Pick<Exercise, 'name' | 'muscle_groups' | 'equipment' | 'notes'>>) => {
       if (!supabase) return;
 
       const { data, error } = await (supabase.from('exercises') as any)

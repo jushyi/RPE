@@ -17,6 +17,7 @@ export interface PRBaseline {
   id: string; // UUID
   user_id: string; // UUID, references auth.users(id)
   exercise_name: string; // 'bench_press' | 'squat' | 'deadlift'
+  exercise_id: string | null; // UUID, references exercises(id)
   weight: number; // NUMERIC(6,2)
   unit: 'kg' | 'lbs';
   created_at: string; // TIMESTAMPTZ
@@ -30,6 +31,7 @@ export interface ExerciseRow {
   muscle_groups: string[];
   equipment: string;
   notes: string | null;
+  track_prs: boolean;
   created_at: string; // TIMESTAMPTZ
   updated_at: string; // TIMESTAMPTZ
 }
@@ -64,6 +66,35 @@ export interface PlanDayExerciseRow {
   created_at: string; // TIMESTAMPTZ
 }
 
+export interface WorkoutSessionRow {
+  id: string; // UUID
+  user_id: string; // UUID, references auth.users(id)
+  plan_id: string | null; // UUID, references workout_plans(id)
+  plan_day_id: string | null; // UUID, references plan_days(id)
+  started_at: string; // TIMESTAMPTZ
+  ended_at: string | null; // TIMESTAMPTZ
+  created_at: string; // TIMESTAMPTZ
+}
+
+export interface SessionExerciseRow {
+  id: string; // UUID
+  session_id: string; // UUID, references workout_sessions(id)
+  exercise_id: string; // UUID, references exercises(id)
+  sort_order: number; // SMALLINT
+  created_at: string; // TIMESTAMPTZ
+}
+
+export interface SetLogRow {
+  id: string; // UUID
+  session_exercise_id: string; // UUID, references session_exercises(id)
+  set_number: number; // SMALLINT
+  weight: number; // NUMERIC(6,2)
+  reps: number; // SMALLINT
+  unit: 'kg' | 'lbs';
+  is_pr: boolean;
+  logged_at: string; // TIMESTAMPTZ
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -79,8 +110,9 @@ export interface Database {
       };
       pr_baselines: {
         Row: PRBaseline;
-        Insert: Omit<PRBaseline, 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<PRBaseline, 'id' | 'created_at' | 'updated_at' | 'exercise_id'> & {
           id?: string;
+          exercise_id?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -133,6 +165,35 @@ export interface Database {
           created_at?: string;
         };
         Update: Partial<Omit<PlanDayExerciseRow, 'id' | 'plan_day_id' | 'created_at'>>;
+      };
+      workout_sessions: {
+        Row: WorkoutSessionRow;
+        Insert: Omit<WorkoutSessionRow, 'id' | 'created_at'> & {
+          id?: string;
+          plan_id?: string | null;
+          plan_day_id?: string | null;
+          started_at?: string;
+          ended_at?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Omit<WorkoutSessionRow, 'id' | 'user_id' | 'created_at'>>;
+      };
+      session_exercises: {
+        Row: SessionExerciseRow;
+        Insert: Omit<SessionExerciseRow, 'id' | 'created_at'> & {
+          id?: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: Partial<Omit<SessionExerciseRow, 'id' | 'session_id' | 'created_at'>>;
+      };
+      set_logs: {
+        Row: SetLogRow;
+        Insert: Omit<SetLogRow, 'id'> & {
+          id?: string;
+          is_pr?: boolean;
+        };
+        Update: Partial<Omit<SetLogRow, 'id' | 'session_exercise_id'>>;
       };
     };
     Views: Record<string, never>;

@@ -16,7 +16,7 @@ function filterExercises(
   let result = exercises;
 
   if (selectedMuscleGroup) {
-    result = result.filter((e) => e.muscle_group === selectedMuscleGroup);
+    result = result.filter((e) => e.muscle_groups.includes(selectedMuscleGroup));
   }
   if (selectedEquipment) {
     result = result.filter((e) => e.equipment === selectedEquipment);
@@ -33,25 +33,26 @@ const makeExercise = (overrides: Partial<Exercise>): Exercise => ({
   id: 'id-1',
   user_id: null,
   name: 'Bench Press',
-  muscle_group: 'Chest',
+  muscle_groups: ['Chest', 'Triceps'],
   equipment: 'Barbell',
   notes: null,
+  track_prs: false,
   created_at: '2026-01-01T00:00:00Z',
   updated_at: '2026-01-01T00:00:00Z',
   ...overrides,
 });
 
 const sampleExercises: Exercise[] = [
-  makeExercise({ id: '1', name: 'Bench Press', muscle_group: 'Chest', equipment: 'Barbell' }),
-  makeExercise({ id: '2', name: 'Incline Bench Press', muscle_group: 'Chest', equipment: 'Barbell' }),
-  makeExercise({ id: '3', name: 'Dumbbell Flyes', muscle_group: 'Chest', equipment: 'Dumbbell' }),
-  makeExercise({ id: '4', name: 'Barbell Row', muscle_group: 'Lats', equipment: 'Barbell' }),
-  makeExercise({ id: '5', name: 'Lat Pulldown', muscle_group: 'Lats', equipment: 'Cable' }),
-  makeExercise({ id: '6', name: 'Squat', muscle_group: 'Quads', equipment: 'Barbell' }),
-  makeExercise({ id: '7', name: 'Leg Press', muscle_group: 'Quads', equipment: 'Machine' }),
-  makeExercise({ id: '8', name: 'Triceps Pushdown', muscle_group: 'Triceps', equipment: 'Cable' }),
-  makeExercise({ id: '9', name: 'Plank', muscle_group: 'Core', equipment: 'Bodyweight' }),
-  makeExercise({ id: '10', name: 'Custom Press', muscle_group: 'Chest', equipment: 'Barbell', user_id: 'user-123' }),
+  makeExercise({ id: '1', name: 'Bench Press', muscle_groups: ['Chest', 'Triceps'], equipment: 'Barbell' }),
+  makeExercise({ id: '2', name: 'Incline Bench Press', muscle_groups: ['Chest', 'Delts'], equipment: 'Barbell' }),
+  makeExercise({ id: '3', name: 'Dumbbell Flyes', muscle_groups: ['Chest'], equipment: 'Dumbbell' }),
+  makeExercise({ id: '4', name: 'Barbell Row', muscle_groups: ['Lats', 'Biceps'], equipment: 'Barbell' }),
+  makeExercise({ id: '5', name: 'Lat Pulldown', muscle_groups: ['Lats', 'Biceps'], equipment: 'Cable' }),
+  makeExercise({ id: '6', name: 'Squat', muscle_groups: ['Quads', 'Glutes'], equipment: 'Barbell' }),
+  makeExercise({ id: '7', name: 'Leg Press', muscle_groups: ['Quads', 'Glutes'], equipment: 'Machine' }),
+  makeExercise({ id: '8', name: 'Triceps Pushdown', muscle_groups: ['Triceps'], equipment: 'Cable' }),
+  makeExercise({ id: '9', name: 'Plank', muscle_groups: ['Core'], equipment: 'Bodyweight' }),
+  makeExercise({ id: '10', name: 'Custom Press', muscle_groups: ['Chest'], equipment: 'Barbell', user_id: 'user-123' }),
 ];
 
 describe('Exercise filtering', () => {
@@ -60,10 +61,16 @@ describe('Exercise filtering', () => {
     expect(result).toHaveLength(10);
   });
 
-  it('filters by muscle group', () => {
+  it('filters by muscle group (includes multi-muscle exercises)', () => {
     const result = filterExercises(sampleExercises, 'Chest', null, '');
-    expect(result).toHaveLength(4); // 3 global chest + 1 custom chest
-    expect(result.every((e) => e.muscle_group === 'Chest')).toBe(true);
+    expect(result).toHaveLength(4); // Bench, Incline, Flyes, Custom Press
+    expect(result.every((e) => e.muscle_groups.includes('Chest'))).toBe(true);
+  });
+
+  it('filters by secondary muscle group', () => {
+    const result = filterExercises(sampleExercises, 'Triceps', null, '');
+    expect(result).toHaveLength(2); // Bench Press (Chest+Triceps), Triceps Pushdown
+    expect(result.every((e) => e.muscle_groups.includes('Triceps'))).toBe(true);
   });
 
   it('filters by equipment', () => {
@@ -82,7 +89,7 @@ describe('Exercise filtering', () => {
   it('combines muscle group + equipment filters', () => {
     const result = filterExercises(sampleExercises, 'Chest', 'Barbell', '');
     expect(result).toHaveLength(3); // Bench, Incline Bench, Custom Press
-    expect(result.every((e) => e.muscle_group === 'Chest' && e.equipment === 'Barbell')).toBe(true);
+    expect(result.every((e) => e.muscle_groups.includes('Chest') && e.equipment === 'Barbell')).toBe(true);
   });
 
   it('combines muscle group + search filters', () => {

@@ -11,7 +11,7 @@ const mockPlanDayExercise = (overrides: Partial<PlanDayExercise> = {}): PlanDayE
   unit_override: null,
   weight_progression: 'carry_previous',
   created_at: '2026-01-01T00:00:00Z',
-  exercise: { id: 'ex-1', name: 'Bench Press', muscle_groups: ['chest'], equipment: 'barbell', is_custom: false, user_id: null, created_at: '2026-01-01T00:00:00Z' },
+  exercise: { id: 'ex-1', name: 'Bench Press', muscle_groups: ['Chest'] as any, equipment: 'Barbell' as any, user_id: null, notes: null, track_prs: false, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z' },
   ...overrides,
 });
 

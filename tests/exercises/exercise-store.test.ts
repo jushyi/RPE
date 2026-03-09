@@ -5,9 +5,10 @@ const mockExercise = (overrides: Partial<Exercise> = {}): Exercise => ({
   id: 'test-id-1',
   user_id: null,
   name: 'Bench Press',
-  muscle_group: 'Chest',
+  muscle_groups: ['Chest', 'Triceps'],
   equipment: 'Barbell',
   notes: null,
+  track_prs: false,
   created_at: '2026-01-01T00:00:00Z',
   updated_at: '2026-01-01T00:00:00Z',
   ...overrides,
@@ -31,7 +32,7 @@ describe('exerciseStore', () => {
   });
 
   it('setExercises replaces exercises and sets lastFetched', () => {
-    const exercises = [mockExercise(), mockExercise({ id: 'test-id-2', name: 'Squat' })];
+    const exercises = [mockExercise(), mockExercise({ id: 'test-id-2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] })];
     useExerciseStore.getState().setExercises(exercises);
 
     const state = useExerciseStore.getState();
@@ -44,7 +45,7 @@ describe('exerciseStore', () => {
   it('addExercise appends to exercises', () => {
     useExerciseStore.getState().setExercises([mockExercise()]);
     useExerciseStore.getState().addExercise(
-      mockExercise({ id: 'test-id-2', name: 'Squat' })
+      mockExercise({ id: 'test-id-2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] })
     );
 
     const state = useExerciseStore.getState();
@@ -55,7 +56,7 @@ describe('exerciseStore', () => {
   it('updateExercise updates the matching exercise by id', () => {
     useExerciseStore.getState().setExercises([
       mockExercise(),
-      mockExercise({ id: 'test-id-2', name: 'Squat' }),
+      mockExercise({ id: 'test-id-2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] }),
     ]);
 
     useExerciseStore.getState().updateExercise('test-id-1', { name: 'Incline Bench Press' });
@@ -77,7 +78,7 @@ describe('exerciseStore', () => {
   it('removeExercise removes exercise by id', () => {
     useExerciseStore.getState().setExercises([
       mockExercise(),
-      mockExercise({ id: 'test-id-2', name: 'Squat' }),
+      mockExercise({ id: 'test-id-2', name: 'Squat', muscle_groups: ['Quads', 'Glutes'] }),
     ]);
 
     useExerciseStore.getState().removeExercise('test-id-1');

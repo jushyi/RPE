@@ -31,9 +31,10 @@ export interface Exercise {
   id: string;
   user_id: string | null; // null = global seed exercise
   name: string;
-  muscle_group: MuscleGroup;
+  muscle_groups: MuscleGroup[];
   equipment: Equipment;
   notes: string | null;
+  track_prs: boolean;
   created_at: string;
   updated_at: string;
 }
