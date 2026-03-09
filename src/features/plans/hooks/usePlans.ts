@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { usePlanStore } from '@/stores/planStore';
 import { useAuthStore } from '@/stores/authStore';
-import type { Plan, PlanSummary } from '../types';
+import type { Plan, PlanSummary, TargetSet } from '../types';
 
 export function usePlans() {
   const {
@@ -58,8 +58,20 @@ export function usePlans() {
     }
   }, [lastFetched, plans.length]);
 
+  interface CreatePlanDay {
+    day_name: string;
+    weekday: number | null;
+    exercises: {
+      exercise_id: string;
+      target_sets: TargetSet[];
+      notes: string | null;
+      unit_override: 'kg' | 'lbs' | null;
+      weight_progression: 'manual' | 'carry_previous';
+    }[];
+  }
+
   const createPlan = useCallback(
-    async (name: string, dayNames: string[]) => {
+    async (name: string, days: CreatePlanDay[]) => {
       if (!supabase || !userId) return;
 
       // Insert the plan
@@ -71,9 +83,10 @@ export function usePlans() {
       if (planError) throw planError;
 
       // Insert plan days
-      const dayInserts = dayNames.map((dayName, index) => ({
+      const dayInserts = days.map((day, index) => ({
         plan_id: planData.id,
-        day_name: dayName,
+        day_name: day.day_name,
+        weekday: day.weekday,
         sort_order: index,
       }));
 
@@ -83,11 +96,44 @@ export function usePlans() {
 
       if (dayError) throw dayError;
 
+      // Insert exercises for each day
+      const sortedDays = (dayData ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order);
+      const allExerciseInserts: any[] = [];
+
+      for (let i = 0; i < sortedDays.length; i++) {
+        const dayExercises = days[i]?.exercises ?? [];
+        for (let j = 0; j < dayExercises.length; j++) {
+          const ex = dayExercises[j];
+          allExerciseInserts.push({
+            plan_day_id: sortedDays[i].id,
+            exercise_id: ex.exercise_id,
+            sort_order: j,
+            target_sets: ex.target_sets,
+            notes: ex.notes,
+            unit_override: ex.unit_override,
+            weight_progression: ex.weight_progression,
+          });
+        }
+      }
+
+      let exerciseData: any[] = [];
+      if (allExerciseInserts.length > 0) {
+        const { data: exData, error: exError } = await (supabase.from('plan_day_exercises') as any)
+          .insert(allExerciseInserts)
+          .select();
+
+        if (exError) throw exError;
+        exerciseData = exData ?? [];
+      }
+
+      // Build the full plan object
       const newPlan: Plan = {
         ...planData,
-        plan_days: (dayData ?? []).map((d: any) => ({
+        plan_days: sortedDays.map((d: any) => ({
           ...d,
-          plan_day_exercises: [],
+          plan_day_exercises: exerciseData
+            .filter((e: any) => e.plan_day_id === d.id)
+            .sort((a: any, b: any) => a.sort_order - b.sort_order),
         })),
       };
 
