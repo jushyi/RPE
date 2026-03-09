@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   Pressable,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -17,7 +18,7 @@ import type { PlanSummary } from '@/features/plans/types';
 
 export default function PlansScreen() {
   const router = useRouter();
-  const { planSummaries, isLoading, fetchPlans, setActivePlan } = usePlans();
+  const { planSummaries, isLoading, fetchPlans, setActivePlan, deletePlan } = usePlans();
 
   useEffect(() => {
     fetchPlans();
@@ -35,12 +36,34 @@ export default function PlansScreen() {
     setActivePlan(id);
   };
 
+  const handleDeletePlan = (plan: PlanSummary) => {
+    Alert.alert(
+      `Delete "${plan.name}"?`,
+      'Past workouts logged with this plan will be kept.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deletePlan(plan.id);
+            } catch (err) {
+              Alert.alert('Error', 'Failed to delete plan.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const renderItem = ({ item }: { item: PlanSummary }) => (
     <View style={s.cardWrapper}>
       <PlanCard
         plan={item}
         onPress={() => handlePlanPress(item.id)}
         onLongPress={() => handleSetActive(item.id)}
+        onDelete={() => handleDeletePlan(item)}
       />
     </View>
   );

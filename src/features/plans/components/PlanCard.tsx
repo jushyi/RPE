@@ -35,8 +35,6 @@ export function PlanCard({ plan, onPress, onLongPress, onDelete }: PlanCardProps
   const handleDelete = () => {
     if (onDelete) {
       onDelete();
-    } else {
-      console.warn('Delete confirmation wired in Plan 03-03');
     }
   };
 
