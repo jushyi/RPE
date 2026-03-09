@@ -23,6 +23,17 @@ export interface PRBaseline {
   updated_at: string; // TIMESTAMPTZ
 }
 
+export interface ExerciseRow {
+  id: string; // UUID
+  user_id: string | null; // UUID, NULL = global seed exercise
+  name: string;
+  muscle_group: string;
+  equipment: string;
+  notes: string | null;
+  created_at: string; // TIMESTAMPTZ
+  updated_at: string; // TIMESTAMPTZ
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -44,6 +55,17 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Omit<PRBaseline, 'id' | 'user_id' | 'created_at'>> & {
+          updated_at?: string;
+        };
+      };
+      exercises: {
+        Row: ExerciseRow;
+        Insert: Omit<ExerciseRow, 'id' | 'created_at' | 'updated_at'> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<ExerciseRow, 'id' | 'user_id' | 'created_at'>> & {
           updated_at?: string;
         };
       };
