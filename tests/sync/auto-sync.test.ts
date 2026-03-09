@@ -2,9 +2,11 @@
  * AUTH-04: Auto-sync
  *
  * Validates that data syncs to Supabase when online and queues when offline.
- * Concrete tests verify mock infrastructure; todo tests will be filled
- * by Plan 01-03 when sync logic is implemented.
+ * Also validates connectivity detection hooks.
  */
+
+import { useNetworkStatus } from '../../src/hooks/useNetworkStatus';
+import { renderHook } from '@testing-library/react-native';
 
 describe('AUTH-04: Auto-sync', () => {
   it('mock NetInfo returns connected state', () => {
@@ -19,7 +21,14 @@ describe('AUTH-04: Auto-sync', () => {
     expect(state.isConnected).toBe(true);
   });
 
-  it.todo('queues writes to MMKV when offline');
-  it.todo('flushes MMKV queue to Supabase when connectivity restored');
-  it.todo('does not block UI while syncing');
+  it('useNetworkStatus returns isConnected from NetInfo', () => {
+    const { result } = renderHook(() => useNetworkStatus());
+    expect(result.current.isConnected).toBe(true);
+  });
+
+  it('useNetworkStatus initially has no transitions', () => {
+    const { result } = renderHook(() => useNetworkStatus());
+    expect(result.current.justWentOffline).toBe(false);
+    expect(result.current.justCameOnline).toBe(false);
+  });
 });

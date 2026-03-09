@@ -1,35 +1,29 @@
-import { Tabs } from 'expo-router';
+import { Stack } from 'expo-router';
 import { colors } from '@/constants/theme';
+import { HeaderCloudIcon } from '@/components/layout/HeaderCloudIcon';
 
 /**
- * Tab navigator layout for the main app.
- * Currently has one tab (dashboard). Future plans will add more tabs.
+ * App layout wrapping tabs and onboarding routes.
+ * HeaderCloudIcon shows connection status in all screen headers.
  */
 export default function AppLayout() {
   return (
-    <Tabs
+    <Stack
       screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.surfaceElevated,
-        },
-        tabBarActiveTintColor: colors.accent,
-        tabBarInactiveTintColor: colors.textMuted,
+        headerStyle: { backgroundColor: colors.surface },
+        headerTintColor: colors.textPrimary,
+        headerRight: () => <HeaderCloudIcon />,
+        contentStyle: { backgroundColor: colors.background },
       }}
     >
-      <Tabs.Screen
+      <Stack.Screen
         name="(tabs)"
-        options={{
-          title: 'Dashboard',
-        }}
+        options={{ headerShown: false }}
       />
-      <Tabs.Screen
+      <Stack.Screen
         name="onboarding"
-        options={{
-          href: null, // Hide from tab bar
-        }}
+        options={{ headerShown: false }}
       />
-    </Tabs>
+    </Stack>
   );
 }
