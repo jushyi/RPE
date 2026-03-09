@@ -37,6 +37,8 @@ Live workout session in focus mode — logging sets with large tap targets, prev
 
 ### Session completion
 - Stats card summary after finishing: duration, total volume (weight × reps), exercises completed, PRs hit
+- Post-session weight target prompt: for exercises with weight_progression = 'manual', prompt "What weight next week?" per exercise after session ends — user sets an explicit target that pre-fills next session
+- Exercises with weight_progression = 'carry_previous' skip the prompt — next session auto-fills from this session's actuals
 - End early with confirmation: "You have X exercises remaining. End anyway?" — saves all completed sets
 - No discard option — once sets are logged, they're saved (delete individual sessions in History, Phase 5)
 - Crash recovery: on relaunch, detect unfinished session and prompt "Resume or start fresh?"
