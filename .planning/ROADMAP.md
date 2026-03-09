@@ -36,13 +36,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. User data automatically syncs to Supabase when the device is online
   5. The app opens and is usable (no crash, no forced logout) when the device has no network connectivity
   6. During account setup, user can enter current 1RM values for key lifts and see them saved as PR baselines
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: Project scaffold (Expo SDK 55, Expo Router, TypeScript, NativeWind, Zustand, TanStack Query, MMKV)
-- [ ] 01-02: Supabase project setup (schema, RLS policies, indexes, plan/session split)
-- [ ] 01-03: Auth screens (sign up, sign in, sign out) with expo-secure-store session persistence and offline-safe token handling
-- [ ] 01-04: PR baseline entry flow during account setup
+- [ ] 01-01-PLAN.md — Project scaffold, dependencies, NativeWind config, Supabase client, Zustand/MMKV store, database migrations, Expo Router file structure
+- [ ] 01-02-PLAN.md — Auth screens (sign-in/sign-up toggle), session persistence, route guards, connectivity indicators (cloud icon + toast banner)
+- [ ] 01-03-PLAN.md — PR baseline entry flow (Big 3 lifts with unit selector), empty state dashboard shell
 
 ### Phase 2: Exercise Library
 **Goal**: Users can browse and search a pre-loaded exercise database and add custom exercises — the foundational data that all plans and workout sessions reference.
@@ -186,11 +185,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Not started | - |
+| 1. Foundation | 0/3 | Planning complete | - |
 | 2. Exercise Library | 0/2 | Not started | - |
 | 3. Plan Builder | 0/3 | Not started | - |
 | 4. Active Workout | 0/4 | Not started | - |
