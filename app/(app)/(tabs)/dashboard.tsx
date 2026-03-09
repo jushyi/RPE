@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { Card } from '@/components/ui/Card';
@@ -86,15 +86,38 @@ function PRCard({ baselines }: { baselines: PRBaseline[] }) {
     deadlift: 'Deadlift',
   };
 
+  const handleEdit = () => {
+    router.push({
+      pathname: '/(app)/onboarding/pr-baseline',
+      params: {
+        mode: 'edit',
+        baselines: JSON.stringify(baselines.map((b) => ({
+          exercise_name: b.exercise_name,
+          weight: b.weight,
+          unit: b.unit,
+        }))),
+      },
+    });
+  };
+
   return (
-    <Card title="Personal Records">
-      {baselines.map((b) => (
-        <View key={b.exercise_name} style={ds.prRow}>
-          <Text style={ds.prLabel}>{liftLabels[b.exercise_name] ?? b.exercise_name}</Text>
-          <Text style={ds.prValue}>{b.weight} {b.unit}</Text>
+    <Pressable
+      onPress={handleEdit}
+      style={({ pressed }) => [pressed && { opacity: 0.8 }]}
+      android_ripple={{ color: colors.surfaceElevated }}
+    >
+      <Card title="Personal Records">
+        <View style={ds.editHintRow}>
+          <Text style={ds.editHint}>Edit &gt;</Text>
         </View>
-      ))}
-    </Card>
+        {baselines.map((b) => (
+          <View key={b.exercise_name} style={ds.prRow}>
+            <Text style={ds.prLabel}>{liftLabels[b.exercise_name] ?? b.exercise_name}</Text>
+            <Text style={ds.prValue}>{b.weight} {b.unit}</Text>
+          </View>
+        ))}
+      </Card>
+    </Pressable>
   );
 }
 
@@ -149,9 +172,11 @@ export default function DashboardScreen() {
     }
   };
 
-  useEffect(() => {
-    getPRBaselines().then(setBaselines).catch(() => {});
-  }, [getPRBaselines]);
+  useFocusEffect(
+    useCallback(() => {
+      getPRBaselines().then(setBaselines).catch(() => {});
+    }, [getPRBaselines])
+  );
 
   const handleSignOut = async () => {
     setSigningOut(true);
@@ -243,4 +268,14 @@ const ds = StyleSheet.create({
   },
   prLabel: { color: colors.textPrimary, fontSize: 16 },
   prValue: { color: colors.accent, fontWeight: 'bold', fontSize: 16 },
+  editHintRow: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+  },
+  editHint: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    fontWeight: '500',
+  },
 });
