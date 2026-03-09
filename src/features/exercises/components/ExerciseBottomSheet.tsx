@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet, Alert } from 'react-native';
+import { View, Text, Pressable, ScrollView, StyleSheet, Alert, Switch } from 'react-native';
 import {
   BottomSheetModal,
   BottomSheetTextInput,
@@ -33,7 +33,7 @@ interface ExerciseBottomSheetProps {
 
 export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSheetProps>(
   ({ exerciseToEdit, readOnly, onSave, onDelete }, ref) => {
-    const { exercises, createExercise, updateExercise } = useExercises();
+    const { exercises, createExercise, updateExercise, toggleTrackPRs } = useExercises();
     const [duplicateWarning, setDuplicateWarning] = useState(false);
     const snapPoints = useMemo(() => ['70%'], []);
 
@@ -138,6 +138,35 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
       );
     }, [exerciseToEdit, onDelete, ref]);
 
+    const trackPRsValue = exerciseToEdit
+      ? (exercises.find((e) => e.id === exerciseToEdit.id)?.track_prs ?? exerciseToEdit.track_prs ?? false)
+      : false;
+
+    const handleToggleTrackPRs = useCallback(() => {
+      if (!exerciseToEdit) return;
+      toggleTrackPRs(exerciseToEdit.id, !trackPRsValue);
+    }, [exerciseToEdit, trackPRsValue, toggleTrackPRs]);
+
+    const renderTrackPRsToggle = () => {
+      if (!exerciseToEdit) return null;
+      return (
+        <Pressable style={s.toggleRow} onPress={handleToggleTrackPRs}>
+          <View style={s.toggleTextContainer}>
+            <Text style={s.toggleLabel}>Track PRs</Text>
+            <Text style={s.toggleDescription}>
+              Flag personal records for this exercise
+            </Text>
+          </View>
+          <Switch
+            value={trackPRsValue}
+            onValueChange={() => handleToggleTrackPRs()}
+            trackColor={{ false: colors.surfaceElevated, true: colors.accent + '80' }}
+            thumbColor={trackPRsValue ? colors.accent : colors.textMuted}
+          />
+        </Pressable>
+      );
+    };
+
     const renderReadOnly = () => {
       if (!exerciseToEdit) return null;
       const groups = exerciseToEdit.muscle_groups ?? [];
@@ -172,6 +201,8 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
               <Text style={s.readOnlyValue}>{exerciseToEdit.notes}</Text>
             </>
           ) : null}
+
+          {renderTrackPRsToggle()}
         </>
       );
     };
@@ -319,6 +350,9 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
             />
           )}
         />
+
+        {/* Track PRs toggle */}
+        {isEditMode && renderTrackPRsToggle()}
 
         {/* Submit button */}
         <Pressable
@@ -479,5 +513,28 @@ const s = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 8,
     paddingVertical: 4,
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 14,
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.surfaceElevated,
+  },
+  toggleTextContainer: {
+    flex: 1,
+    marginRight: 12,
+  },
+  toggleLabel: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  toggleDescription: {
+    color: colors.textMuted,
+    fontSize: 12,
+    marginTop: 2,
   },
 });

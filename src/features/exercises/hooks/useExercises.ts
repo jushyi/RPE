@@ -73,6 +73,23 @@ export function useExercises() {
     []
   );
 
+  const toggleTrackPRs = useCallback(
+    (exerciseId: string, trackPRs: boolean) => {
+      // Update local store immediately
+      updateInStore(exerciseId, { track_prs: trackPRs });
+
+      // Fire-and-forget Supabase sync (offline-safe, local state is source of truth)
+      if (supabase) {
+        (supabase.from('exercises') as any)
+          .update({ track_prs: trackPRs })
+          .eq('id', exerciseId)
+          .then(() => {})
+          .catch((err: any) => console.warn('Failed to sync track_prs:', err));
+      }
+    },
+    []
+  );
+
   const deleteExercise = useCallback(
     async (id: string) => {
       if (!supabase) return;
@@ -94,5 +111,6 @@ export function useExercises() {
     createExercise,
     updateExercise,
     deleteExercise,
+    toggleTrackPRs,
   };
 }
