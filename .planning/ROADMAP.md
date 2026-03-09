@@ -68,7 +68,7 @@ Plans:
   3. User can view all created plans and navigate to any plan's detail
   4. User can edit an existing plan (change exercises, days, or targets) and delete a plan entirely
   5. Plan edits do not alter previously logged workout sessions (plans and actuals remain separate)
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 03-01-PLAN.md — Schema (3 tables + RLS + active trigger), types, planStore, usePlans hook, Plans tab with list screen and empty state
@@ -192,7 +192,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 |-------|----------------|--------|-----------|
 | 1. Foundation | 4/4 | Complete   | 2026-03-09 |
 | 2. Exercise Library | 2/2 | Complete   | 2026-03-09 |
-| 3. Plan Builder | 0/3 | Not started | - |
+| 3. Plan Builder | 2/3 | In Progress|  |
 | 4. Active Workout | 0/4 | Not started | - |
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 0/3 | Not started | - |
