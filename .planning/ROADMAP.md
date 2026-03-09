@@ -52,11 +52,11 @@ Plans:
   1. App launches with a pre-populated library of common exercises (bench press, squat, deadlift, etc.) searchable by name and muscle group
   2. User can create a custom exercise by providing a name, muscle group, and equipment type, and it immediately appears in the library
   3. Custom exercises persist across app restarts and sync to Supabase
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 02-01: Exercise seed data (Supabase migration with common lifts) and exercise library screen with search/filter
-- [ ] 02-02: Custom exercise creation form and CRUD operations
+- [ ] 02-01-PLAN.md — Exercise data layer (Supabase migration with ~35 seed exercises, types, Zustand store) and library screen with search/filter
+- [ ] 02-02-PLAN.md — Custom exercise CRUD via bottom sheet modal, edit/delete via long-press, human verification
 
 ### Phase 3: Plan Builder
 **Goal**: Users can create structured workout plans that assign specific exercises (with full detail) to days of the week — the template layer that drives alarms and the active workout screen.
