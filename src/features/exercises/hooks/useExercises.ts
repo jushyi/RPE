@@ -25,8 +25,7 @@ export function useExercises() {
     setLoading(true);
     try {
       // RLS policies return global + user-owned exercises
-      const { data, error } = await supabase
-        .from('exercises')
+      const { data, error } = await (supabase.from('exercises') as any)
         .select('*')
         .order('name');
 
@@ -45,8 +44,7 @@ export function useExercises() {
     ) => {
       if (!supabase || !userId) return;
 
-      const { data, error } = await supabase
-        .from('exercises')
+      const { data, error } = await (supabase.from('exercises') as any)
         .insert({ ...exercise, user_id: userId })
         .select()
         .single();
@@ -62,8 +60,7 @@ export function useExercises() {
     async (id: string, updates: Partial<Pick<Exercise, 'name' | 'muscle_group' | 'equipment' | 'notes'>>) => {
       if (!supabase) return;
 
-      const { data, error } = await supabase
-        .from('exercises')
+      const { data, error } = await (supabase.from('exercises') as any)
         .update(updates)
         .eq('id', id)
         .select()
@@ -80,8 +77,7 @@ export function useExercises() {
     async (id: string) => {
       if (!supabase) return;
 
-      const { error } = await supabase
-        .from('exercises')
+      const { error } = await (supabase.from('exercises') as any)
         .delete()
         .eq('id', id);
 

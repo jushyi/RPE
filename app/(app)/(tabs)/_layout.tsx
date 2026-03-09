@@ -1,17 +1,39 @@
-import { Stack } from 'expo-router';
+import { Text } from 'react-native';
+import { Tabs } from 'expo-router';
 import { colors } from '@/constants/theme';
 
-/**
- * Tabs group layout. Uses a Stack for now (single screen: dashboard).
- * Future plans will add more screens to this group.
- */
 export default function TabsLayout() {
   return (
-    <Stack
+    <Tabs
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: colors.background },
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.surfaceElevated,
+          borderTopWidth: 1,
+        },
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: colors.textMuted,
       }}
-    />
+    >
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>{'⌂'}</Text>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="exercises"
+        options={{
+          title: 'Exercises',
+          tabBarIcon: ({ color }) => (
+            <Text style={{ fontSize: 20, color }}>{'⚡'}</Text>
+          ),
+        }}
+      />
+    </Tabs>
   );
 }
