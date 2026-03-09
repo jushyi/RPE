@@ -39,6 +39,13 @@ Create structured workout plans with named day slots (optionally mapped to weekd
 - Delete available from two places: swipe left on plan card in list + delete button inside plan editor
 - Delete confirmation dialog with reassuring message: "Delete '[Plan Name]'? Past workouts logged with this plan will be kept."
 
+### Per-exercise weight progression mode
+- Each exercise in a plan has a weight_progression setting chosen on first add: 'manual' or 'carry_previous'
+- 'manual': user sets a specific target weight for next week (explicit goal)
+- 'carry_previous': system uses the weight from the previous week's logged session (auto-carry)
+- Default to 'manual' on first add — user picks during exercise configuration
+- This setting is stored per plan_day_exercise and drives future workout sessions
+
 ### Claude's Discretion
 - Card styling and summary layout details
 - Collapsible section animation and expand/collapse behavior
