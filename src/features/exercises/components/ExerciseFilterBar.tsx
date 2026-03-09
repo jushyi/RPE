@@ -1,4 +1,6 @@
+import React from 'react';
 import { View, TextInput, ScrollView, Text, Pressable, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import type { MuscleGroup, Equipment } from '../types';
 import { MUSCLE_GROUPS, MUSCLE_GROUP_COLORS } from '../constants/muscleGroups';
@@ -11,6 +13,7 @@ interface ExerciseFilterBarProps {
   onMuscleGroupChange: (group: MuscleGroup | null) => void;
   selectedEquipment: Equipment | null;
   onEquipmentChange: (equipment: Equipment | null) => void;
+  TextInputComponent?: React.ComponentType<any>;
 }
 
 export function ExerciseFilterBar({
@@ -20,13 +23,15 @@ export function ExerciseFilterBar({
   onMuscleGroupChange,
   selectedEquipment,
   onEquipmentChange,
+  TextInputComponent,
 }: ExerciseFilterBarProps) {
+  const InputComponent = TextInputComponent ?? TextInput;
   return (
     <View style={s.container}>
       {/* Search bar */}
       <View style={s.searchContainer}>
-        <Text style={s.searchIcon}>{'🔍'}</Text>
-        <TextInput
+        <Ionicons name="search" size={16} color={colors.textMuted} style={{ marginRight: 8 }} />
+        <InputComponent
           style={s.searchInput}
           placeholder="Search exercises..."
           placeholderTextColor={colors.textMuted}
@@ -41,6 +46,7 @@ export function ExerciseFilterBar({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={s.chipScroll}
         contentContainerStyle={s.chipRow}
       >
         {MUSCLE_GROUPS.map((group) => {
@@ -76,6 +82,7 @@ export function ExerciseFilterBar({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={s.chipScroll}
         contentContainerStyle={s.chipRow}
       >
         {EQUIPMENT_TYPES.map((equip) => {
@@ -122,18 +129,16 @@ const s = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 12,
   },
-  searchIcon: {
-    fontSize: 16,
-    marginRight: 8,
-  },
   searchInput: {
     flex: 1,
     color: colors.textPrimary,
     fontSize: 16,
     paddingVertical: 12,
   },
+  chipScroll: {
+    marginHorizontal: 16,
+  },
   chipRow: {
-    paddingHorizontal: 16,
     paddingBottom: 8,
     gap: 8,
   },

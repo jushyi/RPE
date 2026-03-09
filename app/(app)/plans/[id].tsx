@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
+  FlatList,
   ScrollView,
   ActivityIndicator,
   Pressable,
@@ -224,41 +225,41 @@ export default function PlanDetailScreen() {
       )}
 
       {/* Content */}
-      <ScrollView
-        style={s.scroll}
-        contentContainerStyle={s.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {isEditing ? (
+      {isEditing ? (
+        <ScrollView
+          style={s.scroll}
+          contentContainerStyle={s.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
           <DaySlotEditor days={draftDays} onChange={setDraftDays} />
-        ) : (
-          <>
-            {plan.plan_days.length === 0 ? (
-              <Text style={s.emptyText}>No days configured</Text>
-            ) : (
-              plan.plan_days.map((day) => (
-                <PlanDaySection key={day.id} day={day} defaultExpanded={true} />
-              ))
-            )}
-          </>
-        )}
-
-        {/* Set as Active button (view mode, not already active) */}
-        {!isEditing && !plan.is_active && (
-          <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
-            <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
-            <Text style={s.setActiveText}>Set as Active Plan</Text>
-          </Pressable>
-        )}
-
-        {/* Delete button (edit mode) */}
-        {isEditing && (
           <Pressable style={s.deleteBtn} onPress={handleDelete}>
             <Ionicons name="trash-outline" size={20} color={colors.error} />
             <Text style={s.deleteBtnText}>Delete Plan</Text>
           </Pressable>
-        )}
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        <FlatList
+          data={plan.plan_days}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <PlanDaySection day={item} defaultExpanded={true} />
+          )}
+          contentContainerStyle={s.scrollContent}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <Text style={s.emptyText}>No days configured</Text>
+          }
+          ListFooterComponent={
+            !plan.is_active ? (
+              <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
+                <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
+                <Text style={s.setActiveText}>Set as Active Plan</Text>
+              </Pressable>
+            ) : null
+          }
+        />
+      )}
     </SafeAreaView>
   );
 }

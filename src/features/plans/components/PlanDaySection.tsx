@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, LayoutAnimation, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { MuscleGroupBadge } from '@/features/exercises/components/MuscleGroupBadge';
@@ -15,7 +15,6 @@ export function PlanDaySection({ day, defaultExpanded = true }: PlanDaySectionPr
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   const toggle = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded((prev) => !prev);
   };
 
@@ -100,7 +99,6 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.surfaceElevated,
     marginBottom: 12,
-    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',

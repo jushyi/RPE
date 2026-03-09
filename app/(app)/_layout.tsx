@@ -24,6 +24,10 @@ export default function AppLayout() {
         name="onboarding"
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="plans"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }

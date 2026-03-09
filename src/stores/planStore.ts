@@ -60,6 +60,7 @@ export const usePlanStore = create<PlanState & PlanActions>()(
     }),
     {
       name: 'plan-storage',
+      version: 1,
       storage: createJSONStorage(() => mmkvStorage),
     }
   )

@@ -33,6 +33,12 @@ export default function PlansScreen() {
   };
 
   const handleSetActive = (id: string) => {
+    try {
+      const Haptics = require('expo-haptics');
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    } catch {
+      // Haptics not available (Expo Go) — skip silently
+    }
     setActivePlan(id);
   };
 

@@ -1,8 +1,10 @@
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Keyboard, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomSheetModal,
   BottomSheetFlatList,
+  BottomSheetTextInput,
 } from '@gorhom/bottom-sheet';
 import { colors } from '@/constants/theme';
 import { useExercises } from '@/features/exercises/hooks/useExercises';
@@ -17,7 +19,8 @@ interface ExercisePickerProps {
 export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
   ({ onSelect }, ref) => {
     const { exercises, fetchExercises } = useExercises();
-    const snapPoints = useMemo(() => ['75%', '90%'], []);
+    const insets = useSafeAreaInsets();
+    const snapPoints = useMemo(() => ['75%'], []);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<MuscleGroup | null>(null);
@@ -47,11 +50,19 @@ export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
 
     const handleSelect = useCallback(
       (exercise: Exercise) => {
+        Keyboard.dismiss();
         onSelect(exercise);
         (ref as React.RefObject<BottomSheetModal>)?.current?.dismiss();
       },
       [onSelect, ref]
     );
+
+    const handleDismiss = useCallback(() => {
+      Keyboard.dismiss();
+      setSearchQuery('');
+      setSelectedMuscleGroup(null);
+      setSelectedEquipment(null);
+    }, []);
 
     const renderItem = useCallback(
       ({ item }: { item: Exercise }) => (
@@ -66,6 +77,11 @@ export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
         snapPoints={snapPoints}
         backgroundStyle={s.background}
         handleIndicatorStyle={s.handleIndicator}
+        onDismiss={handleDismiss}
+        topInset={insets.top}
+        android_keyboardInputMode="adjustResize"
+        keyboardBehavior="interactive"
+        keyboardBlurBehavior="restore"
       >
         <View style={s.filterContainer}>
           <ExerciseFilterBar
@@ -75,6 +91,7 @@ export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
             onMuscleGroupChange={setSelectedMuscleGroup}
             selectedEquipment={selectedEquipment}
             onEquipmentChange={setSelectedEquipment}
+            TextInputComponent={BottomSheetTextInput}
           />
         </View>
         <BottomSheetFlatList
