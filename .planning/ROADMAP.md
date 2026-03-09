@@ -102,11 +102,11 @@ Plans:
   1. User can view a chronological list of past sessions showing date, exercises performed, and total volume
   2. User can tap a session to see full detail (every set logged, weight, reps)
   3. Estimated 1RM is shown for each logged set (calculated via the Epley formula) and stored for chart use
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 05-01: Workout history list and session detail screens (TanStack Query with Supabase nested select)
-- [ ] 05-02: Epley 1RM calculation, storage, and display in session detail
+- [ ] 05-01-PLAN.md — Data layer: migration (estimated_1rm column), types, Epley utils, volume calc, historyStore, useHistory/useSessionDetail hooks, unit tests
+- [ ] 05-02-PLAN.md — UI layer: PagerView sub-tabs (Plans | History), session list with filter, session detail with exercise cards, 1RM display, delta indicators, delete, human verification
 
 ### Phase 6: Progress Charts + Dashboard
 **Goal**: Users can see their strength trending upward on per-exercise charts and arrive at a dashboard home screen showing today's plan and recent stats — the motivational feedback loop that makes the app worth opening every day.
