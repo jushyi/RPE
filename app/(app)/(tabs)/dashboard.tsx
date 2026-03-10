@@ -16,7 +16,7 @@ import { colors } from '@/constants/theme';
 import { TappableAvatar } from '@/features/dashboard/components/TappableAvatar';
 import { TodaysWorkoutCard } from '@/features/dashboard/components/TodaysWorkoutCard';
 import { ProgressSummaryCard } from '@/features/dashboard/components/ProgressSummaryCard';
-import { BodyweightCard } from '@/features/dashboard/components/BodyweightCard';
+import { BodyCard } from '@/features/body-metrics/components/BodyCard';
 
 import type { PRBaseline } from '@/lib/supabase/types/database';
 import type { WorkoutSession } from '@/features/workout/types';
@@ -376,9 +376,9 @@ export default function DashboardScreen() {
           <ProgressSummaryCard />
         </View>
 
-        {/* Card 3: Bodyweight */}
+        {/* Card 3: Body (bodyweight + measurements) */}
         <View style={ds.cardWrap}>
-          <BodyweightCard />
+          <BodyCard />
         </View>
 
         {/* Card 4: PR Baselines (last) */}
