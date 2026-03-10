@@ -143,9 +143,10 @@ None yet.
 | 10 | Fix history trend arrows not showing upward trend on subsequent days | 2026-03-10 | 7a1f21c | [10-fix-history-trend-arrows-not-showing-upw](./quick/10-fix-history-trend-arrows-not-showing-upw/) |
 | 11 | Add workout resume bar and in-progress history card | 2026-03-10 | dc58dbb | [11-persist-active-workout-on-swipe-back-dis](./quick/11-persist-active-workout-on-swipe-back-dis/) |
 | 12 | Show all workouts for a day on dashboard | 2026-03-10 | 614e4e0 | [12-show-all-workouts-for-a-day-on-dashboard](./quick/12-show-all-workouts-for-a-day-on-dashboard/) |
+| 13 | Fix default unit to match user's preferredUnit instead of hardcoded lbs | 2026-03-10 | 8f1a86e | [13-fix-default-unit-to-match-pr-unit-instea](./quick/13-fix-default-unit-to-match-pr-unit-instea/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T17:25:00Z
-Stopped at: Completed quick task 11
+Last session: 2026-03-10T16:56:09Z
+Stopped at: Completed quick task 13
 Resume file: None
