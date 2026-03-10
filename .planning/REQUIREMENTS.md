@@ -53,8 +53,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Reminders & Accountability
 
-- [ ] **ALRM-01**: When creating a plan with training days, user is prompted to set alarm times
-- [ ] **ALRM-02**: Alarms fire with sound and vibration and must be dismissed
+- [x] **ALRM-01**: When creating a plan with training days, user is prompted to set alarm times
+- [x] **ALRM-02**: Alarms fire with sound and vibration and must be dismissed
 - [ ] **ALRM-03**: User receives notification if a planned workout day passes without a logged session
 
 ## v2 Requirements
@@ -123,8 +123,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-02 | Phase 6 | Complete |
 | HIST-04 | Phase 7 | Complete |
 | HIST-05 | Phase 7 | Complete |
-| ALRM-01 | Phase 8 | Pending |
-| ALRM-02 | Phase 8 | Pending |
+| ALRM-01 | Phase 8 | Complete |
+| ALRM-02 | Phase 8 | Complete |
 | ALRM-03 | Phase 8 | Pending |
 
 **Coverage:**
