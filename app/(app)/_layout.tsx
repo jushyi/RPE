@@ -46,6 +46,10 @@ export default function AppLayout() {
           name="progress"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="body-metrics"
+          options={{ title: 'Body Metrics', headerShown: false }}
+        />
     </Stack>
   );
 }
