@@ -51,22 +51,31 @@ export function useSessionDetail() {
 
       setSession(normalized);
 
-      // Fetch previous session for delta comparison if plan-based
+      // Fetch previous session for delta comparison
+      // Try same plan_day first, then fall back to any session with matching exercises
+      let prev: HistorySession | null = null;
       if (normalized.plan_day_id) {
-        const prev = await fetchPreviousSession(
+        prev = await fetchPreviousSession(
           normalized.plan_day_id,
           normalized.id,
           normalized.started_at
         );
-        setPreviousSession(prev);
+      }
+      if (!prev) {
+        prev = await fetchPreviousSessionByExercises(
+          normalized.id,
+          normalized.started_at,
+          normalized.session_exercises.map((se) => se.exercise_id)
+        );
+      }
+      setPreviousSession(prev);
 
-        if (prev) {
-          const computed = calculateDeltas(
-            normalized.session_exercises,
-            prev.session_exercises
-          );
-          setDeltas(computed);
-        }
+      if (prev) {
+        const computed = calculateDeltas(
+          normalized.session_exercises,
+          prev.session_exercises
+        );
+        setDeltas(computed);
       }
 
       return normalized;
@@ -111,6 +120,52 @@ export function useSessionDetail() {
 
         if (error) return null;
         return data as HistorySession;
+      } catch {
+        return null;
+      }
+    },
+    []
+  );
+
+  /**
+   * Fallback: find the most recent previous session containing at least one
+   * of the same exercises, regardless of plan_day_id.
+   */
+  const fetchPreviousSessionByExercises = useCallback(
+    async (
+      currentSessionId: string,
+      sessionDate: string,
+      exerciseIds: string[]
+    ): Promise<HistorySession | null> => {
+      if (!supabase || !exerciseIds.length) return null;
+
+      try {
+        const { data, error } = await (supabase.from('workout_sessions') as any)
+          .select(
+            `
+            *,
+            session_exercises(
+              *,
+              exercises(name, muscle_groups, equipment, track_prs),
+              set_logs(*)
+            )
+          `
+          )
+          .neq('id', currentSessionId)
+          .lt('started_at', sessionDate)
+          .order('started_at', { ascending: false })
+          .limit(10);
+
+        if (error || !data?.length) return null;
+
+        // Find the most recent session with at least one matching exercise
+        for (const session of data) {
+          const hasOverlap = (session.session_exercises ?? []).some(
+            (se: any) => exerciseIds.includes(se.exercise_id)
+          );
+          if (hasOverlap) return session as HistorySession;
+        }
+        return null;
       } catch {
         return null;
       }
