@@ -82,7 +82,8 @@ export function usePRDetection(userId: string | undefined) {
   const detectPR = useCallback(
     async (
       exerciseId: string,
-      weight: number
+      weight: number,
+      unit: 'kg' | 'lbs'
     ): Promise<PRResult> => {
       const exercise = exercises.find((e) => e.id === exerciseId);
       const tracksPR = exercise?.track_prs ?? false;
@@ -105,7 +106,7 @@ export function usePRDetection(userId: string | undefined) {
         effectiveBaselines.push({
           exercise_id: exerciseId,
           weight: sessionCacheWeight,
-          unit: 'lbs',
+          unit,
         });
       }
 
@@ -125,7 +126,7 @@ export function usePRDetection(userId: string | undefined) {
                 exercise_id: exerciseId,
                 exercise_name: exercise?.name ?? 'Unknown',
                 weight,
-                unit: 'lbs',
+                unit,
               },
               { onConflict: 'user_id,exercise_id' }
             )
@@ -142,7 +143,7 @@ export function usePRDetection(userId: string | undefined) {
                 }
                 return [
                   ...prev,
-                  { exercise_id: exerciseId, weight, unit: 'lbs' },
+                  { exercise_id: exerciseId, weight, unit },
                 ];
               });
             })

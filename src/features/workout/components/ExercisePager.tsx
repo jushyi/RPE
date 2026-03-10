@@ -10,7 +10,8 @@ import type { PRResult } from '@/features/workout/hooks/usePRDetection';
 interface ExercisePagerProps {
   exercises: SessionExercise[];
   onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => void;
-  onDetectPR?: (exerciseId: string, weight: number) => Promise<PRResult>;
+  onDetectPR?: (exerciseId: string, weight: number, unit: 'kg' | 'lbs') => Promise<PRResult>;
+  onRemoveExercise?: (exerciseId: string) => void;
   pagerRef: React.RefObject<PagerView | null>;
 }
 
@@ -18,7 +19,7 @@ interface ExercisePagerProps {
  * PagerView wrapper providing horizontal exercise navigation with progress dots.
  * Each page renders an ExercisePage for one exercise.
  */
-export function ExercisePager({ exercises, onLogSet, onDetectPR, pagerRef }: ExercisePagerProps) {
+export function ExercisePager({ exercises, onLogSet, onDetectPR, onRemoveExercise, pagerRef }: ExercisePagerProps) {
   const currentIndex = useWorkoutStore((s) => s.currentExerciseIndex);
   const setCurrentExerciseIndex = useWorkoutStore((s) => s.setCurrentExerciseIndex);
 
@@ -33,7 +34,7 @@ export function ExercisePager({ exercises, onLogSet, onDetectPR, pagerRef }: Exe
       >
         {exercises.map((exercise) => (
           <View key={exercise.id} style={s.page}>
-            <ExercisePage exercise={exercise} onLogSet={onLogSet} onDetectPR={onDetectPR} />
+            <ExercisePage exercise={exercise} onLogSet={onLogSet} onDetectPR={onDetectPR} onRemove={onRemoveExercise} />
           </View>
         ))}
       </PagerView>
