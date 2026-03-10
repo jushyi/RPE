@@ -1,9 +1,9 @@
 ---
-status: diagnosed
+status: resolved
 phase: 04-active-workout
 source: [04-01-SUMMARY.md, 04-02-SUMMARY.md, 04-03-SUMMARY.md, 04-04-SUMMARY.md]
 started: 2026-03-10T12:00:00Z
-updated: 2026-03-10T12:30:00Z
+updated: 2026-03-10T14:00:00Z
 ---
 
 ## Current Test
@@ -77,7 +77,7 @@ skipped: 0
 ## Gaps
 
 - truth: "PR celebration overlay appears on new record, PR badge shown on logged sets and in summary"
-  status: failed
+  status: resolved
   reason: "User reported: no celebration or even acknowledgement of the pr in summary"
   severity: major
   test: 7
@@ -98,7 +98,7 @@ skipped: 0
   debug_session: ".planning/debug/pr-celebration-not-working.md"
 
 - truth: "Plus FAB opens exercise library bottom sheet for freestyle addition; workout has auto-generated title"
-  status: failed
+  status: resolved
   reason: "User reported: tapping plus doesnt open exercise library. there is also no title for the workout, should be auto generated of day and quick workout"
   severity: major
   test: 8
@@ -119,19 +119,22 @@ skipped: 0
     - "Display session title in WorkoutHeader"
   debug_session: ".planning/debug/freestyle-fab-and-title.md"
 
-- truth: "Summary page scrolls properly with keyboard; dashboard single workout card is auto-expanded and non-collapsible"
-  status: failed
-  reason: "User reported: summary page doesnt scroll down to clear keyboard for set target inputs and done buttons. dashboard collapsed summary view should be auto-expanded and non-collapsible when theres only one workout. only use collapsible pattern when multiple workouts exist"
+- truth: "Summary page scrolls properly with keyboard; dashboard single workout card is auto-expanded and non-collapsible; weight target picker collapses to saved view after saving"
+  status: resolved
+  reason: "User reported: summary page doesnt scroll down to clear keyboard for set target inputs and done buttons. dashboard collapsed summary view should be auto-expanded and non-collapsible when theres only one workout. only use collapsible pattern when multiple workouts exist. weight target picker doesnt disappear after saving — should show collapsed view of new targets with edit button"
   severity: major
   test: 12
-  root_cause: "summary.tsx uses plain ScrollView with no keyboard accommodation. CompletedWorkoutCard hardcodes useState(false) for expanded state with no awareness of single vs multiple workouts."
+  root_cause: "summary.tsx uses plain ScrollView with no keyboard accommodation. CompletedWorkoutCard hardcodes useState(false) for expanded state with no awareness of single vs multiple workouts. WeightTargetPrompt has no saved/editing state — always shows full input form with no collapse-after-save behavior."
   artifacts:
     - path: "app/(app)/workout/summary.tsx"
       issue: "Plain ScrollView with no KeyboardAvoidingView or keyboardShouldPersistTaps (line 84)"
     - path: "app/(app)/(tabs)/dashboard.tsx"
       issue: "CompletedWorkoutCard useState(false) with no total/isOnly prop (line 145)"
+    - path: "src/features/workout/components/WeightTargetPrompt.tsx"
+      issue: "No saved/editing state toggle — always shows full input form, no collapse after save"
   missing:
     - "Replace ScrollView with KeyboardAwareScrollView or wrap in KeyboardAvoidingView"
     - "Add keyboardShouldPersistTaps='handled' and keyboardDismissMode='on-drag'"
     - "Pass total count to CompletedWorkoutCard, auto-expand when single, hide chevron"
+    - "Add saved/editing state to WeightTargetPrompt — after save, collapse to show saved targets summary with edit button"
   debug_session: ".planning/debug/summary-keyboard-and-dashboard-card.md"
