@@ -1,0 +1,157 @@
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { useTodaysWorkout } from '@/features/dashboard/hooks/useTodaysWorkout';
+import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
+import { colors } from '@/constants/theme';
+
+export function TodaysWorkoutCard() {
+  const workout = useTodaysWorkout();
+  const router = useRouter();
+  const { startFreestyle } = useWorkoutSession();
+
+  if (workout.state === 'planned' && workout.todayDay && workout.plan) {
+    return (
+      <Pressable
+        onPress={() =>
+          router.push({
+            pathname: '/(app)/plans/[id]' as any,
+            params: { id: workout.plan!.id },
+          })
+        }
+        style={({ pressed }) => [pressed && { opacity: 0.85 }]}
+      >
+        <Card title="Today's Workout">
+          <Text style={s.planName}>{workout.plan.name}</Text>
+          <Text style={s.dayLabel}>{workout.todayDay.label}</Text>
+
+          <View style={s.statsRow}>
+            <View style={s.stat}>
+              <Ionicons name="barbell-outline" size={16} color={colors.textMuted} />
+              <Text style={s.statText}>
+                {workout.todayDay.exerciseCount} exercise{workout.todayDay.exerciseCount !== 1 ? 's' : ''}
+              </Text>
+            </View>
+            <View style={s.stat}>
+              <Ionicons name="time-outline" size={16} color={colors.textMuted} />
+              <Text style={s.statText}>{workout.todayDay.estimatedDuration} min</Text>
+            </View>
+          </View>
+
+          <View style={s.btnWrap}>
+            <Button
+              title="Start Workout"
+              variant="primary"
+              onPress={() =>
+                router.push({
+                  pathname: '/(app)/workout' as any,
+                  params: { planDayId: workout.todayDay!.id },
+                })
+              }
+            />
+          </View>
+        </Card>
+      </Pressable>
+    );
+  }
+
+  if (workout.state === 'rest-day') {
+    return (
+      <Card title="Today's Workout">
+        <Text style={s.restTitle}>Rest Day</Text>
+        {workout.nextDay && (
+          <Text style={s.restTeaser}>
+            Next: {workout.nextDay.label} -- {workout.nextDay.dayName}
+          </Text>
+        )}
+        <View style={s.btnWrap}>
+          <Button
+            title="Quick Workout"
+            variant="secondary"
+            onPress={startFreestyle}
+          />
+        </View>
+      </Card>
+    );
+  }
+
+  // no-plan state
+  return (
+    <Card title="Today's Workout">
+      <Text style={s.noPlanText}>No plan set up yet</Text>
+      <View style={s.noPlanBtns}>
+        <View style={s.noPlanBtn}>
+          <Button
+            title="Create a Plan"
+            variant="secondary"
+            onPress={() => router.push('/(app)/plans/create' as any)}
+          />
+        </View>
+        <View style={s.noPlanBtn}>
+          <Button
+            title="Quick Workout"
+            variant="secondary"
+            onPress={startFreestyle}
+          />
+        </View>
+      </View>
+    </Card>
+  );
+}
+
+const s = StyleSheet.create({
+  planName: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  dayLabel: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    marginTop: 2,
+    marginBottom: 12,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 14,
+  },
+  stat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  statText: {
+    color: colors.textMuted,
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  btnWrap: {
+    marginTop: 4,
+  },
+  restTitle: {
+    color: colors.textPrimary,
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  restTeaser: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    marginBottom: 12,
+  },
+  noPlanText: {
+    color: colors.textSecondary,
+    fontSize: 15,
+    marginBottom: 14,
+  },
+  noPlanBtns: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  noPlanBtn: {
+    flex: 1,
+  },
+});
