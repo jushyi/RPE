@@ -42,7 +42,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 5 of 11 (Workout History) — COMPLETE
 Plan: 2 of 2 complete
 Status: Phase 05 complete, UAT passed, ready for Phase 06
-Last activity: 2026-03-10 - Completed quick task 13: fix default unit to match PR unit instead of defaulting to pounds
+Last activity: 2026-03-10 - Completed quick task 14: fix resumed session not showing previously logged values
 
 Progress: [█████████░] 90%
 
@@ -159,9 +159,10 @@ None yet.
 | 11 | Add workout resume bar and in-progress history card | 2026-03-10 | dc58dbb | [11-persist-active-workout-on-swipe-back-dis](./quick/11-persist-active-workout-on-swipe-back-dis/) |
 | 12 | Show all workouts for a day on dashboard | 2026-03-10 | 614e4e0 | [12-show-all-workouts-for-a-day-on-dashboard](./quick/12-show-all-workouts-for-a-day-on-dashboard/) |
 | 13 | Fix default unit to match user's preferredUnit instead of hardcoded lbs | 2026-03-10 | 8f1a86e | [13-fix-default-unit-to-match-pr-unit-instea](./quick/13-fix-default-unit-to-match-pr-unit-instea/) |
+| 14 | Fix resumed session not showing previously logged values | 2026-03-10 | 94b2980 | [14-fix-resumed-session-not-showing-previous](./quick/14-fix-resumed-session-not-showing-previous/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T17:03:49.864Z
-Stopped at: Phase 7 context updated
+Last session: 2026-03-10T17:04:14.000Z
+Stopped at: Completed quick task 14
 Resume file: .planning/phases/07-body-metrics/07-CONTEXT.md
