@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert, Animated } from 'react-native';
-import { useRouter, useFocusEffect, useNavigation } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -324,12 +324,12 @@ export default function DashboardScreen() {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      getPRBaselines().then(setBaselines).catch(() => {});
-      fetchPlans();
-    }, [getPRBaselines, fetchPlans])
-  );
+  // Load PR baselines and plans once on mount (no longer re-fetches on every focus)
+  useEffect(() => {
+    getPRBaselines().then(setBaselines).catch(() => {});
+    fetchPlans();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Refresh all data when tapping the home icon while already on dashboard
   useEffect(() => {
