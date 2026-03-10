@@ -56,11 +56,11 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 ## Current Position
 
 Phase: 7 of 11 (Body Metrics)
-Plan: 1 of 3 complete (07-01 data layer + BodyCard done)
-Status: Executing Phase 07
-Last activity: 2026-03-10 - Completed 07-01: body measurements data layer and BodyCard dashboard integration
+Plan: 2 of 3 complete (07-02 body metrics detail screen done)
+Status: Executing Phase 07 - awaiting checkpoint verification
+Last activity: 2026-03-10 - Completed 07-02: body metrics detail screen with Charts/History tabs
 
-Progress: [████████░░] 88%
+Progress: [█████████░] 92%
 
 ## Performance Metrics
 
@@ -96,6 +96,7 @@ Progress: [████████░░] 88%
 | Phase 06 P02 | 15min | 4 tasks | 10 files |
 | Phase 06 P03 | 8min | 3 tasks | 4 files |
 | Phase 07 P01 | 4min | 2 tasks | 13 files |
+| Phase 07 P02 | 4min | 1 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -158,6 +159,9 @@ Recent decisions affecting current work:
 - [Phase 06]: Sign Out button removed from dashboard (moves to Settings in Phase 11)
 - [Phase 07]: Per-field unit columns (chest_unit, waist_unit, hips_unit) for mixed-unit measurement entries
 - [Phase 07]: BodyCard replaces BodyweightCard as unified body data entry point on dashboard
+- [Phase 07]: Tap-to-expand pattern for history item edit/delete (simpler than swipe-to-delete)
+- [Phase 07]: Edit navigates to Charts tab with form pre-filled (reuses MeasurementForm component)
+- [Phase 07]: Shared circumference unit toggle across chest/waist/hips charts
 
 ### Roadmap Evolution
 
@@ -195,6 +199,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T20:02:08.409Z
-Stopped at: Completed 07-01-PLAN.md
+Last session: 2026-03-10T20:07:26Z
+Stopped at: Completed 07-02-PLAN.md (checkpoint pending)
 Resume file: None
