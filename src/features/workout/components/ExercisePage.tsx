@@ -45,9 +45,9 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR }: ExercisePagePro
           // PR detection failure should not block logging
         }
       }
-      onLogSet(exercise.exercise_id, weight, reps, rpe, exercise.unit, isPR);
+      onLogSet(exercise.id, weight, reps, rpe, exercise.unit, isPR);
     },
-    [exercise.exercise_id, exercise.exercise_name, exercise.unit, onLogSet, onDetectPR]
+    [exercise.id, exercise.exercise_name, exercise.unit, onLogSet, onDetectPR]
   );
 
   // Always show all cards — plan-based shows target count, freestyle shows 3 minimum
@@ -67,7 +67,7 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR }: ExercisePagePro
         targetSet={targetSet}
         setNumber={setNumber}
         unit={exercise.unit}
-        onLog={(w, r, rpe) => handleLog(w, r, rpe)}
+        onLog={handleLog}
         isLogged={isAlreadyLogged}
       />
     );

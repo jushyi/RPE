@@ -65,7 +65,7 @@ export function useWorkoutSession() {
         logged_at: new Date().toISOString(),
       };
 
-      logSetAction(currentExercise.exercise_id, setLog);
+      logSetAction(currentExercise.id, setLog);
     },
     [currentExercise, logSetAction]
   );

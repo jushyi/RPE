@@ -70,7 +70,7 @@ describe('useWorkoutSession logic', () => {
         currentExerciseIndex: 0,
       });
 
-      useWorkoutStore.getState().logSet('ex-1', {
+      useWorkoutStore.getState().logSet('se-1', {
         id: 'set-1',
         weight: 135,
         reps: 8,
@@ -114,7 +114,7 @@ describe('useWorkoutSession logic', () => {
         currentExerciseIndex: 0,
       });
 
-      useWorkoutStore.getState().logSet('ex-1', {
+      useWorkoutStore.getState().logSet('se-1', {
         id: 'set-2',
         weight: 140,
         reps: 6,
@@ -168,7 +168,7 @@ describe('useWorkoutSession logic', () => {
         currentExerciseIndex: 0,
       });
 
-      useWorkoutStore.getState().logSet('ex-1', {
+      useWorkoutStore.getState().logSet('se-1', {
         id: 'set-3',
         weight: 145,
         reps: 5,
@@ -200,7 +200,7 @@ describe('useWorkoutSession logic', () => {
         },
       });
 
-      useWorkoutStore.getState().logSet('ex-1', {
+      useWorkoutStore.getState().logSet('se-1', {
         id: 'set-1',
         weight: 200,
         reps: 5,
