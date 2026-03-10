@@ -1,5 +1,5 @@
-import { View } from 'react-native';
-import { Tabs } from 'expo-router';
+import { View, Pressable } from 'react-native';
+import { Tabs, useRouter } from 'expo-router';
 import { BottomTabBar, type BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -15,6 +15,8 @@ function TabBarWithWorkoutBar(props: BottomTabBarProps) {
 }
 
 export default function TabsLayout() {
+  const router = useRouter();
+
   return (
     <Tabs
       tabBar={TabBarWithWorkoutBar}
@@ -35,6 +37,18 @@ export default function TabsLayout() {
           title: 'Home',
           tabBarIcon: ({ color }) => (
             <Ionicons name="home-outline" size={20} color={color} />
+          ),
+          headerShown: true,
+          headerStyle: { backgroundColor: colors.surface },
+          headerTintColor: colors.textPrimary,
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push('/(app)/settings' as any)}
+              hitSlop={8}
+              style={{ marginRight: 16 }}
+            >
+              <Ionicons name="settings-outline" size={22} color={colors.textSecondary} />
+            </Pressable>
           ),
         }}
       />
