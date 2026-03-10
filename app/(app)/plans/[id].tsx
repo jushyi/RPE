@@ -20,7 +20,8 @@ import { PlanDaySection } from '@/features/plans/components/PlanDaySection';
 import { DaySlotEditor } from '@/features/plans/components/DaySlotEditor';
 import type { DaySlot, DaySlotExercise } from '@/features/plans/components/DaySlotEditor';
 import { makeTempId } from '@/features/plans/components/DaySlotEditor';
-import type { Plan } from '@/features/plans/types';
+import type { Plan, PlanDay } from '@/features/plans/types';
+import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
 
 /**
  * Convert a Plan's plan_days into DaySlot[] for the DaySlotEditor.
@@ -78,6 +79,7 @@ export default function PlanDetailScreen() {
   const router = useRouter();
   const { plan, isLoading, isSaving, error, updatePlan } = usePlanDetail(id ?? '');
   const { deletePlan, setActivePlan } = usePlans();
+  const { startFromPlan } = useWorkoutSession();
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftName, setDraftName] = useState('');
@@ -243,7 +245,7 @@ export default function PlanDetailScreen() {
           data={plan.plan_days}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <PlanDaySection day={item} defaultExpanded={true} />
+            <PlanDaySection day={item} defaultExpanded={true} onStartWorkout={startFromPlan} />
           )}
           contentContainerStyle={s.scrollContent}
           showsVerticalScrollIndicator={false}

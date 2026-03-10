@@ -9,9 +9,10 @@ import type { PlanDay } from '../types';
 interface PlanDaySectionProps {
   day: PlanDay;
   defaultExpanded?: boolean;
+  onStartWorkout?: (day: PlanDay) => void;
 }
 
-export function PlanDaySection({ day, defaultExpanded = true }: PlanDaySectionProps) {
+export function PlanDaySection({ day, defaultExpanded = true, onStartWorkout }: PlanDaySectionProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   const toggle = () => {
@@ -85,6 +86,16 @@ export function PlanDaySection({ day, defaultExpanded = true }: PlanDaySectionPr
                 </View>
               );
             })
+          )}
+
+          {onStartWorkout && day.plan_day_exercises.length > 0 && (
+            <Pressable
+              style={s.startWorkoutBtn}
+              onPress={() => onStartWorkout(day)}
+            >
+              <Ionicons name="play" size={18} color="#fff" />
+              <Text style={s.startWorkoutText}>Start Workout</Text>
+            </Pressable>
           )}
         </View>
       )}
@@ -185,5 +196,20 @@ const s = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'italic',
     marginTop: 6,
+  },
+  startWorkoutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.accent,
+    borderRadius: 10,
+    paddingVertical: 12,
+    marginTop: 8,
+  },
+  startWorkoutText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '700',
   },
 });

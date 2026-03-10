@@ -37,17 +37,22 @@ export function usePlans() {
     setLoading(true);
     try {
       const { data, error } = await (supabase.from('workout_plans') as any)
-        .select('*, plan_days(id, plan_id, day_name, weekday, sort_order, created_at)')
+        .select('*, plan_days(id, plan_id, day_name, weekday, sort_order, created_at, plan_day_exercises(id, plan_day_id, exercise_id, sort_order, target_sets, notes, unit_override, weight_progression, created_at, exercise:exercises(id, name, equipment, muscle_groups)))')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // Ensure plan_days is always an array and sorted
+      // Ensure plan_days and their exercises are always arrays and sorted
       const normalized = (data ?? []).map((p: any) => ({
         ...p,
         plan_days: (p.plan_days ?? []).sort(
           (a: any, b: any) => a.sort_order - b.sort_order
-        ).map((d: any) => ({ ...d, plan_day_exercises: [] })),
+        ).map((d: any) => ({
+          ...d,
+          plan_day_exercises: (d.plan_day_exercises ?? []).sort(
+            (a: any, b: any) => a.sort_order - b.sort_order
+          ),
+        })),
       })) as Plan[];
 
       setPlans(normalized);
