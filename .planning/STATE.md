@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 5 of 11 (Workout History) — COMPLETE
 Plan: 2 of 2 complete
 Status: Phase 05 complete, UAT passed, ready for Phase 06
-Last activity: 2026-03-10 - Completed quick task 10: fix history trend arrows not showing upward trend
+Last activity: 2026-03-10 - Completed quick task 11: add workout resume bar and in-progress history card
 
 Progress: [█████████░] 90%
 
@@ -141,10 +141,11 @@ None yet.
 | 8 | Move active plan badge under plan name in header | 2026-03-10 | d10f1f2 | [8-move-active-plan-badge-under-plan-name-i](./quick/8-move-active-plan-badge-under-plan-name-i/) |
 | 9 | Fix workout log data not saving properly (duplicate exercise_id matching) | 2026-03-10 | abeadbc | [9-fix-workout-log-data-not-saving-properly](./quick/9-fix-workout-log-data-not-saving-properly/) |
 | 10 | Fix history trend arrows not showing upward trend on subsequent days | 2026-03-10 | dbfc1e5 | [10-fix-history-trend-arrows-not-showing-upw](./quick/10-fix-history-trend-arrows-not-showing-upw/) |
+| 11 | Add workout resume bar and in-progress history card | 2026-03-10 | dc58dbb | [11-persist-active-workout-on-swipe-back-dis](./quick/11-persist-active-workout-on-swipe-back-dis/) |
 | 12 | Show all workouts for a day on dashboard | 2026-03-10 | 614e4e0 | [12-show-all-workouts-for-a-day-on-dashboard](./quick/12-show-all-workouts-for-a-day-on-dashboard/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:45:22Z
-Stopped at: Completed quick task 9
+Last session: 2026-03-10T17:25:00Z
+Stopped at: Completed quick task 11
 Resume file: None
