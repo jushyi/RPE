@@ -200,7 +200,15 @@ export default function PlanDetailScreen() {
             placeholderTextColor={colors.textMuted}
           />
         ) : (
-          <Text style={s.headerTitle} numberOfLines={1}>{plan.name}</Text>
+          <View style={s.headerCenter}>
+            <Text style={s.headerTitle} numberOfLines={1}>{plan.name}</Text>
+            {plan.is_active && (
+              <View style={s.activeBadge}>
+                <Ionicons name="checkmark-circle" size={14} color={colors.success} />
+                <Text style={s.activeBadgeText}>Active Plan</Text>
+              </View>
+            )}
+          </View>
         )}
 
         {isEditing ? (
@@ -217,14 +225,6 @@ export default function PlanDetailScreen() {
           </Pressable>
         )}
       </View>
-
-      {/* Active badge (view mode only) */}
-      {!isEditing && plan.is_active && (
-        <View style={s.activeBadge}>
-          <Ionicons name="checkmark-circle" size={14} color={colors.success} />
-          <Text style={s.activeBadgeText}>Active Plan</Text>
-        </View>
-      )}
 
       {/* Content */}
       {isEditing ? (
@@ -280,13 +280,16 @@ const s = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.surfaceElevated,
   },
-  headerTitle: {
+  headerCenter: {
     flex: 1,
+    alignItems: 'center',
+    marginHorizontal: 12,
+  },
+  headerTitle: {
     color: colors.textPrimary,
     fontSize: 18,
     fontWeight: '700',
     textAlign: 'center',
-    marginHorizontal: 12,
   },
   headerTitleInput: {
     flex: 1,
@@ -331,8 +334,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 2,
   },
   activeBadgeText: {
     color: colors.success,
