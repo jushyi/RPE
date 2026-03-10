@@ -42,8 +42,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **HIST-01**: User can view list of past workout sessions with date, exercises, and total volume
 - [x] **HIST-02**: User can view per-exercise progress charts (max weight, estimated 1RM, volume over time)
 - [x] **HIST-03**: User can log bodyweight and view bodyweight chart over time
-- [ ] **HIST-04**: User can log body measurements (circumference, body fat %)
-- [ ] **HIST-05**: User can take and view progress photos (front/side/back with date)
+- [x] **HIST-04**: User can log body measurements (circumference, body fat %)
+- [x] **HIST-05**: User can take and view progress photos (front/side/back with date)
 - [x] **HIST-06**: Estimated 1RM auto-calculated from logged sets using Epley formula
 
 ### Dashboard
@@ -121,8 +121,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HIST-03 | Phase 6 | Complete |
 | DASH-01 | Phase 6 | Complete |
 | DASH-02 | Phase 6 | Complete |
-| HIST-04 | Phase 7 | Pending |
-| HIST-05 | Phase 7 | Pending |
+| HIST-04 | Phase 7 | Complete |
+| HIST-05 | Phase 7 | Complete |
 | ALRM-01 | Phase 8 | Pending |
 | ALRM-02 | Phase 8 | Pending |
 | ALRM-03 | Phase 8 | Pending |
