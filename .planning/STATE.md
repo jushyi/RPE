@@ -135,9 +135,10 @@ None yet.
 | 4 | add done button to collapse exercise edit view into summary | 2026-03-10 | 0ea1af8 | [4-add-done-button-to-collapse-exercise-edi](./quick/4-add-done-button-to-collapse-exercise-edi/) |
 | 5 | fix require cycle between useWorkoutSession and summary | 2026-03-10 | c567863 | [5-fix-require-cycle-between-useworkoutsess](./quick/5-fix-require-cycle-between-useworkoutsess/) |
 | 6 | Install MCP server for Supabase | 2026-03-10 | 5464340 | [6-install-mcp-server-for-supabase](./quick/6-install-mcp-server-for-supabase/) |
+| 7 | Fix dashboard showing deleted workout sessions (MMKV cache invalidation) | 2026-03-10 | 77b6dad | [7-the-dashboard-doesn-t-update-the-days-wo](./quick/7-the-dashboard-doesn-t-update-the-days-wo/) |
 
 ## Session Continuity
 
 Last session: 2026-03-10T15:41:00Z
-Stopped at: Completed 04-05-PLAN.md (gap closure)
+Stopped at: Completed quick task 7
 Resume file: None
