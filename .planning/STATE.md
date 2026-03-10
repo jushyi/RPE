@@ -242,9 +242,10 @@ None yet.
 | 14 | Fix resumed session not showing previously logged values | 2026-03-10 | 94b2980 | [14-fix-resumed-session-not-showing-previous](./quick/14-fix-resumed-session-not-showing-previous/) |
 | 15 | Stop dashboard from re-fetching on every tab switch | 2026-03-10 | 87b2bae | [15-the-dashboard-shouldnt-refresh-everytime](./quick/15-the-dashboard-shouldnt-refresh-everytime/) |
 | 16 | Set up MCP server for Expo build tracking | 2026-03-10 | ea1be5a | [16-set-up-mcp-server-for-expo-build-trackin](./quick/16-set-up-mcp-server-for-expo-build-trackin/) |
+| 17 | Create GitHub repo RPE (public) and connect to local | 2026-03-10 | n/a | [17-create-github-repo-and-connect-to-local](./quick/17-create-github-repo-and-connect-to-local/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T20:17:55.613Z
-Stopped at: Completed 07-02-PLAN.md (verified)
+Last session: 2026-03-10T20:31:25Z
+Stopped at: Completed quick-17 (create GitHub repo RPE)
 Resume file: None
