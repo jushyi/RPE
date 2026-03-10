@@ -86,7 +86,7 @@ Plans:
   4. Previous session's weight and reps for the current exercise are displayed inline while logging
   5. When a logged set exceeds the user's stored PR, the app immediately flags it as a personal record
   6. All set logging writes to local storage instantly and syncs to Supabase in the background — logging never waits for a network response
-**Plans:** 4/4 plans complete
+**Plans:** 5/6 plans executed
 
 Plans:
 - [ ] 04-01-PLAN.md — Database schema (workout_sessions, session_exercises, set_logs + RLS), TypeScript types, workoutStore with MMKV persistence
@@ -193,7 +193,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 1. Foundation | 4/4 | Complete   | 2026-03-09 |
 | 2. Exercise Library | 2/2 | Complete   | 2026-03-09 |
 | 3. Plan Builder | 3/3 | Complete   | 2026-03-09 |
-| 4. Active Workout | 4/4 | Complete   | 2026-03-10 |
+| 4. Active Workout | 5/6 | In Progress|  |
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 0/3 | Not started | - |
 | 7. Body Metrics | 0/2 | Not started | - |
