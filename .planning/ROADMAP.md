@@ -146,12 +146,12 @@ Plans:
   1. When creating or editing a plan day, user is prompted to set an alarm time for that day — alarm setup is part of plan creation, not a separate settings screen
   2. On a scheduled training day, the alarm fires at the set time with sound and vibration, displays a full-screen notification, and requires explicit dismissal before it stops
   3. If a planned training day passes without a logged workout session, the user receives a nudge notification before the end of that day
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 08-01: Alarm setup integrated into plan day creation flow (notifee, deterministic notification IDs, SCHEDULE_EXACT_ALARM + RECEIVE_BOOT_COMPLETED permissions)
-- [ ] 08-02: Real alarm delivery (full-screen intent on Android, best-effort on iOS, persistence across device reboot)
-- [ ] 08-03: Missed workout nudge (Supabase Edge Function cron or expo-task-manager background check, end-of-day notification)
+- [ ] 08-01-PLAN.md — Data layer: expo-notifications install, migration (alarm columns on plan_days), alarm types/constants/utils, notification setup, alarm scheduler, alarmStore, Jest mocks, unit tests
+- [ ] 08-02-PLAN.md — Alarm UI: time picker row in DaySlotEditor (toggle + picker when weekday mapped), alarm scheduling wired into plan save/delete/activate, notification category + snooze handler on app startup
+- [ ] 08-03-PLAN.md — Missed workout nudge: auto-cancel on workout completion, settings screen with global alarm pause toggle
 
 ### Phase 9: Polish
 **Goal**: The app looks and feels like a deliberate, dark-and-bold tool — not a prototype — with the OTA update pipeline in place for rapid iteration once the friend group is using it.
