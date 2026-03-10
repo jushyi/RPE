@@ -133,7 +133,7 @@ export function removeCompletedSession(sessionId: string): void {
   const existing = getCachedToday();
   const filtered = existing.filter((s) => s.id !== sessionId);
   if (filtered.length === 0) {
-    mmkv.delete(KEY);
+    mmkv.remove(KEY);
   } else {
     mmkv.set(KEY, JSON.stringify({ date: today, sessions: filtered }));
   }

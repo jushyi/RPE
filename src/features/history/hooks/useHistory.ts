@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase/client';
 import { useHistoryStore } from '@/stores/historyStore';
 import { useAuthStore } from '@/stores/authStore';
 import { calculateTotalVolume, calculateDurationMinutes } from '../utils/volumeCalc';
+import { removeCompletedSession } from '@/features/workout/hooks/useCompletedToday';
 import type { HistorySession, SessionListItem } from '../types';
 
 const PAGE_SIZE = 30;
@@ -46,9 +47,12 @@ export function useHistory() {
         const normalized = (data ?? []).map((s: any) => ({
           ...s,
           plan_name: s.workout_plans?.name ?? null,
-          session_exercises: (s.session_exercises ?? []).sort(
-            (a: any, b: any) => a.sort_order - b.sort_order
-          ),
+          session_exercises: (s.session_exercises ?? [])
+            .sort((a: any, b: any) => a.sort_order - b.sort_order)
+            .map((se: any) => ({
+              ...se,
+              exercise: se.exercises ?? { name: 'Unknown', muscle_groups: [], equipment: '', track_prs: false },
+            })),
         })) as HistorySession[];
 
         if (offset === 0) {
@@ -79,6 +83,7 @@ export function useHistory() {
 
       if (error) throw error;
       removeSession(id);
+      removeCompletedSession(id);
     },
     []
   );
