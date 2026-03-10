@@ -119,6 +119,21 @@ export async function cancelPlanAlarms(planDays: PlanDay[]): Promise<void> {
 }
 
 /**
+ * Cancel today's nudge notifications for the active plan.
+ * Called after workout completion to prevent stale nudges.
+ */
+export async function cancelTodaysNudges(plans: Plan[], todayWeekday: number): Promise<void> {
+  const activePlan = plans.find((p) => p.is_active);
+  if (!activePlan) return;
+
+  for (const day of activePlan.plan_days) {
+    if (day.weekday === todayWeekday && day.alarm_enabled) {
+      await cancelNudge(day.id);
+    }
+  }
+}
+
+/**
  * Sync alarms: cancel all, then schedule only for the active plan.
  * Called when active plan changes.
  */

@@ -3,8 +3,10 @@ import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useWorkoutStore } from '@/stores/workoutStore';
 import { useAuthStore } from '@/stores/authStore';
+import { usePlanStore } from '@/stores/planStore';
 import { setCompletedSession, setIsFinishing } from '@/features/workout/workoutSessionBridge';
 import { saveCompletedSession } from '@/features/workout/hooks/useCompletedToday';
+import { cancelTodaysNudges } from '@/features/alarms/hooks/useAlarmScheduler';
 import type { PlanDay } from '@/features/plans/types';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionExercise, SetLog } from '@/features/workout/types';
@@ -76,6 +78,17 @@ export function useWorkoutSession() {
     if (completed) {
       setCompletedSession(completed);
       saveCompletedSession(completed);
+
+      // Fire-and-forget: cancel today's nudge so user doesn't get reminded after training
+      try {
+        const plans = usePlanStore.getState().plans;
+        const jsDay = new Date().getDay();
+        const todayWeekday = (jsDay + 6) % 7; // Convert to 0=Mon..6=Sun
+        cancelTodaysNudges(plans, todayWeekday);
+      } catch (_) {
+        // Nudge cancel failure should not block workout save
+      }
+
       router.replace('/workout/summary' as any);
     } else {
       setIsFinishing(false);
