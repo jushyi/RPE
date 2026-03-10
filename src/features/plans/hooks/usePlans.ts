@@ -66,6 +66,8 @@ export function usePlans() {
   interface CreatePlanDay {
     day_name: string;
     weekday: number | null;
+    alarm_time?: string | null;
+    alarm_enabled?: boolean;
     exercises: {
       exercise_id: string;
       target_sets: TargetSet[];
@@ -92,6 +94,8 @@ export function usePlans() {
         plan_id: planData.id,
         day_name: day.day_name,
         weekday: day.weekday,
+        alarm_time: day.alarm_time ?? null,
+        alarm_enabled: day.alarm_enabled ?? false,
         sort_order: index,
       }));
 

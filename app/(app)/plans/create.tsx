@@ -19,7 +19,7 @@ export default function CreatePlanScreen() {
   const [nameError, setNameError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [days, setDays] = useState<DaySlot[]>([
-    { tempId: makeTempId(), day_name: 'Day A', weekday: null, exercises: [] },
+    { tempId: makeTempId(), day_name: 'Day A', weekday: null, alarmEnabled: false, alarmTime: null, exercises: [] },
   ]);
 
   const handleSave = async () => {
@@ -34,6 +34,8 @@ export default function CreatePlanScreen() {
       await createPlan(trimmed, days.map((d) => ({
         day_name: d.day_name,
         weekday: d.weekday,
+        alarm_time: d.alarmEnabled ? d.alarmTime : null,
+        alarm_enabled: d.alarmEnabled,
         exercises: d.exercises.map((ex) => ({
           exercise_id: ex.exercise_id,
           target_sets: ex.target_sets,

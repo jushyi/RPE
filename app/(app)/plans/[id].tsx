@@ -31,6 +31,8 @@ function planToDaySlots(plan: Plan): DaySlot[] {
     tempId: makeTempId(),
     day_name: day.day_name,
     weekday: day.weekday,
+    alarmEnabled: day.alarm_enabled ?? false,
+    alarmTime: day.alarm_time ?? null,
     exercises: day.plan_day_exercises.map((ex) => ({
       tempId: makeTempId(),
       exercise_id: ex.exercise_id,
@@ -57,6 +59,8 @@ function daySlotsToplanDays(slots: DaySlot[], planId: string) {
     plan_id: planId,
     day_name: slot.day_name,
     weekday: slot.weekday,
+    alarm_time: slot.alarmEnabled ? slot.alarmTime : null,
+    alarm_enabled: slot.alarmEnabled,
     sort_order: dayIndex,
     created_at: new Date().toISOString(),
     plan_day_exercises: slot.exercises.map((ex, exIndex) => ({

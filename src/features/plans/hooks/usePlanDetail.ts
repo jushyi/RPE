@@ -81,6 +81,8 @@ export function usePlanDetail(planId: string) {
             plan_id: planId,
             day_name: day.day_name,
             weekday: day.weekday,
+            alarm_time: day.alarm_time ?? null,
+            alarm_enabled: day.alarm_enabled ?? false,
             sort_order: index,
           }));
 

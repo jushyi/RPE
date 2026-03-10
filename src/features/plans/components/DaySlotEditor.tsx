@@ -1,9 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, Switch, Platform, Alert, StyleSheet } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { colors } from '@/constants/theme';
 import { DEFAULT_DAY_NAMES, WEEKDAY_LABELS, DEFAULT_TARGET_SET } from '../constants';
+import { requestNotificationPermission } from '@/features/alarms/utils/notificationSetup';
 import type { TargetSet } from '../types';
 import type { Exercise } from '@/features/exercises/types';
 import { PlanExerciseRow } from './PlanExerciseRow';
@@ -23,6 +25,8 @@ export interface DaySlot {
   tempId: string;
   day_name: string;
   weekday: number | null;
+  alarmEnabled: boolean;
+  alarmTime: string | null;
   exercises: DaySlotExercise[];
 }
 
@@ -57,7 +61,17 @@ export function DaySlotEditor({ days, onChange }: DaySlotEditorProps) {
 
   const handleAddDay = () => {
     const nextName = DEFAULT_DAY_NAMES[days.length] ?? `Day ${days.length + 1}`;
-    onChange([...days, { tempId: makeTempId(), day_name: nextName, weekday: null, exercises: [] }]);
+    // Remember-last-time pattern: new day inherits previous day's alarm time
+    const prevDay = days.length > 0 ? days[days.length - 1] : null;
+    const inheritedAlarmTime = prevDay?.alarmTime ?? null;
+    onChange([...days, {
+      tempId: makeTempId(),
+      day_name: nextName,
+      weekday: null,
+      alarmEnabled: false,
+      alarmTime: inheritedAlarmTime,
+      exercises: [],
+    }]);
   };
 
   const handleRemoveDay = (index: number) => {
@@ -75,6 +89,57 @@ export function DaySlotEditor({ days, onChange }: DaySlotEditorProps) {
     const updated = [...days];
     updated[index] = { ...updated[index], weekday };
     onChange(updated);
+  };
+
+  // Track whether permission has been requested this session
+  const permissionRequestedRef = useRef(false);
+  // Android time picker visibility state (index of day showing picker, or null)
+  const [androidPickerDay, setAndroidPickerDay] = useState<number | null>(null);
+
+  const handleAlarmToggle = async (dayIndex: number, enabled: boolean) => {
+    if (enabled && !permissionRequestedRef.current) {
+      permissionRequestedRef.current = true;
+      const granted = await requestNotificationPermission();
+      if (!granted) {
+        Alert.alert(
+          'Notifications Required',
+          'Please enable notifications in your device settings to use wake-up alarms.'
+        );
+        return;
+      }
+    }
+    const updated = [...days];
+    updated[dayIndex] = {
+      ...updated[dayIndex],
+      alarmEnabled: enabled,
+      // Default to 06:00 if no time set yet
+      alarmTime: enabled && !updated[dayIndex].alarmTime ? '06:00' : updated[dayIndex].alarmTime,
+    };
+    onChange(updated);
+  };
+
+  const handleAlarmTimeChange = (dayIndex: number, date: Date | undefined) => {
+    // Hide Android picker
+    if (Platform.OS === 'android') {
+      setAndroidPickerDay(null);
+    }
+    if (!date) return;
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const updated = [...days];
+    updated[dayIndex] = { ...updated[dayIndex], alarmTime: `${hours}:${minutes}` };
+    onChange(updated);
+  };
+
+  const parseAlarmTime = (timeStr: string | null): Date => {
+    const d = new Date();
+    if (timeStr) {
+      const [h, m] = timeStr.split(':').map(Number);
+      d.setHours(h, m, 0, 0);
+    } else {
+      d.setHours(6, 0, 0, 0);
+    }
+    return d;
   };
 
   const handleOpenExercisePicker = (dayIndex: number) => {
@@ -185,6 +250,52 @@ export function DaySlotEditor({ days, onChange }: DaySlotEditorProps) {
                 </Pressable>
               ))}
             </View>
+
+            {/* Alarm row - only when weekday is mapped */}
+            {day.weekday !== null && (
+              <View style={s.alarmRow}>
+                <Ionicons name="alarm-outline" size={20} color={colors.textSecondary} />
+                <Text style={s.alarmLabel}>Wake-up alarm</Text>
+                <Switch
+                  value={day.alarmEnabled}
+                  onValueChange={(v) => handleAlarmToggle(dayIndex, v)}
+                  trackColor={{ false: colors.surfaceElevated, true: colors.accent }}
+                  thumbColor="#ffffff"
+                />
+                {day.alarmEnabled && (
+                  Platform.OS === 'android' ? (
+                    <>
+                      <Pressable
+                        onPress={() => setAndroidPickerDay(dayIndex)}
+                        style={s.alarmTimeBtn}
+                      >
+                        <Text style={s.alarmTimeText}>
+                          {day.alarmTime ?? '06:00'}
+                        </Text>
+                      </Pressable>
+                      {androidPickerDay === dayIndex && (
+                        <DateTimePicker
+                          value={parseAlarmTime(day.alarmTime)}
+                          mode="time"
+                          display="default"
+                          themeVariant="dark"
+                          onChange={(_event: any, date?: Date) => handleAlarmTimeChange(dayIndex, date)}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <DateTimePicker
+                      value={parseAlarmTime(day.alarmTime)}
+                      mode="time"
+                      display="default"
+                      themeVariant="dark"
+                      onChange={(_event: any, date?: Date) => handleAlarmTimeChange(dayIndex, date)}
+                      style={s.alarmPicker}
+                    />
+                  )
+                )}
+              </View>
+            )}
 
             {/* Reorder toggle (only show if 2+ exercises) */}
             {day.exercises.length >= 2 && (
@@ -332,6 +443,36 @@ const s = StyleSheet.create({
   },
   weekdayTextActive: {
     color: '#ffffff',
+  },
+  alarmRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 12,
+    gap: 8,
+  },
+  alarmLabel: {
+    flex: 1,
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  alarmTimeBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    backgroundColor: colors.surfaceElevated,
+  },
+  alarmTimeText: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  alarmPicker: {
+    width: 80,
   },
   reorderToggle: {
     flexDirection: 'row',
