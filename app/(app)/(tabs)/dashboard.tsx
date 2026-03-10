@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert } from 'react-native';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert, Animated } from 'react-native';
 import { useRouter, useFocusEffect, useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
@@ -215,12 +215,52 @@ function CompletedWorkoutCard({ session, index, isOnly }: { session: WorkoutSess
   );
 }
 
+function SkeletonBlock({ width, height, style }: { width: number | string; height: number; style?: any }) {
+  const opacity = useRef(new Animated.Value(0.3)).current;
+
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, { toValue: 0.7, duration: 600, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 0.3, duration: 600, useNativeDriver: true }),
+      ])
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, [opacity]);
+
+  return (
+    <Animated.View
+      style={[
+        { width, height, borderRadius: 8, backgroundColor: colors.surfaceElevated, opacity },
+        style,
+      ]}
+    />
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <View style={ds.todayCard}>
+      <View style={ds.todayHeader}>
+        <View>
+          <SkeletonBlock width={100} height={13} />
+          <SkeletonBlock width={140} height={18} style={{ marginTop: 6 }} />
+        </View>
+        <SkeletonBlock width={80} height={12} />
+      </View>
+      <SkeletonBlock width="100%" height={48} style={{ marginBottom: 8 }} />
+      <SkeletonBlock width="100%" height={48} />
+    </View>
+  );
+}
+
 export default function DashboardScreen() {
   const { signOut, user } = useAuth();
   const { getPRBaselines } = usePRBaselines();
   const { plans, fetchPlans } = usePlans();
   const { startFreestyle, startFromPlan } = useWorkoutSession();
-  const { sessions: completedToday, refresh: refreshCompleted } = useCompletedToday();
+  const { sessions: completedToday, refreshing, refresh: refreshCompleted } = useCompletedToday();
   const navigation = useNavigation();
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
   const [signingOut, setSigningOut] = useState(false);
@@ -324,7 +364,9 @@ export default function DashboardScreen() {
           </View>
         </View>
 
-        {todayDay ? (
+        {refreshing ? (
+          <DashboardSkeleton />
+        ) : todayDay ? (
           <View style={ds.todayCard}>
             <View style={ds.todayHeader}>
               <View>

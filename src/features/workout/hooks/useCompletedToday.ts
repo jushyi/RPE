@@ -129,11 +129,14 @@ export function removeCompletedSession(sessionId: string): void {
 /** Hook that fetches from Supabase + MMKV on focus and on demand */
 export function useCompletedToday(): {
   sessions: WorkoutSession[];
+  refreshing: boolean;
   refresh: () => void;
 } {
   const [sessions, setSessions] = useState<WorkoutSession[]>(() => getCachedToday());
+  const [refreshing, setRefreshing] = useState(false);
 
   const refresh = useCallback(() => {
+    setRefreshing(true);
     const cached = getCachedToday();
     setSessions(cached);
 
@@ -150,10 +153,11 @@ export function useCompletedToday(): {
       })
       .catch(() => {
         // Offline — cached sessions are fine
-      });
+      })
+      .finally(() => setRefreshing(false));
   }, []);
 
   useFocusEffect(refresh);
 
-  return { sessions, refresh };
+  return { sessions, refreshing, refresh };
 }
