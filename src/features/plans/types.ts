@@ -31,6 +31,8 @@ export interface PlanDay {
   weekday: number | null;
   sort_order: number;
   created_at: string;
+  alarm_time: string | null;
+  alarm_enabled: boolean;
   plan_day_exercises: PlanDayExercise[];
 }
 

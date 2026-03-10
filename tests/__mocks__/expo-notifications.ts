@@ -16,3 +16,17 @@ export const AndroidImportance = {
   LOW: 2,
   MIN: 1,
 };
+export const AndroidNotificationPriority = {
+  MAX: 'max',
+  HIGH: 'high',
+  DEFAULT: 'default',
+  LOW: 'low',
+  MIN: 'min',
+};
+export const SchedulableTriggerInputTypes = {
+  WEEKLY: 'weekly',
+  DAILY: 'daily',
+  TIME_INTERVAL: 'timeInterval',
+  DATE: 'date',
+  CALENDAR: 'calendar',
+};
