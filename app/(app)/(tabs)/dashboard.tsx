@@ -1,73 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert, Animated, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Pressable, Alert, Animated, RefreshControl } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { usePRBaselines } from '@/features/auth/hooks/usePRBaselines';
 import { usePlans } from '@/features/plans/hooks/usePlans';
-import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
 import { useCompletedToday } from '@/features/workout/hooks/useCompletedToday';
 import { computeSessionSummary } from '@/features/workout/components/SessionSummary';
 import { supabase } from '@/lib/supabase/client';
 import { colors } from '@/constants/theme';
+
+import { TappableAvatar } from '@/features/dashboard/components/TappableAvatar';
+import { TodaysWorkoutCard } from '@/features/dashboard/components/TodaysWorkoutCard';
+import { ProgressSummaryCard } from '@/features/dashboard/components/ProgressSummaryCard';
+import { BodyweightCard } from '@/features/dashboard/components/BodyweightCard';
+
 import type { PRBaseline } from '@/lib/supabase/types/database';
-import type { PlanDay } from '@/features/plans/types';
 import type { WorkoutSession } from '@/features/workout/types';
-
-function TappableAvatar({
-  displayName,
-  avatarUrl,
-  onPhotoChanged,
-}: {
-  displayName: string;
-  avatarUrl: string | null;
-  onPhotoChanged: (uri: string) => void;
-}) {
-  const initials = displayName
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-
-  const handlePress = () => {
-    Alert.alert('Profile Photo', 'Choose a photo source', [
-      { text: 'Take Photo', onPress: () => pickPhoto('camera') },
-      { text: 'Choose from Gallery', onPress: () => pickPhoto('gallery') },
-      { text: 'Cancel', style: 'cancel' },
-    ]);
-  };
-
-  const pickPhoto = async (source: 'camera' | 'gallery') => {
-    if (source === 'camera') {
-      const { granted } = await ImagePicker.requestCameraPermissionsAsync();
-      if (!granted) { Alert.alert('Permission Required', 'Camera access is needed.'); return; }
-      const result = await ImagePicker.launchCameraAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
-      if (!result.canceled && result.assets[0]) onPhotoChanged(result.assets[0].uri);
-    } else {
-      const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!granted) { Alert.alert('Permission Required', 'Gallery access is needed.'); return; }
-      const result = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true, aspect: [1, 1], quality: 0.7 });
-      if (!result.canceled && result.assets[0]) onPhotoChanged(result.assets[0].uri);
-    }
-  };
-
-  return (
-    <Pressable onPress={handlePress} style={{ opacity: 1 }}>
-      {avatarUrl ? (
-        <Image source={{ uri: avatarUrl }} style={ds.avatarImg} />
-      ) : (
-        <View style={ds.avatar}>
-          <Text style={ds.avatarText}>{initials || '?'}</Text>
-        </View>
-      )}
-    </Pressable>
-  );
-}
 
 function PRCard({ baselines }: { baselines: PRBaseline[] }) {
   const router = useRouter();
@@ -239,22 +191,6 @@ function SkeletonBlock({ width, height, style }: { width: number | string; heigh
   );
 }
 
-function DashboardSkeleton() {
-  return (
-    <View style={ds.todayCard}>
-      <View style={ds.todayHeader}>
-        <View>
-          <SkeletonBlock width={100} height={13} />
-          <SkeletonBlock width={140} height={18} style={{ marginTop: 6 }} />
-        </View>
-        <SkeletonBlock width={80} height={12} />
-      </View>
-      <SkeletonBlock width="100%" height={48} style={{ marginBottom: 8 }} />
-      <SkeletonBlock width="100%" height={48} />
-    </View>
-  );
-}
-
 function PRCardSkeleton() {
   return (
     <Card title="Personal Records">
@@ -269,15 +205,13 @@ function PRCardSkeleton() {
 }
 
 export default function DashboardScreen() {
-  const { signOut, user } = useAuth();
+  const { user } = useAuth();
   const { getPRBaselines } = usePRBaselines();
-  const { plans, fetchPlans } = usePlans();
-  const { startFreestyle, startFromPlan } = useWorkoutSession();
+  const { fetchPlans } = usePlans();
   const { sessions: completedToday, refreshing, refresh: refreshCompleted } = useCompletedToday();
   const navigation = useNavigation();
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
   const [refreshingPRs, setRefreshingPRs] = useState(false);
-  const [signingOut, setSigningOut] = useState(false);
 
   const displayName =
     user?.user_metadata?.display_name ?? user?.email?.split('@')[0] ?? 'Athlete';
@@ -351,22 +285,6 @@ export default function DashboardScreen() {
     return unsubscribe;
   }, [navigation, refreshAll]);
 
-  // Find active plan and today's matching day
-  const activePlan = plans.find((p) => p.is_active);
-  const todayWeekday = new Date().getDay(); // 0=Sun, 1=Mon, ...
-  const todayDay: PlanDay | undefined = activePlan?.plan_days.find(
-    (d) => d.weekday === todayWeekday
-  );
-
-  const handleSignOut = async () => {
-    setSigningOut(true);
-    try {
-      await signOut();
-    } catch {
-      setSigningOut(false);
-    }
-  };
-
   const HEADER_HEIGHT = 80;
   const lastScrollY = useRef(0);
   const headerTranslateY = useRef(new Animated.Value(0)).current;
@@ -438,77 +356,35 @@ export default function DashboardScreen() {
         }
       >
 
-        {refreshing ? (
-          <DashboardSkeleton />
-        ) : todayDay ? (
-          <View style={ds.todayCard}>
-            <View style={ds.todayHeader}>
-              <View>
-                <Text style={ds.todayLabel}>Today's Workout</Text>
-                <Text style={ds.todayDayName}>{todayDay.day_name}</Text>
-              </View>
-              <Text style={ds.todayPlanName}>{activePlan?.name}</Text>
-            </View>
-
-            {completedToday.length > 0 ? (
-              <View>
-                {completedToday.map((s, i) => (
-                  <CompletedWorkoutCard key={s.id} session={s} index={i} isOnly={completedToday.length === 1} />
-                ))}
-              </View>
-            ) : (
-              <>
-                {todayDay.plan_day_exercises.length > 0 && (
-                  <View style={ds.todayExercises}>
-                    {todayDay.plan_day_exercises.map((ex, idx) => (
-                      <View key={ex.id || `ex-${idx}`} style={ds.todayExRow}>
-                        <Text style={ds.todayExName}>{ex.exercise?.name ?? 'Exercise'}</Text>
-                        <Text style={ds.todayExSets}>{ex.target_sets.length} sets</Text>
-                      </View>
-                    ))}
-                  </View>
-                )}
-                <Pressable
-                  onPress={() => startFromPlan(todayDay)}
-                  style={({ pressed }) => [ds.startTodayBtn, pressed && { opacity: 0.8 }]}
-                >
-                  <Ionicons name="play" size={18} color="#fff" />
-                  <Text style={ds.startTodayText}>Start Workout</Text>
-                </Pressable>
-              </>
-            )}
+        {/* Completed workouts for today (if any) */}
+        {completedToday.length > 0 && (
+          <View style={ds.completedSection}>
+            <Text style={ds.completedSectionTitle}>Today's Workouts</Text>
+            {completedToday.map((s, i) => (
+              <CompletedWorkoutCard key={s.id} session={s} index={i} isOnly={completedToday.length === 1} />
+            ))}
           </View>
-        ) : (
-          <>
-            <Pressable
-              onPress={startFreestyle}
-              style={({ pressed }) => [ds.quickWorkoutBtn, pressed && { opacity: 0.8 }]}
-            >
-              <Ionicons name="barbell-outline" size={22} color="#fff" />
-              <Text style={ds.quickWorkoutText}>Quick Workout</Text>
-            </Pressable>
-            {completedToday.length > 0 && (
-              <View style={ds.todayCard}>
-                <Text style={ds.completedSectionTitle}>Today's Workouts</Text>
-                {completedToday.map((s, i) => (
-                  <CompletedWorkoutCard key={s.id} session={s} index={i} isOnly={completedToday.length === 1} />
-                ))}
-              </View>
-            )}
-          </>
         )}
 
+        {/* Card 1: Today's Workout */}
         <View style={ds.cardWrap}>
-          <Card title="Progress">
-            <Text style={ds.cardDesc}>Your progress charts will appear here</Text>
-          </Card>
+          <TodaysWorkoutCard />
         </View>
 
+        {/* Card 2: Progress Summary */}
+        <View style={ds.cardWrap}>
+          <ProgressSummaryCard />
+        </View>
+
+        {/* Card 3: Bodyweight */}
+        <View style={ds.cardWrap}>
+          <BodyweightCard />
+        </View>
+
+        {/* Card 4: PR Baselines (last) */}
         <View style={{ marginBottom: 32 }}>
           {refreshingPRs ? <PRCardSkeleton /> : <PRCard baselines={baselines} />}
         </View>
-
-        <Button title="Sign Out" onPress={handleSignOut} variant="ghost" loading={signingOut} />
       </ScrollView>
     </View>
   );
@@ -531,99 +407,8 @@ const ds = StyleSheet.create({
     backgroundColor: colors.background,
   },
   headerLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
-  avatarImg: { width: 48, height: 48, borderRadius: 24 },
   greeting: { color: colors.textSecondary, fontSize: 14 },
   name: { color: colors.textPrimary, fontSize: 20, fontWeight: 'bold' },
-  todayCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.surfaceElevated,
-  },
-  todayHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  todayLabel: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  todayDayName: {
-    color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '700',
-    marginTop: 2,
-  },
-  todayPlanName: {
-    color: colors.textMuted,
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  todayExercises: {
-    marginBottom: 12,
-  },
-  todayExRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.surfaceElevated,
-  },
-  todayExName: {
-    color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '500',
-    flex: 1,
-  },
-  todayExSets: {
-    color: colors.textMuted,
-    fontSize: 13,
-  },
-  startTodayBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.accent,
-    borderRadius: 10,
-    paddingVertical: 12,
-  },
-  startTodayText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  quickWorkoutBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    backgroundColor: colors.accent,
-    borderRadius: 14,
-    paddingVertical: 16,
-    marginBottom: 16,
-  },
-  quickWorkoutText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: '700',
-  },
   cardWrap: { marginBottom: 16 },
   cardDesc: { color: colors.textSecondary, fontSize: 14 },
   prRow: {
@@ -634,6 +419,9 @@ const ds = StyleSheet.create({
   },
   prLabel: { color: colors.textPrimary, fontSize: 16 },
   prValue: { color: colors.accent, fontWeight: 'bold', fontSize: 16 },
+  completedSection: {
+    marginBottom: 16,
+  },
   completedCard: {
     backgroundColor: colors.surface,
     borderRadius: 14,
