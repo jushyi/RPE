@@ -1,10 +1,23 @@
+import { View } from 'react-native';
 import { Tabs } from 'expo-router';
+import { BottomTabBar, type BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { ActiveWorkoutBar } from '@/features/workout/components/ActiveWorkoutBar';
+
+function TabBarWithWorkoutBar(props: BottomTabBarProps) {
+  return (
+    <View>
+      <ActiveWorkoutBar />
+      <BottomTabBar {...props} />
+    </View>
+  );
+}
 
 export default function TabsLayout() {
   return (
     <Tabs
+      tabBar={TabBarWithWorkoutBar}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
