@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes (completed 2026-03-10)
 - [ ] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation
 - [ ] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen
-- [ ] **Phase 7: Body Metrics** - Body measurements, progress photos, Supabase Storage integration
+- [ ] **Phase 7: Body Metrics** - Body measurements (chest, waist, hips, body fat %), combined dashboard card, detail screen with charts and history
 - [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
 - [ ] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline
 - [ ] **Phase 10: Distribution** - EAS Build, TestFlight, APK/AAB, physical device checklist verification
@@ -125,18 +125,18 @@ Plans:
 - [ ] 06-03-PLAN.md — Dashboard refactor: TodaysWorkoutCard (3 states), ProgressSummaryCard (streak + PRs + stats + sparklines), compose cards in locked order, remove Sign Out
 
 ### Phase 7: Body Metrics
-**Goal**: Users can track body composition changes — measurements and progress photos — with photos stored privately in Supabase Storage accessible only to the owning user.
+**Goal**: Users can track body composition changes via body measurements (chest, waist, hips, body fat %) with a combined dashboard card and full detail screen featuring charts and history. Progress photos (HIST-05) deferred per user decision.
 **Depends on**: Phase 6
 **Requirements**: HIST-04, HIST-05
 **Success Criteria** (what must be TRUE):
   1. User can log body measurements (chest, waist, hips, body fat %) with a date and view past entries
-  2. User can take or select a progress photo (front/side/back), save it with a date, and view past photos in a timeline
-  3. Progress photos are stored in a private Supabase Storage bucket and are not publicly accessible
-**Plans**: TBD
+  2. Dashboard shows a combined Body card with latest bodyweight + measurements, tappable to open detail screen
+  3. Detail screen has Charts tab (entry form + per-measurement trend charts) and History tab (reverse-chronological list with edit/delete)
+**Plans:** 2 plans
 
 Plans:
-- [ ] 07-01: Body measurements log (entry form, history list)
-- [ ] 07-02: Progress photos (expo-image-picker, private Supabase Storage bucket, signed URL display, date-stamped timeline)
+- [ ] 07-01-PLAN.md — Data layer: body_measurements migration + RLS, types, unit conversion utils, bodyMeasurementStore (Zustand + MMKV), CRUD hooks, chart data hook, combined BodyCard on dashboard
+- [ ] 07-02-PLAN.md — Full body metrics detail screen: PagerView Charts/History tabs, measurement entry form (4 fields + bodyweight, per-input unit toggles, date picker), per-measurement trend charts, history list with edit/delete, human verification
 
 ### Phase 8: Alarms + Accountability
 **Goal**: Users are woken up for planned training days by a real alarm that must be dismissed, and receive a nudge notification any time they skip a planned session — the accountability loop that makes the app a training partner, not just a logger.
