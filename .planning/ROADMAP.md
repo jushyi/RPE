@@ -154,23 +154,24 @@ Plans:
 - [ ] 08-03-PLAN.md — Missed workout nudge: auto-cancel on workout completion, settings screen with global alarm pause toggle
 
 ### Phase 9: Polish
-**Goal**: The app looks and feels like a deliberate, dark-and-bold tool — not a prototype — with the OTA update pipeline in place for rapid iteration once the friend group is using it.
+**Goal**: The app looks and feels like a deliberate, dark-and-bold tool -- not a prototype -- with consistent magenta theming, branded icon/splash, and the OTA update pipeline in place for rapid iteration once the friend group is using it.
 **Depends on**: Phase 8
-**Requirements**: (no unassigned v1 requirements — delivery quality gate)
+**Requirements**: (no unassigned v1 requirements -- delivery quality gate)
 **Success Criteria** (what must be TRUE):
-  1. App applies the dark/bold design language consistently across all screens (dark background, clean typography, accent colors that pop — no default white/light screens remaining)
+  1. App applies the dark/bold design language consistently across all screens (dark background, clean typography, accent colors that pop -- no default white/light screens remaining)
   2. App icon and splash screen are set and display correctly on both iOS and Android
   3. EAS Update OTA pipeline is configured and a test update successfully reaches a device without a new store submission
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 09-01: Dark/bold theme pass (NativeWind dark mode, typography, accent colors, consistent across all screens)
-- [ ] 09-02: App icon, splash screen, and EAS Update OTA pipeline configuration
+- [ ] 09-01-PLAN.md -- Theme accent swap (blue to magenta) and centralize all hardcoded colors into theme.ts
+- [ ] 09-02-PLAN.md -- App icon/splash screen generation, app rename to "RPE", navigation transitions
+- [ ] 09-03-PLAN.md -- EAS Update OTA pipeline configuration, Skeleton loading component
 
 ### Phase 10: Distribution
 **Goal**: The app is installable by the friend group on real iOS and Android devices and all critical behaviors (offline logging, alarm delivery, RLS isolation, plan-history separation) are verified on physical hardware before distribution.
 **Depends on**: Phase 9
-**Requirements**: (no unassigned v1 requirements — distribution gate)
+**Requirements**: (no unassigned v1 requirements -- distribution gate)
 **Success Criteria** (what must be TRUE):
   1. App builds successfully via EAS Build and installs on a physical iOS device via TestFlight
   2. App builds successfully via EAS Build and installs on a physical Android device via APK or AAB
@@ -198,7 +199,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
 | 7. Body Metrics | 2/2 | Complete   | 2026-03-10 |
 | 8. Alarms + Accountability | 0/3 | Not started | - |
-| 9. Polish | 0/2 | Not started | - |
+| 9. Polish | 0/3 | Not started | - |
 | 10. Distribution | 0/2 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export

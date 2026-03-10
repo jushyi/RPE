@@ -1,7 +1,9 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { usePlanStore } from '@/stores/planStore';
 import { useAuthStore } from '@/stores/authStore';
+import { useAlarmStore } from '@/stores/alarmStore';
+import { schedulePlanAlarms, cancelPlanAlarms, syncActiveAlarms } from '@/features/alarms/hooks/useAlarmScheduler';
 import type { Plan, PlanSummary, TargetSet } from '../types';
 
 export function usePlans() {
@@ -17,6 +19,7 @@ export function usePlans() {
     setLoading,
   } = usePlanStore();
   const userId = useAuthStore((s) => s.userId);
+  const alarmSyncedRef = useRef(false);
 
   /** Summaries derived from cached plans (avoids extra queries) */
   const planSummaries: PlanSummary[] = plans.map((p) => ({
@@ -37,7 +40,7 @@ export function usePlans() {
     setLoading(true);
     try {
       const { data, error } = await (supabase.from('workout_plans') as any)
-        .select('*, plan_days(id, plan_id, day_name, weekday, sort_order, created_at, plan_day_exercises(id, plan_day_id, exercise_id, sort_order, target_sets, notes, unit_override, weight_progression, created_at, exercise:exercises(id, name, equipment, muscle_groups)))')
+        .select('*, plan_days(id, plan_id, day_name, weekday, alarm_time, alarm_enabled, sort_order, created_at, plan_day_exercises(id, plan_day_id, exercise_id, sort_order, target_sets, notes, unit_override, weight_progression, created_at, exercise:exercises(id, name, equipment, muscle_groups)))')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -56,6 +59,17 @@ export function usePlans() {
       })) as Plan[];
 
       setPlans(normalized);
+
+      // One-time alarm sync on app launch to recover lost alarms
+      if (!alarmSyncedRef.current) {
+        alarmSyncedRef.current = true;
+        const isPaused = useAlarmStore.getState().isPaused;
+        if (!isPaused) {
+          syncActiveAlarms(normalized).catch((err) =>
+            console.warn('Failed to sync alarms on fetch:', err)
+          );
+        }
+      }
     } catch (err) {
       console.warn('Failed to fetch plans:', err);
     } finally {
@@ -147,6 +161,16 @@ export function usePlans() {
       };
 
       addToStore(newPlan);
+
+      // Schedule alarms if new plan is active
+      if (newPlan.is_active && !useAlarmStore.getState().isPaused) {
+        try {
+          await schedulePlanAlarms(newPlan.plan_days);
+        } catch (err) {
+          console.warn('Failed to schedule alarms for new plan:', err);
+        }
+      }
+
       return newPlan;
     },
     [userId]
@@ -156,6 +180,14 @@ export function usePlans() {
     async (id: string) => {
       if (!supabase) return;
 
+      // Cancel alarms for the plan being deleted (fire-and-forget)
+      const planToDelete = plans.find((p) => p.id === id);
+      if (planToDelete) {
+        cancelPlanAlarms(planToDelete.plan_days).catch((err) =>
+          console.warn('Failed to cancel alarms for deleted plan:', err)
+        );
+      }
+
       const { error } = await (supabase.from('workout_plans') as any)
         .delete()
         .eq('id', id);
@@ -163,7 +195,7 @@ export function usePlans() {
       if (error) throw error;
       removeFromStore(id);
     },
-    []
+    [plans]
   );
 
   const setActivePlan = useCallback(
@@ -176,6 +208,14 @@ export function usePlans() {
 
       if (error) throw error;
       setActiveInStore(id);
+
+      // Sync alarms: cancel old active plan alarms, schedule new (fire-and-forget)
+      const updatedPlans = usePlanStore.getState().plans;
+      if (!useAlarmStore.getState().isPaused) {
+        syncActiveAlarms(updatedPlans).catch((err) =>
+          console.warn('Failed to sync alarms on active plan change:', err)
+        );
+      }
     },
     []
   );

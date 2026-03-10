@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { usePlanStore } from '@/stores/planStore';
+import { useAlarmStore } from '@/stores/alarmStore';
+import { cancelPlanAlarms, schedulePlanAlarms } from '@/features/alarms/hooks/useAlarmScheduler';
 import type { Plan } from '../types';
 
 export function usePlanDetail(planId: string) {
@@ -129,6 +131,18 @@ export function usePlanDetail(planId: string) {
 
         // 6. Refetch to get fresh data with new IDs
         await fetchPlan();
+
+        // 7. Reschedule alarms if this is the active plan
+        try {
+          const allPlans = usePlanStore.getState().plans;
+          const currentPlan = allPlans.find((p) => p.id === planId);
+          if (currentPlan?.is_active && !useAlarmStore.getState().isPaused) {
+            await cancelPlanAlarms(currentPlan.plan_days);
+            await schedulePlanAlarms(currentPlan.plan_days);
+          }
+        } catch (alarmErr) {
+          console.warn('Failed to reschedule alarms after plan edit:', alarmErr);
+        }
 
         return { success: true, error: null };
       } catch (err: any) {
