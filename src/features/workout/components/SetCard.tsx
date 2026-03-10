@@ -1,11 +1,12 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React, { useState, useCallback, useRef } from 'react';
+import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import { colors } from '@/constants/theme';
 import {
   MAX_WEIGHT,
   MAX_REPS,
 } from '@/features/workout/constants';
 import type { TargetSet } from '@/features/plans/types';
+import type { SetLog } from '@/features/workout/types';
 
 interface SetCardProps {
   targetSet?: TargetSet;
@@ -13,27 +14,31 @@ interface SetCardProps {
   unit: 'kg' | 'lbs';
   onLog: (weight: number, reps: number, rpe: number | null) => void;
   isLogged?: boolean;
+  loggedSet?: SetLog;
 }
 
-export function SetCard({ targetSet, setNumber, unit, onLog, isLogged }: SetCardProps) {
-  const [weight, setWeight] = useState(
-    targetSet?.weight && targetSet.weight > 0 ? String(targetSet.weight) : ''
-  );
-  const [reps, setReps] = useState(
-    targetSet?.reps && targetSet.reps > 0 ? String(targetSet.reps) : ''
-  );
-  const [rpe, setRpe] = useState(
-    targetSet?.rpe != null && targetSet.rpe > 0 ? String(targetSet.rpe) : ''
-  );
-  const hasLogged = useRef(isLogged ?? false);
-  const userEdited = useRef(false);
+export function SetCard({ targetSet, setNumber, unit, onLog, isLogged, loggedSet }: SetCardProps) {
+  const [weight, setWeight] = useState(() => {
+    if (loggedSet) return String(loggedSet.weight);
+    if (targetSet?.weight && targetSet.weight > 0) return String(targetSet.weight);
+    return '';
+  });
+  const [reps, setReps] = useState(() => {
+    if (loggedSet) return String(loggedSet.reps);
+    if (targetSet?.reps && targetSet.reps > 0) return String(targetSet.reps);
+    return '';
+  });
+  const [rpe, setRpe] = useState(() => {
+    if (loggedSet?.rpe != null && loggedSet.rpe > 0) return String(loggedSet.rpe);
+    if (targetSet?.rpe != null && targetSet.rpe > 0) return String(targetSet.rpe);
+    return '';
+  });
+  const hasLogged = useRef(!!loggedSet || (isLogged ?? false));
 
-  // Auto-log when user edits and both weight+reps have valid values
-  useEffect(() => {
-    if (hasLogged.current || !userEdited.current) return;
+  const handleLogPress = useCallback(() => {
     const w = parseFloat(weight);
     const r = parseInt(reps, 10);
-    if (w > 0 && r > 0) {
+    if (w > 0 && r > 0 && !hasLogged.current) {
       hasLogged.current = true;
       const rpeVal = rpe ? parseFloat(rpe) : null;
       onLog(w, r, rpeVal);
@@ -41,7 +46,6 @@ export function SetCard({ targetSet, setNumber, unit, onLog, isLogged }: SetCard
   }, [weight, reps, rpe, onLog]);
 
   const handleWeightChange = useCallback((text: string) => {
-    userEdited.current = true;
     const cleaned = text.replace(/[^0-9.]/g, '');
     const val = parseFloat(cleaned);
     if (cleaned === '' || (val >= 0 && val <= MAX_WEIGHT)) {
@@ -50,7 +54,6 @@ export function SetCard({ targetSet, setNumber, unit, onLog, isLogged }: SetCard
   }, []);
 
   const handleRepsChange = useCallback((text: string) => {
-    userEdited.current = true;
     const cleaned = text.replace(/[^0-9]/g, '');
     const val = parseInt(cleaned, 10);
     if (cleaned === '' || (val >= 0 && val <= MAX_REPS)) {
@@ -59,7 +62,6 @@ export function SetCard({ targetSet, setNumber, unit, onLog, isLogged }: SetCard
   }, []);
 
   const handleRpeChange = useCallback((text: string) => {
-    userEdited.current = true;
     const cleaned = text.replace(/[^0-9.]/g, '');
     const val = parseFloat(cleaned);
     if (cleaned === '' || (val >= 0 && val <= 10)) {
@@ -116,6 +118,25 @@ export function SetCard({ targetSet, setNumber, unit, onLog, isLogged }: SetCard
           />
         </View>
       </View>
+      {!hasLogged.current && (
+        <Pressable
+          onPress={handleLogPress}
+          style={({ pressed }) => [
+            s.logBtn,
+            parseFloat(weight) > 0 && parseInt(reps, 10) > 0
+              ? s.logBtnActive
+              : s.logBtnDisabled,
+            pressed && { opacity: 0.7 },
+          ]}
+        >
+          <Text style={[
+            s.logBtnText,
+            parseFloat(weight) > 0 && parseInt(reps, 10) > 0
+              ? s.logBtnTextActive
+              : s.logBtnTextDisabled,
+          ]}>Log Set</Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -197,5 +218,27 @@ const s = StyleSheet.create({
     height: 40,
     backgroundColor: colors.surfaceElevated,
     marginHorizontal: 8,
+  },
+  logBtn: {
+    marginTop: 12,
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  logBtnActive: {
+    backgroundColor: colors.accent,
+  },
+  logBtnDisabled: {
+    backgroundColor: colors.surfaceElevated,
+  },
+  logBtnText: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  logBtnTextActive: {
+    color: '#ffffff',
+  },
+  logBtnTextDisabled: {
+    color: colors.textMuted,
   },
 });
