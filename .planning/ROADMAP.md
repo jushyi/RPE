@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Expo project scaffold, Supabase schema, RLS, auth screens, offline session handling, PR baseline setup (completed 2026-03-09)
 - [x] **Phase 2: Exercise Library** - Pre-loaded exercise database, custom exercise creation, searchable exercise picker (completed 2026-03-09)
 - [x] **Phase 3: Plan Builder** - Named plans, day assignment, per-day exercise configuration with full detail, plan CRUD (completed 2026-03-09)
-- [ ] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes
+- [x] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes (completed 2026-03-10)
 - [ ] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation
 - [ ] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen
 - [ ] **Phase 7: Body Metrics** - Body measurements, progress photos, Supabase Storage integration
@@ -86,7 +86,7 @@ Plans:
   4. Previous session's weight and reps for the current exercise are displayed inline while logging
   5. When a logged set exceeds the user's stored PR, the app immediately flags it as a personal record
   6. All set logging writes to local storage instantly and syncs to Supabase in the background — logging never waits for a network response
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans complete
 
 Plans:
 - [ ] 04-01-PLAN.md — Database schema (workout_sessions, session_exercises, set_logs + RLS), TypeScript types, workoutStore with MMKV persistence
@@ -193,7 +193,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 1. Foundation | 4/4 | Complete   | 2026-03-09 |
 | 2. Exercise Library | 2/2 | Complete   | 2026-03-09 |
 | 3. Plan Builder | 3/3 | Complete   | 2026-03-09 |
-| 4. Active Workout | 3/4 | In Progress|  |
+| 4. Active Workout | 4/4 | Complete   | 2026-03-10 |
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 0/3 | Not started | - |
 | 7. Body Metrics | 0/2 | Not started | - |

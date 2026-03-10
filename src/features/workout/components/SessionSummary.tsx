@@ -46,6 +46,8 @@ export function computeSessionSummary(session: WorkoutSession): SessionSummaryTy
         exercise_id: exercise.exercise_id,
         exercise_name: exercise.exercise_name,
         last_weight: lastSet.weight,
+        last_reps: lastSet.reps,
+        sets_completed: exercise.logged_sets.length,
         unit: exercise.unit,
       });
     }

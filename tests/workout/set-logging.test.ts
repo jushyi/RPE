@@ -8,6 +8,7 @@ const makeSetLog = (overrides: Partial<Omit<SetLog, 'set_number'>> = {}): Omit<S
   weight: 135,
   reps: 8,
   unit: 'lbs',
+  rpe: null,
   is_pr: false,
   logged_at: new Date().toISOString(),
   ...overrides,

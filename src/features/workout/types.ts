@@ -11,6 +11,7 @@ export interface SetLog {
   set_number: number;
   weight: number;
   reps: number;
+  rpe: number | null;
   unit: 'kg' | 'lbs';
   is_pr: boolean;
   logged_at: string;
@@ -56,6 +57,8 @@ export interface SessionSummary {
     exercise_id: string;
     exercise_name: string;
     last_weight: number;
+    last_reps: number;
+    sets_completed: number;
     unit: string;
   }>;
 }

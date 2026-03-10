@@ -40,7 +40,7 @@ export default function AppLayout() {
         />
         <Stack.Screen
           name="workout"
-          options={{ headerShown: false, presentation: 'fullScreenModal' }}
+          options={{ headerShown: false }}
         />
       </Stack>
     </>

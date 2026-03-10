@@ -1,6 +1,6 @@
 /**
- * Post-session weight target prompt for manual progression exercises.
- * Allows users to set target weight for next session.
+ * Post-session target prompt for manual progression exercises.
+ * Allows users to set target sets, reps, weight, and RPE for next session.
  */
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
@@ -15,11 +15,36 @@ interface Props {
   onDone: () => void;
 }
 
+interface ExerciseTargets {
+  sets: string;
+  reps: string;
+  weight: string;
+  rpe: string;
+}
+
 export default function WeightTargetPrompt({ exercises, planDayId, onDone }: Props) {
-  const [targets, setTargets] = useState<Record<string, string>>({});
+  const [targets, setTargets] = useState<Record<string, ExerciseTargets>>(() => {
+    const initial: Record<string, ExerciseTargets> = {};
+    for (const ex of exercises) {
+      initial[ex.exercise_id] = {
+        sets: String(ex.sets_completed),
+        reps: String(ex.last_reps),
+        weight: String(ex.last_weight),
+        rpe: '',
+      };
+    }
+    return initial;
+  });
   const [saving, setSaving] = useState(false);
 
   if (exercises.length === 0) return null;
+
+  const updateField = (exerciseId: string, field: keyof ExerciseTargets, value: string) => {
+    setTargets((prev) => ({
+      ...prev,
+      [exerciseId]: { ...prev[exerciseId], [field]: value },
+    }));
+  };
 
   const handleSave = async () => {
     if (!planDayId) {
@@ -29,16 +54,28 @@ export default function WeightTargetPrompt({ exercises, planDayId, onDone }: Pro
 
     setSaving(true);
     try {
-      // Update target_sets JSONB for each exercise in plan_day_exercises
       for (const exercise of exercises) {
-        const targetWeight = parseFloat(targets[exercise.exercise_id] || '');
-        if (isNaN(targetWeight) || targetWeight <= 0) continue;
+        const t = targets[exercise.exercise_id];
+        if (!t) continue;
+
+        const weight = parseFloat(t.weight);
+        const reps = parseInt(t.reps, 10);
+        const sets = parseInt(t.sets, 10);
+        const rpe = t.rpe ? parseFloat(t.rpe) : null;
+
+        if (isNaN(weight) || weight <= 0) continue;
+        if (isNaN(sets) || sets <= 0) continue;
+
+        const targetSets = Array.from({ length: sets }, () => ({
+          weight,
+          reps: isNaN(reps) ? 0 : reps,
+          unit: exercise.unit,
+          ...(rpe !== null && !isNaN(rpe) ? { rpe } : {}),
+        }));
 
         await (supabase as any)
           .from('plan_day_exercises')
-          .update({
-            target_sets: [{ weight: targetWeight, reps: 0, unit: exercise.unit }],
-          })
+          .update({ target_sets: targetSets })
           .eq('plan_day_id', planDayId)
           .eq('exercise_id', exercise.exercise_id);
       }
@@ -57,32 +94,63 @@ export default function WeightTargetPrompt({ exercises, planDayId, onDone }: Pro
         <Text style={s.title}>Set Targets for Next Session</Text>
       </View>
 
-      {exercises.map((exercise) => (
-        <View key={exercise.exercise_id} style={s.exerciseRow}>
-          <View style={s.exerciseInfo}>
+      {exercises.map((exercise) => {
+        const t = targets[exercise.exercise_id] || { sets: '', reps: '', weight: '', rpe: '' };
+        return (
+          <View key={exercise.exercise_id} style={s.exerciseBlock}>
             <Text style={s.exerciseName}>{exercise.exercise_name}</Text>
-            <Text style={s.lastWeight}>
-              Last: {exercise.last_weight} {exercise.unit}
+            <Text style={s.lastPerf}>
+              Last: {exercise.sets_completed} sets x {exercise.last_reps} reps @ {exercise.last_weight} {exercise.unit}
             </Text>
+            <View style={s.inputRow}>
+              <View style={s.fieldGroup}>
+                <Text style={s.fieldLabel}>Sets</Text>
+                <TextInput
+                  style={s.input}
+                  keyboardType="number-pad"
+                  placeholder="3"
+                  placeholderTextColor={colors.textMuted}
+                  value={t.sets}
+                  onChangeText={(v) => updateField(exercise.exercise_id, 'sets', v)}
+                />
+              </View>
+              <View style={s.fieldGroup}>
+                <Text style={s.fieldLabel}>Reps</Text>
+                <TextInput
+                  style={s.input}
+                  keyboardType="number-pad"
+                  placeholder="8"
+                  placeholderTextColor={colors.textMuted}
+                  value={t.reps}
+                  onChangeText={(v) => updateField(exercise.exercise_id, 'reps', v)}
+                />
+              </View>
+              <View style={s.fieldGroup}>
+                <Text style={s.fieldLabel}>Weight</Text>
+                <TextInput
+                  style={[s.input, s.inputWide]}
+                  keyboardType="decimal-pad"
+                  placeholder="135"
+                  placeholderTextColor={colors.textMuted}
+                  value={t.weight}
+                  onChangeText={(v) => updateField(exercise.exercise_id, 'weight', v)}
+                />
+              </View>
+              <View style={s.fieldGroup}>
+                <Text style={s.fieldLabel}>RPE</Text>
+                <TextInput
+                  style={s.input}
+                  keyboardType="decimal-pad"
+                  placeholder="--"
+                  placeholderTextColor={colors.textMuted}
+                  value={t.rpe}
+                  onChangeText={(v) => updateField(exercise.exercise_id, 'rpe', v)}
+                />
+              </View>
+            </View>
           </View>
-          <View style={s.inputContainer}>
-            <TextInput
-              style={s.input}
-              keyboardType="decimal-pad"
-              placeholder="Target"
-              placeholderTextColor={colors.textMuted}
-              value={targets[exercise.exercise_id] || ''}
-              onChangeText={(text) =>
-                setTargets((prev) => ({
-                  ...prev,
-                  [exercise.exercise_id]: text,
-                }))
-              }
-            />
-            <Text style={s.unitLabel}>{exercise.unit}</Text>
-          </View>
-        </View>
-      ))}
+        );
+      })}
 
       <View style={s.actions}>
         <Pressable
@@ -129,49 +197,52 @@ const s = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  exerciseRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  exerciseBlock: {
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: colors.surfaceElevated,
-  },
-  exerciseInfo: {
-    flex: 1,
-    marginRight: 12,
   },
   exerciseName: {
     color: colors.textPrimary,
     fontSize: 15,
     fontWeight: '500',
   },
-  lastWeight: {
+  lastPerf: {
     color: colors.textMuted,
     fontSize: 13,
     marginTop: 2,
+    marginBottom: 10,
   },
-  inputContainer: {
+  inputRow: {
     flexDirection: 'row',
+    gap: 8,
+  },
+  fieldGroup: {
+    flex: 1,
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
+  },
+  fieldLabel: {
+    color: colors.textSecondary,
+    fontSize: 11,
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
   input: {
     backgroundColor: colors.background,
     borderRadius: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     paddingVertical: 8,
     color: colors.textPrimary,
     fontSize: 16,
     fontWeight: '600',
-    width: 80,
     textAlign: 'center',
     borderWidth: 1,
     borderColor: colors.surfaceElevated,
+    width: '100%',
   },
-  unitLabel: {
-    color: colors.textMuted,
-    fontSize: 13,
+  inputWide: {
+    minWidth: 60,
   },
   actions: {
     flexDirection: 'row',

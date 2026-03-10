@@ -4,12 +4,12 @@ import { colors } from '@/constants/theme';
 import { SetCard } from './SetCard';
 import { PreviousPerformanceDisplay } from './PreviousPerformance';
 import { PRCelebration } from './PRCelebration';
-import type { SessionExercise, SetLog } from '@/features/workout/types';
+import type { SessionExercise } from '@/features/workout/types';
 import type { PRResult } from '@/features/workout/hooks/usePRDetection';
 
 interface ExercisePageProps {
   exercise: SessionExercise;
-  onLogSet: (exerciseId: string, weight: number, reps: number, unit: 'kg' | 'lbs') => void;
+  onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs') => void;
   onDetectPR?: (exerciseId: string, weight: number) => Promise<PRResult>;
 }
 
@@ -26,13 +26,11 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR }: ExercisePagePro
   const [celebration, setCelebration] = useState<CelebrationState | null>(null);
 
   const handleLog = useCallback(
-    async (weight: number, reps: number) => {
-      // Check for PR before logging the set
-      let isPR = false;
+    async (weight: number, reps: number, rpe: number | null) => {
+      // Check for PR before logging
       if (onDetectPR) {
         try {
           const result = await onDetectPR(exercise.exercise_id, weight);
-          isPR = result.isPR;
           if (result.isPR) {
             setCelebration({
               exerciseName: exercise.exercise_name,
@@ -45,28 +43,30 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR }: ExercisePagePro
           // PR detection failure should not block logging
         }
       }
-      onLogSet(exercise.exercise_id, weight, reps, exercise.unit);
+      onLogSet(exercise.exercise_id, weight, reps, rpe, exercise.unit);
     },
     [exercise.exercise_id, exercise.exercise_name, exercise.unit, onLogSet, onDetectPR]
   );
 
-  // For plan-based: show target_sets count of cards, minus already logged
-  // For freestyle: show one active card, new one after logging
-  const remainingSets = isPlanBased
-    ? Math.max(exercise.target_sets.length - loggedCount, 0)
-    : 1;
+  // Always show all cards — plan-based shows target count, freestyle shows 3 minimum
+  const totalSets = isPlanBased
+    ? exercise.target_sets.length
+    : Math.max(3, loggedCount + 1);
 
-  const activeSetCards = [];
-  for (let i = 0; i < remainingSets; i++) {
-    const targetSetIndex = loggedCount + i;
-    const targetSet = isPlanBased ? exercise.target_sets[targetSetIndex] : undefined;
-    activeSetCards.push(
+  const setCards = [];
+  for (let i = 0; i < totalSets; i++) {
+    const setNumber = i + 1;
+    const targetSet = isPlanBased ? exercise.target_sets[i] : undefined;
+    const isAlreadyLogged = exercise.logged_sets.some((s) => s.set_number === setNumber);
+
+    setCards.push(
       <SetCard
-        key={`active-${targetSetIndex}`}
+        key={`set-${exercise.id}-${setNumber}`}
         targetSet={targetSet}
-        setNumber={loggedCount + i + 1}
+        setNumber={setNumber}
         unit={exercise.unit}
-        onLog={handleLog}
+        onLog={(w, r, rpe) => handleLog(w, r, rpe)}
+        isLogged={isAlreadyLogged}
       />
     );
   }
@@ -83,37 +83,16 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR }: ExercisePagePro
           <Text style={s.exerciseName}>{exercise.exercise_name}</Text>
           <Text style={s.setsInfo}>
             {isPlanBased
-              ? `${exercise.target_sets.length} sets planned`
-              : 'Add sets'}
+              ? `${loggedCount}/${exercise.target_sets.length} sets logged`
+              : `${loggedCount} sets logged`}
           </Text>
         </View>
 
         {/* Previous performance inline display */}
         <PreviousPerformanceDisplay exerciseId={exercise.exercise_id} />
 
-        {/* Active set cards */}
-        {activeSetCards}
-
-        {/* Logged sets (completed, read-only) */}
-        {exercise.logged_sets.length > 0 && (
-          <View style={s.loggedSection}>
-            <Text style={s.loggedLabel}>Completed</Text>
-            {exercise.logged_sets.map((setLog: SetLog) => (
-              <View
-                key={setLog.id}
-                style={[s.loggedRow, setLog.is_pr && s.loggedRowPR]}
-              >
-                <View style={s.loggedRowLeft}>
-                  <Text style={s.loggedSetNumber}>Set {setLog.set_number}</Text>
-                  {setLog.is_pr && <Text style={s.prBadge}>PR</Text>}
-                </View>
-                <Text style={s.loggedValue}>
-                  {setLog.weight} {setLog.unit} x {setLog.reps} reps
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
+        {/* Set cards — always visible, marked as logged when filled */}
+        {setCards}
       </ScrollView>
 
       {/* PR Celebration overlay */}
@@ -154,50 +133,5 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 14,
     marginTop: 4,
-  },
-  loggedSection: {
-    marginTop: 16,
-    paddingHorizontal: 16,
-  },
-  loggedLabel: {
-    color: colors.textMuted,
-    fontSize: 13,
-    fontWeight: '600',
-    marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  loggedRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.surfaceElevated,
-  },
-  loggedRowPR: {
-    borderLeftWidth: 3,
-    borderLeftColor: colors.accent,
-    paddingLeft: 8,
-  },
-  loggedRowLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  loggedSetNumber: {
-    color: colors.textMuted,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  prBadge: {
-    color: colors.accent,
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 1,
-  },
-  loggedValue: {
-    color: colors.textSecondary,
-    fontSize: 14,
   },
 });
