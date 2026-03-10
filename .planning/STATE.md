@@ -138,9 +138,10 @@ None yet.
 | 5 | fix require cycle between useWorkoutSession and summary | 2026-03-10 | c567863 | [5-fix-require-cycle-between-useworkoutsess](./quick/5-fix-require-cycle-between-useworkoutsess/) |
 | 6 | Install MCP server for Supabase | 2026-03-10 | 5464340 | [6-install-mcp-server-for-supabase](./quick/6-install-mcp-server-for-supabase/) |
 | 7 | Fix dashboard showing deleted workout sessions (MMKV cache invalidation) | 2026-03-10 | 77b6dad | [7-the-dashboard-doesn-t-update-the-days-wo](./quick/7-the-dashboard-doesn-t-update-the-days-wo/) |
+| 8 | Move active plan badge under plan name in header | 2026-03-10 | d10f1f2 | [8-move-active-plan-badge-under-plan-name-i](./quick/8-move-active-plan-badge-under-plan-name-i/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:08:00Z
-Stopped at: Completed 04-06-PLAN.md (gap closure)
+Last session: 2026-03-10T16:27:53Z
+Stopped at: Completed quick task 8
 Resume file: None
