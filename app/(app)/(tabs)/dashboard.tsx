@@ -255,6 +255,19 @@ function DashboardSkeleton() {
   );
 }
 
+function PRCardSkeleton() {
+  return (
+    <Card title="Personal Records">
+      {[1, 2, 3].map((i) => (
+        <View key={i} style={ds.prRow}>
+          <SkeletonBlock width={100} height={16} />
+          <SkeletonBlock width={60} height={16} />
+        </View>
+      ))}
+    </Card>
+  );
+}
+
 export default function DashboardScreen() {
   const { signOut, user } = useAuth();
   const { getPRBaselines } = usePRBaselines();
@@ -263,6 +276,7 @@ export default function DashboardScreen() {
   const { sessions: completedToday, refreshing, refresh: refreshCompleted } = useCompletedToday();
   const navigation = useNavigation();
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
+  const [refreshingPRs, setRefreshingPRs] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
 
   const displayName =
@@ -321,7 +335,11 @@ export default function DashboardScreen() {
   useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', () => {
       refreshCompleted();
-      getPRBaselines().then(setBaselines).catch(() => {});
+      setRefreshingPRs(true);
+      getPRBaselines()
+        .then(setBaselines)
+        .catch(() => {})
+        .finally(() => setRefreshingPRs(false));
       fetchPlans();
     });
     return unsubscribe;
@@ -421,7 +439,7 @@ export default function DashboardScreen() {
         </View>
 
         <View style={{ marginBottom: 32 }}>
-          <PRCard baselines={baselines} />
+          {refreshingPRs ? <PRCardSkeleton /> : <PRCard baselines={baselines} />}
         </View>
 
         <Button title="Sign Out" onPress={handleSignOut} variant="ghost" loading={signingOut} />
