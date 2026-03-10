@@ -127,9 +127,10 @@ None yet.
 | 1 | tapping the profile pic to change on dashboard doesn't seem to work properly | 2026-03-09 | 1789739 | [1-tapping-the-profile-pic-to-change-on-das](./quick/1-tapping-the-profile-pic-to-change-on-das/) |
 | 2 | make tapping on PRs in dashboard allow editing | 2026-03-09 | 13df943 | [2-make-tapping-on-prs-in-dashboard-allow-e](./quick/2-make-tapping-on-prs-in-dashboard-allow-e/) |
 | 3 | single tap to edit/delete exercises, built-in read-only view | 2026-03-09 | 271c224 | [3-single-tap-to-edit-delete-exercises-buil](./quick/3-single-tap-to-edit-delete-exercises-buil/) |
+| 4 | add done button to collapse exercise edit view into summary | 2026-03-10 | 0ea1af8 | [4-add-done-button-to-collapse-exercise-edi](./quick/4-add-done-button-to-collapse-exercise-edi/) |
 
 ## Session Continuity
 
-Last session: 2026-03-09T20:51:27.154Z
-Stopped at: Completed 04-03-PLAN.md
+Last session: 2026-03-10T14:01:49Z
+Stopped at: Completed quick task 4
 Resume file: None
