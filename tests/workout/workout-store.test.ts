@@ -120,12 +120,43 @@ describe('workoutStore', () => {
   });
 
   it('removeExercise removes correct exercise', () => {
-    useWorkoutStore.getState().startPlanSession(mockPlanDay, USER_ID);
-    useWorkoutStore.getState().removeExercise('ex-1');
+    // Use startSession with known ids since removeExercise now matches by session exercise id
+    useWorkoutStore.getState().startSession({
+      id: 'session-rm',
+      user_id: USER_ID,
+      plan_id: 'plan-1',
+      plan_day_id: 'day-1',
+      title: 'Push Day',
+      started_at: new Date().toISOString(),
+      ended_at: null,
+      exercises: [
+        {
+          id: 'se-1',
+          exercise_id: 'ex-1',
+          exercise_name: 'Bench Press',
+          sort_order: 0,
+          target_sets: [{ weight: 135, reps: 8, rpe: 7 }],
+          weight_progression: 'carry_previous',
+          unit: 'lbs',
+          logged_sets: [],
+        },
+        {
+          id: 'se-2',
+          exercise_id: 'ex-2',
+          exercise_name: 'Dumbbell Flyes',
+          sort_order: 1,
+          target_sets: [{ weight: 50, reps: 12, rpe: null }],
+          weight_progression: 'manual',
+          unit: 'lbs',
+          logged_sets: [],
+        },
+      ],
+    });
+    useWorkoutStore.getState().removeExercise('se-1');
 
     const state = useWorkoutStore.getState();
     expect(state.activeSession!.exercises).toHaveLength(1);
-    expect(state.activeSession!.exercises[0].exercise_id).toBe('ex-2');
+    expect(state.activeSession!.exercises[0].id).toBe('se-2');
   });
 
   it('reorderExercises replaces exercises array', () => {

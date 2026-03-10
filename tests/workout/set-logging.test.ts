@@ -56,16 +56,16 @@ describe('set logging', () => {
   });
 
   it('logSet appends set to correct exercise logged_sets', () => {
-    useWorkoutStore.getState().logSet('ex-1', makeSetLog());
+    useWorkoutStore.getState().logSet('se-1', makeSetLog());
 
     const state = useWorkoutStore.getState();
-    const exercise = state.activeSession!.exercises.find((e) => e.exercise_id === 'ex-1');
+    const exercise = state.activeSession!.exercises.find((e) => e.id === 'se-1');
     expect(exercise!.logged_sets).toHaveLength(1);
     expect(exercise!.logged_sets[0].weight).toBe(135);
     expect(exercise!.logged_sets[0].reps).toBe(8);
 
     // Other exercise is unaffected
-    const otherExercise = state.activeSession!.exercises.find((e) => e.exercise_id === 'ex-2');
+    const otherExercise = state.activeSession!.exercises.find((e) => e.id === 'se-2');
     expect(otherExercise!.logged_sets).toHaveLength(0);
   });
 
@@ -78,9 +78,9 @@ describe('set logging', () => {
   });
 
   it('multiple logSet calls accumulate sets with incrementing set_number', () => {
-    useWorkoutStore.getState().logSet('ex-1', makeSetLog({ id: 'set-1' }));
-    useWorkoutStore.getState().logSet('ex-1', makeSetLog({ id: 'set-2', weight: 145 }));
-    useWorkoutStore.getState().logSet('ex-1', makeSetLog({ id: 'set-3', weight: 155 }));
+    useWorkoutStore.getState().logSet('se-1', makeSetLog({ id: 'set-1' }));
+    useWorkoutStore.getState().logSet('se-1', makeSetLog({ id: 'set-2', weight: 145 }));
+    useWorkoutStore.getState().logSet('se-1', makeSetLog({ id: 'set-3', weight: 155 }));
 
     const state = useWorkoutStore.getState();
     const sets = state.activeSession!.exercises[0].logged_sets;
@@ -93,7 +93,7 @@ describe('set logging', () => {
   });
 
   it('logSet preserves is_pr flag from input', () => {
-    useWorkoutStore.getState().logSet('ex-1', makeSetLog({ is_pr: true }));
+    useWorkoutStore.getState().logSet('se-1', makeSetLog({ is_pr: true }));
 
     const state = useWorkoutStore.getState();
     expect(state.activeSession!.exercises[0].logged_sets[0].is_pr).toBe(true);
@@ -101,9 +101,101 @@ describe('set logging', () => {
 
   it('logSet records logged_at timestamp', () => {
     const now = new Date().toISOString();
-    useWorkoutStore.getState().logSet('ex-1', makeSetLog({ logged_at: now }));
+    useWorkoutStore.getState().logSet('se-1', makeSetLog({ logged_at: now }));
 
     const state = useWorkoutStore.getState();
     expect(state.activeSession!.exercises[0].logged_sets[0].logged_at).toBe(now);
+  });
+
+  it('logSet targets correct exercise when duplicate exercise_ids exist', () => {
+    // Set up session with two exercises sharing the same exercise_id
+    useWorkoutStore.setState({
+      activeSession: {
+        id: 'session-dup',
+        user_id: USER_ID,
+        plan_id: null,
+        plan_day_id: null,
+        title: 'Duplicate Test',
+        started_at: new Date().toISOString(),
+        ended_at: null,
+        exercises: [
+          {
+            id: 'se-1',
+            exercise_id: 'ex-1',
+            exercise_name: 'Bench Press (Set A)',
+            sort_order: 0,
+            target_sets: [],
+            weight_progression: 'manual',
+            unit: 'lbs',
+            logged_sets: [],
+          },
+          {
+            id: 'se-3',
+            exercise_id: 'ex-1',
+            exercise_name: 'Bench Press (Set B)',
+            sort_order: 1,
+            target_sets: [],
+            weight_progression: 'manual',
+            unit: 'lbs',
+            logged_sets: [],
+          },
+        ],
+      },
+      currentExerciseIndex: 0,
+    });
+
+    // Log a set targeting the SECOND occurrence by session exercise id
+    useWorkoutStore.getState().logSet('se-3', makeSetLog({ weight: 200 }));
+
+    const state = useWorkoutStore.getState();
+    const first = state.activeSession!.exercises.find((e) => e.id === 'se-1');
+    const second = state.activeSession!.exercises.find((e) => e.id === 'se-3');
+    expect(first!.logged_sets).toHaveLength(0);
+    expect(second!.logged_sets).toHaveLength(1);
+    expect(second!.logged_sets[0].weight).toBe(200);
+  });
+
+  it('removeExercise removes correct exercise when duplicate exercise_ids exist', () => {
+    useWorkoutStore.setState({
+      activeSession: {
+        id: 'session-dup2',
+        user_id: USER_ID,
+        plan_id: null,
+        plan_day_id: null,
+        title: 'Duplicate Remove Test',
+        started_at: new Date().toISOString(),
+        ended_at: null,
+        exercises: [
+          {
+            id: 'se-1',
+            exercise_id: 'ex-1',
+            exercise_name: 'Bench Press (Set A)',
+            sort_order: 0,
+            target_sets: [],
+            weight_progression: 'manual',
+            unit: 'lbs',
+            logged_sets: [],
+          },
+          {
+            id: 'se-3',
+            exercise_id: 'ex-1',
+            exercise_name: 'Bench Press (Set B)',
+            sort_order: 1,
+            target_sets: [],
+            weight_progression: 'manual',
+            unit: 'lbs',
+            logged_sets: [],
+          },
+        ],
+      },
+      currentExerciseIndex: 0,
+    });
+
+    // Remove the first occurrence by session exercise id
+    useWorkoutStore.getState().removeExercise('se-1');
+
+    const state = useWorkoutStore.getState();
+    expect(state.activeSession!.exercises).toHaveLength(1);
+    expect(state.activeSession!.exercises[0].id).toBe('se-3');
   });
 });
