@@ -42,7 +42,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 5 of 11 (Workout History) — COMPLETE
 Plan: 2 of 2 complete
 Status: Phase 05 complete, UAT passed, ready for Phase 06
-Last activity: 2026-03-10 - Completed quick task 14: fix resumed session not showing previously logged values
+Last activity: 2026-03-10 - Completed quick task 15: stop dashboard from re-fetching on every tab switch
 
 Progress: [█████████░] 90%
 
@@ -160,9 +160,10 @@ None yet.
 | 12 | Show all workouts for a day on dashboard | 2026-03-10 | 614e4e0 | [12-show-all-workouts-for-a-day-on-dashboard](./quick/12-show-all-workouts-for-a-day-on-dashboard/) |
 | 13 | Fix default unit to match user's preferredUnit instead of hardcoded lbs | 2026-03-10 | 8f1a86e | [13-fix-default-unit-to-match-pr-unit-instea](./quick/13-fix-default-unit-to-match-pr-unit-instea/) |
 | 14 | Fix resumed session not showing previously logged values | 2026-03-10 | 94b2980 | [14-fix-resumed-session-not-showing-previous](./quick/14-fix-resumed-session-not-showing-previous/) |
+| 15 | Stop dashboard from re-fetching on every tab switch | 2026-03-10 | 87b2bae | [15-the-dashboard-shouldnt-refresh-everytime](./quick/15-the-dashboard-shouldnt-refresh-everytime/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T17:04:14.000Z
-Stopped at: Completed quick task 14
+Last session: 2026-03-10T17:05:00.000Z
+Stopped at: Completed quick task 15
 Resume file: .planning/phases/07-body-metrics/07-CONTEXT.md
