@@ -27,6 +27,7 @@ describe('set logging', () => {
       user_id: USER_ID,
       plan_id: null,
       plan_day_id: null,
+      title: 'Quick Workout',
       started_at: new Date().toISOString(),
       ended_at: null,
       exercises: [

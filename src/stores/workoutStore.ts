@@ -57,6 +57,7 @@ export const useWorkoutStore = create<WorkoutState & WorkoutActions>()(
           user_id: userId,
           plan_id: planDay.plan_id,
           plan_day_id: planDay.id,
+          title: planDay.day_name || 'Workout',
           started_at: new Date().toISOString(),
           ended_at: null,
           exercises: planDay.plan_day_exercises.map((pde, index) => ({
@@ -79,6 +80,7 @@ export const useWorkoutStore = create<WorkoutState & WorkoutActions>()(
           user_id: userId,
           plan_id: null,
           plan_day_id: null,
+          title: 'Quick Workout',
           started_at: new Date().toISOString(),
           ended_at: null,
           exercises: [],

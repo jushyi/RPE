@@ -10,6 +10,7 @@ interface WorkoutHeaderProps {
   hasExercisesRemaining: boolean;
   onEndWorkout: () => void;
   onFinishWorkout: () => void;
+  sessionTitle?: string;
 }
 
 export function WorkoutHeader({
@@ -19,10 +20,16 @@ export function WorkoutHeader({
   hasExercisesRemaining,
   onEndWorkout,
   onFinishWorkout,
+  sessionTitle,
 }: WorkoutHeaderProps) {
   return (
     <View style={s.container}>
       <View style={s.titleContainer}>
+        {sessionTitle ? (
+          <Text style={s.sessionTitle} numberOfLines={1}>
+            {sessionTitle}
+          </Text>
+        ) : null}
         <Text style={s.exerciseName} numberOfLines={1}>
           {exerciseName}
         </Text>
@@ -62,6 +69,11 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  sessionTitle: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    marginBottom: 2,
   },
   setProgress: {
     color: colors.textSecondary,

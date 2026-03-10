@@ -138,6 +138,7 @@ describe('Sync Queue', () => {
         user_id: 'user-1',
         plan_id: 'plan-1',
         plan_day_id: 'day-1',
+        title: 'Workout',
         started_at: '2026-03-09T10:00:00Z',
         ended_at: '2026-03-09T11:00:00Z',
         exercises: [

@@ -106,6 +106,7 @@ async function fetchFromSupabase(): Promise<WorkoutSession[]> {
       user_id: row.user_id,
       plan_id: row.plan_id,
       plan_day_id: row.plan_day_id,
+      title: row.plan_day_id ? 'Workout' : 'Quick Workout',
       started_at: row.started_at,
       ended_at: row.ended_at,
       exercises,
@@ -124,6 +125,18 @@ function mergeSessions(dbSessions: WorkoutSession[], cachedSessions: WorkoutSess
   }
   merged.sort((a, b) => a.started_at.localeCompare(b.started_at));
   return merged;
+}
+
+/** Remove a session from today's MMKV cache (e.g. after deletion) */
+export function removeCompletedSession(sessionId: string): void {
+  const today = new Date().toISOString().split('T')[0];
+  const existing = getCachedToday();
+  const filtered = existing.filter((s) => s.id !== sessionId);
+  if (filtered.length === 0) {
+    mmkv.delete(KEY);
+  } else {
+    mmkv.set(KEY, JSON.stringify({ date: today, sessions: filtered }));
+  }
 }
 
 /** Hook that fetches from Supabase + MMKV on focus */

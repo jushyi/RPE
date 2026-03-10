@@ -35,6 +35,7 @@ export interface WorkoutSession {
   user_id: string;
   plan_id: string | null;
   plan_day_id: string | null;
+  title: string;
   started_at: string;
   ended_at: string | null;
   exercises: SessionExercise[];

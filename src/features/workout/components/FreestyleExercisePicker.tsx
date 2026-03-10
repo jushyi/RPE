@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useMemo, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, FlatList, Text, StyleSheet } from 'react-native';
 import {
   BottomSheetModal,
@@ -16,8 +16,10 @@ interface FreestyleExercisePickerProps {
 
 export const FreestyleExercisePicker = forwardRef<BottomSheetModal, FreestyleExercisePickerProps>(
   ({ onSelect }, ref) => {
-    const { exercises } = useExercises();
+    const { exercises, fetchExercises } = useExercises();
     const snapPoints = useMemo(() => ['75%'], []);
+
+    useEffect(() => { fetchExercises(); }, []);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<MuscleGroup | null>(null);
     const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);

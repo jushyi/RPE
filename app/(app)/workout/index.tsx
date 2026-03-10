@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -117,6 +118,7 @@ export default function WorkoutScreen() {
               hasExercisesRemaining={hasExercisesRemaining}
               onEndWorkout={endEarly}
               onFinishWorkout={finishWorkout}
+              sessionTitle={session.title}
             />
           )}
 
@@ -130,6 +132,9 @@ export default function WorkoutScreen() {
           ) : (
             <View style={s.emptyContainer}>
               <Ionicons name="barbell-outline" size={48} color={colors.textMuted} />
+              {session.title ? (
+                <Text style={s.emptyTitle}>{session.title}</Text>
+              ) : null}
             </View>
           )}
 
@@ -165,6 +170,12 @@ const s = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  emptyTitle: {
+    color: colors.textSecondary,
+    fontSize: 16,
+    fontWeight: '600',
+    marginTop: 12,
   },
   fab: {
     position: 'absolute',
