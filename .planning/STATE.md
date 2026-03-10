@@ -111,6 +111,8 @@ Recent decisions affecting current work:
 - [Phase 05]: historyStore follows exact same Zustand + MMKV pattern as planStore for consistency
 - [Phase 05]: Delta comparison only for plan-based sessions (freestyle sessions skip delta)
 - [04-05]: PR flag passed as 6th parameter through onLogSet callback chain for simplest fix
+- [04-06]: title field is required string on WorkoutSession; DB sessions get fallback title
+- [04-06]: WeightTargetPrompt collapse-after-save stores values locally and renders summary view
 
 ### Roadmap Evolution
 
@@ -140,6 +142,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T15:41:00Z
-Stopped at: Completed quick task 7
+Last session: 2026-03-10T16:08:00Z
+Stopped at: Completed 04-06-PLAN.md (gap closure)
 Resume file: None
