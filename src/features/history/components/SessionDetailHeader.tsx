@@ -29,15 +29,6 @@ export function SessionDetailHeader({ session }: SessionDetailHeaderProps) {
 
   return (
     <View style={s.container}>
-      <Text style={s.date}>
-        {formatFullDate(session.ended_at ?? session.started_at)}
-      </Text>
-
-      <Text style={s.planLabel}>
-        {session.plan_name ?? 'Freestyle'}
-        {session.day_name ? ` - ${session.day_name}` : ''}
-      </Text>
-
       <View style={s.statsRow}>
         {durationMinutes !== null && (
           <StatPill
