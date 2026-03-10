@@ -13,11 +13,12 @@ interface SetCardProps {
   setNumber: number;
   unit: 'kg' | 'lbs';
   onLog: (weight: number, reps: number, rpe: number | null) => void;
+  onDelete?: () => void;
   isLogged?: boolean;
   loggedSet?: SetLog;
 }
 
-export function SetCard({ targetSet, setNumber, unit, onLog, isLogged, loggedSet }: SetCardProps) {
+export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged, loggedSet }: SetCardProps) {
   const [weight, setWeight] = useState(() => {
     if (loggedSet) return String(loggedSet.weight);
     if (targetSet?.weight && targetSet.weight > 0) return String(targetSet.weight);
@@ -73,7 +74,18 @@ export function SetCard({ targetSet, setNumber, unit, onLog, isLogged, loggedSet
     <View style={[s.card, hasLogged.current && s.cardLogged]}>
       <View style={s.setHeader}>
         <Text style={s.setLabel}>Set {setNumber}</Text>
-        {hasLogged.current && <Text style={s.loggedBadge}>Logged</Text>}
+        <View style={s.setHeaderRight}>
+          {hasLogged.current && <Text style={s.loggedBadge}>Logged</Text>}
+          {onDelete && (
+            <Pressable
+              onPress={onDelete}
+              style={({ pressed }) => [s.deleteBtn, pressed && { opacity: 0.6 }]}
+              hitSlop={6}
+            >
+              <Ionicons name="close-circle" size={20} color={colors.textMuted} />
+            </Pressable>
+          )}
+        </View>
       </View>
       <View style={s.inputRow}>
         <View style={s.inputGroup}>
@@ -161,6 +173,11 @@ const s = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
+  setHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   setLabel: {
     color: colors.textSecondary,
     fontSize: 14,
@@ -170,6 +187,9 @@ const s = StyleSheet.create({
     color: colors.accent,
     fontSize: 12,
     fontWeight: '700',
+  },
+  deleteBtn: {
+    padding: 2,
   },
   inputRow: {
     flexDirection: 'row',
