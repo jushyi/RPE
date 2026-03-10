@@ -1,14 +1,12 @@
 import { Stack } from 'expo-router';
 import { colors } from '@/constants/theme';
 import { HeaderCloudIcon } from '@/components/layout/HeaderCloudIcon';
-import CrashRecoveryPrompt from '@/features/workout/components/CrashRecoveryPrompt';
 import { useSyncQueue } from '@/features/workout/hooks/useSyncQueue';
 import { supabase } from '@/lib/supabase/client';
 
 /**
  * App layout wrapping tabs and onboarding routes.
  * HeaderCloudIcon shows connection status in all screen headers.
- * CrashRecoveryPrompt checks for unfinished workouts on app mount.
  * useSyncQueue auto-flushes pending sync items when connectivity is restored.
  */
 export default function AppLayout() {
@@ -16,9 +14,7 @@ export default function AppLayout() {
   useSyncQueue(supabase);
 
   return (
-    <>
-      <CrashRecoveryPrompt />
-      <Stack
+    <Stack
         screenOptions={{
           headerStyle: { backgroundColor: colors.surface },
           headerTintColor: colors.textPrimary,
@@ -46,7 +42,6 @@ export default function AppLayout() {
           name="history"
           options={{ headerShown: false }}
         />
-      </Stack>
-    </>
+    </Stack>
   );
 }
