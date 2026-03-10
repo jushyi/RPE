@@ -93,7 +93,7 @@ export const useWorkoutStore = create<WorkoutState & WorkoutActions>()(
         if (!activeSession) return;
 
         const exerciseIndex = activeSession.exercises.findIndex(
-          (e) => e.exercise_id === exerciseId
+          (e) => e.id === exerciseId
         );
         if (exerciseIndex === -1) return;
 
@@ -139,7 +139,7 @@ export const useWorkoutStore = create<WorkoutState & WorkoutActions>()(
           activeSession: {
             ...activeSession,
             exercises: activeSession.exercises.filter(
-              (e) => e.exercise_id !== exerciseId
+              (e) => e.id !== exerciseId
             ),
           },
         });
