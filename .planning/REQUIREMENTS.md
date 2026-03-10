@@ -48,8 +48,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Dashboard
 
-- [ ] **DASH-01**: Home screen shows progress summary (recent stats, streaks, PRs)
-- [ ] **DASH-02**: Home screen shows today's planned workout with quick-start button
+- [x] **DASH-01**: Home screen shows progress summary (recent stats, streaks, PRs)
+- [x] **DASH-02**: Home screen shows today's planned workout with quick-start button
 
 ### Reminders & Accountability
 
@@ -119,8 +119,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HIST-06 | Phase 5 | Complete |
 | HIST-02 | Phase 6 | Complete |
 | HIST-03 | Phase 6 | Complete |
-| DASH-01 | Phase 6 | Pending |
-| DASH-02 | Phase 6 | Pending |
+| DASH-01 | Phase 6 | Complete |
+| DASH-02 | Phase 6 | Complete |
 | HIST-04 | Phase 7 | Pending |
 | HIST-05 | Phase 7 | Pending |
 | ALRM-01 | Phase 8 | Pending |

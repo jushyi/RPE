@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Plan Builder** - Named plans, day assignment, per-day exercise configuration with full detail, plan CRUD (completed 2026-03-09)
 - [x] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes (completed 2026-03-10)
 - [x] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation (completed 2026-03-10)
-- [ ] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen (1/3 plans complete)
+- [x] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen (1/3 plans complete) (completed 2026-03-10)
 - [ ] **Phase 7: Body Metrics** - Body measurements (chest, waist, hips, body fat %), combined dashboard card, detail screen with charts and history
 - [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
 - [ ] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline
@@ -117,7 +117,7 @@ Plans:
   2. User can log their bodyweight and view a bodyweight trend chart over time
   3. Home screen shows a progress summary including recent PRs, streak count, and recent stats
   4. Home screen shows today's planned workout (from the active plan) with a quick-start button that launches the active workout screen
-**Plans:** 2/3 plans complete
+**Plans:** 3/3 plans complete
 
 Plans:
 - [x] 06-01-PLAN.md — Data layer: Victory Native XL + Skia install, types, chartHelpers, bodyweight migration, chart RPC aggregation, bodyweightStore, all data hooks (chart data, bodyweight, today's workout, progress summary), unit tests (completed 2026-03-10)
@@ -195,7 +195,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 3. Plan Builder | 3/3 | Complete   | 2026-03-09 |
 | 4. Active Workout | 6/6 | Complete   | 2026-03-10 |
 | 5. Workout History | 0/2 | Not started | - |
-| 6. Progress Charts + Dashboard | 2/3 | In progress | - |
+| 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
 | 7. Body Metrics | 0/2 | Not started | - |
 | 8. Alarms + Accountability | 0/3 | Not started | - |
 | 9. Polish | 0/2 | Not started | - |

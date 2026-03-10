@@ -3,14 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-03-10T19:12:00.000Z"
-last_activity: "2026-03-10 - Completed 06-02: chart UI with exercise progress, sparkline, bodyweight card"
+stopped_at: Completed 06-03-PLAN.md
+last_updated: "2026-03-10T19:20:07.610Z"
+last_activity: "2026-03-10 - Completed 06-03: dashboard refactor with feature cards in locked order"
 progress:
   total_phases: 11
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 25
-  completed_plans: 20
+  completed_plans: 21
+  percent: 84
 ---
 
 # Project State
@@ -20,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09)
 
 **Core value:** Users can log every workout session in detail and see their progress over time
-**Current focus:** Phase 06 — Progress Charts + Dashboard (in progress)
+**Current focus:** Phase 06 — Progress Charts + Dashboard (complete)
 
 ## Current Position
 
-Phase: 6 of 11 (Progress Charts + Dashboard)
-Plan: 2 of 3 complete (06-01 data layer + 06-02 chart UI done)
-Status: Phase 06 in progress, Plan 02 complete, ready for Plan 03
-Last activity: 2026-03-10 - Completed 06-02: chart UI with exercise progress, sparkline, bodyweight card
+Phase: 6 of 11 (Progress Charts + Dashboard) -- COMPLETE
+Plan: 3 of 3 complete (06-01 data layer + 06-02 chart UI + 06-03 dashboard refactor done)
+Status: Phase 06 complete, ready for Phase 07
+Last activity: 2026-03-10 - Completed 06-03: dashboard refactor with feature cards in locked order
 
-Progress: [████████░░] 76%
+Progress: [████████░░] 84%
 
 ## Performance Metrics
 
@@ -63,6 +64,7 @@ Progress: [████████░░] 76%
 | Phase 04 P06 | 5min | 2 tasks | 11 files |
 | Phase 06 P01 | 6min | 2 tasks | 20 files |
 | Phase 06 P02 | 15min | 4 tasks | 10 files |
+| Phase 06 P03 | 8min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -121,6 +123,8 @@ Recent decisions affecting current work:
 - [06-02]: Replaced Victory Native + Skia with react-native-svg for Expo Go compatibility
 - [06-02]: SVG polyline chart rendering with manual coordinate scaling
 - [06-02]: Inline card expansion for bodyweight logging (no bottom sheet or separate screen)
+- [Phase 06]: Dashboard card order locked: TodaysWorkout > ProgressSummary > Bodyweight > PRBaselines
+- [Phase 06]: Sign Out button removed from dashboard (moves to Settings in Phase 11)
 
 ### Roadmap Evolution
 
@@ -158,6 +162,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T19:12:00.000Z
-Stopped at: Completed 06-02-PLAN.md
-Resume file: .planning/phases/06-progress-charts-dashboard/06-03-PLAN.md
+Last session: 2026-03-10T19:20:07.607Z
+Stopped at: Completed 06-03-PLAN.md
+Resume file: None
