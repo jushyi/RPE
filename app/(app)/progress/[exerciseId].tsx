@@ -68,7 +68,7 @@ export default function ExerciseChartScreen() {
           </Text>
         </View>
       ) : (
-        <ExerciseChart data={data as any} metric={selectedMetric} />
+        <ExerciseChart data={data as unknown as any[]} metric={selectedMetric} />
       )}
 
       {/* Time Range Selector */}
