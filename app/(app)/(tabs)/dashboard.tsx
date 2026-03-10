@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert, Animated, RefreshControl } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
@@ -367,34 +367,76 @@ export default function DashboardScreen() {
     }
   };
 
+  const HEADER_HEIGHT = 80;
+  const lastScrollY = useRef(0);
+  const headerTranslateY = useRef(new Animated.Value(0)).current;
+  const headerVisible = useRef(true);
+  const contentHeight = useRef(0);
+  const scrollViewHeight = useRef(0);
+
+  const handleScroll = (event: any) => {
+    const currentY = event.nativeEvent.contentOffset.y;
+    const diff = currentY - lastScrollY.current;
+    const maxScroll = contentHeight.current - scrollViewHeight.current;
+    lastScrollY.current = currentY;
+
+    // Ignore overscroll at top and bottom (bounce)
+    if (currentY <= 0 || currentY >= maxScroll) return;
+
+    if (diff > 0 && headerVisible.current) {
+      // Scrolling down — hide
+      headerVisible.current = false;
+      Animated.timing(headerTranslateY, {
+        toValue: -HEADER_HEIGHT,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    } else if (diff < 0 && !headerVisible.current) {
+      // Any scroll up — fully show
+      headerVisible.current = true;
+      Animated.timing(headerTranslateY, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
+
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={ds.safe} edges={['top']}>
+    <View style={[ds.safe, { paddingTop: insets.top }]}>
+      <Animated.View style={[ds.header, { height: HEADER_HEIGHT, transform: [{ translateY: headerTranslateY }] }]}>
+        <View style={ds.headerLeft}>
+          <TappableAvatar
+            displayName={displayName}
+            avatarUrl={avatarUrl}
+            onPhotoChanged={handlePhotoChanged}
+          />
+          <View style={{ flex: 1, marginLeft: 12 }}>
+            <Text style={ds.greeting}>Welcome back,</Text>
+            <Text style={ds.name} numberOfLines={1}>{displayName}</Text>
+          </View>
+        </View>
+      </Animated.View>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 24, paddingBottom: 40 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: HEADER_HEIGHT, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={handleScroll}
+        onContentSizeChange={(_, h) => { contentHeight.current = h; }}
+        onLayout={(e) => { scrollViewHeight.current = e.nativeEvent.layout.height; }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={refreshAll}
             tintColor={colors.textMuted}
             colors={[colors.accent]}
+            progressViewOffset={HEADER_HEIGHT}
           />
         }
       >
-        <View style={ds.header}>
-          <View style={ds.headerLeft}>
-            <TappableAvatar
-              displayName={displayName}
-              avatarUrl={avatarUrl}
-              onPhotoChanged={handlePhotoChanged}
-            />
-            <View style={{ flex: 1, marginLeft: 12 }}>
-              <Text style={ds.greeting}>Welcome back,</Text>
-              <Text style={ds.name} numberOfLines={1}>{displayName}</Text>
-            </View>
-          </View>
-        </View>
 
         {refreshing ? (
           <DashboardSkeleton />
@@ -468,17 +510,25 @@ export default function DashboardScreen() {
 
         <Button title="Sign Out" onPress={handleSignOut} variant="ghost" loading={signingOut} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const ds = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
   header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 32,
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 12,
+    backgroundColor: colors.background,
   },
   headerLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   avatar: {
