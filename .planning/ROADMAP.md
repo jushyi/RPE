@@ -146,7 +146,7 @@ Plans:
   1. When creating or editing a plan day, user is prompted to set an alarm time for that day — alarm setup is part of plan creation, not a separate settings screen
   2. On a scheduled training day, the alarm fires at the set time with sound and vibration, displays a full-screen notification, and requires explicit dismissal before it stops
   3. If a planned training day passes without a logged workout session, the user receives a nudge notification before the end of that day
-**Plans:** 3 plans
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 08-01-PLAN.md — Data layer: expo-notifications install, migration (alarm columns on plan_days), alarm types/constants/utils, notification setup, alarm scheduler, alarmStore, Jest mocks, unit tests
@@ -198,7 +198,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
 | 7. Body Metrics | 2/2 | Complete   | 2026-03-10 |
-| 8. Alarms + Accountability | 0/3 | Not started | - |
+| 8. Alarms + Accountability | 2/3 | In Progress|  |
 | 9. Polish | 0/3 | Not started | - |
 | 10. Distribution | 0/2 | Not started | - |
 
