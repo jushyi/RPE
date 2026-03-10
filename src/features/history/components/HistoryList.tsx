@@ -6,11 +6,15 @@ import { useHistory } from '../hooks/useHistory';
 import { SessionCard } from './SessionCard';
 import { PlanFilter } from './PlanFilter';
 import { HistoryEmptyState } from './HistoryEmptyState';
+import { InProgressCard } from './InProgressCard';
+import { useWorkoutStore } from '@/stores/workoutStore';
 import type { SessionListItem } from '../types';
 
 export function HistoryList() {
   const router = useRouter();
   const { sessions, isLoading, fetchSessions, toListItem } = useHistory();
+  const activeSession = useWorkoutStore((s) => s.activeSession);
+  const hasActiveWorkout = activeSession !== null && activeSession.ended_at === null;
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -77,7 +81,16 @@ export function HistoryList() {
   }
 
   if (!isLoading && sessions.length === 0) {
-    return <HistoryEmptyState onStartWorkout={handleStartWorkout} />;
+    return (
+      <View style={s.container}>
+        {hasActiveWorkout && (
+          <View style={s.inProgressHeader}>
+            <InProgressCard />
+          </View>
+        )}
+        <HistoryEmptyState onStartWorkout={handleStartWorkout} />
+      </View>
+    );
   }
 
   const renderItem = ({ item }: { item: SessionListItem }) => (
@@ -102,6 +115,13 @@ export function HistoryList() {
         data={filteredItems}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
+        ListHeaderComponent={
+          hasActiveWorkout ? (
+            <View style={s.inProgressHeader}>
+              <InProgressCard />
+            </View>
+          ) : null
+        }
         contentContainerStyle={s.list}
         showsVerticalScrollIndicator={false}
         onEndReached={handleFetchMore}
@@ -133,6 +153,9 @@ const s = StyleSheet.create({
     paddingBottom: 100,
   },
   cardWrapper: {
+    marginBottom: 12,
+  },
+  inProgressHeader: {
     marginBottom: 12,
   },
 });
