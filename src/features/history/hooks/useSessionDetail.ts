@@ -56,7 +56,7 @@ export function useSessionDetail() {
         const prev = await fetchPreviousSession(
           normalized.plan_day_id,
           normalized.id,
-          normalized.ended_at ?? normalized.started_at
+          normalized.started_at
         );
         setPreviousSession(prev);
 
@@ -104,8 +104,8 @@ export function useSessionDetail() {
           )
           .eq('plan_day_id', planDayId)
           .neq('id', currentSessionId)
-          .lt('ended_at', sessionDate)
-          .order('ended_at', { ascending: false })
+          .lt('started_at', sessionDate)
+          .order('started_at', { ascending: false })
           .limit(1)
           .single();
 
