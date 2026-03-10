@@ -93,6 +93,34 @@ export default function WorkoutSummaryScreen() {
 
         <SessionSummaryCard session={session} />
 
+        {summary.prs_hit > 0 && (() => {
+          const prExercises = session.exercises
+            .filter((ex) => ex.logged_sets.some((set) => set.is_pr))
+            .map((ex) => {
+              const prSets = ex.logged_sets.filter((set) => set.is_pr);
+              const maxPR = prSets.reduce((max, set) => set.weight > max.weight ? set : max, prSets[0]);
+              return {
+                name: ex.exercise_name,
+                weight: maxPR.weight,
+                unit: maxPR.unit,
+              };
+            });
+          return (
+            <View style={s.prSection}>
+              <View style={s.prHeader}>
+                <Ionicons name="trophy-outline" size={22} color={colors.warning} />
+                <Text style={s.prTitle}>Personal Records</Text>
+              </View>
+              {prExercises.map((pr) => (
+                <View key={pr.name} style={s.prRow}>
+                  <Text style={s.prExerciseName} numberOfLines={1}>{pr.name}</Text>
+                  <Text style={s.prWeight}>New PR: {pr.weight} {pr.unit}</Text>
+                </View>
+              ))}
+            </View>
+          );
+        })()}
+
         {showTargets &&
           summary.exercises_with_manual_progression.length > 0 && (
             <View style={s.targetSection}>
@@ -146,6 +174,41 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 16,
     textAlign: 'center',
+  },
+  prSection: {
+    width: '100%',
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.surfaceElevated,
+    gap: 12,
+  },
+  prHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  prTitle: {
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  prRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  prExerciseName: {
+    color: colors.textPrimary,
+    fontSize: 15,
+    flex: 1,
+    marginRight: 12,
+  },
+  prWeight: {
+    color: colors.warning,
+    fontSize: 15,
+    fontWeight: '700',
   },
   targetSection: {
     width: '100%',
