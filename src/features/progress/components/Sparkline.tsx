@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { CartesianChart, Line } from 'victory-native';
+import Svg, { Polyline } from 'react-native-svg';
 import type { SparklineData } from '../types';
 
 interface SparklineProps {
@@ -10,33 +10,40 @@ interface SparklineProps {
   height: number;
 }
 
-// Victory Native requires Record<string, unknown> compatible data
-type SparklineRecord = Record<string, unknown> & { date: number; value: number };
-
 export function Sparkline({ data, color, width, height }: SparklineProps) {
   if (data.length < 2) {
     return null;
   }
 
-  const chartData = data as unknown as SparklineRecord[];
+  const values = data.map((d) => d.value);
+  const minVal = Math.min(...values);
+  const maxVal = Math.max(...values);
+  const valRange = maxVal - minVal || 1;
+
+  const pad = 2;
+  const chartW = width - pad * 2;
+  const chartH = height - pad * 2;
+
+  const points = data
+    .map((d, i) => {
+      const x = pad + (i / (data.length - 1)) * chartW;
+      const y = pad + (1 - (d.value - minVal) / valRange) * chartH;
+      return `${x},${y}`;
+    })
+    .join(' ');
 
   return (
     <View style={{ width, height }}>
-      <CartesianChart
-        data={chartData}
-        xKey="date"
-        yKeys={['value']}
-        padding={{ left: 2, right: 2, top: 2, bottom: 2 }}
-      >
-        {({ points }) => (
-          <Line
-            points={points.value}
-            color={color}
-            strokeWidth={1.5}
-            curveType="natural"
-          />
-        )}
-      </CartesianChart>
+      <Svg width={width} height={height}>
+        <Polyline
+          points={points}
+          fill="none"
+          stroke={color}
+          strokeWidth={1.5}
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </Svg>
     </View>
   );
 }
