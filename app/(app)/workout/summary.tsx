@@ -17,23 +17,17 @@ import { enqueueCompletedSession, flushSyncQueue } from '@/features/workout/hook
 import { cachePreviousPerformance } from '@/features/workout/hooks/usePreviousPerformance';
 import { supabase } from '@/lib/supabase/client';
 import type { WorkoutSession } from '@/features/workout/types';
-
-// Module-level storage for the completed session
-// Set by useWorkoutSession.finishWorkout() before navigating here
-let _completedSession: WorkoutSession | null = null;
-
-export function setCompletedSession(session: WorkoutSession) {
-  _completedSession = session;
-}
-
-export function getCompletedSession(): WorkoutSession | null {
-  return _completedSession;
-}
+import { getCompletedSession, clearCompletedSession, resetFinishingFlag } from '@/features/workout/workoutSessionBridge';
 
 export default function WorkoutSummaryScreen() {
   const router = useRouter();
   const [session] = useState<WorkoutSession | null>(() => getCompletedSession());
   const [showTargets, setShowTargets] = useState(true);
+
+  // Reset the finishing flag so workout screen redirect works normally again
+  useEffect(() => {
+    resetFinishingFlag();
+  }, []);
 
   // Cache previous performance and enqueue sync on mount
   useEffect(() => {
@@ -60,8 +54,9 @@ export default function WorkoutSummaryScreen() {
   }, [session]);
 
   const handleDone = () => {
-    _completedSession = null;
-    router.replace('/(app)/(tabs)' as any);
+    clearCompletedSession();
+    // Navigate to dashboard, replacing the entire stack so no workout screens remain
+    router.dismissAll();
   };
 
   if (!session) {

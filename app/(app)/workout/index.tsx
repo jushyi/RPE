@@ -15,6 +15,7 @@ import { colors } from '@/constants/theme';
 import { useWorkoutStore } from '@/stores/workoutStore';
 import { useAuthStore } from '@/stores/authStore';
 import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
+import { isWorkoutFinishing } from '@/features/workout/workoutSessionBridge';
 import { usePRDetection } from '@/features/workout/hooks/usePRDetection';
 import { WorkoutHeader } from '@/features/workout/components/WorkoutHeader';
 import { ExercisePager } from '@/features/workout/components/ExercisePager';
@@ -42,8 +43,9 @@ export default function WorkoutScreen() {
   const pagerRef = useRef<PagerView>(null);
 
   // If no active session and no plan_day_id, redirect back
+  // Skip if we're intentionally finishing (navigating to summary)
   useEffect(() => {
-    if (!activeSession && !params.plan_day_id) {
+    if (!activeSession && !params.plan_day_id && !isWorkoutFinishing()) {
       router.back();
     }
   }, [activeSession, params.plan_day_id]);
@@ -54,12 +56,13 @@ export default function WorkoutScreen() {
   }, [loadBaselines]);
 
   const handleLogSet = useCallback(
-    (exerciseId: string, weight: number, reps: number, unit: 'kg' | 'lbs') => {
+    (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs') => {
       const store = useWorkoutStore.getState();
       store.logSet(exerciseId, {
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         weight,
         reps,
+        rpe,
         unit,
         is_pr: false,
         logged_at: new Date().toISOString(),
@@ -101,7 +104,7 @@ export default function WorkoutScreen() {
 
   return (
     <BottomSheetModalProvider>
-      <SafeAreaView style={s.container} edges={['top']}>
+      <SafeAreaView style={s.container} edges={['top', 'bottom']}>
         <KeyboardAvoidingView
           style={s.flex}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

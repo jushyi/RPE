@@ -3,7 +3,8 @@ import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useWorkoutStore } from '@/stores/workoutStore';
 import { useAuthStore } from '@/stores/authStore';
-import { setCompletedSession } from '@/../app/(app)/workout/summary';
+import { setCompletedSession, setIsFinishing } from '@/features/workout/workoutSessionBridge';
+import { saveCompletedSession } from '@/features/workout/hooks/useCompletedToday';
 import type { PlanDay } from '@/features/plans/types';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionExercise, SetLog } from '@/features/workout/types';
@@ -51,13 +52,14 @@ export function useWorkoutSession() {
   }, [userId, startFreestyleSession, router]);
 
   const logCurrentSet = useCallback(
-    (weight: number, reps: number, unit: 'kg' | 'lbs') => {
+    (weight: number, reps: number, unit: 'kg' | 'lbs', rpe: number | null = null) => {
       if (!currentExercise) return;
 
       const setLog: Omit<SetLog, 'set_number'> = {
         id: generateId(),
         weight,
         reps,
+        rpe,
         unit,
         is_pr: false,
         logged_at: new Date().toISOString(),
@@ -69,10 +71,14 @@ export function useWorkoutSession() {
   );
 
   const finishWorkout = useCallback(() => {
+    setIsFinishing(true);
     const completed = finishSessionAction();
     if (completed) {
       setCompletedSession(completed);
+      saveCompletedSession(completed);
       router.replace('/workout/summary' as any);
+    } else {
+      setIsFinishing(false);
     }
   }, [finishSessionAction, router]);
 
