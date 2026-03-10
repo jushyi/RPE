@@ -3,29 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 9 context gathered
-last_updated: "2026-03-10T18:33:53.666Z"
-last_activity: "2026-03-10 - Completed 06-01: data layer and infrastructure for progress charts + dashboard"
+stopped_at: Completed 06-02-PLAN.md
+last_updated: "2026-03-10T19:12:00.000Z"
+last_activity: "2026-03-10 - Completed 06-02: chart UI with exercise progress, sparkline, bodyweight card"
 progress:
   total_phases: 11
   completed_phases: 5
-  total_plans: 22
-  completed_plans: 18
----
-
----
-gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: executing
-stopped_at: Completed 06-01-PLAN.md
-last_updated: "2026-03-10T17:28:00.000Z"
-last_activity: "2026-03-10 - Completed 06-01: data layer and infrastructure for progress charts + dashboard"
-progress:
-  total_phases: 11
-  completed_phases: 5
-  total_plans: 20
-  completed_plans: 19
+  total_plans: 25
+  completed_plans: 20
 ---
 
 # Project State
@@ -40,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 ## Current Position
 
 Phase: 6 of 11 (Progress Charts + Dashboard)
-Plan: 1 of 3 complete (06-01 data layer done)
-Status: Phase 06 in progress, Plan 01 complete, ready for Plan 02
-Last activity: 2026-03-10 - Completed 06-01: data layer and infrastructure for progress charts + dashboard
+Plan: 2 of 3 complete (06-01 data layer + 06-02 chart UI done)
+Status: Phase 06 in progress, Plan 02 complete, ready for Plan 03
+Last activity: 2026-03-10 - Completed 06-02: chart UI with exercise progress, sparkline, bodyweight card
 
-Progress: [█████████░] 95%
+Progress: [████████░░] 76%
 
 ## Performance Metrics
 
@@ -77,6 +62,7 @@ Progress: [█████████░] 95%
 | Phase 04 P05 | 2min | 2 tasks | 5 files |
 | Phase 04 P06 | 5min | 2 tasks | 11 files |
 | Phase 06 P01 | 6min | 2 tasks | 20 files |
+| Phase 06 P02 | 15min | 4 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -132,6 +118,9 @@ Recent decisions affecting current work:
 - [06-01]: Extracted determineTodaysWorkout and calculateWeeklyStreak as pure functions for unit testing
 - [06-01]: Monday-based week keys for streak calculation (gym-standard Mon-Sun week)
 - [06-01]: Supabase RPC for server-side chart data aggregation (get_exercise_chart_data)
+- [06-02]: Replaced Victory Native + Skia with react-native-svg for Expo Go compatibility
+- [06-02]: SVG polyline chart rendering with manual coordinate scaling
+- [06-02]: Inline card expansion for bodyweight logging (no bottom sheet or separate screen)
 
 ### Roadmap Evolution
 
@@ -169,6 +158,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T18:33:53.664Z
-Stopped at: Phase 9 context gathered
-Resume file: .planning/phases/09-polish/09-CONTEXT.md
+Last session: 2026-03-10T19:12:00.000Z
+Stopped at: Completed 06-02-PLAN.md
+Resume file: .planning/phases/06-progress-charts-dashboard/06-03-PLAN.md

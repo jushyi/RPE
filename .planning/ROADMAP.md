@@ -117,11 +117,11 @@ Plans:
   2. User can log their bodyweight and view a bodyweight trend chart over time
   3. Home screen shows a progress summary including recent PRs, streak count, and recent stats
   4. Home screen shows today's planned workout (from the active plan) with a quick-start button that launches the active workout screen
-**Plans:** 1/3 plans complete
+**Plans:** 2/3 plans complete
 
 Plans:
 - [x] 06-01-PLAN.md — Data layer: Victory Native XL + Skia install, types, chartHelpers, bodyweight migration, chart RPC aggregation, bodyweightStore, all data hooks (chart data, bodyweight, today's workout, progress summary), unit tests (completed 2026-03-10)
-- [ ] 06-02-PLAN.md — Chart UI: exercise progress chart screen (metric tabs, time ranges, empty states), Sparkline component, BodyweightCard with inline logging
+- [x] 06-02-PLAN.md — Chart UI: exercise progress chart screen (metric tabs, time ranges, empty states), Sparkline component, BodyweightCard with inline logging (completed 2026-03-10)
 - [ ] 06-03-PLAN.md — Dashboard refactor: TodaysWorkoutCard (3 states), ProgressSummaryCard (streak + PRs + stats + sparklines), compose cards in locked order, remove Sign Out
 
 ### Phase 7: Body Metrics
@@ -195,7 +195,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 3. Plan Builder | 3/3 | Complete   | 2026-03-09 |
 | 4. Active Workout | 6/6 | Complete   | 2026-03-10 |
 | 5. Workout History | 0/2 | Not started | - |
-| 6. Progress Charts + Dashboard | 0/3 | Not started | - |
+| 6. Progress Charts + Dashboard | 2/3 | In progress | - |
 | 7. Body Metrics | 0/2 | Not started | - |
 | 8. Alarms + Accountability | 0/3 | Not started | - |
 | 9. Polish | 0/2 | Not started | - |
