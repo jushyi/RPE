@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 04-active-workout
 source: [04-01-SUMMARY.md, 04-02-SUMMARY.md, 04-03-SUMMARY.md, 04-04-SUMMARY.md]
 started: 2026-03-10T12:00:00Z
@@ -81,27 +81,57 @@ skipped: 0
   reason: "User reported: no celebration or even acknowledgement of the pr in summary"
   severity: major
   test: 7
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "is_pr hardcoded to false in handleLogSet (index.tsx:67). PR detection result from ExercisePage.handleLog never flows back to store. Summary only shows PR count from set data which is always 0."
+  artifacts:
+    - path: "app/(app)/workout/index.tsx"
+      issue: "is_pr: false hardcoded at line 67"
+    - path: "src/features/workout/components/ExercisePage.tsx"
+      issue: "PR detection result not forwarded to onLogSet callback"
+    - path: "src/features/workout/hooks/usePRDetection.ts"
+      issue: "loadBaselines silently swallows errors (lines 73-74)"
+    - path: "app/(app)/workout/summary.tsx"
+      issue: "No PR-specific acknowledgement UI beyond count"
+  missing:
+    - "Pass is_pr flag from ExercisePage.handleLog through onLogSet to handleLogSet"
+    - "Add error handling for baseline loading failures"
+    - "Add PR section to summary screen listing exercises with PRs"
+  debug_session: ".planning/debug/pr-celebration-not-working.md"
 
 - truth: "Plus FAB opens exercise library bottom sheet for freestyle addition; workout has auto-generated title"
   status: failed
   reason: "User reported: tapping plus doesnt open exercise library. there is also no title for the workout, should be auto generated of day and quick workout"
   severity: major
   test: 8
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "FreestyleExercisePicker never calls fetchExercises() on mount — exercise list is empty so bottom sheet appears blank. WorkoutSession type has no title field; no title generation logic exists."
+  artifacts:
+    - path: "src/features/workout/components/FreestyleExercisePicker.tsx"
+      issue: "Missing fetchExercises() call on mount (line 19)"
+    - path: "src/features/workout/types.ts"
+      issue: "No title field on WorkoutSession (lines 33-41)"
+    - path: "src/stores/workoutStore.ts"
+      issue: "startFreestyleSession generates no title (lines 76-87)"
+    - path: "src/features/workout/components/WorkoutHeader.tsx"
+      issue: "No session title prop (lines 6-13)"
+  missing:
+    - "Add fetchExercises() useEffect in FreestyleExercisePicker"
+    - "Add title field to WorkoutSession type"
+    - "Generate default title in startFreestyleSession and startPlanSession"
+    - "Display session title in WorkoutHeader"
+  debug_session: ".planning/debug/freestyle-fab-and-title.md"
 
 - truth: "Summary page scrolls properly with keyboard; dashboard single workout card is auto-expanded and non-collapsible"
   status: failed
   reason: "User reported: summary page doesnt scroll down to clear keyboard for set target inputs and done buttons. dashboard collapsed summary view should be auto-expanded and non-collapsible when theres only one workout. only use collapsible pattern when multiple workouts exist"
   severity: major
   test: 12
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "summary.tsx uses plain ScrollView with no keyboard accommodation. CompletedWorkoutCard hardcodes useState(false) for expanded state with no awareness of single vs multiple workouts."
+  artifacts:
+    - path: "app/(app)/workout/summary.tsx"
+      issue: "Plain ScrollView with no KeyboardAvoidingView or keyboardShouldPersistTaps (line 84)"
+    - path: "app/(app)/(tabs)/dashboard.tsx"
+      issue: "CompletedWorkoutCard useState(false) with no total/isOnly prop (line 145)"
+  missing:
+    - "Replace ScrollView with KeyboardAwareScrollView or wrap in KeyboardAvoidingView"
+    - "Add keyboardShouldPersistTaps='handled' and keyboardDismissMode='on-drag'"
+    - "Pass total count to CompletedWorkoutCard, auto-expand when single, hide chevron"
+  debug_session: ".planning/debug/summary-keyboard-and-dashboard-card.md"
