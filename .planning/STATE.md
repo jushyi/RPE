@@ -3,29 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 7 context updated
-last_updated: "2026-03-10T17:03:49.866Z"
-last_activity: "2026-03-10 - Completed quick task 13: fix default unit to match PR unit instead of defaulting to pounds"
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-03-10T17:28:00.000Z"
+last_activity: "2026-03-10 - Completed 06-01: data layer and infrastructure for progress charts + dashboard"
 progress:
   total_phases: 11
   completed_phases: 5
   total_plans: 20
-  completed_plans: 17
----
-
----
-gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: executing
-stopped_at: Completed Phase 05 (workout history)
-last_updated: "2026-03-10T17:00:00.000Z"
-last_activity: "2026-03-10 - Completed quick task 13: fix default unit to match PR unit"
-progress:
-  total_phases: 11
-  completed_phases: 5
-  total_plans: 20
-  completed_plans: 18
+  completed_plans: 19
 ---
 
 # Project State
@@ -35,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09)
 
 **Core value:** Users can log every workout session in detail and see their progress over time
-**Current focus:** Phase 05 — Workout History (complete, UAT passed)
+**Current focus:** Phase 06 — Progress Charts + Dashboard (in progress)
 
 ## Current Position
 
-Phase: 5 of 11 (Workout History) — COMPLETE
-Plan: 2 of 2 complete
-Status: Phase 05 complete, UAT passed, ready for Phase 06
-Last activity: 2026-03-10 - Completed quick task 15: stop dashboard from re-fetching on every tab switch
+Phase: 6 of 11 (Progress Charts + Dashboard)
+Plan: 1 of 3 complete (06-01 data layer done)
+Status: Phase 06 in progress, Plan 01 complete, ready for Plan 02
+Last activity: 2026-03-10 - Completed 06-01: data layer and infrastructure for progress charts + dashboard
 
-Progress: [█████████░] 90%
+Progress: [█████████░] 95%
 
 ## Performance Metrics
 
@@ -76,6 +61,7 @@ Progress: [█████████░] 90%
 | Phase 05 P01 | 3min | 2 tasks | 10 files |
 | Phase 04 P05 | 2min | 2 tasks | 5 files |
 | Phase 04 P06 | 5min | 2 tasks | 11 files |
+| Phase 06 P01 | 6min | 2 tasks | 20 files |
 
 ## Accumulated Context
 
@@ -127,6 +113,10 @@ Recent decisions affecting current work:
 - [04-05]: PR flag passed as 6th parameter through onLogSet callback chain for simplest fix
 - [04-06]: title field is required string on WorkoutSession; DB sessions get fallback title
 - [04-06]: WeightTargetPrompt collapse-after-save stores values locally and renders summary view
+- [06-01]: Used react-native-worklets as required peer dep for reanimated 4.x babel plugin
+- [06-01]: Extracted determineTodaysWorkout and calculateWeeklyStreak as pure functions for unit testing
+- [06-01]: Monday-based week keys for streak calculation (gym-standard Mon-Sun week)
+- [06-01]: Supabase RPC for server-side chart data aggregation (get_exercise_chart_data)
 
 ### Roadmap Evolution
 
@@ -164,6 +154,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T17:05:00.000Z
-Stopped at: Completed quick task 15
-Resume file: .planning/phases/07-body-metrics/07-CONTEXT.md
+Last session: 2026-03-10T17:28:00.000Z
+Stopped at: Completed 06-01-PLAN.md
+Resume file: .planning/phases/06-progress-charts-dashboard/06-02-PLAN.md

@@ -16,8 +16,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Exercise Library** - Pre-loaded exercise database, custom exercise creation, searchable exercise picker (completed 2026-03-09)
 - [x] **Phase 3: Plan Builder** - Named plans, day assignment, per-day exercise configuration with full detail, plan CRUD (completed 2026-03-09)
 - [x] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes (completed 2026-03-10)
-- [ ] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation
-- [ ] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen
+- [x] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation (completed 2026-03-10)
+- [ ] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen (1/3 plans complete)
 - [ ] **Phase 7: Body Metrics** - Body measurements (chest, waist, hips, body fat %), combined dashboard card, detail screen with charts and history
 - [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
 - [ ] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline
@@ -117,10 +117,10 @@ Plans:
   2. User can log their bodyweight and view a bodyweight trend chart over time
   3. Home screen shows a progress summary including recent PRs, streak count, and recent stats
   4. Home screen shows today's planned workout (from the active plan) with a quick-start button that launches the active workout screen
-**Plans:** 3 plans
+**Plans:** 1/3 plans complete
 
 Plans:
-- [ ] 06-01-PLAN.md — Data layer: Victory Native XL + Skia install, types, chartHelpers, bodyweight migration, chart RPC aggregation, bodyweightStore, all data hooks (chart data, bodyweight, today's workout, progress summary), unit tests
+- [x] 06-01-PLAN.md — Data layer: Victory Native XL + Skia install, types, chartHelpers, bodyweight migration, chart RPC aggregation, bodyweightStore, all data hooks (chart data, bodyweight, today's workout, progress summary), unit tests (completed 2026-03-10)
 - [ ] 06-02-PLAN.md — Chart UI: exercise progress chart screen (metric tabs, time ranges, empty states), Sparkline component, BodyweightCard with inline logging
 - [ ] 06-03-PLAN.md — Dashboard refactor: TodaysWorkoutCard (3 states), ProgressSummaryCard (streak + PRs + stats + sparklines), compose cards in locked order, remove Sign Out
 
