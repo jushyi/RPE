@@ -43,7 +43,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 5 of 11 (Workout History)
 Plan: 0 of 2 in current phase
 Status: Phase 4 complete, ready for Phase 5
-Last activity: 2026-03-10 - Completed quick task 5: Fix require cycle between useWorkoutSession.ts and summary.tsx
+Last activity: 2026-03-10 - Completed quick task 6: Install MCP server for Supabase
 
 Progress: [███████░░░] 67%
 
@@ -144,6 +144,7 @@ None yet.
 | 3 | single tap to edit/delete exercises, built-in read-only view | 2026-03-09 | 271c224 | [3-single-tap-to-edit-delete-exercises-buil](./quick/3-single-tap-to-edit-delete-exercises-buil/) |
 | 4 | add done button to collapse exercise edit view into summary | 2026-03-10 | 0ea1af8 | [4-add-done-button-to-collapse-exercise-edi](./quick/4-add-done-button-to-collapse-exercise-edi/) |
 | 5 | fix require cycle between useWorkoutSession and summary | 2026-03-10 | c567863 | [5-fix-require-cycle-between-useworkoutsess](./quick/5-fix-require-cycle-between-useworkoutsess/) |
+| 6 | Install MCP server for Supabase | 2026-03-10 | 5464340 | [6-install-mcp-server-for-supabase](./quick/6-install-mcp-server-for-supabase/) |
 
 ## Session Continuity
 
