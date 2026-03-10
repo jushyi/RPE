@@ -42,6 +42,10 @@ export default function AppLayout() {
           name="history"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="progress"
+          options={{ headerShown: false }}
+        />
     </Stack>
   );
 }
