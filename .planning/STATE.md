@@ -140,9 +140,10 @@ None yet.
 | 7 | Fix dashboard showing deleted workout sessions (MMKV cache invalidation) | 2026-03-10 | 77b6dad | [7-the-dashboard-doesn-t-update-the-days-wo](./quick/7-the-dashboard-doesn-t-update-the-days-wo/) |
 | 8 | Move active plan badge under plan name in header | 2026-03-10 | d10f1f2 | [8-move-active-plan-badge-under-plan-name-i](./quick/8-move-active-plan-badge-under-plan-name-i/) |
 | 10 | Fix history trend arrows not showing upward trend on subsequent days | 2026-03-10 | dbfc1e5 | [10-fix-history-trend-arrows-not-showing-upw](./quick/10-fix-history-trend-arrows-not-showing-upw/) |
+| 12 | Show all workouts for a day on dashboard | 2026-03-10 | 614e4e0 | [12-show-all-workouts-for-a-day-on-dashboard](./quick/12-show-all-workouts-for-a-day-on-dashboard/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:36:55Z
-Stopped at: Completed quick task 10
+Last session: 2026-03-10T16:45:22Z
+Stopped at: Completed quick task 12
 Resume file: None
