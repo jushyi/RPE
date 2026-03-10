@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import {
   View,
+  Text,
   ScrollView,
   Pressable,
   Alert,
@@ -16,10 +17,19 @@ import { useHistory } from '@/features/history/hooks/useHistory';
 import { SessionDetailHeader } from '@/features/history/components/SessionDetailHeader';
 import { SessionExerciseCard } from '@/features/history/components/SessionExerciseCard';
 
+function formatShortDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  ];
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+}
+
 export default function SessionDetailScreen() {
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
   const router = useRouter();
-  const { session, deltas, isLoading, fetchSession, deleteSet } =
+  const { session, deltas, isLoading, fetchSession, deleteSet, deleteExercise } =
     useSessionDetail();
   const { deleteSession } = useHistory();
 
@@ -68,6 +78,17 @@ export default function SessionDetailScreen() {
     [deleteSet]
   );
 
+  const handleDeleteExercise = useCallback(
+    async (sessionExerciseId: string) => {
+      try {
+        await deleteExercise(sessionExerciseId);
+      } catch {
+        Alert.alert('Error', 'Failed to delete exercise.');
+      }
+    },
+    [deleteExercise]
+  );
+
   if (isLoading || !session) {
     return (
       <SafeAreaView style={s.safe}>
@@ -78,13 +99,22 @@ export default function SessionDetailScreen() {
     );
   }
 
+  const title = session.plan_name
+    ? `${session.plan_name}${session.day_name ? ` - ${session.day_name}` : ''}`
+    : 'Freestyle';
+  const dateStr = formatShortDate(session.ended_at ?? session.started_at);
+
   return (
     <SafeAreaView style={s.safe} edges={['top']}>
       {/* Navigation Bar */}
       <View style={s.navBar}>
         <Pressable onPress={() => router.back()} style={s.navButton}>
-          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
         </Pressable>
+        <View style={s.navTitle}>
+          <Text style={s.navTitleText} numberOfLines={1}>{title}</Text>
+          <Text style={s.navSubtitle}>{dateStr}</Text>
+        </View>
         <Pressable onPress={handleDeleteSession} style={s.navButton}>
           <Ionicons name="trash-outline" size={22} color={colors.error} />
         </Pressable>
@@ -107,6 +137,7 @@ export default function SessionDetailScreen() {
                 exercise={exercise}
                 delta={delta}
                 onDeleteSet={handleDeleteSet}
+                onDeleteExercise={handleDeleteExercise}
               />
             </View>
           );
@@ -128,13 +159,26 @@ const s = StyleSheet.create({
   },
   navBar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 4,
     paddingVertical: 8,
   },
   navButton: {
     padding: 8,
+  },
+  navTitle: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  navTitleText: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  navSubtitle: {
+    color: colors.textSecondary,
+    fontSize: 12,
+    marginTop: 1,
   },
   scroll: {
     flex: 1,

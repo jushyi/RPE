@@ -42,6 +42,10 @@ export default function AppLayout() {
           name="workout"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="history"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </>
   );

@@ -42,6 +42,7 @@ export function useSessionDetail() {
           .sort((a: any, b: any) => a.sort_order - b.sort_order)
           .map((se: any) => ({
             ...se,
+            exercise: se.exercises ?? { name: 'Unknown', muscle_groups: [], equipment: '', track_prs: false },
             set_logs: (se.set_logs ?? []).sort(
               (a: any, b: any) => a.set_number - b.set_number
             ),
@@ -200,6 +201,33 @@ export function useSessionDetail() {
     []
   );
 
+  const deleteExercise = useCallback(
+    async (sessionExerciseId: string) => {
+      if (!supabase) return;
+
+      const { error: setsError } = await (supabase.from('set_logs') as any)
+        .delete()
+        .eq('session_exercise_id', sessionExerciseId);
+      if (setsError) throw setsError;
+
+      const { error } = await (supabase.from('session_exercises') as any)
+        .delete()
+        .eq('id', sessionExerciseId);
+      if (error) throw error;
+
+      setSession((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          session_exercises: prev.session_exercises.filter(
+            (se) => se.id !== sessionExerciseId
+          ),
+        };
+      });
+    },
+    []
+  );
+
   return {
     session,
     previousSession,
@@ -209,5 +237,6 @@ export function useSessionDetail() {
     fetchPreviousSession,
     calculateDeltas,
     deleteSet,
+    deleteExercise,
   };
 }

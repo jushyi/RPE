@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, FlatList, RefreshControl, StyleSheet, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
 import { useHistory } from '../hooks/useHistory';
@@ -12,10 +12,17 @@ export function HistoryList() {
   const router = useRouter();
   const { sessions, isLoading, fetchSessions, toListItem } = useHistory();
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchSessions(true);
   }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchSessions(true);
+    setRefreshing(false);
+  }, [fetchSessions]);
 
   const listItems = useMemo(
     () => sessions.map(toListItem),
@@ -99,6 +106,14 @@ export function HistoryList() {
         showsVerticalScrollIndicator={false}
         onEndReached={handleFetchMore}
         onEndReachedThreshold={0.3}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={colors.accent}
+            colors={[colors.accent]}
+          />
+        }
       />
     </View>
   );

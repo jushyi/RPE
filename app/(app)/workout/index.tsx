@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import PagerView from 'react-native-pager-view';
 import { colors } from '@/constants/theme';
 import { useWorkoutStore } from '@/stores/workoutStore';
@@ -60,7 +60,11 @@ export default function WorkoutScreen() {
     (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => {
       const store = useWorkoutStore.getState();
       store.logSet(exerciseId, {
-        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        id: 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+          const r = (Math.random() * 16) | 0;
+          const v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }),
         weight,
         reps,
         rpe,
@@ -104,57 +108,66 @@ export default function WorkoutScreen() {
   const isFreestyle = session.plan_id === null;
 
   return (
-    <BottomSheetModalProvider>
-      <SafeAreaView style={s.container} edges={['top', 'bottom']}>
-        <KeyboardAvoidingView
-          style={s.flex}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-          {currentExercise && (
-            <WorkoutHeader
-              exerciseName={currentExercise.exercise_name}
-              currentSetNumber={currentSetNumber}
-              totalSets={totalSets}
-              hasExercisesRemaining={hasExercisesRemaining}
-              onEndWorkout={endEarly}
-              onFinishWorkout={finishWorkout}
-              sessionTitle={session.title}
-            />
-          )}
-
-          {exerciseCount > 0 ? (
-            <ExercisePager
-              exercises={session.exercises}
-              onLogSet={handleLogSet}
-              onDetectPR={detectPR}
-              pagerRef={pagerRef}
-            />
-          ) : (
-            <View style={s.emptyContainer}>
-              <Ionicons name="barbell-outline" size={48} color={colors.textMuted} />
-              {session.title ? (
-                <Text style={s.emptyTitle}>{session.title}</Text>
-              ) : null}
+    <SafeAreaView style={s.container} edges={['top', 'bottom']}>
+      <KeyboardAvoidingView
+        style={s.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        {currentExercise ? (
+          <WorkoutHeader
+            exerciseName={currentExercise.exercise_name}
+            currentSetNumber={currentSetNumber}
+            totalSets={totalSets}
+            hasExercisesRemaining={hasExercisesRemaining}
+            onEndWorkout={endEarly}
+            onFinishWorkout={finishWorkout}
+            sessionTitle={session.title}
+          />
+        ) : (
+          <View style={s.emptyHeader}>
+            <View style={s.emptyHeaderTitle}>
+              <Text style={s.emptyHeaderText}>{session.title || 'Quick Workout'}</Text>
+              <Text style={s.emptyHeaderSub}>Tap + to add an exercise</Text>
             </View>
-          )}
-
-          {/* FAB for freestyle exercise picker */}
-          {isFreestyle && (
             <Pressable
-              onPress={openPicker}
-              style={({ pressed }) => [s.fab, pressed && s.fabPressed]}
+              onPress={endEarly}
+              style={({ pressed }) => [s.endButton, pressed && s.endButtonPressed]}
             >
-              <Ionicons name="add" size={28} color="#ffffff" />
+              <Ionicons name="stop-circle-outline" size={20} color={colors.error} />
+              <Text style={s.endButtonText}>End</Text>
             </Pressable>
-          )}
-        </KeyboardAvoidingView>
+          </View>
+        )}
 
-        <FreestyleExercisePicker
-          ref={pickerRef}
-          onSelect={handleAddExercise}
-        />
-      </SafeAreaView>
-    </BottomSheetModalProvider>
+        {exerciseCount > 0 ? (
+          <ExercisePager
+            exercises={session.exercises}
+            onLogSet={handleLogSet}
+            onDetectPR={detectPR}
+            pagerRef={pagerRef}
+          />
+        ) : (
+          <View style={s.emptyContainer}>
+            <Ionicons name="barbell-outline" size={48} color={colors.textMuted} />
+          </View>
+        )}
+
+        {/* FAB for freestyle exercise picker */}
+        {isFreestyle && (
+          <Pressable
+            onPress={openPicker}
+            style={({ pressed }) => [s.fab, pressed && s.fabPressed]}
+          >
+            <Ionicons name="add" size={28} color="#ffffff" />
+          </Pressable>
+        )}
+      </KeyboardAvoidingView>
+
+      <FreestyleExercisePicker
+        ref={pickerRef}
+        onSelect={handleAddExercise}
+      />
+    </SafeAreaView>
   );
 }
 
@@ -166,16 +179,51 @@ const s = StyleSheet.create({
   flex: {
     flex: 1,
   },
+  emptyHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: colors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceElevated,
+  },
+  emptyHeaderTitle: {
+    flex: 1,
+    marginRight: 12,
+  },
+  emptyHeaderText: {
+    color: colors.textPrimary,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  emptyHeaderSub: {
+    color: colors.textMuted,
+    fontSize: 14,
+    marginTop: 2,
+  },
+  endButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surfaceElevated,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
+  },
+  endButtonPressed: {
+    opacity: 0.7,
+  },
+  endButtonText: {
+    color: colors.error,
+    fontSize: 14,
+    fontWeight: '600',
+  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  emptyTitle: {
-    color: colors.textSecondary,
-    fontSize: 16,
-    fontWeight: '600',
-    marginTop: 12,
   },
   fab: {
     position: 'absolute',

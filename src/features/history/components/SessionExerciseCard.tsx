@@ -1,5 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, Animated, Alert, StyleSheet } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { Card } from '@/components/ui/Card';
 import { bestSessionE1RM } from '../utils/epley';
@@ -11,17 +13,59 @@ interface SessionExerciseCardProps {
   exercise: HistoryExercise;
   delta?: ExerciseDelta;
   onDeleteSet: (setId: string, sessionExerciseId: string) => void;
+  onDeleteExercise?: (sessionExerciseId: string) => void;
+}
+
+function renderRightActions(
+  _progress: Animated.AnimatedInterpolation<number>,
+  dragX: Animated.AnimatedInterpolation<number>,
+) {
+  const scale = dragX.interpolate({
+    inputRange: [-80, 0],
+    outputRange: [1, 0.5],
+    extrapolate: 'clamp',
+  });
+
+  return (
+    <Animated.View style={[s.deleteAction, { transform: [{ scale }] }]}>
+      <Ionicons name="trash-outline" size={22} color="#ffffff" />
+      <Text style={s.deleteText}>Delete</Text>
+    </Animated.View>
+  );
 }
 
 export function SessionExerciseCard({
   exercise,
   delta,
   onDeleteSet,
+  onDeleteExercise,
 }: SessionExerciseCardProps) {
+  const swipeableRef = useRef<Swipeable>(null);
   const showE1RM = exercise.exercise.track_prs && exercise.set_logs.length > 0;
   const e1rm = showE1RM ? bestSessionE1RM(exercise.set_logs) : 0;
 
-  return (
+  const handleSwipeOpen = (direction: 'left' | 'right') => {
+    if (direction === 'right' && onDeleteExercise) {
+      Alert.alert(
+        'Delete Exercise?',
+        'This exercise and all its sets will be permanently removed.',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+            onPress: () => swipeableRef.current?.close(),
+          },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => onDeleteExercise(exercise.id),
+          },
+        ]
+      );
+    }
+  };
+
+  const content = (
     <Card>
       {/* Header */}
       <View style={s.header}>
@@ -54,6 +98,19 @@ export function SessionExerciseCard({
         />
       ))}
     </Card>
+  );
+
+  if (!onDeleteExercise) return content;
+
+  return (
+    <Swipeable
+      ref={swipeableRef}
+      renderRightActions={renderRightActions}
+      onSwipeableOpen={handleSwipeOpen}
+      overshootRight={false}
+    >
+      {content}
+    </Swipeable>
   );
 }
 
@@ -98,5 +155,19 @@ const s = StyleSheet.create({
     color: colors.accentBright,
     fontSize: 12,
     fontWeight: '600',
+  },
+  deleteAction: {
+    backgroundColor: colors.error,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    borderRadius: 16,
+    marginBottom: 12,
+  },
+  deleteText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 4,
   },
 });

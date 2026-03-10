@@ -11,7 +11,7 @@ interface SetRowProps {
 }
 
 export function SetRow({ set, sessionExerciseId, onDeleteSet }: SetRowProps) {
-  const handleLongPress = () => {
+  const handleDelete = () => {
     Alert.alert(
       'Delete Set?',
       `Set ${set.set_number} will be permanently removed.`,
@@ -27,7 +27,7 @@ export function SetRow({ set, sessionExerciseId, onDeleteSet }: SetRowProps) {
   };
 
   return (
-    <Pressable onLongPress={handleLongPress} style={s.row}>
+    <View style={s.row}>
       <Text style={s.setLabel}>Set {set.set_number}</Text>
       <Text style={s.weight}>
         {set.weight} {set.unit}
@@ -41,7 +41,10 @@ export function SetRow({ set, sessionExerciseId, onDeleteSet }: SetRowProps) {
           style={s.prIcon}
         />
       )}
-    </Pressable>
+      <Pressable onPress={handleDelete} hitSlop={8} style={s.deleteButton}>
+        <Ionicons name="close-circle-outline" size={18} color={colors.textMuted} />
+      </Pressable>
+    </View>
   );
 }
 
@@ -73,5 +76,9 @@ const s = StyleSheet.create({
   },
   prIcon: {
     marginLeft: 8,
+  },
+  deleteButton: {
+    marginLeft: 8,
+    padding: 4,
   },
 });

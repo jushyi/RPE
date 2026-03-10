@@ -61,16 +61,19 @@ function Chip({
 
 const s = StyleSheet.create({
   scroll: {
+    flexGrow: 0,
     marginHorizontal: 16,
+    marginTop: 12,
     marginBottom: 8,
   },
   row: {
+    alignItems: 'center',
     paddingBottom: 4,
     gap: 8,
   },
   chip: {
     paddingHorizontal: 14,
-    paddingVertical: 7,
+    paddingVertical: 5,
     borderRadius: 20,
   },
   chipActive: {
