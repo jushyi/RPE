@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: Completed Phase 05 (workout history)
 last_updated: "2026-03-10T17:00:00.000Z"
-last_activity: "2026-03-10 - Completed Phase 05: Workout history data layer + UI with UAT fixes"
+last_activity: "2026-03-10 - Completed quick task 13: fix default unit to match PR unit"
 progress:
   total_phases: 11
   completed_phases: 5
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 5 of 11 (Workout History) — COMPLETE
 Plan: 2 of 2 complete
 Status: Phase 05 complete, UAT passed, ready for Phase 06
-Last activity: 2026-03-10 - Completed quick task 11: add workout resume bar and in-progress history card
+Last activity: 2026-03-10 - Completed quick task 13: fix default unit to match PR unit instead of defaulting to pounds
 
 Progress: [█████████░] 90%
 
