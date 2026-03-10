@@ -423,13 +423,23 @@ export default function DashboardScreen() {
             )}
           </View>
         ) : (
-          <Pressable
-            onPress={startFreestyle}
-            style={({ pressed }) => [ds.quickWorkoutBtn, pressed && { opacity: 0.8 }]}
-          >
-            <Ionicons name="barbell-outline" size={22} color="#fff" />
-            <Text style={ds.quickWorkoutText}>Quick Workout</Text>
-          </Pressable>
+          <>
+            <Pressable
+              onPress={startFreestyle}
+              style={({ pressed }) => [ds.quickWorkoutBtn, pressed && { opacity: 0.8 }]}
+            >
+              <Ionicons name="barbell-outline" size={22} color="#fff" />
+              <Text style={ds.quickWorkoutText}>Quick Workout</Text>
+            </Pressable>
+            {completedToday.length > 0 && (
+              <View style={ds.todayCard}>
+                <Text style={ds.completedSectionTitle}>Today's Workouts</Text>
+                {completedToday.map((s, i) => (
+                  <CompletedWorkoutCard key={s.id} session={s} index={i} isOnly={completedToday.length === 1} />
+                ))}
+              </View>
+            )}
+          </>
         )}
 
         <View style={ds.cardWrap}>
@@ -634,5 +644,11 @@ const ds = StyleSheet.create({
   setValCol: {
     flex: 1,
     textAlign: 'center',
+  },
+  completedSectionTitle: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '500',
+    marginBottom: 12,
   },
 });
