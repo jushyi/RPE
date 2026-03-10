@@ -40,6 +40,20 @@ export function DaySlotEditor({ days, onChange }: DaySlotEditorProps) {
   const pickerRef = useRef<BottomSheetModal>(null);
   const activeDayIndexRef = useRef<number>(0);
   const [reorderingDayIndex, setReorderingDayIndex] = useState<number | null>(null);
+  const [collapsedExercises, setCollapsedExercises] = useState<Set<string>>(() => {
+    const ids = new Set<string>();
+    days.forEach(d => d.exercises.forEach(e => ids.add(e.tempId)));
+    return ids;
+  });
+
+  const toggleExerciseCollapse = (tempId: string) => {
+    setCollapsedExercises(prev => {
+      const next = new Set(prev);
+      if (next.has(tempId)) next.delete(tempId);
+      else next.add(tempId);
+      return next;
+    });
+  };
 
   const handleAddDay = () => {
     const nextName = DEFAULT_DAY_NAMES[days.length] ?? `Day ${days.length + 1}`;
@@ -242,6 +256,8 @@ export function DaySlotEditor({ days, onChange }: DaySlotEditorProps) {
                   onUnitChange={(unit) => updateExercise(dayIndex, exIndex, { unit_override: unit })}
                   onWeightProgressionChange={(mode) => updateExercise(dayIndex, exIndex, { weight_progression: mode })}
                   onRemove={() => removeExercise(dayIndex, exIndex)}
+                  collapsed={collapsedExercises.has(item.tempId)}
+                  onToggleCollapse={() => toggleExerciseCollapse(item.tempId)}
                 />
               ))
             )}

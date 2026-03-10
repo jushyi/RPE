@@ -10,6 +10,8 @@ import { SetRow } from './SetRow';
 interface PlanExerciseRowProps {
   exercise: PlanDayExercise;
   isEditing: boolean;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
   onSetsChange: (sets: TargetSet[]) => void;
   onNotesChange: (notes: string | null) => void;
   onUnitChange: (unit: 'kg' | 'lbs' | null) => void;
@@ -26,6 +28,8 @@ const UNIT_OPTIONS: { value: 'kg' | 'lbs' | null; label: string }[] = [
 export const PlanExerciseRow = React.memo(function PlanExerciseRow({
   exercise,
   isEditing,
+  collapsed = false,
+  onToggleCollapse,
   onSetsChange,
   onNotesChange,
   onUnitChange,
@@ -49,6 +53,55 @@ export const PlanExerciseRow = React.memo(function PlanExerciseRow({
   const handleAddSet = () => {
     onSetsChange([...exercise.target_sets, { ...DEFAULT_TARGET_SET }]);
   };
+
+  // Collapsed summary view (editing mode, but collapsed)
+  if (isEditing && collapsed) {
+    return (
+      <View style={s.container}>
+        {/* Header: exercise name + badges + edit button */}
+        <View style={s.header}>
+          <View style={s.headerInfo}>
+            <Text style={s.name}>{exerciseInfo?.name ?? 'Unknown Exercise'}</Text>
+            <View style={s.badges}>
+              {muscleGroups.map((group: string) => (
+                <MuscleGroupBadge key={group} muscleGroup={group as any} />
+              ))}
+            </View>
+          </View>
+          {onToggleCollapse && (
+            <Pressable onPress={onToggleCollapse} hitSlop={8} style={s.editBtn}>
+              <Ionicons name="create-outline" size={18} color={colors.accent} />
+            </Pressable>
+          )}
+        </View>
+
+        {/* Sets summary table */}
+        {exercise.target_sets.length > 0 && (
+          <View style={s.summaryTable}>
+            <View style={s.summaryHeaderRow}>
+              <Text style={[s.summaryHeaderCell, s.summarySetNumCol]}>Set</Text>
+              <Text style={[s.summaryHeaderCell, s.summarySetValueCol]}>Weight</Text>
+              <Text style={[s.summaryHeaderCell, s.summarySetValueCol]}>Reps</Text>
+              <Text style={[s.summaryHeaderCell, s.summarySetValueCol]}>RPE</Text>
+            </View>
+            {exercise.target_sets.map((set, i) => (
+              <View key={i} style={s.summaryRow}>
+                <Text style={[s.summaryCell, s.summarySetNumCol]}>{i + 1}</Text>
+                <Text style={[s.summaryCell, s.summarySetValueCol]}>{set.weight || '--'}</Text>
+                <Text style={[s.summaryCell, s.summarySetValueCol]}>{set.reps || '--'}</Text>
+                <Text style={[s.summaryCell, s.summarySetValueCol]}>{set.rpe ?? '--'}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Notes */}
+        {exercise.notes && (
+          <Text style={s.summaryNotes}>{exercise.notes}</Text>
+        )}
+      </View>
+    );
+  }
 
   return (
     <View style={s.container}>
@@ -146,6 +199,14 @@ export const PlanExerciseRow = React.memo(function PlanExerciseRow({
           </Text>
         </View>
       )}
+
+      {/* Done button */}
+      {isEditing && onToggleCollapse && (
+        <Pressable onPress={onToggleCollapse} style={s.doneBtn}>
+          <Ionicons name="checkmark-circle-outline" size={16} color={colors.success} />
+          <Text style={s.doneBtnText}>Done</Text>
+        </Pressable>
+      )}
     </View>
   );
 });
@@ -238,5 +299,62 @@ const s = StyleSheet.create({
     fontSize: 11,
     marginTop: 4,
     fontStyle: 'italic',
+  },
+  // Done button
+  doneBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: 12,
+    backgroundColor: colors.surfaceElevated,
+    borderRadius: 8,
+    paddingVertical: 10,
+  },
+  doneBtnText: {
+    color: colors.success,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  // Edit button (collapsed mode)
+  editBtn: {
+    padding: 4,
+  },
+  // Summary table (collapsed mode)
+  summaryTable: {
+    marginTop: 4,
+  },
+  summaryHeaderRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceElevated,
+    paddingBottom: 4,
+    marginBottom: 2,
+  },
+  summaryHeaderCell: {
+    color: colors.textMuted,
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    paddingVertical: 3,
+  },
+  summaryCell: {
+    color: colors.textSecondary,
+    fontSize: 13,
+  },
+  summarySetNumCol: {
+    width: 36,
+  },
+  summarySetValueCol: {
+    flex: 1,
+    textAlign: 'center',
+  },
+  summaryNotes: {
+    color: colors.textMuted,
+    fontSize: 12,
+    fontStyle: 'italic',
+    marginTop: 6,
   },
 });
