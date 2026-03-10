@@ -128,9 +128,10 @@ None yet.
 | 2 | make tapping on PRs in dashboard allow editing | 2026-03-09 | 13df943 | [2-make-tapping-on-prs-in-dashboard-allow-e](./quick/2-make-tapping-on-prs-in-dashboard-allow-e/) |
 | 3 | single tap to edit/delete exercises, built-in read-only view | 2026-03-09 | 271c224 | [3-single-tap-to-edit-delete-exercises-buil](./quick/3-single-tap-to-edit-delete-exercises-buil/) |
 | 4 | add done button to collapse exercise edit view into summary | 2026-03-10 | 0ea1af8 | [4-add-done-button-to-collapse-exercise-edi](./quick/4-add-done-button-to-collapse-exercise-edi/) |
+| 5 | fix require cycle between useWorkoutSession and summary | 2026-03-10 | c567863 | [5-fix-require-cycle-between-useworkoutsess](./quick/5-fix-require-cycle-between-useworkoutsess/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T14:01:49Z
-Stopped at: Completed quick task 4
+Last session: 2026-03-10T14:17:18Z
+Stopped at: Completed quick task 5
 Resume file: None
