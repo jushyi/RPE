@@ -4,7 +4,7 @@
  * and handles session sync + previous performance caching on completion.
  */
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, Pressable, ScrollView, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -81,9 +81,12 @@ export default function WorkoutSummaryScreen() {
 
   return (
     <SafeAreaView style={s.container}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView
         contentContainerStyle={s.scrollContent}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
       >
         <View style={s.headerSection}>
           <Ionicons name="checkmark-circle" size={64} color={colors.success} />
@@ -139,6 +142,7 @@ export default function WorkoutSummaryScreen() {
           <Text style={s.doneButtonText}>Done</Text>
         </Pressable>
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

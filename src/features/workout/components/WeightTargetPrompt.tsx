@@ -3,7 +3,7 @@
  * Allows users to set target sets, reps, weight, and RPE for next session.
  */
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Keyboard } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase/client';
@@ -36,6 +36,8 @@ export default function WeightTargetPrompt({ exercises, planDayId, onDone }: Pro
     return initial;
   });
   const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [savedTargets, setSavedTargets] = useState<Record<string, ExerciseTargets>>({});
 
   if (exercises.length === 0) return null;
 
@@ -83,9 +85,42 @@ export default function WeightTargetPrompt({ exercises, planDayId, onDone }: Pro
       // Silently ignore errors -- targets are optional
     } finally {
       setSaving(false);
-      onDone();
+      setSavedTargets({ ...targets });
+      setSaved(true);
+      Keyboard.dismiss();
     }
   };
+
+  if (saved) {
+    return (
+      <View style={s.container}>
+        <View style={s.header}>
+          <Ionicons name="checkmark-circle-outline" size={20} color={colors.success} />
+          <Text style={s.title}>Targets Saved</Text>
+        </View>
+        {exercises.map((exercise) => {
+          const t = savedTargets[exercise.exercise_id];
+          if (!t) return null;
+          const parts = [`${t.sets}x${t.reps}`];
+          if (t.weight) parts.push(`@ ${t.weight} ${exercise.unit}`);
+          if (t.rpe) parts.push(`RPE ${t.rpe}`);
+          return (
+            <View key={exercise.exercise_id} style={s.savedRow}>
+              <Text style={s.savedExName} numberOfLines={1}>{exercise.exercise_name}</Text>
+              <Text style={s.savedValues}>{parts.join(' ')}</Text>
+            </View>
+          );
+        })}
+        <Pressable
+          onPress={() => setSaved(false)}
+          style={({ pressed }) => [s.editButton, pressed && s.buttonPressed]}
+        >
+          <Ionicons name="pencil-outline" size={16} color={colors.accent} />
+          <Text style={s.editText}>Edit</Text>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
     <View style={s.container}>
@@ -279,6 +314,38 @@ const s = StyleSheet.create({
   saveText: {
     color: '#ffffff',
     fontSize: 15,
+    fontWeight: '600',
+  },
+  savedRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceElevated,
+  },
+  savedExName: {
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '500',
+    flex: 1,
+    marginRight: 8,
+  },
+  savedValues: {
+    color: colors.textMuted,
+    fontSize: 13,
+  },
+  editButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    marginTop: 14,
+    paddingVertical: 8,
+  },
+  editText: {
+    color: colors.accent,
+    fontSize: 14,
     fontWeight: '600',
   },
 });

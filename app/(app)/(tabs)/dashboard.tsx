@@ -141,33 +141,43 @@ function formatDuration(minutes: number): string {
   return `${minutes}m`;
 }
 
-function CompletedWorkoutCard({ session, index }: { session: WorkoutSession; index: number }) {
-  const [expanded, setExpanded] = useState(false);
+function CompletedWorkoutCard({ session, index, isOnly }: { session: WorkoutSession; index: number; isOnly: boolean }) {
+  const [expanded, setExpanded] = useState(isOnly);
   const summary = computeSessionSummary(session);
 
   const startTime = new Date(session.started_at);
   const timeLabel = startTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
+  const headerContent = (
+    <View style={ds.completedHeaderLeft}>
+      <Ionicons name="checkmark-circle" size={18} color={colors.success} />
+      <View>
+        <Text style={ds.completedTitle}>
+          {session.title || `Workout ${index + 1}`}
+        </Text>
+        <Text style={ds.completedMeta}>
+          {timeLabel}  {formatDuration(summary.duration_minutes)}  {formatVolume(summary.total_volume)} vol
+        </Text>
+      </View>
+    </View>
+  );
+
   return (
     <View style={ds.completedCard}>
-      <Pressable onPress={() => setExpanded((p) => !p)} style={ds.completedHeader}>
-        <View style={ds.completedHeaderLeft}>
-          <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-          <View>
-            <Text style={ds.completedTitle}>
-              Workout {index + 1}
-            </Text>
-            <Text style={ds.completedMeta}>
-              {timeLabel}  {formatDuration(summary.duration_minutes)}  {formatVolume(summary.total_volume)} vol
-            </Text>
-          </View>
+      {isOnly ? (
+        <View style={ds.completedHeader}>
+          {headerContent}
         </View>
-        <Ionicons
-          name={expanded ? 'chevron-up' : 'chevron-down'}
-          size={18}
-          color={colors.textMuted}
-        />
-      </Pressable>
+      ) : (
+        <Pressable onPress={() => setExpanded((p) => !p)} style={ds.completedHeader}>
+          {headerContent}
+          <Ionicons
+            name={expanded ? 'chevron-up' : 'chevron-down'}
+            size={18}
+            color={colors.textMuted}
+          />
+        </Pressable>
+      )}
 
       {expanded && (
         <View style={ds.completedBody}>
@@ -316,7 +326,7 @@ export default function DashboardScreen() {
             {completedToday.length > 0 ? (
               <View>
                 {completedToday.map((s, i) => (
-                  <CompletedWorkoutCard key={s.id} session={s} index={i} />
+                  <CompletedWorkoutCard key={s.id} session={s} index={i} isOnly={completedToday.length === 1} />
                 ))}
               </View>
             ) : (
