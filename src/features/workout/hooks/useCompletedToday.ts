@@ -114,19 +114,6 @@ async function fetchFromSupabase(): Promise<WorkoutSession[]> {
   });
 }
 
-/** Merge DB and MMKV sessions, deduplicating by ID */
-function mergeSessions(dbSessions: WorkoutSession[], cachedSessions: WorkoutSession[]): WorkoutSession[] {
-  const seen = new Set(dbSessions.map((s) => s.id));
-  const merged = [...dbSessions];
-  for (const s of cachedSessions) {
-    if (!seen.has(s.id)) {
-      merged.push(s);
-    }
-  }
-  merged.sort((a, b) => a.started_at.localeCompare(b.started_at));
-  return merged;
-}
-
 /** Remove a session from today's MMKV cache (e.g. after deletion) */
 export function removeCompletedSession(sessionId: string): void {
   const today = new Date().toISOString().split('T')[0];
@@ -139,24 +126,34 @@ export function removeCompletedSession(sessionId: string): void {
   }
 }
 
-/** Hook that fetches from Supabase + MMKV on focus */
-export function useCompletedToday(): WorkoutSession[] {
+/** Hook that fetches from Supabase + MMKV on focus and on demand */
+export function useCompletedToday(): {
+  sessions: WorkoutSession[];
+  refresh: () => void;
+} {
   const [sessions, setSessions] = useState<WorkoutSession[]>(() => getCachedToday());
 
-  useFocusEffect(
-    useCallback(() => {
-      const cached = getCachedToday();
-      setSessions(cached);
+  const refresh = useCallback(() => {
+    const cached = getCachedToday();
+    setSessions(cached);
 
-      fetchFromSupabase()
-        .then((dbSessions) => {
-          setSessions((prev) => mergeSessions(dbSessions, prev));
-        })
-        .catch(() => {
-          // Offline — cached sessions are fine
-        });
-    }, [])
-  );
+    fetchFromSupabase()
+      .then((dbSessions) => {
+        // Supabase is source of truth — overwrite MMKV cache and state
+        const today = new Date().toISOString().split('T')[0];
+        if (dbSessions.length > 0) {
+          mmkv.set(KEY, JSON.stringify({ date: today, sessions: dbSessions }));
+        } else {
+          mmkv.remove(KEY);
+        }
+        setSessions(dbSessions);
+      })
+      .catch(() => {
+        // Offline — cached sessions are fine
+      });
+  }, []);
 
-  return sessions;
+  useFocusEffect(refresh);
+
+  return { sessions, refresh };
 }

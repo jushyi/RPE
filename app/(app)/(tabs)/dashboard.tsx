@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert } from 'react-native';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useRouter, useFocusEffect, useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -220,7 +220,8 @@ export default function DashboardScreen() {
   const { getPRBaselines } = usePRBaselines();
   const { plans, fetchPlans } = usePlans();
   const { startFreestyle, startFromPlan } = useWorkoutSession();
-  const completedToday = useCompletedToday();
+  const { sessions: completedToday, refresh: refreshCompleted } = useCompletedToday();
+  const navigation = useNavigation();
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
   const [signingOut, setSigningOut] = useState(false);
 
@@ -275,6 +276,16 @@ export default function DashboardScreen() {
       fetchPlans();
     }, [getPRBaselines, fetchPlans])
   );
+
+  // Refresh all data when tapping the home icon while already on dashboard
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      refreshCompleted();
+      getPRBaselines().then(setBaselines).catch(() => {});
+      fetchPlans();
+    });
+    return unsubscribe;
+  }, [navigation, refreshCompleted, getPRBaselines, fetchPlans]);
 
   // Find active plan and today's matching day
   const activePlan = plans.find((p) => p.is_active);
