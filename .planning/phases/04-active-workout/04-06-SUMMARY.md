@@ -65,12 +65,23 @@ completed: 2026-03-10
 - WeightTargetPrompt collapses to a saved summary view with edit button after saving
 - Dashboard single completed workout card auto-expands with no chevron/toggle; multiple cards retain collapsible behavior
 
+### Additional Hands-On Fixes (post-gap-closure)
+- FreestyleExercisePicker rewritten from BottomSheetModal to RN Modal (pageSheet) — BottomSheet portals don't render inside React Navigation modal screens
+- SetCard: removed auto-log useEffect, replaced with explicit "Log Set" button with disabled/active states
+- Per-set delete button (X icon) on every set card for both plan and freestyle workouts
+- Add Set button available on all workouts (not just freestyle)
+- Unit toggle (kg/lbs) on all exercises via `toggleExerciseUnit` store action
+- Remove exercise with confirmation dialog (freestyle only)
+- Store: added `removeSet` and `toggleExerciseUnit` actions to workoutStore
+- Dashboard: pull-to-refresh via RefreshControl; tab icon re-tap only refreshes when already focused
+
 ## Task Commits
 
 Each task was committed atomically:
 
 1. **Task 1: Fix freestyle picker and add workout session titles** - `f61cf3d` (feat)
 2. **Task 2: Fix summary keyboard scrolling, weight target collapse, and dashboard card expansion** - `3cd1444` (feat)
+3. **Task 3: Unify plan and freestyle workout UX** - `5617a95` (feat) — Manual testing fixes: Modal picker, explicit Log Set button, per-set delete, add set for all, unit toggle, remove exercise (freestyle), dashboard pull-to-refresh
 
 ## Files Created/Modified
 - `src/features/workout/components/FreestyleExercisePicker.tsx` - Added useEffect to call fetchExercises on mount

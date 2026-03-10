@@ -32,7 +32,7 @@ human_verification:
 | 1 | User can start a workout from a plan day and see exercises pre-filled | VERIFIED | `useWorkoutSession.startFromPlan` calls `workoutStore.startPlanSession`, which snapshots `planDay.plan_day_exercises` into `SessionExercise[]` with `target_sets` pre-filled |
 | 2 | User can start a freestyle session and add exercises via picker | VERIFIED | `startFreestyleSession` creates empty session; `FreestyleExercisePicker` calls `fetchExercises()` on mount (line 22) and `handleSelect` calls `addFreestyleExercise` |
 | 3 | Active workout shows one exercise at a time filling the screen | VERIFIED | `ExercisePager` uses `PagerView` from `react-native-pager-view`; each page is a full-screen `ExercisePage` |
-| 4 | User can log weight and reps with large inputs | VERIFIED | `SetCard` has `TextInput` with `fontSize: 28`, `minHeight: 60`; auto-logs when both weight and reps are valid and user has edited |
+| 4 | User can log weight and reps with large inputs | VERIFIED | `SetCard` has `TextInput` with `fontSize: 28`, `minHeight: 60`; explicit "Log Set" button logs when both weight and reps are valid |
 | 5 | User can navigate between exercises | VERIFIED | `ExercisePager` uses `PagerView` horizontal swipe; progress dots update via `onPageSelected -> setCurrentExerciseIndex` |
 | 6 | Previous session weight/reps are visible inline while logging | VERIFIED | `ExercisePage` renders `<PreviousPerformanceDisplay exerciseId={exercise.exercise_id} />` above set cards; reads from MMKV cache via `usePreviousPerformance` |
 | 7 | PR detection fires when a set exceeds the stored baseline | VERIFIED | `ExercisePage.handleLog` calls `onDetectPR`; `isPR` result flows to `onLogSet` (6th param); `index.tsx.handleLogSet` sets `is_pr: isPR`; `PRCelebration` renders on `celebration` state set |
@@ -61,12 +61,12 @@ human_verification:
 | `supabase/migrations/20260312000002_add_track_prs_to_exercises.sql` | VERIFIED | File exists with track_prs column and Big 3 defaults |
 | `src/features/workout/types.ts` | VERIFIED | Exports `WorkoutSession` (with `title` field), `SessionExercise`, `SetLog` (with `rpe`), `PreviousPerformance`, `SessionSummary` |
 | `src/features/workout/constants.ts` | VERIFIED | File exists with `SWIPE_THRESHOLD`, `SWIPE_ANIMATION_DURATION`, `PR_CELEBRATION_DURATION`, `MAX_WEIGHT`, `MAX_REPS` |
-| `src/stores/workoutStore.ts` | VERIFIED | Zustand store with MMKV persistence (`createMMKV({ id: 'workout-storage' })`); all actions: start, logSet, add/remove/reorder, finish, discard |
-| `src/features/workout/components/SetCard.tsx` | VERIFIED | 201 lines; oversized inputs (`fontSize: 28`, `minHeight: 60`); auto-log on valid weight+reps; `isLogged` state with "Logged" badge |
-| `src/features/workout/components/ExercisePage.tsx` | VERIFIED | 139 lines; renders `PreviousPerformanceDisplay` inline; `PRCelebration` overlay; `handleLog` wires PR detection through `onLogSet` with `isPR` |
+| `src/stores/workoutStore.ts` | VERIFIED | Zustand store with MMKV persistence (`createMMKV({ id: 'workout-storage' })`); all actions: start, logSet, removeSet, add/remove/reorder, toggleExerciseUnit, finish, discard |
+| `src/features/workout/components/SetCard.tsx` | VERIFIED | Oversized inputs (`fontSize: 28`, `minHeight: 60`); explicit "Log Set" button; per-set delete button (X icon); `isLogged` state with "Logged" badge |
+| `src/features/workout/components/ExercisePage.tsx` | VERIFIED | Renders `PreviousPerformanceDisplay` inline; `PRCelebration` overlay; `handleLog` wires PR detection through `onLogSet` with `isPR`; unit toggle; per-set delete; add set for all workouts |
 | `src/features/workout/components/ExercisePager.tsx` | VERIFIED | 84 lines; wraps `PagerView`; progress dots; `onPageSelected` updates store index |
 | `src/features/workout/components/WorkoutHeader.tsx` | VERIFIED | 100 lines; shows `sessionTitle` above exercise name; End/Finish button |
-| `src/features/workout/components/FreestyleExercisePicker.tsx` | VERIFIED | 129 lines; `useEffect` calls `fetchExercises()` on mount; search/filter via `useExercises`; `BottomSheetModal` ref pattern |
+| `src/features/workout/components/FreestyleExercisePicker.tsx` | VERIFIED | Uses RN `Modal` with `presentationStyle="pageSheet"`; `useEffect` calls `fetchExercises()` on mount; search/filter via `useExercises`; `visible`/`onClose` prop pattern |
 | `src/features/workout/components/PreviousPerformance.tsx` | VERIFIED | 73 lines; reads from `usePreviousPerformance` hook; shows "First time logging" fallback; no extra taps required |
 | `src/features/workout/components/PRCelebration.tsx` | VERIFIED | 146 lines; Reanimated spring entrance; `withDelay` auto-dismiss after `PR_CELEBRATION_DURATION`; no emojis |
 | `src/features/workout/components/SessionSummary.tsx` | VERIFIED | 146 lines; `computeSessionSummary` exported; 2x2 grid with Ionicons; counts `is_pr === true` |
@@ -129,7 +129,7 @@ All 5 required requirements (WORK-01 through WORK-05) are satisfied. No orphaned
 
 | File | Pattern | Severity | Assessment |
 |------|---------|----------|-----------|
-| `SetCard.tsx` | No swipe gesture (plan specified `Gesture.Pan`; implementation uses auto-log on input change) | Info | Design deviation, not a bug. UAT test 5 passed — user confirmed it works. The auto-log approach is simpler and avoids gesture conflict issues. Not a blocker. |
+| `SetCard.tsx` | No swipe gesture (plan specified `Gesture.Pan`; implementation uses explicit "Log Set" button) | Info | Design deviation, not a bug. Original auto-log-on-input was replaced with explicit button after user testing revealed accidental logging on keystroke. Current approach is clearest UX. |
 | `CrashRecoveryPrompt.tsx` | `return null` | Info | Intentional — component renders an Alert, not JSX. Correct pattern. |
 | `WeightTargetPrompt.tsx` | `return null` when exercises empty | Info | Intentional guard. Correct pattern. |
 | `useSyncQueue.ts`, `usePreviousPerformance.ts` | `return []` / `return null` in catch blocks | Info | Intentional error handling in MMKV parse guards. Not stubs. |
@@ -159,7 +159,11 @@ No blocker anti-patterns found. No TODO/FIXME/PLACEHOLDER comments in any workou
 No gaps found. All 18 observable truths verified. All 30 artifacts exist and are substantive (not stubs). All 15 key links are wired. All 5 requirements satisfied. 40/40 unit tests pass. TypeScript compiles without errors.
 
 **Notable design deviations that were accepted during UAT:**
-- `SetCard` uses auto-log-on-input instead of swipe-to-log gesture (UAT test 5 passed)
+- `SetCard` uses explicit "Log Set" button instead of swipe-to-log gesture (original auto-log replaced after user testing)
+- `FreestyleExercisePicker` uses RN Modal (pageSheet) instead of BottomSheetModal (portal rendering issues in modal screens)
+- Per-set delete and add set available on all workouts (not just freestyle) — user-requested parity
+- Unit toggle (kg/lbs) available on all exercises — user-requested
+- Dashboard pull-to-refresh added — user-requested
 - `WeightTargetPrompt` expanded to sets/reps/weight/RPE (beyond plan scope, user-requested)
 - `useCompletedToday` added Supabase fetch layer beyond MMKV-only spec (user-requested persistence)
 

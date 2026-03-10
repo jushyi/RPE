@@ -66,10 +66,22 @@ result: issue
 reported: "summary page doesnt scroll down to clear keyboard for set target inputs and done buttons. dashboard collapsed summary view should be auto-expanded and non-collapsible when theres only one workout. only use collapsible pattern when multiple workouts exist"
 severity: major
 
+### 13. Freestyle Workout UX (Post-Fix Manual Testing)
+expected: Start freestyle workout. FAB opens exercise picker (as Modal pageSheet). Adding exercise shows 1 set card. Tapping "Log Set" logs explicitly (no auto-log on keystroke). "Add Set" and per-set X delete buttons work. Unit toggle (kg/lbs) on each exercise. Remove exercise with confirmation (freestyle only).
+result: pass
+
+### 14. Plan Workout Parity
+expected: Start plan-based workout. All features match freestyle: unit toggle, per-set delete, add set button. Remove exercise NOT available on plan workouts. Delete logged sets re-numbers remaining sets correctly.
+result: pass
+
+### 15. Dashboard Pull-to-Refresh
+expected: On dashboard, pull down to refresh. Refresh control appears. Data reloads (completed workouts, PRs, plans). Tab icon re-tap also refreshes only when already on dashboard.
+result: pass
+
 ## Summary
 
-total: 12
-passed: 9
+total: 15
+passed: 12
 issues: 3
 pending: 0
 skipped: 0
