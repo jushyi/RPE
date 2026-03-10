@@ -1,9 +1,6 @@
-import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
-import { View, FlatList, Text, StyleSheet } from 'react-native';
-import {
-  BottomSheetModal,
-  BottomSheetTextInput,
-} from '@gorhom/bottom-sheet';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { View, FlatList, Text, StyleSheet, Pressable, Modal } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useExercises } from '@/features/exercises/hooks/useExercises';
 import { ExerciseFilterBar } from '@/features/exercises/components/ExerciseFilterBar';
@@ -11,69 +8,71 @@ import { ExerciseListItem } from '@/features/exercises/components/ExerciseListIt
 import type { Exercise, MuscleGroup, Equipment } from '@/features/exercises/types';
 
 interface FreestyleExercisePickerProps {
+  visible: boolean;
   onSelect: (exercise: Exercise) => void;
+  onClose: () => void;
 }
 
-export const FreestyleExercisePicker = forwardRef<BottomSheetModal, FreestyleExercisePickerProps>(
-  ({ onSelect }, ref) => {
-    const { exercises, fetchExercises } = useExercises();
-    const snapPoints = useMemo(() => ['75%'], []);
+export function FreestyleExercisePicker({ visible, onSelect, onClose }: FreestyleExercisePickerProps) {
+  const { exercises, fetchExercises } = useExercises();
 
-    useEffect(() => { fetchExercises(); }, []);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<MuscleGroup | null>(null);
-    const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  useEffect(() => { fetchExercises(); }, []);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<MuscleGroup | null>(null);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
 
-    const filteredExercises = useMemo(() => {
-      let result = exercises;
+  const filteredExercises = useMemo(() => {
+    let result = exercises;
 
-      if (searchQuery.trim()) {
-        const query = searchQuery.trim().toLowerCase();
-        result = result.filter((e) => e.name.toLowerCase().includes(query));
-      }
+    if (searchQuery.trim()) {
+      const query = searchQuery.trim().toLowerCase();
+      result = result.filter((e) => e.name.toLowerCase().includes(query));
+    }
 
-      if (selectedMuscleGroup) {
-        result = result.filter((e) =>
-          e.muscle_groups.includes(selectedMuscleGroup)
-        );
-      }
+    if (selectedMuscleGroup) {
+      result = result.filter((e) =>
+        e.muscle_groups.includes(selectedMuscleGroup)
+      );
+    }
 
-      if (selectedEquipment) {
-        result = result.filter((e) => e.equipment === selectedEquipment);
-      }
+    if (selectedEquipment) {
+      result = result.filter((e) => e.equipment === selectedEquipment);
+    }
 
-      return result;
-    }, [exercises, searchQuery, selectedMuscleGroup, selectedEquipment]);
+    return result;
+  }, [exercises, searchQuery, selectedMuscleGroup, selectedEquipment]);
 
-    const handleSelect = useCallback(
-      (exercise: Exercise) => {
-        onSelect(exercise);
-        (ref as React.RefObject<BottomSheetModal>)?.current?.dismiss();
-        setSearchQuery('');
-        setSelectedMuscleGroup(null);
-        setSelectedEquipment(null);
-      },
-      [onSelect, ref]
-    );
+  const handleSelect = useCallback(
+    (exercise: Exercise) => {
+      onSelect(exercise);
+      onClose();
+      setSearchQuery('');
+      setSelectedMuscleGroup(null);
+      setSelectedEquipment(null);
+    },
+    [onSelect, onClose]
+  );
 
-    const renderItem = useCallback(
-      ({ item }: { item: Exercise }) => (
-        <ExerciseListItem exercise={item} onPress={() => handleSelect(item)} />
-      ),
-      [handleSelect]
-    );
+  const renderItem = useCallback(
+    ({ item }: { item: Exercise }) => (
+      <ExerciseListItem exercise={item} onPress={() => handleSelect(item)} />
+    ),
+    [handleSelect]
+  );
 
-    return (
-      <BottomSheetModal
-        ref={ref}
-        snapPoints={snapPoints}
-        backgroundStyle={s.background}
-        handleIndicatorStyle={s.handleIndicator}
-        keyboardBehavior="interactive"
-        android_keyboardInputMode="adjustResize"
-      >
+  return (
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={onClose}
+    >
+      <View style={s.container}>
         <View style={s.header}>
           <Text style={s.title}>Add Exercise</Text>
+          <Pressable onPress={onClose} hitSlop={8}>
+            <Ionicons name="close" size={24} color={colors.textMuted} />
+          </Pressable>
         </View>
         <ExerciseFilterBar
           searchQuery={searchQuery}
@@ -82,7 +81,6 @@ export const FreestyleExercisePicker = forwardRef<BottomSheetModal, FreestyleExe
           onMuscleGroupChange={setSelectedMuscleGroup}
           selectedEquipment={selectedEquipment}
           onEquipmentChange={setSelectedEquipment}
-          TextInputComponent={BottomSheetTextInput}
         />
         <FlatList
           data={filteredExercises}
@@ -94,23 +92,26 @@ export const FreestyleExercisePicker = forwardRef<BottomSheetModal, FreestyleExe
             <Text style={s.emptyText}>No exercises found</Text>
           }
         />
-      </BottomSheetModal>
-    );
-  }
-);
-
-FreestyleExercisePicker.displayName = 'FreestyleExercisePicker';
+      </View>
+    </Modal>
+  );
+}
 
 const s = StyleSheet.create({
-  background: {
-    backgroundColor: colors.surface,
-  },
-  handleIndicator: {
-    backgroundColor: colors.textMuted,
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingBottom: 12,
+    paddingVertical: 14,
+    backgroundColor: colors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceElevated,
+    marginBottom: 12,
   },
   title: {
     color: colors.textPrimary,

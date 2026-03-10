@@ -33,8 +33,10 @@ interface WorkoutActions {
   startPlanSession: (planDay: PlanDay, userId: string) => void;
   startFreestyleSession: (userId: string) => void;
   logSet: (exerciseId: string, setLog: Omit<SetLog, 'set_number'>) => void;
+  removeSet: (exerciseId: string, setNumber: number) => void;
   addExercise: (exercise: SessionExercise) => void;
   removeExercise: (exerciseId: string) => void;
+  toggleExerciseUnit: (exerciseId: string) => void;
   reorderExercises: (exercises: SessionExercise[]) => void;
   setCurrentExerciseIndex: (index: number) => void;
   finishSession: () => WorkoutSession | null;
@@ -120,6 +122,34 @@ export const useWorkoutStore = create<WorkoutState & WorkoutActions>()(
         });
       },
 
+      removeSet: (exerciseId, setNumber) => {
+        const { activeSession } = get();
+        if (!activeSession) return;
+
+        const exerciseIndex = activeSession.exercises.findIndex(
+          (e) => e.id === exerciseId
+        );
+        if (exerciseIndex === -1) return;
+
+        const exercise = activeSession.exercises[exerciseIndex];
+        const filteredSets = exercise.logged_sets
+          .filter((s) => s.set_number !== setNumber)
+          .map((s, i) => ({ ...s, set_number: i + 1 }));
+
+        const updatedExercises = [...activeSession.exercises];
+        updatedExercises[exerciseIndex] = {
+          ...exercise,
+          logged_sets: filteredSets,
+        };
+
+        set({
+          activeSession: {
+            ...activeSession,
+            exercises: updatedExercises,
+          },
+        });
+      },
+
       addExercise: (exercise) => {
         const { activeSession } = get();
         if (!activeSession) return;
@@ -142,6 +172,30 @@ export const useWorkoutStore = create<WorkoutState & WorkoutActions>()(
             exercises: activeSession.exercises.filter(
               (e) => e.id !== exerciseId
             ),
+          },
+        });
+      },
+
+      toggleExerciseUnit: (exerciseId) => {
+        const { activeSession } = get();
+        if (!activeSession) return;
+
+        const exerciseIndex = activeSession.exercises.findIndex(
+          (e) => e.id === exerciseId
+        );
+        if (exerciseIndex === -1) return;
+
+        const exercise = activeSession.exercises[exerciseIndex];
+        const updatedExercises = [...activeSession.exercises];
+        updatedExercises[exerciseIndex] = {
+          ...exercise,
+          unit: exercise.unit === 'kg' ? 'lbs' : 'kg',
+        };
+
+        set({
+          activeSession: {
+            ...activeSession,
+            exercises: updatedExercises,
           },
         });
       },

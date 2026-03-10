@@ -28,10 +28,8 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: Exerc
   const isPlanBased = exercise.target_sets.length > 0;
   const loggedCount = exercise.logged_sets.length;
   const [celebration, setCelebration] = useState<CelebrationState | null>(null);
-  // For freestyle: track total desired set card count explicitly
-  const [totalFreestyleSets, setTotalFreestyleSets] = useState(
-    isPlanBased ? 0 : Math.max(1, loggedCount)
-  );
+  // Track extra sets added beyond plan/default count
+  const [extraSets, setExtraSets] = useState(0);
 
   const handleLog = useCallback(
     async (weight: number, reps: number, rpe: number | null) => {
@@ -58,10 +56,19 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: Exerc
     [exercise.id, exercise.exercise_name, exercise.unit, onLogSet, onDetectPR]
   );
 
-  // Plan-based: show target count. Freestyle: exact count controlled by user
-  const totalSets = isPlanBased
-    ? exercise.target_sets.length
-    : Math.max(totalFreestyleSets, loggedCount);
+  const baseSets = isPlanBased ? exercise.target_sets.length : Math.max(1, loggedCount);
+  const totalSets = baseSets + extraSets;
+
+  const handleDeleteSet = useCallback(
+    (setNumber: number, isLogged: boolean) => {
+      if (isLogged) {
+        removeSet(exercise.id, setNumber);
+      } else {
+        setExtraSets((prev) => Math.max(0, prev - 1));
+      }
+    },
+    [exercise.id, removeSet]
+  );
 
   const setCards = [];
   for (let i = 0; i < totalSets; i++) {
@@ -76,6 +83,7 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: Exerc
         setNumber={setNumber}
         unit={exercise.unit}
         onLog={handleLog}
+        onDelete={totalSets > 1 ? () => handleDeleteSet(setNumber, !!loggedSet) : undefined}
         isLogged={!!loggedSet}
         loggedSet={loggedSet}
       />
@@ -100,16 +108,14 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: Exerc
                     ? `${loggedCount}/${exercise.target_sets.length} sets logged`
                     : `${loggedCount} sets logged`}
                 </Text>
-                {!isPlanBased && (
-                  <Pressable
-                    onPress={() => toggleUnit(exercise.id)}
-                    style={({ pressed }) => [s.unitToggle, pressed && { opacity: 0.7 }]}
-                    hitSlop={8}
-                  >
-                    <Ionicons name="swap-horizontal" size={14} color={colors.accent} />
-                    <Text style={s.unitToggleText}>{exercise.unit}</Text>
-                  </Pressable>
-                )}
+                <Pressable
+                  onPress={() => toggleUnit(exercise.id)}
+                  style={({ pressed }) => [s.unitToggle, pressed && { opacity: 0.7 }]}
+                  hitSlop={8}
+                >
+                  <Ionicons name="swap-horizontal" size={14} color={colors.accent} />
+                  <Text style={s.unitToggleText}>{exercise.unit}</Text>
+                </Pressable>
               </View>
             </View>
             {onRemove && (
@@ -137,27 +143,16 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: Exerc
         {/* Set cards — always visible, marked as logged when filled */}
         {setCards}
 
-        {/* Add/Remove Set buttons for freestyle exercises */}
-        {!isPlanBased && (
-          <View style={s.setActions}>
-            {totalSets > loggedCount && totalSets > 1 && (
-              <Pressable
-                onPress={() => setTotalFreestyleSets((prev) => Math.max(loggedCount, prev - 1))}
-                style={({ pressed }) => [s.setActionBtn, pressed && { opacity: 0.7 }]}
-              >
-                <Ionicons name="remove-circle-outline" size={20} color={colors.error} />
-                <Text style={s.removeSetText}>Remove Set</Text>
-              </Pressable>
-            )}
-            <Pressable
-              onPress={() => setTotalFreestyleSets((prev) => prev + 1)}
-              style={({ pressed }) => [s.setActionBtn, pressed && { opacity: 0.7 }]}
-            >
-              <Ionicons name="add-circle-outline" size={20} color={colors.accent} />
-              <Text style={s.addSetText}>Add Set</Text>
-            </Pressable>
-          </View>
-        )}
+        {/* Add Set button */}
+        <View style={s.setActions}>
+          <Pressable
+            onPress={() => setExtraSets((prev) => prev + 1)}
+            style={({ pressed }) => [s.setActionBtn, pressed && { opacity: 0.7 }]}
+          >
+            <Ionicons name="add-circle-outline" size={20} color={colors.accent} />
+            <Text style={s.addSetText}>Add Set</Text>
+          </Pressable>
+        </View>
       </ScrollView>
 
       {/* PR Celebration overlay */}
@@ -247,11 +242,6 @@ const s = StyleSheet.create({
   },
   addSetText: {
     color: colors.accent,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  removeSetText: {
-    color: colors.error,
     fontSize: 15,
     fontWeight: '600',
   },

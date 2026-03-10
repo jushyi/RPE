@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import PagerView from 'react-native-pager-view';
 import { colors } from '@/constants/theme';
 import { useWorkoutStore } from '@/stores/workoutStore';
@@ -40,7 +39,7 @@ export default function WorkoutScreen() {
     addFreestyleExercise,
   } = useWorkoutSession();
 
-  const pickerRef = useRef<BottomSheetModal>(null);
+  const [pickerVisible, setPickerVisible] = useState(false);
   const pagerRef = useRef<PagerView>(null);
 
   // If no active session and no plan_day_id, redirect back
@@ -87,9 +86,13 @@ export default function WorkoutScreen() {
     [addFreestyleExercise, exerciseCount]
   );
 
-  const openPicker = useCallback(() => {
-    pickerRef.current?.present();
-  }, []);
+  const handleRemoveExercise = useCallback(
+    (exerciseId: string) => {
+      const store = useWorkoutStore.getState();
+      store.removeExercise(exerciseId);
+    },
+    []
+  );
 
   if (!session) {
     return <View style={s.container} />;
@@ -144,6 +147,7 @@ export default function WorkoutScreen() {
             exercises={session.exercises}
             onLogSet={handleLogSet}
             onDetectPR={detectPR}
+            onRemoveExercise={isFreestyle ? handleRemoveExercise : undefined}
             pagerRef={pagerRef}
           />
         ) : (
@@ -155,7 +159,7 @@ export default function WorkoutScreen() {
         {/* FAB for freestyle exercise picker */}
         {isFreestyle && (
           <Pressable
-            onPress={openPicker}
+            onPress={() => setPickerVisible(true)}
             style={({ pressed }) => [s.fab, pressed && s.fabPressed]}
           >
             <Ionicons name="add" size={28} color="#ffffff" />
@@ -164,8 +168,9 @@ export default function WorkoutScreen() {
       </KeyboardAvoidingView>
 
       <FreestyleExercisePicker
-        ref={pickerRef}
+        visible={pickerVisible}
         onSelect={handleAddExercise}
+        onClose={() => setPickerVisible(false)}
       />
     </SafeAreaView>
   );

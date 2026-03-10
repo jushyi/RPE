@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert, Animated } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { View, Text, ScrollView, Image, StyleSheet, Pressable, Alert, Animated, RefreshControl } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
@@ -331,19 +331,25 @@ export default function DashboardScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Refresh all data when tapping the home icon while already on dashboard
+  const refreshAll = useCallback(() => {
+    refreshCompleted();
+    setRefreshingPRs(true);
+    getPRBaselines()
+      .then(setBaselines)
+      .catch(() => {})
+      .finally(() => setRefreshingPRs(false));
+    fetchPlans();
+  }, [refreshCompleted, getPRBaselines, fetchPlans]);
+
+  // Refresh only when re-tapping the home icon while already on dashboard
   useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', () => {
-      refreshCompleted();
-      setRefreshingPRs(true);
-      getPRBaselines()
-        .then(setBaselines)
-        .catch(() => {})
-        .finally(() => setRefreshingPRs(false));
-      fetchPlans();
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      if (navigation.isFocused()) {
+        refreshAll();
+      }
     });
     return unsubscribe;
-  }, [navigation, refreshCompleted, getPRBaselines, fetchPlans]);
+  }, [navigation, refreshAll]);
 
   // Find active plan and today's matching day
   const activePlan = plans.find((p) => p.is_active);
@@ -367,6 +373,14 @@ export default function DashboardScreen() {
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 24, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refreshAll}
+            tintColor={colors.textMuted}
+            colors={[colors.accent]}
+          />
+        }
       >
         <View style={ds.header}>
           <View style={ds.headerLeft}>
