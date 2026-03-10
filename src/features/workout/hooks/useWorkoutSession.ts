@@ -117,7 +117,7 @@ export function useWorkoutSession() {
         sort_order: exerciseCount,
         target_sets: [],
         weight_progression: 'manual',
-        unit: 'lbs',
+        unit: useAuthStore.getState().preferredUnit,
         logged_sets: [],
       };
       addExerciseAction(sessionExercise);

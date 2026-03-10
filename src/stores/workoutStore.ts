@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { createMMKV } from 'react-native-mmkv';
 import type { WorkoutSession, SessionExercise, SetLog } from '@/features/workout/types';
 import type { PlanDay } from '@/features/plans/types';
+import { useAuthStore } from '@/stores/authStore';
 
 /** Generate a UUID v4 string */
 function generateId(): string {
@@ -67,7 +68,7 @@ export const useWorkoutStore = create<WorkoutState & WorkoutActions>()(
             sort_order: index,
             target_sets: pde.target_sets,
             weight_progression: pde.weight_progression,
-            unit: (pde.unit_override ?? 'lbs') as 'kg' | 'lbs',
+            unit: (pde.unit_override ?? useAuthStore.getState().preferredUnit) as 'kg' | 'lbs',
             logged_sets: [],
           })),
         };
