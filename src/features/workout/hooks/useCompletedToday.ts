@@ -2,8 +2,7 @@
  * Storage + fetching for today's completed workout sessions.
  * Combines MMKV cache (for unsynced sessions) with Supabase (for synced ones).
  */
-import { useState, useCallback } from 'react';
-import { useFocusEffect } from 'expo-router';
+import { useState, useCallback, useEffect } from 'react';
 import { createMMKV } from 'react-native-mmkv';
 import { supabase } from '@/lib/supabase/client';
 import type { WorkoutSession, SessionExercise, SetLog } from '@/features/workout/types';
@@ -157,7 +156,11 @@ export function useCompletedToday(): {
       .finally(() => setRefreshing(false));
   }, []);
 
-  useFocusEffect(refresh);
+  // Load data once on mount (no longer re-fetches on every focus)
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { sessions, refreshing, refresh };
 }
