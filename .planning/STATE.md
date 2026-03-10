@@ -263,9 +263,10 @@ None yet.
 | 15 | Stop dashboard from re-fetching on every tab switch | 2026-03-10 | 87b2bae | [15-the-dashboard-shouldnt-refresh-everytime](./quick/15-the-dashboard-shouldnt-refresh-everytime/) |
 | 16 | Set up MCP server for Expo build tracking | 2026-03-10 | ea1be5a | [16-set-up-mcp-server-for-expo-build-trackin](./quick/16-set-up-mcp-server-for-expo-build-trackin/) |
 | 17 | Create GitHub repo RPE (public) and connect to local | 2026-03-10 | 1fc9649 | [17-create-github-repo-and-connect-to-local](./quick/17-create-github-repo-and-connect-to-local/) |
+| 18 | Make main default branch, merge master in, replace README | 2026-03-10 | e4af128 | [18-make-main-default-branch-merge-master-in](./quick/18-make-main-default-branch-merge-master-in/) |
 
 ## Session Continuity
 
-Last session: 2026-03-10T20:33:23.476Z
-Stopped at: Completed 08-01-PLAN.md
+Last session: 2026-03-10T20:37:00Z
+Stopped at: Completed quick-18
 Resume file: None
