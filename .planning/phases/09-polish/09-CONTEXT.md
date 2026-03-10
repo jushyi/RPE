@@ -15,19 +15,24 @@ The app looks and feels like a deliberate, dark-and-bold tool — not a prototyp
 
 ### Theme refinement scope
 - Consistency audit across all screens — fix mismatched grays, hardcoded colors not using theme.ts, spacing/typography drift between phases
-- No major visual redesign — the dark theme is already in place, this is about making it intentional and uniform
-- Keep current blue accent (#3b82f6) — just ensure it's applied consistently everywhere
+- Swap accent color from blue (#3b82f6) to hot pink/magenta (#ec4899) — user chose this as the new brand color
+- Update accentBright to match (lighter magenta variant for hover/highlight states)
+- Centralize ALL hardcoded color values into theme.ts — replace every #fff, #ffffff, and other hardcoded hex with theme constants
+- No major layout redesign — this is about color consistency and intentionality
 
 ### App icon & splash screen
-- Dumbbell/barbell icon direction — classic gym symbol, stylized on dark background with accent color
-- AI-generated icon — Claude provides the prompt, user generates the final asset
+- Dumbbell/barbell icon direction — classic gym symbol, stylized on dark background with magenta accent
+- SVG/vector designed by Claude programmatically — clean, simple, bold
 - Splash screen: app icon centered on #0a0a0a dark background — clean and standard
-- App name stays "Gym App" — simple and descriptive for the friend group
+- Rename app from "Gym App" to "RPE" — short, punchy, gym-relevant
 - Android adaptive icon layers (foreground/background/monochrome) already configured in app.json
 
 ### Edge case handling
-- General audit approach — Claude identifies the most impactful edge cases and handles them
-- No specific known issues flagged — systematic screen-by-screen review needed
+- Graceful degradation priority — loading skeletons, friendly error messages, retry buttons, empty state improvements
+- General audit approach — Claude does systematic screen-by-screen review
+- No specific known issues flagged by user
+- Fix keyboard handling across all input screens — keyboard avoidance, auto-dismiss, focus flow
+- Add smooth navigation transitions and micro-animations — consistent across all screen changes
 
 ### OTA pipeline
 - EAS Update configuration for the friend group's devices
@@ -38,22 +43,21 @@ The app looks and feels like a deliberate, dark-and-bold tool — not a prototyp
 - Update channel strategy (single vs dual — pick what makes sense for friend group)
 - Runtime version policy (appVersion vs nativeVersion — pick safest for Expo SDK 55)
 - Rollback setup (configure if EAS provides it by default, skip if overkill)
-- Typography refinement depth (fix obvious issues vs full type hierarchy audit)
-- Color centralization scope (which hardcoded values are worth moving to theme.ts)
-- Keyboard handling improvements (fix if obviously broken)
-- Navigation transitions and animations (add where they make a noticeable difference)
-- Edge case prioritization (crash prevention vs graceful degradation — balance as needed)
 - Loading skeleton design and error state presentation
+- Specific navigation transition styles (fade, slide, custom)
+- Typography consistency (fix as encountered during audit)
+- Exact magenta accent bright variant hex value
 
 </decisions>
 
 <specifics>
 ## Specific Ideas
 
-- Dark & bold aesthetic inspired by Claude Code — consistent with Phases 1-8 decisions
+- "RPE" as the app name — Rate of Perceived Exertion, a gym term that doubles as a brand name
+- Hot pink/magenta (#ec4899) accent on dark backgrounds will make the app visually distinctive from typical blue/green gym apps
 - The polish pass should make the app feel like a finished tool, not a prototype with rough edges
-- AI-generated icon prompt should emphasize: dark background, bold/clean style, dumbbell/barbell motif, accent blue highlight
 - Friend group context means perfect pixel polish isn't needed — functional consistency is the goal
+- Keyboard handling is important for gym use (logging sets with gloves, quick input)
 
 </specifics>
 
@@ -61,7 +65,7 @@ The app looks and feels like a deliberate, dark-and-bold tool — not a prototyp
 ## Existing Code Insights
 
 ### Reusable Assets
-- `src/constants/theme.ts`: Central color constants (background, surface, surfaceElevated, accent, text colors, semantic colors)
+- `src/constants/theme.ts`: Central color constants (background, surface, surfaceElevated, accent, text colors, semantic colors) — accent swap happens here first
 - `assets/images/`: Existing icon and splash image slots already configured in app.json
 - `eas.json`: Build profiles for development, preview, production already set up
 - `app.json`: userInterfaceStyle already set to "dark", icon/splash paths configured
@@ -75,10 +79,11 @@ The app looks and feels like a deliberate, dark-and-bold tool — not a prototyp
 
 ### Integration Points
 - Every screen file in `app/` needs theme consistency audit
-- `app.json` for icon/splash/EAS Update configuration
+- `app.json` for icon/splash/EAS Update configuration + app name rename
 - `eas.json` for update channel and runtime version policy
-- All component files referencing hardcoded color values (#fff, #ffffff, etc.)
+- All component files referencing hardcoded color values (#fff, #ffffff, #3b82f6, etc.)
 - Tab bar, navigation headers, status bar — system-level theming touchpoints
+- `src/constants/theme.ts` — accent color swap propagates to all screens importing from here
 
 </code_context>
 
