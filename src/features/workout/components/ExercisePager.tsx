@@ -9,7 +9,7 @@ import type { PRResult } from '@/features/workout/hooks/usePRDetection';
 
 interface ExercisePagerProps {
   exercises: SessionExercise[];
-  onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs') => void;
+  onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => void;
   onDetectPR?: (exerciseId: string, weight: number) => Promise<PRResult>;
   pagerRef: React.RefObject<PagerView | null>;
 }

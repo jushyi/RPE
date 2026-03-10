@@ -70,8 +70,8 @@ export function usePRDetection(userId: string | undefined) {
       if (data) {
         setBaselines(data as PRBaseline[]);
       }
-    } catch {
-      // Silently fail - PR detection is non-critical
+    } catch (e) {
+      console.warn('PR baseline load failed:', e);
     }
   }, [userId]);
 

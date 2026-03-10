@@ -56,7 +56,7 @@ export default function WorkoutScreen() {
   }, [loadBaselines]);
 
   const handleLogSet = useCallback(
-    (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs') => {
+    (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => {
       const store = useWorkoutStore.getState();
       store.logSet(exerciseId, {
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
@@ -64,7 +64,7 @@ export default function WorkoutScreen() {
         reps,
         rpe,
         unit,
-        is_pr: false,
+        is_pr: isPR,
         logged_at: new Date().toISOString(),
       });
     },

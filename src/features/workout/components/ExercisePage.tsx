@@ -9,7 +9,7 @@ import type { PRResult } from '@/features/workout/hooks/usePRDetection';
 
 interface ExercisePageProps {
   exercise: SessionExercise;
-  onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs') => void;
+  onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => void;
   onDetectPR?: (exerciseId: string, weight: number) => Promise<PRResult>;
 }
 
@@ -28,9 +28,11 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR }: ExercisePagePro
   const handleLog = useCallback(
     async (weight: number, reps: number, rpe: number | null) => {
       // Check for PR before logging
+      let isPR = false;
       if (onDetectPR) {
         try {
           const result = await onDetectPR(exercise.exercise_id, weight);
+          isPR = result.isPR;
           if (result.isPR) {
             setCelebration({
               exerciseName: exercise.exercise_name,
@@ -43,7 +45,7 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR }: ExercisePagePro
           // PR detection failure should not block logging
         }
       }
-      onLogSet(exercise.exercise_id, weight, reps, rpe, exercise.unit);
+      onLogSet(exercise.exercise_id, weight, reps, rpe, exercise.unit, isPR);
     },
     [exercise.exercise_id, exercise.exercise_name, exercise.unit, onLogSet, onDetectPR]
   );
