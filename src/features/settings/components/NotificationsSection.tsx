@@ -1,13 +1,12 @@
 import { useCallback } from 'react';
-import { View, Text, Switch, StyleSheet, ScrollView } from 'react-native';
-import { Stack } from 'expo-router';
+import { View, Text, Switch, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useAlarmStore } from '@/stores/alarmStore';
 import { usePlanStore } from '@/stores/planStore';
 import { cancelPlanAlarms, syncActiveAlarms } from '@/features/alarms/hooks/useAlarmScheduler';
 
-export default function SettingsScreen() {
+export function NotificationsSection() {
   const isPaused = useAlarmStore((s) => s.isPaused);
   const setPaused = useAlarmStore((s) => s.setPaused);
   const plans = usePlanStore((s) => s.plans);
@@ -18,12 +17,10 @@ export default function SettingsScreen() {
 
       try {
         if (value) {
-          // Pause: cancel all scheduled notifications for all plans
           for (const plan of plans) {
             await cancelPlanAlarms(plan.plan_days);
           }
         } else {
-          // Unpause: reschedule active plan's alarms
           await syncActiveAlarms(plans);
         }
       } catch (_) {
@@ -34,44 +31,37 @@ export default function SettingsScreen() {
   );
 
   return (
-    <>
-      <Stack.Screen options={{ title: 'Settings' }} />
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <Text style={styles.sectionTitle}>Notifications</Text>
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <Ionicons
-              name="notifications-off-outline"
-              size={22}
-              color={colors.textSecondary}
-              style={styles.rowIcon}
-            />
-            <View style={styles.rowContent}>
-              <Text style={styles.rowLabel}>Pause all alarms</Text>
-              {isPaused && (
-                <Text style={styles.rowHint}>Alarms and reminders are paused</Text>
-              )}
-            </View>
-            <Switch
-              value={isPaused}
-              onValueChange={handleTogglePause}
-              trackColor={{ false: colors.surfaceElevated, true: colors.accent }}
-              thumbColor={colors.textPrimary}
-            />
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Notifications</Text>
+      <View style={styles.card}>
+        <View style={styles.row}>
+          <Ionicons
+            name="notifications-off-outline"
+            size={22}
+            color={colors.textSecondary}
+            style={styles.rowIcon}
+          />
+          <View style={styles.rowContent}>
+            <Text style={styles.rowLabel}>Pause all alarms</Text>
+            {isPaused && (
+              <Text style={styles.rowHint}>Alarms and reminders are paused</Text>
+            )}
           </View>
+          <Switch
+            value={isPaused}
+            onValueChange={handleTogglePause}
+            trackColor={{ false: colors.surfaceElevated, true: colors.accent }}
+            thumbColor={colors.textPrimary}
+          />
         </View>
-      </ScrollView>
-    </>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    padding: 16,
+  section: {
+    marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 13,

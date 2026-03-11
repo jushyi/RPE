@@ -13,6 +13,7 @@ const mmkvStorage = {
 interface AuthState {
   hasCompletedOnboarding: boolean;
   preferredUnit: 'kg' | 'lbs';
+  preferredMeasurementUnit: 'in' | 'cm';
   isAuthenticated: boolean;
   userId: string | null;
 }
@@ -20,6 +21,7 @@ interface AuthState {
 interface AuthActions {
   setOnboardingComplete: () => void;
   setPreferredUnit: (unit: 'kg' | 'lbs') => void;
+  setPreferredMeasurementUnit: (unit: 'in' | 'cm') => void;
   setAuthenticated: (userId: string) => void;
   clearAuth: () => void;
 }
@@ -30,12 +32,14 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       // State
       hasCompletedOnboarding: false,
       preferredUnit: 'lbs',
+      preferredMeasurementUnit: 'in',
       isAuthenticated: false,
       userId: null,
 
       // Actions
       setOnboardingComplete: () => set({ hasCompletedOnboarding: true }),
       setPreferredUnit: (unit) => set({ preferredUnit: unit }),
+      setPreferredMeasurementUnit: (unit) => set({ preferredMeasurementUnit: unit }),
       setAuthenticated: (userId) => set({ isAuthenticated: true, userId }),
       clearAuth: () =>
         set({
