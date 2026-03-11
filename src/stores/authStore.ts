@@ -16,6 +16,7 @@ interface AuthState {
   preferredMeasurementUnit: 'in' | 'cm';
   isAuthenticated: boolean;
   userId: string | null;
+  deletionScheduledAt: string | null;
 }
 
 interface AuthActions {
@@ -23,6 +24,7 @@ interface AuthActions {
   setPreferredUnit: (unit: 'kg' | 'lbs') => void;
   setPreferredMeasurementUnit: (unit: 'in' | 'cm') => void;
   setAuthenticated: (userId: string) => void;
+  setDeletionScheduledAt: (date: string | null) => void;
   clearAuth: () => void;
 }
 
@@ -35,17 +37,20 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       preferredMeasurementUnit: 'in',
       isAuthenticated: false,
       userId: null,
+      deletionScheduledAt: null,
 
       // Actions
       setOnboardingComplete: () => set({ hasCompletedOnboarding: true }),
       setPreferredUnit: (unit) => set({ preferredUnit: unit }),
       setPreferredMeasurementUnit: (unit) => set({ preferredMeasurementUnit: unit }),
       setAuthenticated: (userId) => set({ isAuthenticated: true, userId }),
+      setDeletionScheduledAt: (date) => set({ deletionScheduledAt: date }),
       clearAuth: () =>
         set({
           isAuthenticated: false,
           userId: null,
           hasCompletedOnboarding: false,
+          deletionScheduledAt: null,
         }),
     }),
     {
