@@ -201,14 +201,14 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 8. Alarms + Accountability | 2/3 | In Progress|  |
 | 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
-| 11. Settings + Account Management | 1/3 | In Progress|  |
+| 11. Settings + Account Management | 2/3 | In Progress|  |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
 **Goal:** Users have a dedicated Settings tab for account management -- unit preferences, alarm controls, data export (CSV via share sheet), sign out with confirmation, and account deletion with password re-entry, 7-day grace period, and server-side cleanup via Supabase Edge Function.
 **Requirements**: SETT-01, SETT-02, SETT-03, SETT-04, SETT-05, SETT-06, SETT-07
 **Depends on:** Phase 10
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 - [ ] 11-01-PLAN.md — Settings tab route (4th tab), profile header, preference toggles (weight/measurement units), notifications section, account section with sign out confirmation
