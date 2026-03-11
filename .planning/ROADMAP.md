@@ -201,7 +201,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 8. Alarms + Accountability | 2/3 | In Progress|  |
 | 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
-| 11. Settings + Account Management | 3/3 | Complete   | 2026-03-11 |
+| 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
