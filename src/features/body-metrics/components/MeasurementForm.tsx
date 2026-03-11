@@ -410,7 +410,7 @@ const s = StyleSheet.create({
     opacity: 0.5,
   },
   saveBtnText: {
-    color: '#ffffff',
+    color: colors.white,
     fontSize: 16,
     fontWeight: '700',
   },

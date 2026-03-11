@@ -184,7 +184,7 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
                   key={group}
                   style={[s.chip, { backgroundColor: groupColor + 'CC' }]}
                 >
-                  <Text style={[s.chipText, { color: '#ffffff', fontWeight: '700' }]}>
+                  <Text style={[s.chipText, { color: colors.white, fontWeight: '700' }]}>
                     {group}
                   </Text>
                 </View>
@@ -273,7 +273,7 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
                       style={[
                         s.chipText,
                         isActive
-                          ? { color: '#ffffff', fontWeight: '700' }
+                          ? { color: colors.white, fontWeight: '700' }
                           : { color: colors.textSecondary },
                       ]}
                     >
@@ -315,7 +315,7 @@ export const ExerciseBottomSheet = forwardRef<BottomSheetModal, ExerciseBottomSh
                       style={[
                         s.chipText,
                         isActive
-                          ? { color: '#ffffff', fontWeight: '700' }
+                          ? { color: colors.white, fontWeight: '700' }
                           : { color: colors.textSecondary },
                       ]}
                     >
@@ -476,7 +476,7 @@ const s = StyleSheet.create({
     opacity: 0.8,
   },
   submitText: {
-    color: '#ffffff',
+    color: colors.white,
     fontSize: 16,
     fontWeight: '700',
   },

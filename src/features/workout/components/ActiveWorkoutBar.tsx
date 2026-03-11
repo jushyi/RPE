@@ -39,7 +39,7 @@ export function ActiveWorkoutBar() {
       style={s.container}
       onPress={() => router.push('/workout' as any)}
     >
-      <Ionicons name="play" size={18} color="#fff" />
+      <Ionicons name="play" size={18} color={colors.white} />
       <View style={s.center}>
         <Text style={s.title} numberOfLines={1}>
           {activeSession!.title}
@@ -64,7 +64,7 @@ const s = StyleSheet.create({
     flex: 1,
   },
   title: {
-    color: '#fff',
+    color: colors.white,
     fontSize: 14,
     fontWeight: '700',
   },

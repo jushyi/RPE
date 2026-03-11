@@ -79,6 +79,6 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
   },
-  avatarText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
+  avatarText: { color: colors.white, fontWeight: 'bold', fontSize: 18 },
   avatarImg: { width: 48, height: 48, borderRadius: 24 },
 });

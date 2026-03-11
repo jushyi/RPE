@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '@/constants/theme';
 import { AuthForm } from '@/features/auth/components/AuthForm';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
@@ -29,7 +30,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#0a0a0a' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <AuthForm
         onSignIn={handleSignIn}
         onSignUp={handleSignUp}

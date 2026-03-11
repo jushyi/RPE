@@ -260,7 +260,7 @@ export function DaySlotEditor({ days, onChange }: DaySlotEditorProps) {
                   value={day.alarmEnabled}
                   onValueChange={(v) => handleAlarmToggle(dayIndex, v)}
                   trackColor={{ false: colors.surfaceElevated, true: colors.accent }}
-                  thumbColor="#ffffff"
+                  thumbColor={colors.white}
                 />
                 {day.alarmEnabled && (
                   Platform.OS === 'android' ? (
@@ -442,7 +442,7 @@ const s = StyleSheet.create({
     fontWeight: '600',
   },
   weekdayTextActive: {
-    color: '#ffffff',
+    color: colors.white,
   },
   alarmRow: {
     flexDirection: 'row',

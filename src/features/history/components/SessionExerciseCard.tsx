@@ -28,7 +28,7 @@ function renderRightActions(
 
   return (
     <Animated.View style={[s.deleteAction, { transform: [{ scale }] }]}>
-      <Ionicons name="trash-outline" size={22} color="#ffffff" />
+      <Ionicons name="trash-outline" size={22} color={colors.white} />
       <Text style={s.deleteText}>Delete</Text>
     </Animated.View>
   );
@@ -165,7 +165,7 @@ const s = StyleSheet.create({
     marginBottom: 12,
   },
   deleteText: {
-    color: '#ffffff',
+    color: colors.white,
     fontSize: 12,
     fontWeight: '600',
     marginTop: 4,

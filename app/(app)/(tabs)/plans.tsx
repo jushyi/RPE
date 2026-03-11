@@ -182,7 +182,7 @@ function PlansContent() {
 
       {!showEmpty && (
         <Pressable style={s.fab} onPress={handleCreatePress}>
-          <Ionicons name="add" size={28} color="#ffffff" />
+          <Ionicons name="add" size={28} color={colors.white} />
         </Pressable>
       )}
     </View>
@@ -253,7 +253,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,

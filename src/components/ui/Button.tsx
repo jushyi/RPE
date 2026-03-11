@@ -29,7 +29,7 @@ export function Button({
   ];
 
   const textColor =
-    variant === 'primary' ? '#ffffff' :
+    variant === 'primary' ? colors.white :
     variant === 'ghost' ? colors.accent :
     colors.textPrimary;
 
@@ -41,7 +41,7 @@ export function Button({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? '#ffffff' : colors.accent}
+          color={variant === 'primary' ? colors.white : colors.accent}
           size="small"
         />
       ) : (

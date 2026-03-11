@@ -162,7 +162,7 @@ export default function WorkoutScreen() {
             onPress={() => setPickerVisible(true)}
             style={({ pressed }) => [s.fab, pressed && s.fabPressed]}
           >
-            <Ionicons name="add" size={28} color="#ffffff" />
+            <Ionicons name="add" size={28} color={colors.white} />
           </Pressable>
         )}
       </KeyboardAvoidingView>
@@ -241,7 +241,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 6,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

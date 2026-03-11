@@ -312,7 +312,7 @@ const s = StyleSheet.create({
     fontWeight: '600',
   },
   saveText: {
-    color: '#ffffff',
+    color: colors.white,
     fontSize: 15,
     fontWeight: '600',
   },

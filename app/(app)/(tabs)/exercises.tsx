@@ -151,7 +151,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 6,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -161,7 +161,7 @@ const s = StyleSheet.create({
     transform: [{ scale: 0.95 }],
   },
   fabText: {
-    color: '#ffffff',
+    color: colors.white,
     fontSize: 28,
     fontWeight: '600',
     lineHeight: 30,

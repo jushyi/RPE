@@ -67,7 +67,7 @@ export function ExerciseFilterBar({
                 style={[
                   s.chipText,
                   isActive
-                    ? { color: '#ffffff', fontWeight: '700' }
+                    ? { color: colors.white, fontWeight: '700' }
                     : { color: colors.textSecondary },
                 ]}
               >
@@ -100,7 +100,7 @@ export function ExerciseFilterBar({
                 style={[
                   s.chipText,
                   isActive
-                    ? { color: '#ffffff', fontWeight: '700' }
+                    ? { color: colors.white, fontWeight: '700' }
                     : { color: colors.textSecondary },
                 ]}
               >

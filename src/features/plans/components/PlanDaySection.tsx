@@ -93,7 +93,7 @@ export function PlanDaySection({ day, defaultExpanded = true, onStartWorkout }: 
               style={s.startWorkoutBtn}
               onPress={() => onStartWorkout(day)}
             >
-              <Ionicons name="play" size={18} color="#fff" />
+              <Ionicons name="play" size={18} color={colors.white} />
               <Text style={s.startWorkoutText}>Start Workout</Text>
             </Pressable>
           )}
@@ -208,7 +208,7 @@ const s = StyleSheet.create({
     marginTop: 8,
   },
   startWorkoutText: {
-    color: '#fff',
+    color: colors.white,
     fontSize: 15,
     fontWeight: '700',
   },

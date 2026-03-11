@@ -113,7 +113,7 @@ const s = StyleSheet.create({
     backgroundColor: colors.accent,
   },
   saveText: {
-    color: '#ffffff',
+    color: colors.white,
     fontSize: 15,
     fontWeight: '700',
   },

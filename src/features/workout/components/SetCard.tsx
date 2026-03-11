@@ -256,7 +256,7 @@ const s = StyleSheet.create({
     fontWeight: '700',
   },
   logBtnTextActive: {
-    color: '#ffffff',
+    color: colors.white,
   },
   logBtnTextDisabled: {
     color: colors.textMuted,

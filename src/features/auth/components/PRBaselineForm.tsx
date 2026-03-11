@@ -43,12 +43,12 @@ function UnitToggle({
   return (
     <View style={s.unitToggle}>
       <Pressable onPress={() => onChange('kg')} style={[pad, isKg && s.unitActive]}>
-        <Text style={[{ fontSize, fontWeight: '600' }, { color: isKg ? '#fff' : colors.textSecondary }]}>
+        <Text style={[{ fontSize, fontWeight: '600' }, { color: isKg ? colors.white : colors.textSecondary }]}>
           kg
         </Text>
       </Pressable>
       <Pressable onPress={() => onChange('lbs')} style={[pad, !isKg && s.unitActive]}>
-        <Text style={[{ fontSize, fontWeight: '600' }, { color: !isKg ? '#fff' : colors.textSecondary }]}>
+        <Text style={[{ fontSize, fontWeight: '600' }, { color: !isKg ? colors.white : colors.textSecondary }]}>
           lbs
         </Text>
       </Pressable>

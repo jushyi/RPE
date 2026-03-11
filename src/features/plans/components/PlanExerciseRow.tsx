@@ -292,7 +292,7 @@ const s = StyleSheet.create({
     fontWeight: '600',
   },
   segmentTextActive: {
-    color: '#ffffff',
+    color: colors.white,
   },
   segmentDesc: {
     color: colors.textMuted,

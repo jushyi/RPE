@@ -69,7 +69,7 @@ export function ConnectivityBanner() {
 
 const s = StyleSheet.create({
   text: {
-    color: '#fff',
+    color: colors.white,
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',

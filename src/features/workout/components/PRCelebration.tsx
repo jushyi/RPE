@@ -106,7 +106,7 @@ const s = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000',
+    backgroundColor: colors.black,
   },
   content: {
     alignItems: 'center',

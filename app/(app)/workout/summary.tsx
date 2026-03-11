@@ -229,7 +229,7 @@ const s = StyleSheet.create({
     opacity: 0.8,
   },
   doneButtonText: {
-    color: '#ffffff',
+    color: colors.white,
     fontSize: 18,
     fontWeight: '700',
   },
