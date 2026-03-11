@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: Body Metrics** - Body measurements (chest, waist, hips, body fat %), combined dashboard card, detail screen with charts and history (completed 2026-03-10)
 - [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
 - [x] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline (completed 2026-03-11)
-- [ ] **Phase 10: Distribution** - EAS Build, TestFlight, APK/AAB, physical device checklist verification
+- [ ] **Phase 10: Distribution** - EAS Build, TestFlight (iOS only), physical device verification
 
 ## Phase Details
 
@@ -169,20 +169,20 @@ Plans:
 - [ ] 09-03-PLAN.md -- EAS Update OTA pipeline configuration, Skeleton loading component
 
 ### Phase 10: Distribution
-**Goal**: The app is installable by the friend group on real iOS and Android devices and all critical behaviors (offline logging, alarm delivery, RLS isolation, plan-history separation) are verified on physical hardware before distribution.
+**Goal**: The app is installable by the friend group on real iOS devices via TestFlight and all critical behaviors (offline logging, alarm delivery, RLS isolation, plan-history separation) are verified on physical hardware before distribution. Android distribution deferred.
 **Depends on**: Phase 9
 **Requirements**: (no unassigned v1 requirements -- distribution gate)
 **Success Criteria** (what must be TRUE):
   1. App builds successfully via EAS Build and installs on a physical iOS device via TestFlight
-  2. App builds successfully via EAS Build and installs on a physical Android device via APK or AAB
-  3. On a physical Android device: alarm fires after device reboot with sound and vibration and requires dismissal
-  4. On a physical device with no network: user can log a full workout session, reconnect, and see it appear in history
-  5. A second test account cannot read or modify the first account's workout data (RLS isolation confirmed)
-**Plans**: TBD
+  2. On a physical iOS device: alarm fires with sound and vibration and requires dismissal
+  3. On a physical device with no network: user can log a full workout session, reconnect, and see it appear in history
+  4. A second test account cannot read or modify the first account's workout data (RLS isolation confirmed)
+  5. Editing a plan does not alter previously logged workout sessions (plan-history isolation confirmed)
+**Plans:** 2 plans
 
 Plans:
-- [ ] 10-01: EAS Build configuration (iOS + Android), TestFlight submission, APK/AAB distribution
-- [ ] 10-02: Physical device checklist verification (alarm after reboot, offline logging + sync, RLS cross-user test, plan-edit history isolation, progress photo private bucket access)
+- [ ] 10-01-PLAN.md — EAS Build config fixes (expo-notifications plugin, submit config, EAS secrets), App Store Connect listing, build + auto-submit to TestFlight
+- [ ] 10-02-PLAN.md — Interactive device verification script, physical device testing checkpoint
 
 ## Progress
 
