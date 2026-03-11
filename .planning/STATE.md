@@ -143,16 +143,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-09)
 
 **Core value:** Users can log every workout session in detail and see their progress over time
-**Current focus:** Phase 08 — Alarms & Accountability (in progress)
+**Current focus:** Phase 09 — Polish (in progress)
 
 ## Current Position
 
-Phase: 8 of 11 (Alarms & Accountability) -- COMPLETE
-Plan: 3 of 3 complete (08-03 nudge cancel and settings)
-Status: Phase 08 Complete
-Last activity: 2026-03-10 - Completed 08-03: nudge cancel and settings screen with alarm pause toggle
+Phase: 9 of 11 (Polish)
+Plan: 3 of 3 complete (09-03 EAS Update and edge polish)
+Status: Phase 09 Complete
+Last activity: 2026-03-11 - Completed 09-03: EAS Update OTA pipeline and Skeleton component
 
-Progress: [█████████░] 96%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -194,6 +194,7 @@ Progress: [█████████░] 96%
 | Phase 08 P03 | 3min | 2 tasks | 6 files |
 | Phase 09 P02 | 2min | 2 tasks | 13 files |
 | Phase 09 P01 | 3min | 2 tasks | 24 files |
+| Phase 09 P03 | 2min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -271,6 +272,8 @@ Recent decisions affecting current work:
 - [Phase 09]: Workout stack keeps slide_from_bottom (modal); auth uses fade; all others slide_from_right
 - [Phase 09]: muscleGroups.ts domain-specific colors kept as inline hex (not theme-level)
 - [Phase 09]: Added colors.black and colors.white constants for complete centralization
+- [Phase 09]: EAS Update auto-update on launch with appVersion runtimeVersion policy (no custom UI)
+- [Phase 09]: Single production channel for OTA updates (sufficient for friend group)
 
 ### Roadmap Evolution
 
@@ -311,6 +314,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T13:36:07.919Z
-Stopped at: Completed 09-01-PLAN.md
+Last session: 2026-03-11T13:38:30Z
+Stopped at: Completed 09-03-PLAN.md
 Resume file: None

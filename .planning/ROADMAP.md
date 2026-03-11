@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen (1/3 plans complete) (completed 2026-03-10)
 - [x] **Phase 7: Body Metrics** - Body measurements (chest, waist, hips, body fat %), combined dashboard card, detail screen with charts and history (completed 2026-03-10)
 - [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
-- [ ] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline
+- [x] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline (completed 2026-03-11)
 - [ ] **Phase 10: Distribution** - EAS Build, TestFlight, APK/AAB, physical device checklist verification
 
 ## Phase Details
@@ -161,7 +161,7 @@ Plans:
   1. App applies the dark/bold design language consistently across all screens (dark background, clean typography, accent colors that pop -- no default white/light screens remaining)
   2. App icon and splash screen are set and display correctly on both iOS and Android
   3. EAS Update OTA pipeline is configured and a test update successfully reaches a device without a new store submission
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 09-01-PLAN.md -- Theme accent swap (blue to magenta) and centralize all hardcoded colors into theme.ts
@@ -199,7 +199,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
 | 7. Body Metrics | 2/2 | Complete   | 2026-03-10 |
 | 8. Alarms + Accountability | 2/3 | In Progress|  |
-| 9. Polish | 0/3 | Not started | - |
+| 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
