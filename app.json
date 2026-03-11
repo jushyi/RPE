@@ -7,6 +7,12 @@
     "icon": "./assets/images/icon.png",
     "scheme": "gym-app",
     "userInterfaceStyle": "dark",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8ea209dd-0ed7-4d73-9aee-3a6fe3993657"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.spoods.gymapp",
