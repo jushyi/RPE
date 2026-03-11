@@ -187,7 +187,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -201,13 +201,16 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 8. Alarms + Accountability | 2/3 | In Progress|  |
 | 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
+| 11. Settings + Account Management | 0/3 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Users have a dedicated Settings tab for account management -- unit preferences, alarm controls, data export (CSV via share sheet), sign out with confirmation, and account deletion with password re-entry, 7-day grace period, and server-side cleanup via Supabase Edge Function.
+**Requirements**: SETT-01, SETT-02, SETT-03, SETT-04, SETT-05, SETT-06, SETT-07
 **Depends on:** Phase 10
-**Plans:** 0 plans
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 11 to break down)
+- [ ] 11-01-PLAN.md — Settings tab route (4th tab), profile header, preference toggles (weight/measurement units), notifications section, account section with sign out confirmation
+- [ ] 11-02-PLAN.md — CSV data export: generation utilities with tests, Supabase queries for all data categories, share sheet integration
+- [ ] 11-03-PLAN.md — Delete account: migration, Edge Function, password re-entry, 7-day grace period banner on dashboard, wire all Settings actions together
