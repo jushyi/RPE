@@ -20,6 +20,7 @@ export default function AppLayout() {
           headerTintColor: colors.textPrimary,
           headerRight: () => <HeaderCloudIcon />,
           contentStyle: { backgroundColor: colors.background },
+          animation: 'slide_from_right',
         }}
       >
         <Stack.Screen
