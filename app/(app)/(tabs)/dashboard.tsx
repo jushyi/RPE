@@ -17,6 +17,7 @@ import { TappableAvatar } from '@/features/dashboard/components/TappableAvatar';
 import { TodaysWorkoutCard } from '@/features/dashboard/components/TodaysWorkoutCard';
 import { ProgressSummaryCard } from '@/features/dashboard/components/ProgressSummaryCard';
 import { BodyCard } from '@/features/body-metrics/components/BodyCard';
+import { DeletionBanner } from '@/features/settings/components/DeletionBanner';
 
 import type { PRBaseline } from '@/lib/supabase/types/database';
 import type { WorkoutSession } from '@/features/workout/types';
@@ -355,6 +356,9 @@ export default function DashboardScreen() {
           />
         }
       >
+
+        {/* Grace period deletion banner */}
+        <DeletionBanner />
 
         {/* Completed workouts for today (if any) */}
         {completedToday.length > 0 && (

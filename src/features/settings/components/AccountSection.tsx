@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -6,9 +6,10 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 interface AccountSectionProps {
   onExport: () => void;
   onDelete: () => void;
+  isExporting?: boolean;
 }
 
-export function AccountSection({ onExport, onDelete }: AccountSectionProps) {
+export function AccountSection({ onExport, onDelete, isExporting }: AccountSectionProps) {
   const { signOut } = useAuth();
 
   const handleSignOut = () => {
@@ -26,10 +27,14 @@ export function AccountSection({ onExport, onDelete }: AccountSectionProps) {
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Account</Text>
       <View style={styles.card}>
-        <Pressable style={styles.row} onPress={onExport}>
-          <Ionicons name="download-outline" size={22} color={colors.textSecondary} style={styles.rowIcon} />
-          <Text style={styles.rowLabel}>Export Data</Text>
-          <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+        <Pressable style={[styles.row, isExporting && styles.rowDisabled]} onPress={onExport} disabled={isExporting}>
+          <Ionicons name="download-outline" size={22} color={isExporting ? colors.textMuted : colors.textSecondary} style={styles.rowIcon} />
+          <Text style={[styles.rowLabel, isExporting && styles.rowLabelDisabled]}>Export Data</Text>
+          {isExporting ? (
+            <ActivityIndicator size="small" color={colors.textMuted} />
+          ) : (
+            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+          )}
         </Pressable>
 
         <View style={styles.divider} />
@@ -86,6 +91,12 @@ const styles = StyleSheet.create({
   },
   deleteLabel: {
     color: colors.error,
+  },
+  rowDisabled: {
+    opacity: 0.6,
+  },
+  rowLabelDisabled: {
+    color: colors.textMuted,
   },
   divider: {
     height: 1,
