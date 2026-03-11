@@ -12,6 +12,8 @@ module.exports = {
     '^expo-notifications$': '<rootDir>/tests/__mocks__/expo-notifications.ts',
     '^expo-device$': '<rootDir>/tests/__mocks__/expo-device.ts',
     '^@react-native-community/datetimepicker$': '<rootDir>/tests/__mocks__/@react-native-community/datetimepicker.js',
+    '^expo-file-system$': '<rootDir>/tests/__mocks__/expo-file-system.ts',
+    '^expo-sharing$': '<rootDir>/tests/__mocks__/expo-sharing.ts',
   },
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|nativewind|@supabase))',
