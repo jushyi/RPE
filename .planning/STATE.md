@@ -352,9 +352,10 @@ None yet.
 | 17 | Create GitHub repo RPE (public) and connect to local | 2026-03-10 | 1fc9649 | [17-create-github-repo-and-connect-to-local](./quick/17-create-github-repo-and-connect-to-local/) |
 | 18 | Make main default branch, merge master in, replace README | 2026-03-10 | e4af128 | [18-make-main-default-branch-merge-master-in](./quick/18-make-main-default-branch-merge-master-in/) |
 | 19 | Fix sharp build failure in EAS development builds | 2026-03-12 | 4962a93 | [19-fix-sharp-build-failure-in-eas-developme](./quick/19-fix-sharp-build-failure-in-eas-developme/) |
+| 20 | Fix plans not showing on phone (auth session race condition) | 2026-03-12 | 3d267c5 | [20-phone-shows-no-plans-even-though-there-a](./quick/20-phone-shows-no-plans-even-though-there-a/) |
 
 ## Session Continuity
 
-Last session: 2026-03-12T13:18:52Z
-Stopped at: Completed quick-19
+Last session: 2026-03-12T14:23:00Z
+Stopped at: Completed quick-20
 Resume file: None
