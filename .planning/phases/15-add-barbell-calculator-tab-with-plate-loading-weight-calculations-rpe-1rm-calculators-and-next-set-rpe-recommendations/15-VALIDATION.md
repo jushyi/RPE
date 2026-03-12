@@ -38,12 +38,13 @@ created: 2026-03-12
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 15-01-01 | 01 | 0 | CALC-01 | unit | `npx jest tests/calculator/plateCalculator.test.ts -x` | No - W0 | pending |
-| 15-01-02 | 01 | 0 | CALC-02 | unit | `npx jest tests/calculator/plateCalculator.test.ts -x` | No - W0 | pending |
-| 15-01-03 | 01 | 0 | CALC-03 | unit | `npx jest tests/calculator/rpeTable.test.ts -x` | No - W0 | pending |
-| 15-01-04 | 01 | 0 | CALC-04 | unit | `npx jest tests/calculator/nextSetCalc.test.ts -x` | No - W0 | pending |
-| 15-01-05 | 01 | 0 | CALC-05 | unit | `npx jest tests/calculator/nextSetCalc.test.ts -x` | No - W0 | pending |
-| 15-01-06 | 01 | 0 | CALC-06 | unit | `npx jest tests/calculator/plateCalculator.test.ts -x` | No - W0 | pending |
+| 15-00-01 | 00 | 0 | CALC-01 | unit | `npx jest tests/calculator/plateCalculator.test.ts -x` | No - W0 | pending |
+| 15-00-02 | 00 | 0 | CALC-02 | unit | `npx jest tests/calculator/plateCalculator.test.ts -x` | No - W0 | pending |
+| 15-00-03 | 00 | 0 | CALC-03 | unit | `npx jest tests/calculator/rpeTable.test.ts -x` | No - W0 | pending |
+| 15-00-04 | 00 | 0 | CALC-04 | unit | `npx jest tests/calculator/nextSetCalc.test.ts -x` | No - W0 | pending |
+| 15-00-05 | 00 | 0 | CALC-05 | unit | `npx jest tests/calculator/nextSetCalc.test.ts -x` | No - W0 | pending |
+| 15-00-06 | 00 | 0 | CALC-06 | unit | `npx jest tests/calculator/plateCalculator.test.ts -x` | No - W0 | pending |
+| 15-00-07 | 00 | 0 | CALC-07 | unit | `npx jest tests/calculator/plateCalculator.test.ts -x` | No - W0 | pending |
 
 *Status: pending / green / red / flaky*
 
@@ -51,7 +52,7 @@ created: 2026-03-12
 
 ## Wave 0 Requirements
 
-- [ ] `tests/calculator/plateCalculator.test.ts` — stubs for CALC-01, CALC-02, CALC-06
+- [ ] `tests/calculator/plateCalculator.test.ts` — stubs for CALC-01, CALC-02, CALC-06, CALC-07
 - [ ] `tests/calculator/rpeTable.test.ts` — stubs for CALC-03
 - [ ] `tests/calculator/nextSetCalc.test.ts` — stubs for CALC-04, CALC-05
 
