@@ -45,18 +45,26 @@ export default function WorkoutSummaryScreen() {
     }
 
     // Enqueue session for background sync
-    enqueueCompletedSession(session);
+    try {
+      enqueueCompletedSession(session);
+    } catch (err) {
+      console.error('Failed to enqueue session for sync:', err);
+    }
 
     // Attempt to flush immediately
-    flushSyncQueue(supabase).catch(() => {
-      // Will retry on next connectivity event
+    flushSyncQueue(supabase).catch((err) => {
+      console.warn('Flush sync queue failed:', err);
     });
   }, [session]);
 
   const handleDone = () => {
     clearCompletedSession();
     // Navigate to dashboard, replacing the entire stack so no workout screens remain
-    router.dismissAll();
+    try {
+      router.dismissAll();
+    } catch {
+      router.replace('/(app)/(tabs)/dashboard' as any);
+    }
   };
 
   if (!session) {

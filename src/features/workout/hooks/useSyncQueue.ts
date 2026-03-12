@@ -59,6 +59,7 @@ export async function flushSyncQueue(supabase: SupabaseClient): Promise<void> {
       .from(item.table)
       [item.operation](item.data);
     if (error) {
+      console.warn('Sync queue: failed to sync item to', item.table, ':', error.message ?? error);
       failed.push(item);
     }
   }
