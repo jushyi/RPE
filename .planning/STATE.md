@@ -566,6 +566,7 @@ None yet.
 | 28 | Fix Metro bundler nullthrows error (cache clear) | 2026-03-12 | 6ceed3b | [28-fix-metro-bundler-nullthrows-error-got-u](./quick/28-fix-metro-bundler-nullthrows-error-got-u/) |
 | 29 | Replace deprecated SafeAreaView with react-native-safe-area-context | 2026-03-12 | 6c669d4 | [29-replace-deprecated-safeareaview-with-rea](./quick/29-replace-deprecated-safeareaview-with-rea/) |
 | 30 | Fix profile photo persistence and consistent avatar fallback | 2026-03-12 | bacf406 | [30-profile-photo-doesn-t-save-on-account-cr](./quick/30-profile-photo-doesn-t-save-on-account-cr/) |
+| 31 | Stack no-plan workout card buttons vertically | 2026-03-12 | f151db0 | [31-stack-no-plan-workout-card-buttons-verti](./quick/31-stack-no-plan-workout-card-buttons-verti/) |
 
 ## Session Continuity
 
