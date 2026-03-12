@@ -208,7 +208,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
 | 13. Coaching Options | 4/6 | In Progress|  |
-| 14. Set Videos | 2/3 | In Progress|  |
+| 14. Set Videos | 3/3 | Complete   | 2026-03-12 |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -268,7 +268,7 @@ Plans:
   3. Video thumbnails with play icon appear on sets in workout history detail
   4. Tapping thumbnail opens fullscreen native video player
   5. Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 14-01-PLAN.md -- Data layer: dependencies (expo-video, expo-video-thumbnails, base64-arraybuffer), migrations (video_url column, set-videos bucket), types, video capture/upload hooks, upload queue, thumbnail cache, shared components
