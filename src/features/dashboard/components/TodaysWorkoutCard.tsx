@@ -24,31 +24,33 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
     }
 
     return (
-      <Pressable
-        onPress={() =>
-          router.push({
-            pathname: '/(app)/plans/[id]' as any,
-            params: { id: workout.plan!.id },
-          })
-        }
-        style={({ pressed }) => [s.wrap, pressed && { opacity: 0.85 }]}
-      >
+      <View style={s.wrap}>
         <Card title="Today's Workout">
-          <Text style={s.planName}>{workout.plan.name}</Text>
-          <Text style={s.dayLabel}>{workout.todayDay.label}</Text>
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/(app)/plans/[id]' as any,
+                params: { id: workout.plan!.id },
+              })
+            }
+            style={({ pressed }) => [pressed && { opacity: 0.85 }]}
+          >
+            <Text style={s.planName}>{workout.plan.name}</Text>
+            <Text style={s.dayLabel}>{workout.todayDay.label}</Text>
 
-          <View style={s.statsRow}>
-            <View style={s.stat}>
-              <Ionicons name="barbell-outline" size={16} color={colors.textMuted} />
-              <Text style={s.statText}>
-                {workout.todayDay.exerciseCount} exercise{workout.todayDay.exerciseCount !== 1 ? 's' : ''}
-              </Text>
+            <View style={s.statsRow}>
+              <View style={s.stat}>
+                <Ionicons name="barbell-outline" size={16} color={colors.textMuted} />
+                <Text style={s.statText}>
+                  {workout.todayDay.exerciseCount} exercise{workout.todayDay.exerciseCount !== 1 ? 's' : ''}
+                </Text>
+              </View>
+              <View style={s.stat}>
+                <Ionicons name="time-outline" size={16} color={colors.textMuted} />
+                <Text style={s.statText}>{workout.todayDay.estimatedDuration} min</Text>
+              </View>
             </View>
-            <View style={s.stat}>
-              <Ionicons name="time-outline" size={16} color={colors.textMuted} />
-              <Text style={s.statText}>{workout.todayDay.estimatedDuration} min</Text>
-            </View>
-          </View>
+          </Pressable>
 
           <View style={s.btnWrap}>
             <Button
@@ -63,7 +65,7 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
             />
           </View>
         </Card>
-      </Pressable>
+      </View>
     );
   }
 
@@ -117,6 +119,7 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
 
 const s = StyleSheet.create({
   wrap: {
+    marginTop: 16,
     marginBottom: 16,
   },
   planName: {
