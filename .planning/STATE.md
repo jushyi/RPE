@@ -212,7 +212,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 11 of 11 (Settings + Account Management)
 Plan: 2 of 3 complete (11-02 CSV data export)
 Status: Phase 11 In Progress
-Last activity: 2026-03-12 - Completed quick task 25: fix Start Workout button on TodaysWorkoutCard
+Last activity: 2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout
 
 Progress: [██████████] 100%
 
