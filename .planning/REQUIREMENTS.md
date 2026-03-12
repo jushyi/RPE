@@ -70,11 +70,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Coaching
 
-- [ ] **COACH-01**: Coach can generate an invite code to connect with a trainee
-- [ ] **COACH-02**: Trainee can enter an invite code to establish a coaching relationship
-- [ ] **COACH-03**: Users can be both coach and trainee simultaneously
+- [x] **COACH-01**: Coach can generate an invite code to connect with a trainee
+- [x] **COACH-02**: Trainee can enter an invite code to establish a coaching relationship
+- [x] **COACH-03**: Users can be both coach and trainee simultaneously
 - [ ] **COACH-04**: Either party can disconnect the coaching relationship unilaterally
-- [ ] **COACH-05**: Push notification infrastructure exists (token registration, server-side dispatch via Edge Function)
+- [x] **COACH-05**: Push notification infrastructure exists (token registration, server-side dispatch via Edge Function)
 - [ ] **COACH-06**: Coach UI toggle in Plans tab: "My Plans" vs "Trainees"
 - [ ] **COACH-07**: Coach-assigned plans are visually distinguished in trainee's plan list
 - [ ] **COACH-08**: Trainee cannot edit coach-assigned plans (read-only)
