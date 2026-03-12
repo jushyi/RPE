@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 12-02-PLAN.md
-last_updated: "2026-03-12T19:08:54.216Z"
+stopped_at: Completed quick-30
+last_updated: "2026-03-12T19:14:25.237Z"
 last_activity: "2026-03-12 - Completed quick task 28: Fix Metro bundler nullthrows error"
 progress:
   total_phases: 14
@@ -457,6 +457,7 @@ Recent decisions affecting current work:
 - [Phase 09]: Reused LayoutAnimation.Presets.easeInEaseOut for plan detail edit toggle (consistent with Phase 03 pattern)
 - [Phase 12]: Replaced PagerView with conditional rendering for reliable unit prop propagation between onboarding steps
 - [Phase 12]: Auth confirm.tsx uses refreshSession() for routing instead of hardcoded onboarding route
+- [Phase quick-30]: Cache-busting query param on avatar URL; profiles table as fallback avatar source
 
 ### Roadmap Evolution
 
@@ -511,6 +512,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T19:08:54.213Z
-Stopped at: Completed 12-02-PLAN.md
+Last session: 2026-03-12T19:14:25.184Z
+Stopped at: Completed quick-30
 Resume file: None
