@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
+stopped_at: Completed 08-04-PLAN.md
+last_updated: "2026-03-12T16:03:30.738Z"
+last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
+progress:
+  total_phases: 13
+  completed_phases: 10
+  total_plans: 37
+  completed_plans: 35
+  percent: 95
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
 stopped_at: Completed 07-03-PLAN.md
 last_updated: "2026-03-12T15:23:15.356Z"
 last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
 progress:
-  total_phases: 11
+  [██████████] 95%
   completed_phases: 10
   total_plans: 36
   completed_plans: 34
@@ -279,6 +295,7 @@ Progress: [██████████] 100%
 | Phase 06 P04 | 2min | 2 tasks | 4 files |
 | Phase 07 P04 | 2min | 1 tasks | 4 files |
 | Phase 07 P03 | 6min | 2 tasks | 13 files |
+| Phase 08 P04 | 1min | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -368,10 +385,13 @@ Recent decisions affecting current work:
 - [Phase quick-26]: Used close-outline Ionicons icon as cancel affordance with confirmation alert using discardSession
 - [Phase 07]: Bodyweight addEntry uses loggedAt ?? today for backward compat with all existing callers
 - [Phase 07]: Hips data dropped in migration (acceptable per user request)
+- [Phase 08]: Inline 12h time formatter for alarm_time display in PlanDaySection
 
 ### Roadmap Evolution
 
 - Phase 11 added: Add settings tab, move sign out to it and have a delete account option with data export
+- Phase 12 added: proper onboarding
+- Phase 13 added: coaching options, create plans for others, get notifs when they finish and update their plans for the next week
 
 ### Pending Todos
 
@@ -416,6 +436,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T15:23:15.354Z
-Stopped at: Completed 07-03-PLAN.md
+Last session: 2026-03-12T16:03:30.735Z
+Stopped at: Completed 08-04-PLAN.md
 Resume file: None
