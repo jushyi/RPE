@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { MuscleGroupBadge } from '@/features/exercises/components/MuscleGroupBadge';
 import { WEEKDAY_LABELS } from '../constants';
 import type { PlanDay } from '../types';
+
+const WEEKDAY_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function formatAlarmTime(time: string): string {
   const parts = time.split(':');
@@ -18,27 +20,85 @@ function formatAlarmTime(time: string): string {
   return `${hours}:${minutes} ${suffix}`;
 }
 
+interface WeekdayPickerModalProps {
+  visible: boolean;
+  currentWeekday: number | null;
+  onSelect: (weekday: number) => void;
+  onClose: () => void;
+}
+
+function WeekdayPickerModal({ visible, currentWeekday, onSelect, onClose }: WeekdayPickerModalProps) {
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <Pressable style={ms.overlay} onPress={onClose}>
+        <Pressable style={ms.card} onPress={(e) => e.stopPropagation()}>
+          <Text style={ms.title}>Select Day</Text>
+          {WEEKDAY_FULL.map((name, index) => {
+            const isSelected = currentWeekday === index;
+            return (
+              <Pressable
+                key={index}
+                style={[ms.option, index < 6 && ms.optionBorder]}
+                onPress={() => onSelect(index)}
+              >
+                <Text style={[ms.optionText, isSelected && ms.optionTextSelected]}>
+                  {name}
+                </Text>
+                {isSelected && (
+                  <Ionicons name="checkmark" size={18} color={colors.accent} />
+                )}
+              </Pressable>
+            );
+          })}
+          <Pressable style={ms.cancelBtn} onPress={onClose}>
+            <Text style={ms.cancelText}>Cancel</Text>
+          </Pressable>
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
 interface PlanDaySectionProps {
   day: PlanDay;
   defaultExpanded?: boolean;
   onStartWorkout?: (day: PlanDay) => void;
+  isCoachPlan?: boolean;
+  onWeekdayChange?: (dayId: string, weekday: number) => void;
 }
 
-export function PlanDaySection({ day, defaultExpanded = true, onStartWorkout }: PlanDaySectionProps) {
+export function PlanDaySection({ day, defaultExpanded = true, onStartWorkout, isCoachPlan = false, onWeekdayChange }: PlanDaySectionProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   const toggle = () => {
     setExpanded((prev) => !prev);
   };
 
   const weekdayLabel = day.weekday !== null ? WEEKDAY_LABELS[day.weekday] : null;
+  const showChip = isCoachPlan && !!onWeekdayChange;
 
   return (
     <View style={s.container}>
       <Pressable onPress={toggle} style={s.header}>
         <View style={s.headerText}>
           <Text style={s.dayName}>{day.day_name}</Text>
-          {weekdayLabel && <Text style={s.weekday}> - {weekdayLabel}</Text>}
+          {showChip ? (
+            <Pressable
+              style={s.weekdayChip}
+              onPress={(e) => {
+                e.stopPropagation();
+                setPickerVisible(true);
+              }}
+              hitSlop={4}
+            >
+              <Text style={s.weekdayChipText}>
+                {weekdayLabel ?? 'Set Day'}
+              </Text>
+            </Pressable>
+          ) : (
+            weekdayLabel && <Text style={s.weekday}> - {weekdayLabel}</Text>
+          )}
         </View>
         <Ionicons
           name={expanded ? 'chevron-up' : 'chevron-down'}
@@ -117,6 +177,18 @@ export function PlanDaySection({ day, defaultExpanded = true, onStartWorkout }: 
           )}
         </View>
       )}
+
+      {showChip && (
+        <WeekdayPickerModal
+          visible={pickerVisible}
+          currentWeekday={day.weekday}
+          onSelect={(weekday) => {
+            onWeekdayChange(day.id, weekday);
+            setPickerVisible(false);
+          }}
+          onClose={() => setPickerVisible(false)}
+        />
+      )}
     </View>
   );
 }
@@ -149,6 +221,19 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 14,
     fontWeight: '500',
+  },
+  weekdayChip: {
+    marginLeft: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.accent,
+  },
+  weekdayChipText: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: '600',
   },
   body: {
     paddingHorizontal: 14,
@@ -240,5 +325,55 @@ const s = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: 13,
     fontWeight: '500',
+  },
+});
+
+const ms = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    padding: 16,
+    width: 260,
+  },
+  title: {
+    color: colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  option: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+  },
+  optionBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceElevated,
+  },
+  optionText: {
+    color: colors.textPrimary,
+    fontSize: 15,
+  },
+  optionTextSelected: {
+    color: colors.accent,
+    fontWeight: '600',
+  },
+  cancelBtn: {
+    marginTop: 12,
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  cancelText: {
+    color: colors.textMuted,
+    fontSize: 15,
+    fontWeight: '600',
   },
 });
