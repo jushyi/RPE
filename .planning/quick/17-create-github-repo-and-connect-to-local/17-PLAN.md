@@ -6,96 +6,87 @@ wave: 1
 depends_on: []
 files_modified: []
 autonomous: true
-requirements: []
+requirements: [QUICK-17]
 user_setup: []
 
 must_haves:
   truths:
-    - "GitHub repo 'Gym-App' exists under account 'jushyi' as private"
-    - "Local git repo has remote 'origin' pointing to GitHub"
-    - "Existing commits are pushed to GitHub main/master branches"
+    - "GitHub repo 'RPE' exists under account 'jushyi' as public"
+    - "Local git repo has remote 'origin' pointing to jushyi/RPE"
+    - "All local branches (master, main) are pushed to GitHub"
   artifacts:
-    - path: "GitHub repo: https://github.com/jushyi/Gym-App (private)"
-      provides: "Remote repository for Gym-App project"
+    - path: "GitHub repo: https://github.com/jushyi/RPE (public)"
+      provides: "Remote repository for RPE project"
   key_links:
     - from: "Local .git/config"
       to: "GitHub remote origin"
-      via: "git remote add origin"
-      pattern: "origin.*github.com"
+      via: "gh repo create + git push"
+      pattern: "origin.*github.com.*jushyi/RPE"
 ---
 
 <objective>
-Create a private GitHub repository named "Gym-App" under the account "jushyi" and connect it to the existing local git repository, then push all commits.
+Create a public GitHub repository named "RPE" under the jushyi account and connect the local repository to it, pushing all branches.
 
-Purpose: Enable remote backup and collaboration for the Gym-App project.
-Output: Private GitHub repo with all local commits accessible remotely.
+Purpose: Get the codebase on GitHub for backup and future collaboration/deployment.
+Output: Live public GitHub repo at github.com/jushyi/RPE with all local branches pushed.
 </objective>
 
 <execution_context>
-@C:\Users\maser\.claude\get-shit-done\workflows\execute-plan.md
-@C:\Users\maser\.claude\get-shit-done\templates\summary.md
+@C:/Users/maser/.claude/get-shit-done/workflows/execute-plan.md
+@C:/Users/maser/.claude/get-shit-done/templates/summary.md
 </execution_context>
 
 <context>
-@.planning\STATE.md
-@CLAUDE.md
+@.planning/STATE.md
 
 **Current state:**
 - Local git repo exists with commits on master and main branches
-- No remote configured
+- No remotes currently configured
 - gh CLI authenticated as "jushyi"
-- User account: jushyi
 </context>
 
 <tasks>
 
 <task type="auto">
-  <name>Task 1: Create GitHub repo, add remote, and push commits</name>
+  <name>Task 1: Create GitHub repo and push all branches</name>
   <files>none (remote operation only)</files>
   <action>
-    1. Use gh CLI to create the private GitHub repository, add it as origin remote, and push existing commits in one atomic command:
-       `gh repo create Gym-App --private --source=. --remote=origin --push`
+    1. Create the public GitHub repo, add origin remote, and push current branch in one command:
+       `gh repo create RPE --public --source=. --remote=origin --push`
 
-    This single command:
-    - Creates "Gym-App" repository as private under account "jushyi" (authenticated)
-    - Adds the GitHub URL as "origin" remote to the local .git/config
-    - Pushes all local commits (master and main branches) to GitHub
+    2. Push all remaining branches to ensure both master and main are on GitHub:
+       `git push origin --all`
 
-    If the push includes both master and main branches, verify both are present on GitHub after completion.
+    3. Verify remote and repo:
+       `git remote -v`
+       `gh repo view jushyi/RPE --json name,url,visibility`
+       `git branch -r`
 
-    NOTE: If the command fails due to the repo already existing (HTTP 422), the remote may already be configured. Verify with `git remote -v` before retrying. If already exists, skip to verification.
+    NOTE: If the command fails because a repo named RPE already exists (HTTP 422), check with `gh repo view jushyi/RPE` first. If origin remote already exists, use `git remote set-url origin` instead of creating.
   </action>
   <verify>
-    <automated>git remote -v | grep -E "origin.*github.com/jushyi/Gym-App" && git branch -r | grep -E "origin/(main|master)"</automated>
+    <automated>git remote -v | grep -E "origin.*jushyi/RPE" && git branch -r | grep -E "origin/(main|master)" && gh repo view jushyi/RPE --json visibility --jq .visibility</automated>
   </verify>
   <done>
-    - GitHub repo "Gym-App" created as private under jushyi account
-    - Local git config has "origin" remote pointing to GitHub
-    - All local commits pushed to remote branches (main/master visible in `git branch -r`)
-    - Accessible at https://github.com/jushyi/Gym-App (private repository)
+    - GitHub repo "RPE" created as public under jushyi account
+    - Local git config has "origin" remote pointing to jushyi/RPE
+    - Both master and main branches pushed and visible via `git branch -r`
+    - Repo accessible at https://github.com/jushyi/RPE
   </done>
 </task>
 
 </tasks>
 
 <verification>
-Verify the following after task completion:
-1. `git remote -v` shows origin pointing to GitHub Gym-App repo
-2. `git log --oneline -3` shows the 3 most recent commits
-3. Visit https://github.com/jushyi/Gym-App and confirm repo is private and contains the code
+1. `git remote -v` shows origin pointing to jushyi/RPE
+2. `git branch -r` shows origin/master and origin/main
+3. `gh repo view jushyi/RPE` confirms public visibility with code present
 </verification>
 
 <success_criteria>
-- Private GitHub repository "Gym-App" exists under account "jushyi"
-- Local .git/config has origin remote configured
-- All existing commits are pushed and visible on GitHub
-- Repository is confirmed private (not public)
+Public GitHub repository "RPE" exists under jushyi with all local branches pushed and origin remote configured.
 </success_criteria>
 
 <output>
-After completion, create `.planning/quick/17-create-github-repo-and-connect-to-local/17-SUMMARY.md` documenting:
-- GitHub repo URL created
-- Remote configuration completed
-- Commits pushed (branches and count)
-- Any issues encountered or resolved
+After completion, create `.planning/quick/17-create-github-repo-and-connect-to-local/17-SUMMARY.md`
 </output>
