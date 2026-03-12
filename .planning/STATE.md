@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 12-01-PLAN.md
-last_updated: "2026-03-12T16:45:50.437Z"
+stopped_at: Completed quick-27
+last_updated: "2026-03-12T17:35:16.979Z"
 last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
 progress:
   total_phases: 14
-  completed_phases: 10
-  total_plans: 39
+  completed_phases: 9
+  total_plans: 46
   completed_plans: 36
 ---
 
@@ -404,6 +404,7 @@ Recent decisions affecting current work:
 - [Phase 08]: Inline 12h time formatter for alarm_time display in PlanDaySection
 - [Phase 12]: Duplicated SegmentedToggle locally in UnitPreferencesStep rather than extracting shared component
 - [Phase 12]: PRBaselineStep uses own UI rather than reusing PRBaselineForm for clean onNext/onSkip callback pattern
+- [Phase quick-27]: Exercises content copied inline into plans.tsx rather than extracting shared component
 
 ### Roadmap Evolution
 
@@ -455,6 +456,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T16:45:50.434Z
-Stopped at: Completed 12-01-PLAN.md
+Last session: 2026-03-12T17:35:16.925Z
+Stopped at: Completed quick-27
 Resume file: None
