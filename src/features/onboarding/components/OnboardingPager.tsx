@@ -4,6 +4,7 @@ import PagerView from 'react-native-pager-view';
 import { colors } from '@/constants/theme';
 import { StepDots } from './StepDots';
 import { UnitPreferencesStep } from './UnitPreferencesStep';
+import { PRBaselineStep } from './PRBaselineStep';
 
 const TOTAL_STEPS = 4;
 
@@ -59,16 +60,9 @@ export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
           <UnitPreferencesStep onNext={goToNext} />
         </View>
 
-        {/* Step 1: PR Baselines (placeholder until Task 2) */}
+        {/* Step 1: PR Baselines */}
         <View key="1" style={s.page}>
-          <PlaceholderStep
-            title="Set Your PRs"
-            subtitle="Coming soon"
-            onNext={goToNext}
-            onSkip={goToSkip}
-            showSkip={true}
-            buttonLabel="Next"
-          />
+          <PRBaselineStep onNext={goToNext} onSkip={goToSkip} />
         </View>
 
         {/* Step 2: Body Stats (placeholder for future plan) */}

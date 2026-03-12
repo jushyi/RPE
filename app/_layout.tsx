@@ -63,7 +63,7 @@ export default function RootLayout() {
     } else if (isAuthenticated && inAuthGroup) {
       // After email confirmation, route to onboarding or dashboard
       if (!hasCompletedOnboarding) {
-        router.replace('/(app)/onboarding/pr-baseline');
+        router.replace('/(app)/onboarding' as any);
       } else {
         router.replace('/(app)/(tabs)/dashboard');
       }
