@@ -181,7 +181,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 11 of 11 (Settings + Account Management)
 Plan: 2 of 3 complete (11-02 CSV data export)
 Status: Phase 11 In Progress
-Last activity: 2026-03-12 - Completed quick task 22: fix ReferenceError removeSet in ExercisePage
+Last activity: 2026-03-12 - Completed quick task 23: remove duplicate Home header banner from dashboard
 
 Progress: [██████████] 100%
 
@@ -355,9 +355,10 @@ None yet.
 | 20 | Fix plans not showing on phone (auth session race condition) | 2026-03-12 | 3d267c5 | [20-phone-shows-no-plans-even-though-there-a](./quick/20-phone-shows-no-plans-even-though-there-a/) |
 | 21 | Fix layout warning - route settings is extraneous | 2026-03-12 | 0951f0a | [21-fix-layout-warning-route-settings-is-ext](./quick/21-fix-layout-warning-route-settings-is-ext/) |
 | 22 | Fix ReferenceError: Property removeSet doesn't exist in ExercisePage | 2026-03-12 | cbfcec9 | [22-fix-referenceerror-property-removeset-do](./quick/22-fix-referenceerror-property-removeset-do/) |
+| 23 | Remove duplicate Home header banner from dashboard tab | 2026-03-12 | ebb87d9 | [23-regression-in-home-page-header-banner-sh](./quick/23-regression-in-home-page-header-banner-sh/) |
 
 ## Session Continuity
 
-Last session: 2026-03-12T14:03:10Z
-Stopped at: Completed quick-22
+Last session: 2026-03-12T14:07:00Z
+Stopped at: Completed quick-23
 Resume file: None
