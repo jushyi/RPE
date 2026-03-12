@@ -82,7 +82,7 @@ function daySlotsToplanDays(slots: DaySlot[], planId: string) {
 export default function PlanDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { plan, isLoading, isSaving, error, refetch, updatePlan } = usePlanDetail(id ?? '');
+  const { plan, isLoading, isSaving, error, refetch, updatePlan, updateDayWeekday } = usePlanDetail(id ?? '');
   const { deletePlan, setActivePlan } = usePlans();
   const { startFromPlan } = useWorkoutSession();
 
@@ -261,9 +261,18 @@ export default function PlanDetailScreen() {
           <FlatList
             data={plan.plan_days}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <PlanDaySection day={item} defaultExpanded={true} onStartWorkout={startFromPlan} />
-            )}
+            renderItem={({ item }) => {
+              const isCoachPlan = !!plan.coach_id;
+              return (
+                <PlanDaySection
+                  day={item}
+                  defaultExpanded={true}
+                  onStartWorkout={startFromPlan}
+                  isCoachPlan={isCoachPlan}
+                  onWeekdayChange={isCoachPlan ? (dayId: string, weekday: number) => updateDayWeekday(dayId, weekday) : undefined}
+                />
+              );
+            }}
             contentContainerStyle={s.scrollContent}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={

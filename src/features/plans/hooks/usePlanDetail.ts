@@ -155,9 +155,36 @@ export function usePlanDetail(planId: string) {
     [planId, fetchPlan, updateInStore]
   );
 
+  const updateDayWeekday = useCallback(
+    (dayId: string, weekday: number) => {
+      // Optimistic local update
+      setPlan((prev) => {
+        if (!prev) return prev;
+        const updated: Plan = {
+          ...prev,
+          plan_days: prev.plan_days.map((d) =>
+            d.id === dayId ? { ...d, weekday } : d
+          ),
+        };
+        // Sync to MMKV store
+        updateInStore(prev.id, { plan_days: updated.plan_days });
+        return updated;
+      });
+
+      // Fire-and-forget DB update
+      (supabase.from('plan_days') as any)
+        .update({ weekday })
+        .eq('id', dayId)
+        .then(({ error: dbErr }: any) => {
+          if (dbErr) console.warn('Failed to update weekday:', dbErr);
+        });
+    },
+    [updateInStore]
+  );
+
   useEffect(() => {
     fetchPlan();
   }, [fetchPlan]);
 
-  return { plan, isLoading, isSaving, error, refetch: fetchPlan, updatePlan };
+  return { plan, isLoading, isSaving, error, refetch: fetchPlan, updatePlan, updateDayWeekday };
 }
