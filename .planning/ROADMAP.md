@@ -191,7 +191,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -211,6 +211,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 14. Set Videos | 3/3 | Complete   | 2026-03-12 |
 | 15. Barbell Calculator | 0/3 | Not started | - |
 | 16. Push Notifications | 0/3 | Not started | - |
+| 17. Social Sharing | 0/6 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -316,15 +317,29 @@ Plans:
 - [ ] 16-02-PLAN.md — Inbox UI: BellBadge in dashboard header, NotificationInbox screen, deep link handlers (cold-start + foreground), Edge Function extensions to persist notifications
 - [ ] 16-03-PLAN.md — Dev test screen (6 trigger buttons + debug log), enrich notification payloads with deep link IDs, alarm/nudge notification persistence
 
-### Phase 17: friend workout, pr and set video sharing. creating of groups to share with
+### Phase 17: Friend Workout, PR and Set Video Sharing
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Users can connect as friends (via invite codes or handle search), create groups, and share workout summaries, PR achievements, and set videos to those groups. Each group has a card-based timeline feed with icon-based reactions. Group chat/messaging deferred to Phase 18.
+**Requirements**: SOCL-01, SOCL-02, SOCL-03, SOCL-04, SOCL-05, SOCL-06, SOCL-07, SOCL-08, SOCL-09, SOCL-10, SOCL-11, SOCL-12, SOCL-13, SOCL-14
 **Depends on:** Phase 16
-**Plans:** 0 plans
+**Success Criteria** (what must be TRUE):
+  1. User can set a unique handle and be found by other users via handle search
+  2. User can connect as friends via invite codes or handle search (mutual acceptance required)
+  3. User can create groups, manage membership, and leave groups
+  4. Group feed shows card-based reverse-chronological shared content (workouts, PRs, videos)
+  5. User can share workout summaries, PRs, and set videos to selected groups after completing a workout
+  6. Group members can add icon-based reactions to shared items
+  7. Push notifications sent to non-muted group members on new shares
+  8. Body metrics are never shared
+**Plans:** 6 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 17 to break down)
+- [ ] 17-01-PLAN.md — Database migration (social tables + RLS), TypeScript types, pure utility functions with tests, Zustand stores
+- [ ] 17-02-PLAN.md — Social tab route, friendship system (invite codes, handle search, friend requests, accept/reject, unfriend)
+- [ ] 17-03-PLAN.md — Group CRUD, membership management, group list on Social tab
+- [ ] 17-04-PLAN.md — Group feed screen with workout/PR/video cards, cursor-based pagination, icon-based reactions
+- [ ] 17-05-PLAN.md — Share flow on workout summary screen, push notifications for group shares
+- [ ] 17-06-PLAN.md — Handle setup in Settings profile section and onboarding flow
 
 ### Phase 18: deferred group chat features from phase 17 discussion
 
