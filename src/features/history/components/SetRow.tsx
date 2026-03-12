@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, Pressable, Alert, StyleSheet, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useVideoPlayer, VideoView } from 'expo-video';
 import { colors } from '@/constants/theme';
 import { VideoThumbnail } from '@/features/videos/components/VideoThumbnail';
 import { useVideoUpload } from '@/features/videos/hooks/useVideoUpload';
@@ -10,6 +9,52 @@ import {
   generateAndCacheThumbnail,
 } from '@/features/videos/utils/thumbnailCache';
 import type { HistorySetLog } from '../types';
+
+let ExpoVideo: typeof import('expo-video') | null = null;
+try {
+  ExpoVideo = require('expo-video');
+} catch {
+  // Native module not available (e.g., Expo Go)
+}
+
+/** Separate component so useVideoPlayer hook is only called when ExpoVideo is available */
+function VideoPlayerModal({
+  videoUrl,
+  visible,
+  onClose,
+}: {
+  videoUrl: string;
+  visible: boolean;
+  onClose: () => void;
+}) {
+  const videoViewRef = useRef<any>(null);
+  const { useVideoPlayer, VideoView } = ExpoVideo!;
+  const player = useVideoPlayer(visible ? videoUrl : null, (p) => {
+    p.play();
+  });
+
+  return (
+    <Modal
+      visible={visible}
+      animationType="fade"
+      supportedOrientations={['portrait', 'landscape']}
+      onRequestClose={onClose}
+    >
+      <View style={s.playerContainer}>
+        <VideoView
+          ref={videoViewRef}
+          player={player}
+          style={s.videoView}
+          nativeControls
+          contentFit="contain"
+        />
+        <Pressable style={s.closeButton} onPress={onClose} hitSlop={12}>
+          <Ionicons name="close-circle" size={32} color={colors.white} />
+        </Pressable>
+      </View>
+    </Modal>
+  );
+}
 
 interface SetRowProps {
   set: HistorySetLog;
@@ -21,7 +66,6 @@ interface SetRowProps {
 export function SetRow({ set, sessionExerciseId, onDeleteSet, onVideoDeleted }: SetRowProps) {
   const [thumbnailUri, setThumbnailUri] = useState<string | null>(null);
   const [showPlayer, setShowPlayer] = useState(false);
-  const videoViewRef = useRef<any>(null);
   const { deleteVideo } = useVideoUpload();
 
   // Load or generate thumbnail when video_url exists
@@ -36,18 +80,10 @@ export function SetRow({ set, sessionExerciseId, onDeleteSet, onVideoDeleted }: 
       setThumbnailUri(cached);
     } else {
       generateAndCacheThumbnail(set.id, set.video_url).then(setThumbnailUri).catch(() => {
-        // Fallback: use a placeholder or skip thumbnail
         setThumbnailUri(null);
       });
     }
   }, [set.id, set.video_url]);
-
-  const player = useVideoPlayer(
-    showPlayer && set.video_url ? set.video_url : null,
-    (p) => {
-      p.play();
-    },
-  );
 
   const handleThumbnailPress = useCallback(() => {
     setShowPlayer(true);
@@ -116,30 +152,13 @@ export function SetRow({ set, sessionExerciseId, onDeleteSet, onVideoDeleted }: 
         </Pressable>
       </View>
 
-      {/* Fullscreen video player modal */}
-      <Modal
-        visible={showPlayer}
-        animationType="fade"
-        supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={() => setShowPlayer(false)}
-      >
-        <View style={s.playerContainer}>
-          <VideoView
-            ref={videoViewRef}
-            player={player}
-            style={s.videoView}
-            nativeControls
-            contentFit="contain"
-          />
-          <Pressable
-            style={s.closeButton}
-            onPress={() => setShowPlayer(false)}
-            hitSlop={12}
-          >
-            <Ionicons name="close-circle" size={32} color={colors.white} />
-          </Pressable>
-        </View>
-      </Modal>
+      {ExpoVideo && set.video_url && showPlayer && (
+        <VideoPlayerModal
+          videoUrl={set.video_url}
+          visible={showPlayer}
+          onClose={() => setShowPlayer(false)}
+        />
+      )}
     </>
   );
 }

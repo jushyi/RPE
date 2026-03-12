@@ -4,7 +4,12 @@
  */
 
 import { createMMKV } from 'react-native-mmkv';
-import * as VideoThumbnails from 'expo-video-thumbnails';
+let VideoThumbnails: typeof import('expo-video-thumbnails') | null = null;
+try {
+  VideoThumbnails = require('expo-video-thumbnails');
+} catch {
+  // Native module not available (e.g., Expo Go)
+}
 
 const storage = createMMKV({ id: 'video-thumbnail-cache' });
 
@@ -28,6 +33,9 @@ export async function generateAndCacheThumbnail(
   setLogId: string,
   videoUri: string,
 ): Promise<string> {
+  if (!VideoThumbnails) {
+    throw new Error('expo-video-thumbnails not available');
+  }
   const { uri } = await VideoThumbnails.getThumbnailAsync(videoUri, {
     time: 500,
     quality: 0.5,
