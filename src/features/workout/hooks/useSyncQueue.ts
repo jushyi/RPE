@@ -7,6 +7,7 @@ import { createMMKV } from 'react-native-mmkv';
 import NetInfo from '@react-native-community/netinfo';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { WorkoutSession } from '@/features/workout/types';
+import { calculateEpley1RM } from '@/features/history/utils/epley';
 
 // Named MMKV instance for sync queue
 const syncStorage = createMMKV({ id: 'sync-queue' });
@@ -125,6 +126,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
           reps: set.reps,
           unit: set.unit,
           is_pr: set.is_pr,
+          estimated_1rm: calculateEpley1RM(set.weight, set.reps),
           logged_at: set.logged_at,
         },
         created_at: now,

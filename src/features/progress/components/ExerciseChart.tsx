@@ -51,7 +51,7 @@ export function ExerciseChart({ data, metric, height = 250 }: ExerciseChartProps
         data={data}
         xKey="date"
         yKeys={[metric]}
-        padding={{ left: 10, right: 10, bottom: 5, top: 10 }}
+        padding={{ left: 50, right: 16, bottom: 25, top: 16 }}
         xAxis={{
           font,
           tickCount: 5,
