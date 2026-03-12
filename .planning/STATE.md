@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: Phase 14 context gathered
 last_updated: "2026-03-12T18:13:08.010Z"
-last_activity: "2026-03-12 - Completed quick task 28: Fix Metro bundler nullthrows error"
+last_activity: "2026-03-12 - Completed quick task 29: Replace deprecated SafeAreaView with react-native-safe-area-context"
 progress:
   total_phases: 14
   completed_phases: 10
@@ -488,9 +488,10 @@ None yet.
 | 26 | Add cancel workout button with confirmation dialog | 2026-03-12 | 47e5a7a | [26-there-should-be-a-way-to-cancel-the-curr](./quick/26-there-should-be-a-way-to-cancel-the-curr/) |
 | 27 | Move exercises into plans tab as third inner tab | 2026-03-12 | 14918b3 | [27-move-exercises-off-the-home-tab-and-into](./quick/27-move-exercises-off-the-home-tab-and-into/) |
 | 28 | Fix Metro bundler nullthrows error (cache clear) | 2026-03-12 | 6ceed3b | [28-fix-metro-bundler-nullthrows-error-got-u](./quick/28-fix-metro-bundler-nullthrows-error-got-u/) |
+| 29 | Replace deprecated SafeAreaView with react-native-safe-area-context | 2026-03-12 | 6c669d4 | [29-replace-deprecated-safeareaview-with-rea](./quick/29-replace-deprecated-safeareaview-with-rea/) |
 
 ## Session Continuity
 
 Last session: 2026-03-12T18:13:08.007Z
-Stopped at: Phase 14 context gathered
+Stopped at: Completed quick-29
 Resume file: .planning/phases/14-feature-to-add-and-save-videos-of-a-certain-set-can-be-viewed-in-history-and-in-seperate-tab-in-settings/14-CONTEXT.md
