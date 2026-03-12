@@ -29,6 +29,7 @@ async function uploadProfilePhoto(userId: string, uri: string): Promise<void> {
         .eq('id', userId);
 
       await supabase.auth.updateUser({ data: { avatar_url: cacheBustedUrl } });
+      useAuthStore.getState().setAvatarUrl(cacheBustedUrl);
     }
   } catch (err) {
     console.warn('Profile photo upload failed:', err);
@@ -38,7 +39,7 @@ async function uploadProfilePhoto(userId: string, uri: string): Promise<void> {
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { isAuthenticated, setAuthenticated, clearAuth } = useAuthStore();
+  const { isAuthenticated, setAuthenticated, setAvatarUrl, setDisplayName, clearAuth } = useAuthStore();
 
   useEffect(() => {
     if (!supabase) {
@@ -51,6 +52,8 @@ export function useAuth() {
         if (session?.user) {
           setUser(session.user);
           setAuthenticated(session.user.id);
+          setDisplayName(session.user.user_metadata?.display_name || 'User');
+          setAvatarUrl(session.user.user_metadata?.avatar_url || null);
         } else {
           setUser(null);
           clearAuth();
@@ -62,7 +65,7 @@ export function useAuth() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [setAuthenticated, clearAuth]);
+  }, [setAuthenticated, setAvatarUrl, setDisplayName, clearAuth]);
 
   const signUp = useCallback(async ({ email, password, displayName, photoUri }: SignUpParams) => {
     const { data, error } = await supabase.auth.signUp({

@@ -1,41 +1,14 @@
-import { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
-import { supabase } from '@/lib/supabase/client';
-
-interface UserInfo {
-  displayName: string;
-  email: string;
-  avatarUrl: string | null;
-}
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useAuthStore } from '@/stores/authStore';
 
 export function ProfileHeader() {
-  const [userInfo, setUserInfo] = useState<UserInfo>({
-    displayName: 'User',
-    email: '',
-    avatarUrl: null,
-  });
+  const { user } = useAuth();
+  const { avatarUrl, displayName } = useAuthStore();
+  const email = user?.email || '';
 
-  useEffect(() => {
-    (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Check profiles table as fallback for existing accounts
-        const { data: profile } = await (supabase.from('profiles') as any)
-          .select('avatar_url')
-          .eq('id', user.id)
-          .single();
-
-        setUserInfo({
-          displayName: user.user_metadata?.display_name || 'User',
-          email: user.email || '',
-          avatarUrl: user.user_metadata?.avatar_url || profile?.avatar_url || null,
-        });
-      }
-    })();
-  }, []);
-
-  const initials = userInfo.displayName
+  const initials = displayName
     .split(' ')
     .map((n) => n[0])
     .join('')
@@ -44,16 +17,16 @@ export function ProfileHeader() {
 
   return (
     <View style={styles.container}>
-      {userInfo.avatarUrl ? (
-        <Image source={{ uri: userInfo.avatarUrl }} style={styles.avatar} />
+      {avatarUrl ? (
+        <Image source={{ uri: avatarUrl }} style={styles.avatar} />
       ) : (
         <View style={styles.avatarFallback}>
           <Text style={styles.initialsText}>{initials}</Text>
         </View>
       )}
       <View style={styles.info}>
-        <Text style={styles.displayName}>{userInfo.displayName}</Text>
-        <Text style={styles.email}>{userInfo.email}</Text>
+        <Text style={styles.displayName}>{displayName}</Text>
+        <Text style={styles.email}>{email}</Text>
       </View>
     </View>
   );

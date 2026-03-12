@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useAuthStore } from '@/stores/authStore';
 import { usePRBaselines } from '@/features/auth/hooks/usePRBaselines';
 import { usePlans } from '@/features/plans/hooks/usePlans';
 import { useCompletedToday } from '@/features/workout/hooks/useCompletedToday';
@@ -215,18 +216,9 @@ export default function DashboardScreen() {
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
   const [refreshingPRs, setRefreshingPRs] = useState(false);
 
-  const displayName =
-    user?.user_metadata?.display_name ?? user?.email?.split('@')[0] ?? 'Athlete';
-
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(
-    user?.user_metadata?.avatar_url ?? null
-  );
-
-  // Sync avatar with auth user metadata on session refresh / reload
-  useEffect(() => {
-    const url = user?.user_metadata?.avatar_url ?? null;
-    if (url) setAvatarUrl(url);
-  }, [user?.user_metadata?.avatar_url]);
+  const { avatarUrl, displayName: storeName, setAvatarUrl } = useAuthStore();
+  const displayName = storeName !== 'User' ? storeName
+    : user?.user_metadata?.display_name ?? user?.email?.split('@')[0] ?? 'Athlete';
 
   const handlePhotoChanged = async (uri: string) => {
     const previousUrl = avatarUrl;

@@ -17,6 +17,8 @@ interface AuthState {
   isAuthenticated: boolean;
   userId: string | null;
   deletionScheduledAt: string | null;
+  avatarUrl: string | null;
+  displayName: string;
 }
 
 interface AuthActions {
@@ -25,6 +27,8 @@ interface AuthActions {
   setPreferredMeasurementUnit: (unit: 'in' | 'cm') => void;
   setAuthenticated: (userId: string) => void;
   setDeletionScheduledAt: (date: string | null) => void;
+  setAvatarUrl: (url: string | null) => void;
+  setDisplayName: (name: string) => void;
   clearAuth: () => void;
 }
 
@@ -38,6 +42,8 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       isAuthenticated: false,
       userId: null,
       deletionScheduledAt: null,
+      avatarUrl: null,
+      displayName: 'User',
 
       // Actions
       setOnboardingComplete: () => set({ hasCompletedOnboarding: true }),
@@ -45,12 +51,16 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       setPreferredMeasurementUnit: (unit) => set({ preferredMeasurementUnit: unit }),
       setAuthenticated: (userId) => set({ isAuthenticated: true, userId }),
       setDeletionScheduledAt: (date) => set({ deletionScheduledAt: date }),
+      setAvatarUrl: (url) => set({ avatarUrl: url }),
+      setDisplayName: (name) => set({ displayName: name }),
       clearAuth: () =>
         set({
           isAuthenticated: false,
           userId: null,
           hasCompletedOnboarding: false,
           deletionScheduledAt: null,
+          avatarUrl: null,
+          displayName: 'User',
         }),
     }),
     {
