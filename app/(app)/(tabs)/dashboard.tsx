@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, Alert, Animated, RefreshControl } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { File as ExpoFile } from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -232,8 +233,8 @@ export default function DashboardScreen() {
     setAvatarUrl(uri); // Show immediately (optimistic)
     if (!supabase || !user) return;
     try {
-      const response = await fetch(uri);
-      const arrayBuffer = await response.arrayBuffer();
+      const expoFile = new ExpoFile(uri);
+      const arrayBuffer = await expoFile.arrayBuffer();
 
       const filePath = `${user.id}/avatar.jpg`;
       const { error: uploadError } = await supabase.storage

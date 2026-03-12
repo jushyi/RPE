@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { File } from 'expo-file-system';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
 import type { SignUpParams, SignInParams } from '../types';
@@ -6,13 +7,14 @@ import type { User, AuthChangeEvent, Session } from '@supabase/supabase-js';
 
 async function uploadProfilePhoto(userId: string, uri: string): Promise<void> {
   try {
-    const response = await fetch(uri);
-    const blob = await response.blob();
     const filePath = `${userId}/avatar.jpg`;
+
+    const file = new File(uri);
+    const arrayBuffer = await file.arrayBuffer();
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(filePath, blob, { contentType: 'image/jpeg', upsert: true });
+      .upload(filePath, arrayBuffer, { contentType: 'image/jpeg', upsert: true });
 
     if (!uploadError) {
       const { data: urlData } = supabase.storage
