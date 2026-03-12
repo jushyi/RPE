@@ -6,6 +6,7 @@ import type { BodyMeasurement } from '../types';
 
 interface MeasurementHistoryItemProps {
   entry: BodyMeasurement;
+  bodyweightEntry?: { weight: number; unit: string };
   onEdit: () => void;
   onDelete: () => void;
 }
@@ -21,6 +22,7 @@ function formatDate(dateStr: string): string {
 
 export function MeasurementHistoryItem({
   entry,
+  bodyweightEntry,
   onEdit,
   onDelete,
 }: MeasurementHistoryItemProps) {
@@ -50,6 +52,9 @@ export function MeasurementHistoryItem({
   };
 
   const values: { label: string; display: string }[] = [];
+  if (bodyweightEntry) {
+    values.push({ label: 'Weight', display: `${bodyweightEntry.weight} ${bodyweightEntry.unit}` });
+  }
   if (entry.chest != null) {
     values.push({ label: 'Chest', display: `${entry.chest} ${entry.chest_unit ?? ''}` });
   }

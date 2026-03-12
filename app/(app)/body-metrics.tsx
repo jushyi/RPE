@@ -113,7 +113,7 @@ export default function BodyMetricsScreen() {
     }) => {
       // Save bodyweight to Phase 6 bodyweight_logs table
       if (data.bodyweight != null && data.bodyweight_unit) {
-        await logWeight(data.bodyweight, data.bodyweight_unit);
+        await logWeight(data.bodyweight, data.bodyweight_unit, data.measured_at);
       }
 
       // Save/update body measurements
@@ -281,6 +281,7 @@ export default function BodyMetricsScreen() {
         <View key="history" style={s.page}>
           <MeasurementHistoryList
             measurements={measurements}
+            bodyweightEntries={bodyweightEntries}
             isLoading={isLoading}
             onRefresh={fetchMeasurements}
             onEdit={handleEdit}
