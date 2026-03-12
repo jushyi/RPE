@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/stores/authStore';
 import { useCoachPlans } from '@/features/coaching/hooks/useCoachPlans';
@@ -28,9 +29,11 @@ export default function TraineePlansScreen() {
     useCoachPlans(traineeId ?? '');
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    if (traineeId) fetchTraineePlans();
-  }, [traineeId]);
+  useFocusEffect(
+    useCallback(() => {
+      if (traineeId) fetchTraineePlans();
+    }, [traineeId, fetchTraineePlans])
+  );
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);

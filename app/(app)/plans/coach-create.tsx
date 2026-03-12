@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Pressable, Alert, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -93,6 +93,7 @@ export default function CoachCreateScreen() {
         </Pressable>
       </View>
 
+      <KeyboardAvoidingView style={s.keyboardAvoid} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView
         style={s.scroll}
         contentContainerStyle={s.scrollContent}
@@ -143,6 +144,7 @@ export default function CoachCreateScreen() {
         {/* Coach note */}
         <CoachNoteInput value={note} onChangeText={setNote} />
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -180,12 +182,15 @@ const s = StyleSheet.create({
   saveTextDisabled: {
     opacity: 0.5,
   },
+  keyboardAvoid: {
+    flex: 1,
+  },
   scroll: {
     flex: 1,
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 60,
+    paddingBottom: 120,
   },
   banner: {
     flexDirection: 'row',
