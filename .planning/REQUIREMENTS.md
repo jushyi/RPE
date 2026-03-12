@@ -96,6 +96,19 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **NOTIF-05**: Developer test screen with trigger buttons for all 6 notification types and debug log
 - [ ] **NOTIF-06**: Local alarm/nudge notifications write records to notifications table for inbox consistency
 
+### Group Chat & Enhanced Sharing
+
+- [ ] **CHAT-01**: Real-time group chat messaging via Supabase Realtime (text messages appear instantly)
+- [ ] **CHAT-02**: Images and videos supported in chat messages (upload to chat-media Storage bucket)
+- [ ] **CHAT-03**: Delivered + read receipts on own messages (WhatsApp-style checkmarks)
+- [ ] **CHAT-04**: Typing indicators show "[Name] is typing..." via Supabase Realtime Presence
+- [ ] **CHAT-05**: User can edit own messages within 15-minute window (shows "edited" indicator)
+- [ ] **CHAT-06**: User can delete own messages at any time (shows "This message was deleted" placeholder)
+- [ ] **CHAT-07**: Push notifications for new chat messages (respects per-group mute toggle)
+- [ ] **CHAT-08**: Per-share content-type selection with checkboxes (workout summary, individual PRs, individual videos)
+- [ ] **CHAT-09**: Retroactive sharing from workout history detail screen (any past workout, no time limit)
+- [ ] **CHAT-10**: Chat tab alongside Feed tab within each group screen
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -195,15 +208,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NOTIF-04 | Phase 16 | Planned |
 | NOTIF-05 | Phase 16 | Planned |
 | NOTIF-06 | Phase 16 | Planned |
+| CHAT-01 | Phase 18 | Planned |
+| CHAT-02 | Phase 18 | Planned |
+| CHAT-03 | Phase 18 | Planned |
+| CHAT-04 | Phase 18 | Planned |
+| CHAT-05 | Phase 18 | Planned |
+| CHAT-06 | Phase 18 | Planned |
+| CHAT-07 | Phase 18 | Planned |
+| CHAT-08 | Phase 18 | Planned |
+| CHAT-09 | Phase 18 | Planned |
+| CHAT-10 | Phase 18 | Planned |
 
 **Coverage:**
 - v1 requirements: 29 total (all complete)
 - Coaching requirements: 16 total (planned)
 - Video requirements: 8 total (planned)
 - Notification requirements: 6 total (planned)
-- Mapped to phases: 59
+- Chat requirements: 10 total (planned)
+- Mapped to phases: 69
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-12 after Phase 16 planning -- 6 notification requirements added*
+*Last updated: 2026-03-12 after Phase 18 planning -- 10 chat requirements added*

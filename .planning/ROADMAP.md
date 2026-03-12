@@ -191,7 +191,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -212,6 +212,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 15. Barbell Calculator | 0/3 | Not started | - |
 | 16. Push Notifications | 0/3 | Not started | - |
 | 17. Social Sharing | 0/6 | Not started | - |
+| 18. Group Chat | 0/5 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -341,12 +342,27 @@ Plans:
 - [ ] 17-05-PLAN.md — Share flow on workout summary screen, push notifications for group shares
 - [ ] 17-06-PLAN.md — Handle setup in Settings profile section and onboarding flow
 
-### Phase 18: deferred group chat features from phase 17 discussion
+### Phase 18: Group Chat + Enhanced Sharing
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Users can send real-time text, image, and video messages in group chats (Chat tab alongside Feed tab within each group), with delivered/read receipts, typing indicators, message edit/delete, and push notifications. The share flow is enhanced with per-content-type checkboxes (workout summary, individual PRs, individual videos), and retroactive sharing from workout history is supported.
+**Requirements**: CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05, CHAT-06, CHAT-07, CHAT-08, CHAT-09, CHAT-10
 **Depends on:** Phase 17
-**Plans:** 0 plans
+**Success Criteria** (what must be TRUE):
+  1. User can see a Chat tab alongside Feed tab within each group screen
+  2. User can send and receive text messages in real-time via Supabase Realtime
+  3. User can send images and videos in chat messages
+  4. Delivered and read receipts show on own messages (WhatsApp-style checkmarks)
+  5. Typing indicators show when another user is typing
+  6. User can edit own messages within 15 minutes and delete own messages at any time
+  7. Push notifications sent to non-muted group members on new chat messages
+  8. Share flow shows content-type checkboxes for granular selection (summary, individual PRs, individual videos)
+  9. User can share past workouts from history detail screen via the same share flow
+  10. Retroactively shared feed cards show both share date and original workout date
+**Plans:** 5 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 18 to break down)
+- [ ] 18-01-PLAN.md — Data layer: migration (messages + read_receipts + chat-media bucket), types, pure utility functions with tests, chatStore
+- [ ] 18-02-PLAN.md — Enhanced share flow: content-type checkboxes, retroactive sharing from history detail
+- [ ] 18-03-PLAN.md — Chat screen UI: GroupTabs (Feed|Chat), useChat hook with Realtime, MessageBubble, MessageInput
+- [ ] 18-04-PLAN.md — Chat features: typing indicators, read receipts, chat media upload, message edit/delete
+- [ ] 18-05-PLAN.md — Push notifications for chat, final integration, human verification
