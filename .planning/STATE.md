@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed quick-33
-last_updated: "2026-03-12T23:08:17.000Z"
-last_activity: "2026-03-12 - Completed quick task 33: Fix finish workout silent failure with MMKV bridge"
+stopped_at: Completed quick-34
+last_updated: "2026-03-12T22:41:00.000Z"
+last_activity: "2026-03-12 - Completed quick task 34: Fix TodaysWorkoutCard showing stale workout data after account switch"
 progress:
   total_phases: 18
   completed_phases: 13
@@ -608,9 +608,10 @@ None yet.
 | 31 | Stack no-plan workout card buttons vertically | 2026-03-12 | f151db0 | [31-stack-no-plan-workout-card-buttons-verti](./quick/31-stack-no-plan-workout-card-buttons-verti/) |
 | 32 | Trainee weekday modification on coach plans via tappable chip | 2026-03-12 | 1688396 | [32-make-it-so-trainees-can-modify-the-actua](./quick/32-make-it-so-trainees-can-modify-the-actua/) |
 | 33 | Fix finish workout silent failure with MMKV bridge | 2026-03-12 | 80383e8 | [33-starting-a-workout-and-clicking-finish-d](./quick/33-starting-a-workout-and-clicking-finish-d/) |
+| 34 | Fix TodaysWorkoutCard showing stale workout data after account switch | 2026-03-12 | 718c566 | [34-fix-todays-workout-card-showing-stale-wo](./quick/34-fix-todays-workout-card-showing-stale-wo/) |
 
 ## Session Continuity
 
-Last session: 2026-03-12T23:08:17.000Z
-Stopped at: Completed quick-33
+Last session: 2026-03-12T22:41:00.000Z
+Stopped at: Completed quick-34
 Resume file: None
