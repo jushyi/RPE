@@ -286,6 +286,7 @@ export default function DashboardScreen() {
     return unsubscribe;
   }, [navigation, refreshAll]);
 
+  const insets = useSafeAreaInsets();
   const HEADER_HEIGHT = 80;
   const lastScrollY = useRef(0);
   const headerTranslateY = useRef(new Animated.Value(0)).current;
@@ -303,10 +304,10 @@ export default function DashboardScreen() {
     if (currentY <= 0 || currentY >= maxScroll) return;
 
     if (diff > 0 && headerVisible.current) {
-      // Scrolling down — hide
+      // Scrolling down — hide (slide past safe area + header)
       headerVisible.current = false;
       Animated.timing(headerTranslateY, {
-        toValue: -HEADER_HEIGHT,
+        toValue: -(insets.top + HEADER_HEIGHT),
         duration: 200,
         useNativeDriver: true,
       }).start();
@@ -320,8 +321,6 @@ export default function DashboardScreen() {
       }).start();
     }
   };
-
-  const insets = useSafeAreaInsets();
 
   return (
     <View style={ds.safe}>
