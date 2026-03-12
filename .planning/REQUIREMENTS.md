@@ -57,6 +57,25 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ALRM-02**: Alarms fire with sound and vibration and must be dismissed
 - [x] **ALRM-03**: User receives notification if a planned workout day passes without a logged session
 
+### Coaching
+
+- [ ] **COACH-01**: Coach can generate an invite code to connect with a trainee
+- [ ] **COACH-02**: Trainee can enter an invite code to establish a coaching relationship
+- [ ] **COACH-03**: Users can be both coach and trainee simultaneously
+- [ ] **COACH-04**: Either party can disconnect the coaching relationship unilaterally
+- [ ] **COACH-05**: Push notification infrastructure exists (token registration, server-side dispatch via Edge Function)
+- [ ] **COACH-06**: Coach UI toggle in Plans tab: "My Plans" vs "Trainees"
+- [ ] **COACH-07**: Coach-assigned plans are visually distinguished in trainee's plan list
+- [ ] **COACH-08**: Trainee cannot edit coach-assigned plans (read-only)
+- [ ] **COACH-09**: Coach can create workout plans targeting a specific trainee
+- [ ] **COACH-10**: Coach can see trainee's last-week performance inline while editing plans
+- [ ] **COACH-11**: Coach can attach a text note when saving plan changes
+- [ ] **COACH-12**: Coach can see trainee's workout logs (sets/reps/weight) but NOT body metrics
+- [ ] **COACH-13**: Coach receives push notification when trainee completes a workout
+- [ ] **COACH-14**: Coach receives push notification when trainee achieves a PR
+- [ ] **COACH-15**: Trainee receives push notification when coach updates their plan
+- [ ] **COACH-16**: Coach receives weekly adherence summary (Sunday evening) for all trainees
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -126,12 +145,29 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ALRM-01 | Phase 8 | Complete |
 | ALRM-02 | Phase 8 | Complete |
 | ALRM-03 | Phase 8 | Complete |
+| COACH-01 | Phase 13 | Planned |
+| COACH-02 | Phase 13 | Planned |
+| COACH-03 | Phase 13 | Planned |
+| COACH-04 | Phase 13 | Planned |
+| COACH-05 | Phase 13 | Planned |
+| COACH-06 | Phase 13 | Planned |
+| COACH-07 | Phase 13 | Planned |
+| COACH-08 | Phase 13 | Planned |
+| COACH-09 | Phase 13 | Planned |
+| COACH-10 | Phase 13 | Planned |
+| COACH-11 | Phase 13 | Planned |
+| COACH-12 | Phase 13 | Planned |
+| COACH-13 | Phase 13 | Planned |
+| COACH-14 | Phase 13 | Planned |
+| COACH-15 | Phase 13 | Planned |
+| COACH-16 | Phase 13 | Planned |
 
 **Coverage:**
-- v1 requirements: 29 total
-- Mapped to phases: 29
+- v1 requirements: 29 total (all complete)
+- Coaching requirements: 16 total (planned)
+- Mapped to phases: 45
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-09 after roadmap creation — all 29 requirements mapped*
+*Last updated: 2026-03-12 after Phase 13 planning — 16 coaching requirements added*

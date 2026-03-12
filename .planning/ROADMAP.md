@@ -190,7 +190,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -206,6 +206,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 1/2 | In Progress|  |
+| 13. Coaching Options | 0/5 | Planned | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -230,15 +231,27 @@ Plans:
 - [ ] 12-01-PLAN.md — OnboardingPager structure (PagerView + StepDots), UnitPreferencesStep, PRBaselineStep, route guard update
 - [ ] 12-02-PLAN.md — BodyStatsStep, FirstPlanPromptStep, full flow wiring, human verification
 
-### Phase 13: coaching options, create plans for others, get notifs when they finish and update their plans for the next week.
+### Phase 13: Coaching Options
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** One user (coach) can create and manage workout plans for another user (trainee), receive push notifications when trainees complete workouts or hit PRs, get a weekly adherence summary, and update trainee plans with inline performance data. This is the app's first multi-user interaction feature.
+**Requirements**: COACH-01, COACH-02, COACH-03, COACH-04, COACH-05, COACH-06, COACH-07, COACH-08, COACH-09, COACH-10, COACH-11, COACH-12, COACH-13, COACH-14, COACH-15, COACH-16
 **Depends on:** Phase 12
-**Plans:** 0 plans
+**Success Criteria** (what must be TRUE):
+  1. Coach can generate an invite code and a trainee can enter it to establish a coaching relationship
+  2. Coach can create and edit workout plans targeting a specific trainee, with inline last-week performance data
+  3. Coach receives push notifications when trainee completes a workout or hits a PR
+  4. Trainee receives push notification when coach updates their plan (with optional note)
+  5. Coach receives a weekly adherence summary for all trainees every Sunday evening
+  6. Coach-assigned plans are visually distinguished and read-only in trainee's Plans tab
+  7. Either party can disconnect the coaching relationship unilaterally
+**Plans:** 5 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 13 to break down)
+- [ ] 13-01-PLAN.md — Database schema (coaching_relationships, invite_codes, push_tokens, coach_notes, plan extension), TypeScript types, push token registration
+- [ ] 13-02-PLAN.md — send-push Edge Function (generic push notification dispatch via Expo Push API)
+- [ ] 13-03-PLAN.md — Coaching relationship management: coachingStore, invite code flow, Plans tab toggle, coach/trainee UI components
+- [ ] 13-04-PLAN.md — Coach plan management: plan CRUD targeting trainee, inline performance, coach notes, trainee plans screen
+- [ ] 13-05-PLAN.md — Notification triggers (workout complete, PR, plan update), weekly summary Edge Function, push token registration on startup
 
 ### Phase 14: feature to add and save videos of a certain set. can be viewed in history and in seperate tab in settings.
 
