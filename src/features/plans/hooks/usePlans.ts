@@ -27,6 +27,7 @@ export function usePlans() {
     user_id: p.user_id,
     name: p.name,
     is_active: p.is_active,
+    coach_id: p.coach_id ?? null,
     created_at: p.created_at,
     updated_at: p.updated_at,
     day_count: p.plan_days?.length ?? 0,

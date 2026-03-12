@@ -28,6 +28,7 @@ const makePlan = (id: string, isActive: boolean, days: PlanDay[]): Plan => ({
   user_id: 'user-1',
   name: `Plan ${id}`,
   is_active: isActive,
+  coach_id: null,
   created_at: '2026-01-01',
   updated_at: '2026-01-01',
   plan_days: days,

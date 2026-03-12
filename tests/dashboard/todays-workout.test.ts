@@ -23,6 +23,7 @@ function makePlan(days: PlanDay[]): Plan {
     user_id: 'user-1',
     name: 'Push Pull Legs',
     is_active: true,
+    coach_id: null,
     created_at: '2026-01-01T00:00:00Z',
     updated_at: '2026-01-01T00:00:00Z',
     plan_days: days,
