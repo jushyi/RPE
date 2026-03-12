@@ -3,6 +3,21 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
+stopped_at: Phase 13 context gathered
+last_updated: "2026-03-12T16:38:57.626Z"
+last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
+progress:
+  total_phases: 14
+  completed_phases: 10
+  total_plans: 39
+  completed_plans: 35
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
 stopped_at: Phase 12 context gathered
 last_updated: "2026-03-12T16:23:43.081Z"
 last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
@@ -392,6 +407,7 @@ Recent decisions affecting current work:
 - Phase 11 added: Add settings tab, move sign out to it and have a delete account option with data export
 - Phase 12 added: proper onboarding
 - Phase 13 added: coaching options, create plans for others, get notifs when they finish and update their plans for the next week
+- Phase 14 added: feature to add and save videos of a certain set. can be viewed in history and in seperate tab in settings.
 
 ### Pending Todos
 
@@ -436,6 +452,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T16:23:43.079Z
-Stopped at: Phase 12 context gathered
-Resume file: .planning/phases/12-proper-onboarding/12-CONTEXT.md
+Last session: 2026-03-12T16:38:57.622Z
+Stopped at: Phase 13 context gathered
+Resume file: .planning/phases/13-coaching-options-create-plans-for-others-get-notifs-when-they-finish-and-update-their-plans-for-the-next-week/13-CONTEXT.md
