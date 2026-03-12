@@ -191,7 +191,7 @@ export function useProgressSummary() {
             },
           );
 
-          if (chartData && chartData.length > 0) {
+          if (chartData && chartData.length >= 3) {
             // Take last 10 sessions
             sparklineMap[liftName] = chartData.slice(-10).map((r: any) => ({
               date: new Date(r.session_date).getTime(),
