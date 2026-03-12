@@ -306,7 +306,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 11 of 11 (Settings + Account Management)
 Plan: 2 of 3 complete (11-02 CSV data export)
 Status: Phase 11 In Progress
-Last activity: 2026-03-12 - Completed quick task 28: Fix Metro bundler nullthrows error
+Last activity: 2026-03-12 - Completed quick task 30: Fix profile photo persistence and consistent avatar fallback
 
 Progress: [██████████] 100%
 
@@ -509,6 +509,7 @@ None yet.
 | 27 | Move exercises into plans tab as third inner tab | 2026-03-12 | 14918b3 | [27-move-exercises-off-the-home-tab-and-into](./quick/27-move-exercises-off-the-home-tab-and-into/) |
 | 28 | Fix Metro bundler nullthrows error (cache clear) | 2026-03-12 | 6ceed3b | [28-fix-metro-bundler-nullthrows-error-got-u](./quick/28-fix-metro-bundler-nullthrows-error-got-u/) |
 | 29 | Replace deprecated SafeAreaView with react-native-safe-area-context | 2026-03-12 | 6c669d4 | [29-replace-deprecated-safeareaview-with-rea](./quick/29-replace-deprecated-safeareaview-with-rea/) |
+| 30 | Fix profile photo persistence and consistent avatar fallback | 2026-03-12 | bacf406 | [30-profile-photo-doesn-t-save-on-account-cr](./quick/30-profile-photo-doesn-t-save-on-account-cr/) |
 
 ## Session Continuity
 
