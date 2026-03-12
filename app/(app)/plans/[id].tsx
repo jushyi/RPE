@@ -11,7 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { usePlanDetail } from '@/features/plans/hooks/usePlanDetail';
@@ -81,11 +81,18 @@ function daySlotsToplanDays(slots: DaySlot[], planId: string) {
 export default function PlanDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { plan, isLoading, isSaving, error, updatePlan } = usePlanDetail(id ?? '');
+  const { plan, isLoading, isSaving, error, refetch, updatePlan } = usePlanDetail(id ?? '');
   const { deletePlan, setActivePlan } = usePlans();
   const { startFromPlan } = useWorkoutSession();
 
   const [isEditing, setIsEditing] = useState(false);
+
+  // Refetch plan data when screen regains focus (e.g., after tab switch or navigation)
+  useFocusEffect(
+    useCallback(() => {
+      if (!isEditing) refetch();
+    }, [refetch, isEditing])
+  );
   const [draftName, setDraftName] = useState('');
   const [draftDays, setDraftDays] = useState<DaySlot[]>([]);
 
