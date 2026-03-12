@@ -181,7 +181,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 11 of 11 (Settings + Account Management)
 Plan: 2 of 3 complete (11-02 CSV data export)
 Status: Phase 11 In Progress
-Last activity: 2026-03-12 - Completed quick task 20: phone shows no plans even though there are workout plans in the database
+Last activity: 2026-03-12 - Completed quick task 21: fix layout warning - route settings is extraneous
 
 Progress: [██████████] 100%
 
@@ -353,9 +353,10 @@ None yet.
 | 18 | Make main default branch, merge master in, replace README | 2026-03-10 | e4af128 | [18-make-main-default-branch-merge-master-in](./quick/18-make-main-default-branch-merge-master-in/) |
 | 19 | Fix sharp build failure in EAS development builds | 2026-03-12 | 4962a93 | [19-fix-sharp-build-failure-in-eas-developme](./quick/19-fix-sharp-build-failure-in-eas-developme/) |
 | 20 | Fix plans not showing on phone (auth session race condition) | 2026-03-12 | 3d267c5 | [20-phone-shows-no-plans-even-though-there-a](./quick/20-phone-shows-no-plans-even-though-there-a/) |
+| 21 | Fix layout warning - route settings is extraneous | 2026-03-12 | 0951f0a | [21-fix-layout-warning-route-settings-is-ext](./quick/21-fix-layout-warning-route-settings-is-ext/) |
 
 ## Session Continuity
 
-Last session: 2026-03-12T14:23:00Z
-Stopped at: Completed quick-20
+Last session: 2026-03-12T14:01:14Z
+Stopped at: Completed quick-21
 Resume file: None
