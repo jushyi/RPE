@@ -148,12 +148,13 @@ Plans:
   1. When creating or editing a plan day, user is prompted to set an alarm time for that day — alarm setup is part of plan creation, not a separate settings screen
   2. On a scheduled training day, the alarm fires at the set time with sound and vibration, displays a full-screen notification, and requires explicit dismissal before it stops
   3. If a planned training day passes without a logged workout session, the user receives a nudge notification before the end of that day
-**Plans:** 2/3 plans executed
+**Plans:** 4 plans (3 executed + 1 gap closure)
 
 Plans:
 - [ ] 08-01-PLAN.md — Data layer: expo-notifications install, migration (alarm columns on plan_days), alarm types/constants/utils, notification setup, alarm scheduler, alarmStore, Jest mocks, unit tests
 - [ ] 08-02-PLAN.md — Alarm UI: time picker row in DaySlotEditor (toggle + picker when weekday mapped), alarm scheduling wired into plan save/delete/activate, notification category + snooze handler on app startup
 - [ ] 08-03-PLAN.md — Missed workout nudge: auto-cancel on workout completion, settings screen with global alarm pause toggle
+- [ ] 08-04-PLAN.md — Gap closure: show alarm time in read-only plan details view (PlanDaySection)
 
 ### Phase 9: Polish
 **Goal**: The app looks and feels like a deliberate, dark-and-bold tool -- not a prototype -- with consistent magenta theming, branded icon/splash, and the OTA update pipeline in place for rapid iteration once the friend group is using it.
@@ -200,7 +201,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
 | 7. Body Metrics | 4/4 | Complete   | 2026-03-12 |
-| 8. Alarms + Accountability | 2/3 | In Progress|  |
+| 8. Alarms + Accountability | 3/4 | In Progress|  |
 | 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
@@ -216,3 +217,23 @@ Plans:
 - [ ] 11-01-PLAN.md — Settings tab route (4th tab), profile header, preference toggles (weight/measurement units), notifications section, account section with sign out confirmation
 - [ ] 11-02-PLAN.md — CSV data export: generation utilities with tests, Supabase queries for all data categories, share sheet integration
 - [ ] 11-03-PLAN.md — Delete account: migration, Edge Function, password re-entry, 7-day grace period banner on dashboard, wire all Settings actions together
+
+### Phase 12: proper onboarding
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 11
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 12 to break down)
+
+### Phase 13: coaching options, create plans for others, get notifs when they finish and update their plans for the next week.
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 12
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 13 to break down)

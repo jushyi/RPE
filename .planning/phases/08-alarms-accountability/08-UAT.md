@@ -49,11 +49,11 @@ skipped: 0
 ## Gaps
 
 - truth: "Alarm time is visible in plan details view after saving"
-  status: failed
+  status: diagnosed
   reason: "User reported: can't tell if time is saved, doesn't show in plan details"
   severity: major
   test: 2
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "PlanDaySection component (read-only view) has zero alarm rendering. Data is available (PlanDay has alarm_enabled/alarm_time) but completely ignored."
+  artifacts: [src/features/plans/components/PlanDaySection.tsx]
+  missing: ["Conditional alarm display row showing alarm icon + formatted time when alarm_enabled is true"]
+  debug_session: ".planning/debug/alarm-time-not-visible.md"
