@@ -86,7 +86,7 @@ Plans:
   4. Previous session's weight and reps for the current exercise are displayed inline while logging
   5. When a logged set exceeds the user's stored PR, the app immediately flags it as a personal record
   6. All set logging writes to local storage instantly and syncs to Supabase in the background — logging never waits for a network response
-**Plans:** 6/6 plans complete
+**Plans:** 8 plans (6 executed + 2 gap closure)
 
 Plans:
 - [ ] 04-01-PLAN.md — Database schema (workout_sessions, session_exercises, set_logs + RLS), TypeScript types, workoutStore with MMKV persistence
@@ -207,7 +207,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
-| 13. Coaching Options | 6/6 | Complete    | 2026-03-12 |
+| 13. Coaching Options | 6/8 | In Progress (gap closure) |  |
 | 14. Set Videos | 3/3 | Complete   | 2026-03-12 |
 | 15. Barbell Calculator | 0/3 | Not started | - |
 
@@ -247,7 +247,7 @@ Plans:
   5. Coach receives a weekly adherence summary for all trainees every Sunday evening
   6. Coach-assigned plans are visually distinguished and read-only in trainee's Plans tab
   7. Either party can disconnect the coaching relationship unilaterally
-**Plans:** 6/6 plans complete
+**Plans:** 8 plans (6 executed + 2 gap closure)
 
 
 Plans:
@@ -257,6 +257,8 @@ Plans:
 - [ ] 13-03-PLAN.md — Coaching relationship management: coachingStore, invite code flow, Plans tab toggle, coach/trainee UI components
 - [ ] 13-04-PLAN.md — Coach plan management: plan CRUD targeting trainee, inline performance, coach notes, trainee plans screen, trainee workout history
 - [ ] 13-05-PLAN.md — Notification triggers (workout complete, PR, plan update), weekly summary Edge Function, push token registration on startup
+- [ ] 13-06-PLAN.md — Gap closure: fix trainee history infinite loop, coach plans filter, keyboard avoidance, focus refresh
+- [ ] 13-07-PLAN.md — Gap closure: InviteCodeModal UX fixes (fade overlay, tap-to-dismiss, keyboard avoidance)
 
 ### Phase 14: Set Videos
 
@@ -293,3 +295,23 @@ Plans:
 - [ ] 15-00-PLAN.md — Wave 0: Test stubs for calculator utility functions (plateCalculator, rpeTable, nextSetCalc)
 - [ ] 15-01-PLAN.md — Types, constants, pure utility functions (plate calc, RPE table, next-set recommendation) with TDD test coverage
 - [ ] 15-02-PLAN.md — Calculator tab route, PagerView layout, all 3 sub-tool UI components (PlateCalculator, RpeCalculator, NextSetCalculator), human verification
+
+### Phase 16: push notifications
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 15
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 16 to break down)
+
+### Phase 17: friend workout, pr and set video sharing. creating of groups to share with
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 16
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 17 to break down)
