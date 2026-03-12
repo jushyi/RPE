@@ -259,7 +259,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 11 of 11 (Settings + Account Management)
 Plan: 2 of 3 complete (11-02 CSV data export)
 Status: Phase 11 In Progress
-Last activity: 2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout
+Last activity: 2026-03-12 - Completed quick task 27: Move exercises into plans tab as third inner tab
 
 Progress: [██████████] 100%
 
@@ -453,6 +453,7 @@ None yet.
 | 24 | Hide Start Workout card after completing planned workout | 2026-03-12 | 84f9665 | [24-hide-start-workout-card-after-completing](./quick/24-hide-start-workout-card-after-completing/) |
 | 25 | Fix Start Workout button to use startFromPlan flow | 2026-03-12 | 96b345e | [25-the-start-workout-button-on-the-todays-w](./quick/25-the-start-workout-button-on-the-todays-w/) |
 | 26 | Add cancel workout button with confirmation dialog | 2026-03-12 | 47e5a7a | [26-there-should-be-a-way-to-cancel-the-curr](./quick/26-there-should-be-a-way-to-cancel-the-curr/) |
+| 27 | Move exercises into plans tab as third inner tab | 2026-03-12 | 14918b3 | [27-move-exercises-off-the-home-tab-and-into](./quick/27-move-exercises-off-the-home-tab-and-into/) |
 
 ## Session Continuity
 
