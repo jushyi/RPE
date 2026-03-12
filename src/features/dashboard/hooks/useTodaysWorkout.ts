@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
-import { usePlanStore } from '@/stores/planStore';
+import { useState, useEffect, useMemo } from 'react';
+import { supabase } from '@/lib/supabase/client';
+import { useAuthStore } from '@/stores/authStore';
 import { estimateWorkoutDuration } from '@/features/progress/utils/chartHelpers';
 import type { Plan } from '@/features/plans/types';
 import type { TodaysWorkoutState } from '@/features/progress/types';
@@ -66,13 +67,68 @@ export function determineTodaysWorkout(
 }
 
 /**
- * Hook that determines today's planned workout from the active plan.
+ * Hook that determines today's planned workout by fetching the active plan
+ * directly from Supabase (not MMKV cache) keyed by the authenticated userId.
  */
-export function useTodaysWorkout(): TodaysWorkoutState {
-  const activePlan = usePlanStore((s) => s.plans.find((p) => p.is_active));
+export function useTodaysWorkout(): { workout: TodaysWorkoutState; activePlan: Plan | null } {
+  const [activePlan, setActivePlan] = useState<Plan | null>(null);
+  const userId = useAuthStore((s) => s.userId);
 
-  return useMemo(() => {
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!userId || !supabase) {
+      setActivePlan(null);
+      return;
+    }
+
+    (async () => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase.from('workout_plans') as any)
+          .select(
+            '*, plan_days(id, plan_id, day_name, weekday, sort_order, plan_day_exercises(id, plan_day_id, exercise_id, sort_order, target_sets, notes, unit_override, weight_progression, exercise:exercises(id, name, equipment, muscle_groups)))',
+          )
+          .eq('user_id', userId)
+          .eq('is_active', true)
+          .limit(1)
+          .single();
+
+        if (cancelled) return;
+
+        if (error || !data) {
+          setActivePlan(null);
+          return;
+        }
+
+        // Normalize sort orders (same as fetchPlans pattern)
+        const normalized: Plan = {
+          ...data,
+          plan_days: [...data.plan_days]
+            .sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+            .map((day: any) => ({
+              ...day,
+              plan_day_exercises: [...day.plan_day_exercises].sort(
+                (a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0),
+              ),
+            })),
+        };
+
+        setActivePlan(normalized);
+      } catch {
+        if (!cancelled) setActivePlan(null);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
+  const workout = useMemo(() => {
     const today = new Date().getDay();
-    return determineTodaysWorkout(activePlan ?? null, today);
+    return determineTodaysWorkout(activePlan, today);
   }, [activePlan]);
+
+  return { workout, activePlan };
 }
