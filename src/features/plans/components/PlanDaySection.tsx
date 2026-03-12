@@ -6,6 +6,18 @@ import { MuscleGroupBadge } from '@/features/exercises/components/MuscleGroupBad
 import { WEEKDAY_LABELS } from '../constants';
 import type { PlanDay } from '../types';
 
+function formatAlarmTime(time: string): string {
+  const parts = time.split(':');
+  if (parts.length < 2) return time;
+  let hours = parseInt(parts[0], 10);
+  const minutes = parts[1];
+  if (isNaN(hours)) return time;
+  const suffix = hours >= 12 ? 'PM' : 'AM';
+  if (hours === 0) hours = 12;
+  else if (hours > 12) hours -= 12;
+  return `${hours}:${minutes} ${suffix}`;
+}
+
 interface PlanDaySectionProps {
   day: PlanDay;
   defaultExpanded?: boolean;
@@ -37,6 +49,12 @@ export function PlanDaySection({ day, defaultExpanded = true, onStartWorkout }: 
 
       {expanded && (
         <View style={s.body}>
+          {day.alarm_enabled && day.alarm_time ? (
+            <View style={s.alarmRow}>
+              <Ionicons name="alarm-outline" size={16} color={colors.accent} />
+              <Text style={s.alarmText}>{formatAlarmTime(day.alarm_time)}</Text>
+            </View>
+          ) : null}
           {day.plan_day_exercises.length === 0 ? (
             <Text style={s.empty}>No exercises</Text>
           ) : (
@@ -211,5 +229,16 @@ const s = StyleSheet.create({
     color: colors.white,
     fontSize: 15,
     fontWeight: '700',
+  },
+  alarmRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 10,
+  },
+  alarmText: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '500',
   },
 });
