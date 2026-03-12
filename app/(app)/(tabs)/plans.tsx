@@ -44,8 +44,6 @@ export default function PlansScreen() {
   const [activeTab, setActiveTab] = useState(0);
   const indicatorX = useSharedValue(0);
   const [tabWidth, setTabWidth] = useState(0);
-  const [inviteModalVisible, setInviteModalVisible] = useState(false);
-
   const handleTabPress = useCallback(
     (index: number) => {
       pagerRef.current?.setPage(index);
@@ -79,18 +77,6 @@ export default function PlansScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['top']}>
-      {/* Header with person-add icon */}
-      <View style={s.headerRow}>
-        <View style={s.headerSpacer} />
-        <Pressable
-          style={s.headerIcon}
-          onPress={() => setInviteModalVisible(true)}
-          hitSlop={12}
-        >
-          <Ionicons name="person-add-outline" size={22} color={colors.textPrimary} />
-        </Pressable>
-      </View>
-
       {/* Tab Bar */}
       <View style={s.tabBar} onLayout={onTabBarLayout}>
         {TABS.map((tab, index) => (
@@ -131,11 +117,6 @@ export default function PlansScreen() {
         </View>
       </PagerView>
 
-      {/* Invite Code Modal */}
-      <InviteCodeModal
-        visible={inviteModalVisible}
-        onClose={() => setInviteModalVisible(false)}
-      />
     </SafeAreaView>
   );
 }
@@ -155,6 +136,7 @@ function PlansContent() {
   } = useCoaching();
   const [refreshing, setRefreshing] = useState(false);
   const [coachToggle, setCoachToggle] = useState<CoachToggleValue>('my-plans');
+  const [inviteModalVisible, setInviteModalVisible] = useState(false);
 
   useEffect(() => {
     fetchPlans();
@@ -325,6 +307,20 @@ function PlansContent() {
           <Ionicons name="add" size={28} color={colors.white} />
         </Pressable>
       )}
+
+      {/* Coaching FAB */}
+      <Pressable
+        style={s.coachingFab}
+        onPress={() => setInviteModalVisible(true)}
+      >
+        <Ionicons name="people-outline" size={20} color={colors.white} />
+        <Text style={s.coachingFabText}>Coaching</Text>
+      </Pressable>
+
+      <InviteCodeModal
+        visible={inviteModalVisible}
+        onClose={() => setInviteModalVisible(false)}
+      />
     </View>
   );
 }
@@ -440,20 +436,6 @@ const s = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    backgroundColor: colors.background,
-  },
-  headerSpacer: {
-    flex: 1,
-  },
-  headerIcon: {
-    padding: 6,
-  },
   tabBar: {
     flexDirection: 'row',
     backgroundColor: colors.background,
@@ -537,6 +519,28 @@ const s = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+  },
+  coachingFab: {
+    position: 'absolute',
+    bottom: 24,
+    left: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: colors.surfaceElevated,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    borderRadius: 28,
+    elevation: 4,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  coachingFabText: {
+    color: colors.white,
+    fontSize: 15,
+    fontWeight: '700',
   },
   exercisesContainer: {
     flex: 1,

@@ -3,14 +3,14 @@ import { supabase } from '@/lib/supabase/client';
 
 export interface TraineeSession {
   id: string;
-  title: string;
   started_at: string;
   ended_at: string | null;
-  plan_name: string | null;
+  plan_id: string | null;
+  workout_plans: { name: string } | null;
   session_exercises: {
     id: string;
     exercise_id: string;
-    exercise_name: string;
+    exercises: { name: string } | null;
     set_logs: {
       weight: number;
       reps: number;
@@ -40,7 +40,7 @@ export function useTraineeHistory(traineeId: string) {
       const offset = offsetRef.current;
 
       const { data, error } = await (supabase.from('workout_sessions') as any)
-        .select('id, title, started_at, ended_at, plan_name, session_exercises(id, exercise_id, exercise_name, set_logs(weight, reps, unit))')
+        .select('id, started_at, ended_at, plan_id, workout_plans(name), session_exercises(id, exercise_id, exercises(name), set_logs(weight, reps, unit))')
         .eq('user_id', traineeId)
         .not('ended_at', 'is', null)
         .order('started_at', { ascending: false })

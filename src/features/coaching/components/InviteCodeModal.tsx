@@ -16,12 +16,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-let Clipboard: typeof import('expo-clipboard') | null = null;
-try {
-  Clipboard = require('expo-clipboard');
-} catch {
-  // Native module not available (e.g., Expo Go)
-}
+import * as Clipboard from 'expo-clipboard';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useCoaching } from '@/features/coaching/hooks/useCoaching';
@@ -86,7 +81,7 @@ export function InviteCodeModal({ visible, onClose }: InviteCodeModalProps) {
 
   const handleCopy = useCallback(async () => {
     if (activeCode) {
-      await Clipboard?.setStringAsync(activeCode.code);
+      await Clipboard.setStringAsync(activeCode.code);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

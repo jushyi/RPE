@@ -57,7 +57,6 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         set({
           isAuthenticated: false,
           userId: null,
-          hasCompletedOnboarding: false,
           deletionScheduledAt: null,
           avatarUrl: null,
           displayName: 'User',

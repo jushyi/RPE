@@ -78,7 +78,7 @@ export default function TraineeHistoryScreen() {
           <View style={s.cardInfo}>
             <Text style={s.dateText}>{formatDate(item.started_at)}</Text>
             <Text style={s.titleText} numberOfLines={1}>
-              {item.title || item.plan_name || 'Freestyle'}
+              {item.workout_plans?.name ?? 'Freestyle'}
             </Text>
           </View>
           <Ionicons
@@ -106,7 +106,7 @@ export default function TraineeHistoryScreen() {
           <View style={s.detail}>
             {(item.session_exercises ?? []).map((ex) => (
               <View key={ex.id} style={s.exerciseBlock}>
-                <Text style={s.exerciseName}>{ex.exercise_name}</Text>
+                <Text style={s.exerciseName}>{ex.exercises?.name ?? 'Unknown'}</Text>
                 {(ex.set_logs ?? []).map((set, i) => (
                   <Text key={i} style={s.setText}>
                     Set {i + 1}: {set.weight}{set.unit} x {set.reps}
