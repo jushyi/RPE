@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 09-polish
 source: [09-01-SUMMARY.md, 09-02-SUMMARY.md, 09-03-SUMMARY.md]
 started: 2026-03-12T12:00:00Z
@@ -54,7 +54,10 @@ skipped: 1
   reason: "User reported: clciking edit on a plan doesnt have an animation. also saving doesn't have an animation back to the plan detail."
   severity: minor
   test: 5
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "Edit/Save are in-screen state toggles (isEditing boolean), not router navigation. enterEditMode() sets isEditing=true, handleSave() sets isEditing=false. No animation occurs because there is no navigation transition — the view/edit modes render conditionally within the same [id].tsx screen."
+  artifacts:
+    - path: "app/(app)/plans/[id].tsx"
+      issue: "Edit mode is a state toggle with no visual transition between view and edit states"
+  missing:
+    - "Add a visual transition (fade or layout animation) when toggling between view and edit modes in the plan detail screen"
   debug_session: ""
