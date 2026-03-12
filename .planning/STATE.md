@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 13 context gathered
-last_updated: "2026-03-12T16:38:57.626Z"
+stopped_at: Completed 12-01-PLAN.md
+last_updated: "2026-03-12T16:45:50.437Z"
 last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
 progress:
   total_phases: 14
   completed_phases: 10
   total_plans: 39
-  completed_plans: 35
+  completed_plans: 36
 ---
 
 ---
@@ -311,6 +311,7 @@ Progress: [██████████] 100%
 | Phase 07 P04 | 2min | 1 tasks | 4 files |
 | Phase 07 P03 | 6min | 2 tasks | 13 files |
 | Phase 08 P04 | 1min | 1 tasks | 1 files |
+| Phase 12 P01 | 3min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -401,6 +402,8 @@ Recent decisions affecting current work:
 - [Phase 07]: Bodyweight addEntry uses loggedAt ?? today for backward compat with all existing callers
 - [Phase 07]: Hips data dropped in migration (acceptable per user request)
 - [Phase 08]: Inline 12h time formatter for alarm_time display in PlanDaySection
+- [Phase 12]: Duplicated SegmentedToggle locally in UnitPreferencesStep rather than extracting shared component
+- [Phase 12]: PRBaselineStep uses own UI rather than reusing PRBaselineForm for clean onNext/onSkip callback pattern
 
 ### Roadmap Evolution
 
@@ -452,6 +455,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T16:38:57.622Z
-Stopped at: Phase 13 context gathered
-Resume file: .planning/phases/13-coaching-options-create-plans-for-others-get-notifs-when-they-finish-and-update-their-plans-for-the-next-week/13-CONTEXT.md
+Last session: 2026-03-12T16:45:50.434Z
+Stopped at: Completed 12-01-PLAN.md
+Resume file: None
