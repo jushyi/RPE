@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,8 @@ import {
   TextInput,
   Alert,
   StyleSheet,
-  LayoutAnimation,
 } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -87,28 +87,27 @@ export default function PlanDetailScreen() {
   const { startFromPlan } = useWorkoutSession();
 
   const [isEditing, setIsEditing] = useState(false);
+  const isEditingRef = useRef(false);
 
   // Refetch plan data when screen regains focus (e.g., after tab switch or navigation)
   useFocusEffect(
     useCallback(() => {
-      if (!isEditing) refetch();
-    }, [refetch, isEditing])
+      if (!isEditingRef.current) refetch();
+    }, [refetch])
   );
   const [draftName, setDraftName] = useState('');
   const [draftDays, setDraftDays] = useState<DaySlot[]>([]);
 
   const enterEditMode = useCallback(() => {
     if (!plan) return;
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    // Deep clone via DaySlot conversion (independent copy)
     setDraftName(plan.name);
     setDraftDays(planToDaySlots(plan));
+    isEditingRef.current = true;
     setIsEditing(true);
   }, [plan]);
 
   const cancelEdit = useCallback(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    // Discard draft - no persistence
+    isEditingRef.current = false;
     setIsEditing(false);
     setDraftName('');
     setDraftDays([]);
@@ -125,7 +124,7 @@ export default function PlanDetailScreen() {
 
     const result = await updatePlan(updatedPlan);
     if (result?.success) {
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      isEditingRef.current = false;
       setIsEditing(false);
       setDraftName('');
       setDraftDays([]);
@@ -243,39 +242,43 @@ export default function PlanDetailScreen() {
 
       {/* Content */}
       {isEditing ? (
-        <ScrollView
-          style={s.scroll}
-          contentContainerStyle={s.scrollContent}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          <DaySlotEditor days={draftDays} onChange={setDraftDays} />
-          <Pressable style={s.deleteBtn} onPress={handleDelete}>
-            <Ionicons name="trash-outline" size={20} color={colors.error} />
-            <Text style={s.deleteBtnText}>Delete Plan</Text>
-          </Pressable>
-        </ScrollView>
+        <Animated.View key="edit" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
+          <ScrollView
+            style={s.scroll}
+            contentContainerStyle={s.scrollContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <DaySlotEditor days={draftDays} onChange={setDraftDays} />
+            <Pressable style={s.deleteBtn} onPress={handleDelete}>
+              <Ionicons name="trash-outline" size={20} color={colors.error} />
+              <Text style={s.deleteBtnText}>Delete Plan</Text>
+            </Pressable>
+          </ScrollView>
+        </Animated.View>
       ) : (
-        <FlatList
-          data={plan.plan_days}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <PlanDaySection day={item} defaultExpanded={true} onStartWorkout={startFromPlan} />
-          )}
-          contentContainerStyle={s.scrollContent}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <Text style={s.emptyText}>No days configured</Text>
-          }
-          ListFooterComponent={
-            !plan.is_active ? (
-              <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
-                <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
-                <Text style={s.setActiveText}>Set as Active Plan</Text>
-              </Pressable>
-            ) : null
-          }
-        />
+        <Animated.View key="view" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
+          <FlatList
+            data={plan.plan_days}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <PlanDaySection day={item} defaultExpanded={true} onStartWorkout={startFromPlan} />
+            )}
+            contentContainerStyle={s.scrollContent}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <Text style={s.emptyText}>No days configured</Text>
+            }
+            ListFooterComponent={
+              !plan.is_active ? (
+                <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
+                  <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
+                  <Text style={s.setActiveText}>Set as Active Plan</Text>
+                </Pressable>
+              ) : null
+            }
+          />
+        </Animated.View>
       )}
     </SafeAreaView>
   );

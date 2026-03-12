@@ -12,10 +12,10 @@ export function usePlanDetail(planId: string) {
   const [isSaving, setIsSaving] = useState(false);
   const updateInStore = usePlanStore((s) => s.updatePlan);
 
-  const fetchPlan = useCallback(async () => {
+  const fetchPlan = useCallback(async (silent = false) => {
     if (!supabase || !planId) return;
 
-    setIsLoading(true);
+    if (!silent) setIsLoading(true);
     setError(null);
     try {
       const { data, error: fetchError } = await (supabase.from('workout_plans') as any)
@@ -129,8 +129,8 @@ export function usePlanDetail(planId: string) {
           plan_days: draft.plan_days,
         });
 
-        // 6. Refetch to get fresh data with new IDs
-        await fetchPlan();
+        // 6. Refetch to get fresh data with new IDs (silent — no loading spinner)
+        await fetchPlan(true);
 
         // 7. Reschedule alarms if this is the active plan
         try {
