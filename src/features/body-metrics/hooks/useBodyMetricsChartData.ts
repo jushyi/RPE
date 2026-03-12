@@ -8,7 +8,7 @@ interface ChartDataPoint {
   value: number;
 }
 
-const CIRCUMFERENCE_METRICS: CircumferenceMetric[] = ['chest', 'waist', 'hips'];
+const CIRCUMFERENCE_METRICS: CircumferenceMetric[] = ['chest', 'waist', 'biceps', 'quad'];
 
 /**
  * Returns chart-ready data for a specific body metric.

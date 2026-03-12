@@ -35,7 +35,8 @@ describe('validateMeasurementEntry', () => {
     const result = validateMeasurementEntry({
       chest: null,
       waist: null,
-      hips: null,
+      biceps: null,
+      quad: null,
       body_fat_pct: null,
     });
     expect(result.valid).toBe(false);
@@ -53,10 +54,26 @@ describe('validateMeasurementEntry', () => {
     expect(result.errors).toContain('Waist requires a unit (in or cm)');
   });
 
-  it('invalid: hips value without unit', () => {
-    const result = validateMeasurementEntry({ hips: 38 });
+  it('invalid: biceps value without unit', () => {
+    const result = validateMeasurementEntry({ biceps: 15 });
     expect(result.valid).toBe(false);
-    expect(result.errors).toContain('Hips requires a unit (in or cm)');
+    expect(result.errors).toContain('Biceps requires a unit (in or cm)');
+  });
+
+  it('invalid: quad value without unit', () => {
+    const result = validateMeasurementEntry({ quad: 24 });
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContain('Quad requires a unit (in or cm)');
+  });
+
+  it('valid: biceps with unit', () => {
+    const result = validateMeasurementEntry({ biceps: 15, biceps_unit: 'in' });
+    expect(result.valid).toBe(true);
+  });
+
+  it('valid: quad with unit', () => {
+    const result = validateMeasurementEntry({ quad: 24, quad_unit: 'cm' });
+    expect(result.valid).toBe(true);
   });
 
   it('valid: body_fat_pct does not require a unit', () => {

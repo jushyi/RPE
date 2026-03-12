@@ -51,7 +51,7 @@ export const useBodyMeasurementStore = create<BodyMeasurementState & BodyMeasure
     }),
     {
       name: 'body-measurement-storage',
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => mmkvStorage),
     }
   )
