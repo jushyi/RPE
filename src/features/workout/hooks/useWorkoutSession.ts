@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useWorkoutStore } from '@/stores/workoutStore';
 import { useAuthStore } from '@/stores/authStore';
 import { usePlanStore } from '@/stores/planStore';
-import { setCompletedSession, setIsFinishing } from '@/features/workout/workoutSessionBridge';
+import { setCompletedSession, setIsFinishing, isWorkoutFinishing } from '@/features/workout/workoutSessionBridge';
 import { saveCompletedSession } from '@/features/workout/hooks/useCompletedToday';
 import { cancelTodaysNudges } from '@/features/alarms/hooks/useAlarmScheduler';
 import { enqueueVideoUpload, flushVideoQueue } from '@/features/videos/utils/videoUploadQueue';
@@ -76,37 +76,55 @@ export function useWorkoutSession() {
   );
 
   const finishWorkout = useCallback(() => {
-    setIsFinishing(true);
-    const completed = finishSessionAction();
-    if (completed) {
-      setCompletedSession(completed);
-      saveCompletedSession(completed);
+    try {
+      setIsFinishing(true);
+      console.log('finishWorkout: calling finishSessionAction');
+      const completed = finishSessionAction();
+      console.log('finishWorkout: finishSessionAction returned', completed ? 'session' : 'null');
 
-      // Fire-and-forget: cancel today's nudge so user doesn't get reminded after training
-      try {
-        const plans = usePlanStore.getState().plans;
-        const jsDay = new Date().getDay();
-        const todayWeekday = (jsDay + 6) % 7; // Convert to 0=Mon..6=Sun
-        cancelTodaysNudges(plans, todayWeekday);
-      } catch (_) {
-        // Nudge cancel failure should not block workout save
+      if (completed) {
+        setCompletedSession(completed);
+        saveCompletedSession(completed);
+
+        // Fire-and-forget: cancel today's nudge so user doesn't get reminded after training
+        try {
+          const plans = usePlanStore.getState().plans;
+          const jsDay = new Date().getDay();
+          const todayWeekday = (jsDay + 6) % 7; // Convert to 0=Mon..6=Sun
+          cancelTodaysNudges(plans, todayWeekday);
+        } catch (_) {
+          // Nudge cancel failure should not block workout save
+        }
+
+        // Fire-and-forget: notify coaches that trainee completed a workout
+        const userName = useAuthStore.getState().displayName;
+        const sessionHadPR = completed.exercises.some((e) =>
+          e.logged_sets.some((s) => s.is_pr)
+        );
+        notifyCoachWorkoutComplete(
+          completed.user_id,
+          userName,
+          completed.title,
+          sessionHadPR
+        ).catch(() => {});
+
+        console.log('finishWorkout: navigating to summary');
+        router.replace('/workout/summary' as any);
+
+        // Safety fallback: if navigation doesn't fire within 500ms, retry
+        setTimeout(() => {
+          if (isWorkoutFinishing()) {
+            console.warn('finishWorkout: navigation may have stalled, retrying');
+            router.replace('/workout/summary' as any);
+          }
+        }, 500);
+      } else {
+        setIsFinishing(false);
       }
-
-      // Fire-and-forget: notify coaches that trainee completed a workout
-      const userName = useAuthStore.getState().displayName;
-      const sessionHadPR = completed.exercises.some((e) =>
-        e.logged_sets.some((s) => s.is_pr)
-      );
-      notifyCoachWorkoutComplete(
-        completed.user_id,
-        userName,
-        completed.title,
-        sessionHadPR
-      ).catch(() => {});
-
-      router.replace('/workout/summary' as any);
-    } else {
+    } catch (error) {
+      console.error('finishWorkout failed:', error);
       setIsFinishing(false);
+      Alert.alert('Error', 'Failed to save workout. Please try again.');
     }
   }, [finishSessionAction, router]);
 
