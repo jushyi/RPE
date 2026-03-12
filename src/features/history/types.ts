@@ -7,6 +7,7 @@ export interface HistorySetLog {
   is_pr: boolean;
   estimated_1rm: number | null;
   logged_at: string;
+  video_url?: string | null;
 }
 
 export interface HistoryExercise {

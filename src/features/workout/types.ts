@@ -15,6 +15,7 @@ export interface SetLog {
   unit: 'kg' | 'lbs';
   is_pr: boolean;
   logged_at: string;
+  video_url?: string | null;
 }
 
 /** An exercise within an active workout session */
