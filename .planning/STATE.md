@@ -3,6 +3,21 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
+stopped_at: Completed quick-25
+last_updated: "2026-03-12T14:34:16.806Z"
+last_activity: "2026-03-12 - Completed quick task 25: fix Start Workout button on TodaysWorkoutCard"
+progress:
+  total_phases: 11
+  completed_phases: 10
+  total_plans: 34
+  completed_plans: 32
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
 stopped_at: Completed 06-04-PLAN.md
 last_updated: "2026-03-12T14:28:30.404Z"
 last_activity: "2026-03-12 - Completed quick task 24: hide Start Workout card after completing planned workout"
