@@ -132,7 +132,7 @@ Plans:
   1. User can log body measurements (chest, waist, biceps, quad, body fat %) with a date and view past entries
   2. Dashboard shows a combined Body card with latest bodyweight + measurements, tappable to open detail screen
   3. Detail screen has Charts tab (entry form + per-measurement trend charts) and History tab (reverse-chronological list with edit/delete)
-**Plans:** 4 plans (2 complete + 2 gap closure)
+**Plans:** 3/4 plans executed
 
 Plans:
 - [x] 07-01-PLAN.md — Data layer: body_measurements migration + RLS, types, unit conversion utils, bodyMeasurementStore (Zustand + MMKV), CRUD hooks, chart data hook, combined BodyCard on dashboard
@@ -199,7 +199,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 4. Active Workout | 6/6 | Complete   | 2026-03-10 |
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
-| 7. Body Metrics | 2/4 | Gap Closure | - |
+| 7. Body Metrics | 3/4 | In Progress|  |
 | 8. Alarms + Accountability | 2/3 | In Progress|  |
 | 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
