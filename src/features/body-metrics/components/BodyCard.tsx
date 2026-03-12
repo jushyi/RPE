@@ -83,11 +83,19 @@ export function BodyCard() {
                     </Text>
                   </View>
                 )}
-                {latestMeasurement.hips != null && (
+                {latestMeasurement.biceps != null && (
                   <View style={s.measurementRow}>
-                    <Text style={s.measurementLabel}>Hips</Text>
+                    <Text style={s.measurementLabel}>Biceps</Text>
                     <Text style={s.measurementValue}>
-                      {latestMeasurement.hips} {latestMeasurement.hips_unit}
+                      {latestMeasurement.biceps} {latestMeasurement.biceps_unit}
+                    </Text>
+                  </View>
+                )}
+                {latestMeasurement.quad != null && (
+                  <View style={s.measurementRow}>
+                    <Text style={s.measurementLabel}>Quad</Text>
+                    <Text style={s.measurementValue}>
+                      {latestMeasurement.quad} {latestMeasurement.quad_unit}
                     </Text>
                   </View>
                 )}

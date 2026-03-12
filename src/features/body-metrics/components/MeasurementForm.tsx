@@ -20,8 +20,10 @@ interface MeasurementFormProps {
     chest_unit?: CircumferenceUnit | null;
     waist?: number | null;
     waist_unit?: CircumferenceUnit | null;
-    hips?: number | null;
-    hips_unit?: CircumferenceUnit | null;
+    biceps?: number | null;
+    biceps_unit?: CircumferenceUnit | null;
+    quad?: number | null;
+    quad_unit?: CircumferenceUnit | null;
     body_fat_pct?: number | null;
     measured_at: string;
     editId?: string;
@@ -55,8 +57,10 @@ export function MeasurementForm({
   const [chestUnit, setChestUnit] = useState<CircumferenceUnit>('in');
   const [waist, setWaist] = useState('');
   const [waistUnit, setWaistUnit] = useState<CircumferenceUnit>('in');
-  const [hips, setHips] = useState('');
-  const [hipsUnit, setHipsUnit] = useState<CircumferenceUnit>('in');
+  const [biceps, setBiceps] = useState('');
+  const [bicepsUnit, setBicepsUnit] = useState<CircumferenceUnit>('in');
+  const [quad, setQuad] = useState('');
+  const [quadUnit, setQuadUnit] = useState<CircumferenceUnit>('in');
   const [bodyFat, setBodyFat] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -68,7 +72,8 @@ export function MeasurementForm({
     if (latestMeasurement && !editEntry) {
       if (latestMeasurement.chest_unit) setChestUnit(latestMeasurement.chest_unit);
       if (latestMeasurement.waist_unit) setWaistUnit(latestMeasurement.waist_unit);
-      if (latestMeasurement.hips_unit) setHipsUnit(latestMeasurement.hips_unit);
+      if (latestMeasurement.biceps_unit) setBicepsUnit(latestMeasurement.biceps_unit);
+      if (latestMeasurement.quad_unit) setQuadUnit(latestMeasurement.quad_unit);
     }
   }, [latestMeasurement, editEntry]);
 
@@ -79,8 +84,10 @@ export function MeasurementForm({
       setChestUnit(editEntry.chest_unit ?? 'in');
       setWaist(editEntry.waist != null ? String(editEntry.waist) : '');
       setWaistUnit(editEntry.waist_unit ?? 'in');
-      setHips(editEntry.hips != null ? String(editEntry.hips) : '');
-      setHipsUnit(editEntry.hips_unit ?? 'in');
+      setBiceps(editEntry.biceps != null ? String(editEntry.biceps) : '');
+      setBicepsUnit(editEntry.biceps_unit ?? 'in');
+      setQuad(editEntry.quad != null ? String(editEntry.quad) : '');
+      setQuadUnit(editEntry.quad_unit ?? 'in');
       setBodyFat(editEntry.body_fat_pct != null ? String(editEntry.body_fat_pct) : '');
       setDate(new Date(editEntry.measured_at));
       setBodyweight('');
@@ -92,7 +99,8 @@ export function MeasurementForm({
     setBodyweight('');
     setChest('');
     setWaist('');
-    setHips('');
+    setBiceps('');
+    setQuad('');
     setBodyFat('');
     setDate(new Date());
     setError('');
@@ -102,11 +110,12 @@ export function MeasurementForm({
     const bw = bodyweight.trim() ? parseFloat(bodyweight) : null;
     const ch = chest.trim() ? parseFloat(chest) : null;
     const wa = waist.trim() ? parseFloat(waist) : null;
-    const hi = hips.trim() ? parseFloat(hips) : null;
+    const bi = biceps.trim() ? parseFloat(biceps) : null;
+    const qu = quad.trim() ? parseFloat(quad) : null;
     const bf = bodyFat.trim() ? parseFloat(bodyFat) : null;
 
     // Validate at least one field
-    if (bw == null && ch == null && wa == null && hi == null && bf == null) {
+    if (bw == null && ch == null && wa == null && bi == null && qu == null && bf == null) {
       setError('Enter at least one measurement');
       return;
     }
@@ -122,8 +131,10 @@ export function MeasurementForm({
         chest_unit: ch != null ? chestUnit : null,
         waist: wa,
         waist_unit: wa != null ? waistUnit : null,
-        hips: hi,
-        hips_unit: hi != null ? hipsUnit : null,
+        biceps: bi,
+        biceps_unit: bi != null ? bicepsUnit : null,
+        quad: qu,
+        quad_unit: qu != null ? quadUnit : null,
         body_fat_pct: bf,
         measured_at: toISODate(date),
         editId: editEntry?.id,
@@ -209,13 +220,23 @@ export function MeasurementForm({
         showUnitToggle
       />
 
-      {/* Hips */}
+      {/* Biceps */}
       <FieldRow
-        label="Hips"
-        value={hips}
-        onChangeText={setHips}
-        unit={hipsUnit}
-        onToggleUnit={() => setHipsUnit((u) => (u === 'in' ? 'cm' : 'in'))}
+        label="Biceps"
+        value={biceps}
+        onChangeText={setBiceps}
+        unit={bicepsUnit}
+        onToggleUnit={() => setBicepsUnit((u) => (u === 'in' ? 'cm' : 'in'))}
+        showUnitToggle
+      />
+
+      {/* Quad */}
+      <FieldRow
+        label="Quad"
+        value={quad}
+        onChangeText={setQuad}
+        unit={quadUnit}
+        onToggleUnit={() => setQuadUnit((u) => (u === 'in' ? 'cm' : 'in'))}
         showUnitToggle
       />
 
