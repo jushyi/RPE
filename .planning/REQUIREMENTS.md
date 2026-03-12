@@ -75,9 +75,9 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **COACH-03**: Users can be both coach and trainee simultaneously
 - [x] **COACH-04**: Either party can disconnect the coaching relationship unilaterally
 - [x] **COACH-05**: Push notification infrastructure exists (token registration, server-side dispatch via Edge Function)
-- [ ] **COACH-06**: Coach UI toggle in Plans tab: "My Plans" vs "Trainees"
-- [ ] **COACH-07**: Coach-assigned plans are visually distinguished in trainee's plan list
-- [ ] **COACH-08**: Trainee cannot edit coach-assigned plans (read-only)
+- [x] **COACH-06**: Coach UI toggle in Plans tab: "My Plans" vs "Trainees"
+- [x] **COACH-07**: Coach-assigned plans are visually distinguished in trainee's plan list
+- [x] **COACH-08**: Trainee cannot edit coach-assigned plans (read-only)
 - [ ] **COACH-09**: Coach can create workout plans targeting a specific trainee
 - [ ] **COACH-10**: Coach can see trainee's last-week performance inline while editing plans
 - [ ] **COACH-11**: Coach can attach a text note when saving plan changes
