@@ -191,7 +191,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -209,6 +209,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
 | 13. Coaching Options | 6/6 | Complete    | 2026-03-12 |
 | 14. Set Videos | 3/3 | Complete   | 2026-03-12 |
+| 15. Barbell Calculator | 0/3 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -277,10 +278,18 @@ Plans:
 
 ### Phase 15: Add barbell calculator tab with plate loading, weight calculations, RPE/1RM calculators, and next-set RPE recommendations
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Users have a dedicated Calculator tab with three standalone utility tools: a plate loading visualizer with color-coded barbell diagram, a combined RPE/1RM calculator with percentage grid, and a next-set RPE-based weight recommendation engine -- all using the user's preferred unit setting and requiring no network connectivity.
+**Requirements**: CALC-01, CALC-02, CALC-03, CALC-04, CALC-05, CALC-06, CALC-07
 **Depends on:** Phase 14
-**Plans:** 0 plans
+**Success Criteria** (what must be TRUE):
+  1. User can navigate to the Calc tab (between Plans and Settings) and see three sub-tools via segmented tabs with swipe navigation
+  2. Plate calculator shows a visual barbell diagram with color-coded plates when a target weight is entered
+  3. RPE/1RM calculator shows estimated 1RM and an RPE percentage grid when weight and reps are entered
+  4. Next Set calculator shows a recommended weight (rounded to loadable increment) with explanation when last set data and targets are entered
+  5. All calculations correctly use the user's preferred unit setting (lb/kg)
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 15 to break down)
+- [ ] 15-00-PLAN.md — Wave 0: Test stubs for calculator utility functions (plateCalculator, rpeTable, rpeCalculator, nextSet)
+- [ ] 15-01-PLAN.md — Types, constants, pure utility functions (plate calc, RPE table, next-set recommendation) with full test coverage
+- [ ] 15-02-PLAN.md — Calculator tab route, PagerView layout, all 3 sub-tool UI components (PlateCalculator, RpeCalculator, NextSetCalculator), human verification
