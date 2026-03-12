@@ -19,7 +19,7 @@ export function BodyCard() {
     fetchEntries: fetchBodyweight,
   } = useBodyweightData();
   const {
-    latest: latestMeasurement,
+    latestByMetric,
     fetchMeasurements,
   } = useBodyMeasurements();
 
@@ -30,7 +30,7 @@ export function BodyCard() {
     }, [fetchBodyweight, fetchMeasurements])
   );
 
-  const hasData = latestWeight || latestMeasurement;
+  const hasData = latestWeight || latestByMetric;
 
   const handlePress = () => {
     router.push('/(app)/body-metrics' as any);
@@ -65,45 +65,45 @@ export function BodyCard() {
             </View>
 
             {/* Measurement rows */}
-            {latestMeasurement && (
+            {latestByMetric && (
               <View style={s.measurementSection}>
-                {latestMeasurement.chest != null && (
+                {latestByMetric.chest != null && (
                   <View style={s.measurementRow}>
                     <Text style={s.measurementLabel}>Chest</Text>
                     <Text style={s.measurementValue}>
-                      {latestMeasurement.chest} {latestMeasurement.chest_unit}
+                      {latestByMetric.chest} {latestByMetric.chest_unit}
                     </Text>
                   </View>
                 )}
-                {latestMeasurement.waist != null && (
+                {latestByMetric.waist != null && (
                   <View style={s.measurementRow}>
                     <Text style={s.measurementLabel}>Waist</Text>
                     <Text style={s.measurementValue}>
-                      {latestMeasurement.waist} {latestMeasurement.waist_unit}
+                      {latestByMetric.waist} {latestByMetric.waist_unit}
                     </Text>
                   </View>
                 )}
-                {latestMeasurement.biceps != null && (
+                {latestByMetric.biceps != null && (
                   <View style={s.measurementRow}>
                     <Text style={s.measurementLabel}>Biceps</Text>
                     <Text style={s.measurementValue}>
-                      {latestMeasurement.biceps} {latestMeasurement.biceps_unit}
+                      {latestByMetric.biceps} {latestByMetric.biceps_unit}
                     </Text>
                   </View>
                 )}
-                {latestMeasurement.quad != null && (
+                {latestByMetric.quad != null && (
                   <View style={s.measurementRow}>
                     <Text style={s.measurementLabel}>Quad</Text>
                     <Text style={s.measurementValue}>
-                      {latestMeasurement.quad} {latestMeasurement.quad_unit}
+                      {latestByMetric.quad} {latestByMetric.quad_unit}
                     </Text>
                   </View>
                 )}
-                {latestMeasurement.body_fat_pct != null && (
+                {latestByMetric.body_fat_pct != null && (
                   <View style={s.measurementRow}>
                     <Text style={s.measurementLabel}>Body Fat</Text>
                     <Text style={s.measurementValue}>
-                      {latestMeasurement.body_fat_pct}%
+                      {latestByMetric.body_fat_pct}%
                     </Text>
                   </View>
                 )}

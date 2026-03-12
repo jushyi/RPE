@@ -151,6 +151,30 @@ export function useBodyMeasurements() {
 
   const latest = measurements.length > 0 ? measurements[0] : null;
 
+  // Build a composite of the most recent non-null value for each metric
+  // across all entries (measurements are sorted newest-first)
+  const latestByMetric = (() => {
+    if (measurements.length === 0) return null;
+    const result: Partial<Pick<BodyMeasurement,
+      'chest' | 'chest_unit' | 'waist' | 'waist_unit' |
+      'biceps' | 'biceps_unit' | 'quad' | 'quad_unit' | 'body_fat_pct'
+    >> = {};
+    const fields = ['chest', 'waist', 'biceps', 'quad', 'body_fat_pct'] as const;
+    for (const field of fields) {
+      for (const m of measurements) {
+        if (m[field] != null) {
+          result[field] = m[field] as any;
+          if (field !== 'body_fat_pct') {
+            const unitKey = `${field}_unit` as keyof BodyMeasurement;
+            (result as any)[unitKey] = m[unitKey];
+          }
+          break;
+        }
+      }
+    }
+    return Object.keys(result).length > 0 ? result : null;
+  })();
+
   return {
     measurements,
     isLoading,
@@ -159,5 +183,6 @@ export function useBodyMeasurements() {
     updateMeasurement,
     deleteMeasurement,
     latest,
+    latestByMetric,
   };
 }

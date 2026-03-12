@@ -172,7 +172,7 @@ export function MeasurementForm({
       {/* Date Picker */}
       <Pressable
         style={s.dateRow}
-        onPress={() => setShowDatePicker(true)}
+        onPress={() => setShowDatePicker((prev) => !prev)}
       >
         <Ionicons name="calendar-outline" size={18} color={colors.textSecondary} />
         <Text style={s.dateText}>{formatDate(date)}</Text>
