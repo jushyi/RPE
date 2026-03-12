@@ -73,6 +73,10 @@ export default function AppLayout() {
           name="body-metrics"
           options={{ title: 'Body Metrics', headerShown: false }}
         />
+        <Stack.Screen
+          name="videos"
+          options={{ title: 'My Videos' }}
+        />
     </Stack>
   );
 }
