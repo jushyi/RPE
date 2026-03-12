@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 
 export interface TraineeSession {
@@ -29,13 +29,15 @@ export function useTraineeHistory(traineeId: string) {
   const [sessions, setSessions] = useState<TraineeSession[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const offsetRef = useRef(0);
 
   const fetchSessions = useCallback(async (reset = true) => {
     if (!supabase || !traineeId) return;
 
     setIsLoading(true);
     try {
-      const offset = reset ? 0 : sessions.length;
+      if (reset) offsetRef.current = 0;
+      const offset = offsetRef.current;
 
       const { data, error } = await (supabase.from('workout_sessions') as any)
         .select('id, title, started_at, ended_at, plan_name, session_exercises(id, exercise_id, exercise_name, set_logs(weight, reps, unit))')
@@ -51,15 +53,17 @@ export function useTraineeHistory(traineeId: string) {
 
       if (reset) {
         setSessions(items);
+        offsetRef.current = items.length;
       } else {
         setSessions((prev) => [...prev, ...items]);
+        offsetRef.current += items.length;
       }
     } catch (err) {
       console.warn('Failed to fetch trainee history:', err);
     } finally {
       setIsLoading(false);
     }
-  }, [traineeId, sessions.length]);
+  }, [traineeId]);
 
   const fetchMore = useCallback(() => {
     if (!isLoading && hasMore) {

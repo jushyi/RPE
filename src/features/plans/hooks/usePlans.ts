@@ -49,6 +49,7 @@ export function usePlans() {
     try {
       const { data, error } = await (supabase.from('workout_plans') as any)
         .select('*, plan_days(id, plan_id, day_name, weekday, alarm_time, alarm_enabled, sort_order, created_at, plan_day_exercises(id, plan_day_id, exercise_id, sort_order, target_sets, notes, unit_override, weight_progression, created_at, exercise:exercises(id, name, equipment, muscle_groups)))')
+        .eq('user_id', session.user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
