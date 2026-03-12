@@ -8,7 +8,14 @@ import {
   Modal,
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 let Clipboard: typeof import('expo-clipboard') | null = null;
 try {
   Clipboard = require('expo-clipboard');
@@ -35,6 +42,19 @@ export function InviteCodeModal({ visible, onClose }: InviteCodeModalProps) {
   const [enteredCode, setEnteredCode] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [copied, setCopied] = useState(false);
+
+  // Slide-up animation for the bottom sheet content
+  const translateY = useSharedValue(300);
+
+  useEffect(() => {
+    translateY.value = visible
+      ? withTiming(0, { duration: 300 })
+      : withTiming(300, { duration: 200 });
+  }, [visible]);
+
+  const sheetAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }));
 
   // Check for existing active code on open
   useEffect(() => {
@@ -102,119 +122,127 @@ export function InviteCodeModal({ visible, onClose }: InviteCodeModalProps) {
     <Modal
       visible={visible}
       transparent
-      animationType="slide"
+      animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={s.overlay}>
-        <View style={s.modal}>
-          {/* Header */}
-          <View style={s.header}>
-            <Text style={s.title}>Coaching Connection</Text>
-            <Pressable onPress={onClose} hitSlop={12}>
-              <Ionicons name="close" size={24} color={colors.textSecondary} />
-            </Pressable>
-          </View>
+      <Pressable style={s.overlay} onPress={onClose}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={s.keyboardAvoid}
+        >
+          <Animated.View
+            style={[s.modal, sheetAnimatedStyle]}
+            onStartShouldSetResponder={() => true}
+          >
+            {/* Header */}
+            <View style={s.header}>
+              <Text style={s.title}>Coaching Connection</Text>
+              <Pressable onPress={onClose} hitSlop={12}>
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
+              </Pressable>
+            </View>
 
-          {/* Tab Selector */}
-          <View style={s.tabs}>
-            <Pressable
-              style={[s.tab, tab === 'generate' && s.tabActive]}
-              onPress={() => setTab('generate')}
-            >
-              <Text style={[s.tabText, tab === 'generate' && s.tabTextActive]}>
-                Generate Code
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[s.tab, tab === 'enter' && s.tabActive]}
-              onPress={() => setTab('enter')}
-            >
-              <Text style={[s.tabText, tab === 'enter' && s.tabTextActive]}>
-                Enter Code
-              </Text>
-            </Pressable>
-          </View>
+            {/* Tab Selector */}
+            <View style={s.tabs}>
+              <Pressable
+                style={[s.tab, tab === 'generate' && s.tabActive]}
+                onPress={() => setTab('generate')}
+              >
+                <Text style={[s.tabText, tab === 'generate' && s.tabTextActive]}>
+                  Generate Code
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[s.tab, tab === 'enter' && s.tabActive]}
+                onPress={() => setTab('enter')}
+              >
+                <Text style={[s.tabText, tab === 'enter' && s.tabTextActive]}>
+                  Enter Code
+                </Text>
+              </Pressable>
+            </View>
 
-          {/* Content */}
-          {tab === 'generate' ? (
-            <View style={s.content}>
-              {activeCode ? (
-                <>
-                  <Text style={s.label}>Your Invite Code</Text>
-                  <View style={s.codeDisplay}>
-                    <Text style={s.codeText}>{activeCode.code}</Text>
-                  </View>
-                  <Text style={s.expiry}>{getTimeRemaining()}</Text>
-                  <Pressable style={s.copyBtn} onPress={handleCopy}>
-                    <Ionicons
-                      name={copied ? 'checkmark-outline' : 'copy-outline'}
-                      size={18}
-                      color={colors.white}
-                    />
-                    <Text style={s.copyBtnText}>
-                      {copied ? 'Copied' : 'Copy Code'}
+            {/* Content */}
+            {tab === 'generate' ? (
+              <View style={s.content}>
+                {activeCode ? (
+                  <>
+                    <Text style={s.label}>Your Invite Code</Text>
+                    <View style={s.codeDisplay}>
+                      <Text style={s.codeText}>{activeCode.code}</Text>
+                    </View>
+                    <Text style={s.expiry}>{getTimeRemaining()}</Text>
+                    <Pressable style={s.copyBtn} onPress={handleCopy}>
+                      <Ionicons
+                        name={copied ? 'checkmark-outline' : 'copy-outline'}
+                        size={18}
+                        color={colors.white}
+                      />
+                      <Text style={s.copyBtnText}>
+                        {copied ? 'Copied' : 'Copy Code'}
+                      </Text>
+                    </Pressable>
+                  </>
+                ) : (
+                  <>
+                    <Text style={s.description}>
+                      Generate an invite code to share with someone you want to coach. The code expires in 24 hours.
                     </Text>
-                  </Pressable>
-                </>
-              ) : (
-                <>
-                  <Text style={s.description}>
-                    Generate an invite code to share with someone you want to coach. The code expires in 24 hours.
-                  </Text>
-                </>
-              )}
-              <Pressable
-                style={[s.actionBtn, loading && s.actionBtnDisabled]}
-                onPress={handleGenerate}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color={colors.white} size="small" />
-                ) : (
-                  <Text style={s.actionBtnText}>
-                    {activeCode ? 'Generate New Code' : 'Generate Code'}
-                  </Text>
+                  </>
                 )}
-              </Pressable>
-            </View>
-          ) : (
-            <View style={s.content}>
-              <Text style={s.label}>Enter Invite Code</Text>
-              <Text style={s.description}>
-                Enter the 6-character code from your coach to connect.
-              </Text>
-              <TextInput
-                style={s.input}
-                value={enteredCode}
-                onChangeText={(text) => {
-                  setEnteredCode(text.toUpperCase());
-                  setErrorMsg('');
-                }}
-                placeholder="ABC123"
-                placeholderTextColor={colors.textMuted}
-                maxLength={6}
-                autoCapitalize="characters"
-                autoCorrect={false}
-              />
-              {errorMsg ? <Text style={s.errorText}>{errorMsg}</Text> : null}
-              <Pressable
-                style={[
-                  s.actionBtn,
-                  (loading || enteredCode.trim().length < 6) && s.actionBtnDisabled,
-                ]}
-                onPress={handleRedeem}
-                disabled={loading || enteredCode.trim().length < 6}
-              >
-                {loading ? (
-                  <ActivityIndicator color={colors.white} size="small" />
-                ) : (
-                  <Text style={s.actionBtnText}>Connect</Text>
-                )}
-              </Pressable>
-            </View>
-          )}
-        </View>
-      </View>
+                <Pressable
+                  style={[s.actionBtn, loading && s.actionBtnDisabled]}
+                  onPress={handleGenerate}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color={colors.white} size="small" />
+                  ) : (
+                    <Text style={s.actionBtnText}>
+                      {activeCode ? 'Generate New Code' : 'Generate Code'}
+                    </Text>
+                  )}
+                </Pressable>
+              </View>
+            ) : (
+              <View style={s.content}>
+                <Text style={s.label}>Enter Invite Code</Text>
+                <Text style={s.description}>
+                  Enter the 6-character code from your coach to connect.
+                </Text>
+                <TextInput
+                  style={s.input}
+                  value={enteredCode}
+                  onChangeText={(text) => {
+                    setEnteredCode(text.toUpperCase());
+                    setErrorMsg('');
+                  }}
+                  placeholder="ABC123"
+                  placeholderTextColor={colors.textMuted}
+                  maxLength={6}
+                  autoCapitalize="characters"
+                  autoCorrect={false}
+                />
+                {errorMsg ? <Text style={s.errorText}>{errorMsg}</Text> : null}
+                <Pressable
+                  style={[
+                    s.actionBtn,
+                    (loading || enteredCode.trim().length < 6) && s.actionBtnDisabled,
+                  ]}
+                  onPress={handleRedeem}
+                  disabled={loading || enteredCode.trim().length < 6}
+                >
+                  {loading ? (
+                    <ActivityIndicator color={colors.white} size="small" />
+                  ) : (
+                    <Text style={s.actionBtnText}>Connect</Text>
+                  )}
+                </Pressable>
+              </View>
+            )}
+          </Animated.View>
+        </KeyboardAvoidingView>
+      </Pressable>
     </Modal>
   );
 }
@@ -223,6 +251,10 @@ const s = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'flex-end',
+  },
+  keyboardAvoid: {
+    width: '100%',
     justifyContent: 'flex-end',
   },
   modal: {
