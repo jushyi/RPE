@@ -375,9 +375,10 @@ None yet.
 | 22 | Fix ReferenceError: Property removeSet doesn't exist in ExercisePage | 2026-03-12 | cbfcec9 | [22-fix-referenceerror-property-removeset-do](./quick/22-fix-referenceerror-property-removeset-do/) |
 | 23 | Remove duplicate Home header banner from dashboard tab | 2026-03-12 | ebb87d9 | [23-regression-in-home-page-header-banner-sh](./quick/23-regression-in-home-page-header-banner-sh/) |
 | 24 | Hide Start Workout card after completing planned workout | 2026-03-12 | 84f9665 | [24-hide-start-workout-card-after-completing](./quick/24-hide-start-workout-card-after-completing/) |
+| 25 | Fix Start Workout button to use startFromPlan flow | 2026-03-12 | 96b345e | [25-the-start-workout-button-on-the-todays-w](./quick/25-the-start-workout-button-on-the-todays-w/) |
 
 ## Session Continuity
 
-Last session: 2026-03-12T14:28:30.402Z
-Stopped at: Completed 06-04-PLAN.md
+Last session: 2026-03-12T14:29:00Z
+Stopped at: Completed quick-25
 Resume file: None
