@@ -369,7 +369,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 12 of 14 (Proper Onboarding)
 Plan: 2 of 2 complete
 Status: Phase 12 Complete (verified + human approved)
-Last activity: 2026-03-12 - Completed quick task 31: Stack no-plan workout card buttons vertically
+Last activity: 2026-03-12 - Completed quick task 32: Trainee weekday modification on coach plans
 
 Progress: [██████████] 100%
 
