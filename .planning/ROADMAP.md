@@ -208,6 +208,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 1/2 | In Progress|  |
 | 13. Coaching Options | 0/6 | Planned | - |
+| 14. Set Videos | 0/3 | Planned | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -256,12 +257,20 @@ Plans:
 - [ ] 13-04-PLAN.md — Coach plan management: plan CRUD targeting trainee, inline performance, coach notes, trainee plans screen, trainee workout history
 - [ ] 13-05-PLAN.md — Notification triggers (workout complete, PR, plan update), weekly summary Edge Function, push token registration on startup
 
-### Phase 14: feature to add and save videos of a certain set. can be viewed in history and in seperate tab in settings.
+### Phase 14: Set Videos
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Users can record or upload a video for a specific set during an active workout, view those videos as thumbnails in workout history detail, and browse all videos in a dedicated gallery screen accessible from Settings. One video per set, stored in Supabase Storage with offline-first upload queue.
+**Requirements**: VID-01, VID-02, VID-03, VID-04, VID-05, VID-06, VID-07, VID-08
 **Depends on:** Phase 13
-**Plans:** 0 plans
+**Success Criteria** (what must be TRUE):
+  1. User can record a video or pick from gallery and attach it to a logged set during an active workout
+  2. Video uploads to Supabase Storage in background (offline-first queue)
+  3. Video thumbnails with play icon appear on sets in workout history detail
+  4. Tapping thumbnail opens fullscreen native video player
+  5. Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 14 to break down)
+- [ ] 14-01-PLAN.md -- Data layer: dependencies (expo-video, expo-video-thumbnails, base64-arraybuffer), migrations (video_url column, set-videos bucket), types, video capture/upload hooks, upload queue, thumbnail cache, shared components
+- [ ] 14-02-PLAN.md -- Active workout integration: VideoCaptureButton on SetCard, video attachment wiring in workout session, background upload on capture
+- [ ] 14-03-PLAN.md -- History playback + gallery: video thumbnails in SetRow, video badge on session cards, My Videos gallery screen in Settings with storage usage

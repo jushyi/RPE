@@ -57,6 +57,17 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ALRM-02**: Alarms fire with sound and vibration and must be dismissed
 - [x] **ALRM-03**: User receives notification if a planned workout day passes without a logged session
 
+### Set Videos
+
+- [ ] **VID-01**: User can record a video during an active workout and attach it to a specific set
+- [ ] **VID-02**: User can choose a video from gallery and attach it to a specific set
+- [ ] **VID-03**: Videos upload to Supabase Storage in background (offline-first queue)
+- [ ] **VID-04**: Camera button appears on each logged SetCard during active workout
+- [ ] **VID-05**: User can replace or delete an attached video on a set
+- [ ] **VID-06**: Video thumbnails with play icon appear on sets in workout history detail
+- [ ] **VID-07**: Tapping thumbnail opens fullscreen native video player
+- [ ] **VID-08**: Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
+
 ### Coaching
 
 - [ ] **COACH-01**: Coach can generate an invite code to connect with a trainee
@@ -161,13 +172,22 @@ Which phases cover which requirements. Updated during roadmap creation.
 | COACH-14 | Phase 13 | Planned |
 | COACH-15 | Phase 13 | Planned |
 | COACH-16 | Phase 13 | Planned |
+| VID-01 | Phase 14 | Planned |
+| VID-02 | Phase 14 | Planned |
+| VID-03 | Phase 14 | Planned |
+| VID-04 | Phase 14 | Planned |
+| VID-05 | Phase 14 | Planned |
+| VID-06 | Phase 14 | Planned |
+| VID-07 | Phase 14 | Planned |
+| VID-08 | Phase 14 | Planned |
 
 **Coverage:**
 - v1 requirements: 29 total (all complete)
 - Coaching requirements: 16 total (planned)
-- Mapped to phases: 45
+- Video requirements: 8 total (planned)
+- Mapped to phases: 53
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-12 after Phase 13 planning — 16 coaching requirements added*
+*Last updated: 2026-03-12 after Phase 14 planning — 8 video requirements added*
