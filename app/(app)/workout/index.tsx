@@ -38,6 +38,8 @@ export default function WorkoutScreen() {
     endEarly,
     cancelWorkout,
     addFreestyleExercise,
+    attachVideoToSet,
+    removeVideoFromSet,
   } = useWorkoutSession();
 
   const [pickerVisible, setPickerVisible] = useState(false);
@@ -153,6 +155,8 @@ export default function WorkoutScreen() {
             onLogSet={handleLogSet}
             onDetectPR={detectPR}
             onRemoveExercise={isFreestyle ? handleRemoveExercise : undefined}
+            onVideoAttached={attachVideoToSet}
+            onVideoDeleted={removeVideoFromSet}
             pagerRef={pagerRef}
           />
         ) : (

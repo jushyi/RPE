@@ -7,6 +7,7 @@ import { usePlanStore } from '@/stores/planStore';
 import { setCompletedSession, setIsFinishing } from '@/features/workout/workoutSessionBridge';
 import { saveCompletedSession } from '@/features/workout/hooks/useCompletedToday';
 import { cancelTodaysNudges } from '@/features/alarms/hooks/useAlarmScheduler';
+import { enqueueVideoUpload, flushVideoQueue } from '@/features/videos/utils/videoUploadQueue';
 import type { PlanDay } from '@/features/plans/types';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionExercise, SetLog } from '@/features/workout/types';
@@ -158,6 +159,35 @@ export function useWorkoutSession() {
     [exerciseCount, addExerciseAction, setCurrentExerciseIndex]
   );
 
+  const attachVideoToSet = useCallback(
+    async (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string) => {
+      if (!userId) return;
+      // Enqueue upload for background processing (offline-first)
+      try {
+        await enqueueVideoUpload({
+          setLogId,
+          userId,
+          localUri,
+          thumbnailUri,
+          createdAt: new Date().toISOString(),
+        });
+        // Fire-and-forget flush attempt
+        flushVideoQueue().catch(() => {});
+      } catch {
+        // Enqueue failure should not block workout flow
+      }
+    },
+    [userId],
+  );
+
+  const removeVideoFromSet = useCallback(
+    (_exerciseId: string, _setLogId: string) => {
+      // Video deletion from storage is handled by SetCard via useVideoUpload.deleteVideo
+      // This callback allows the session hook to clear any local state if needed in the future
+    },
+    [],
+  );
+
   return {
     session: activeSession,
     currentExercise,
@@ -170,5 +200,7 @@ export function useWorkoutSession() {
     endEarly,
     cancelWorkout,
     addFreestyleExercise,
+    attachVideoToSet,
+    removeVideoFromSet,
   };
 }

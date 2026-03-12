@@ -1,10 +1,14 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import {
   MAX_WEIGHT,
   MAX_REPS,
 } from '@/features/workout/constants';
+import { VideoCaptureButton } from '@/features/videos/components/VideoCaptureButton';
+import { VideoThumbnail } from '@/features/videos/components/VideoThumbnail';
+import { useVideoUpload } from '@/features/videos/hooks/useVideoUpload';
 import type { TargetSet } from '@/features/plans/types';
 import type { SetLog } from '@/features/workout/types';
 
@@ -16,9 +20,14 @@ interface SetCardProps {
   onDelete?: () => void;
   isLogged?: boolean;
   loggedSet?: SetLog;
+  onVideoAttached?: (setLogId: string, localUri: string, thumbnailUri: string) => void;
+  onVideoDeleted?: (setLogId: string) => void;
 }
 
-export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged, loggedSet }: SetCardProps) {
+export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged, loggedSet, onVideoAttached, onVideoDeleted }: SetCardProps) {
+  const { deleteVideo } = useVideoUpload();
+  const [localVideoUri, setLocalVideoUri] = useState<string | null>(null);
+  const [localThumbnailUri, setLocalThumbnailUri] = useState<string | null>(null);
   const [weight, setWeight] = useState(() => {
     if (loggedSet) return String(loggedSet.weight);
     if (targetSet?.weight && targetSet.weight > 0) return String(targetSet.weight);
@@ -70,12 +79,58 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
     }
   }, []);
 
+  const handleVideoAttached = useCallback(
+    (localUri: string, thumbnailUri: string) => {
+      setLocalVideoUri(localUri);
+      setLocalThumbnailUri(thumbnailUri);
+      if (loggedSet?.id && onVideoAttached) {
+        onVideoAttached(loggedSet.id, localUri, thumbnailUri);
+      }
+    },
+    [loggedSet?.id, onVideoAttached],
+  );
+
+  const handleDeleteVideo = useCallback(() => {
+    if (!loggedSet?.id) return;
+    Alert.alert(
+      'Remove Video?',
+      'This will delete the video from this set.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteVideo(loggedSet.id);
+            } catch {
+              // Storage delete failure is non-blocking
+            }
+            setLocalVideoUri(null);
+            setLocalThumbnailUri(null);
+            onVideoDeleted?.(loggedSet.id);
+          },
+        },
+      ],
+    );
+  }, [loggedSet?.id, deleteVideo, onVideoDeleted]);
+
+  const hasVideoAttachment = !!(localVideoUri || loggedSet?.video_url);
+  const displayThumbnail = localThumbnailUri || null;
+
   return (
     <View style={[s.card, hasLogged.current && s.cardLogged]}>
       <View style={s.setHeader}>
         <Text style={s.setLabel}>Set {setNumber}</Text>
         <View style={s.setHeaderRight}>
           {hasLogged.current && <Text style={s.loggedBadge}>Logged</Text>}
+          {hasLogged.current && loggedSet?.id && (
+            <VideoCaptureButton
+              onVideoAttached={handleVideoAttached}
+              setLogId={loggedSet.id}
+              hasVideo={hasVideoAttachment}
+            />
+          )}
           {onDelete && (
             <Pressable
               onPress={onDelete}
@@ -130,6 +185,24 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
           />
         </View>
       </View>
+      {hasLogged.current && displayThumbnail && (
+        <View style={s.videoRow}>
+          <View style={s.thumbnailWrapper}>
+            <VideoThumbnail
+              thumbnailUri={displayThumbnail}
+              onPress={() => {/* Preview handled in future plan */}}
+              size={40}
+            />
+            <Pressable
+              onPress={handleDeleteVideo}
+              style={s.deleteThumbnailBtn}
+              hitSlop={6}
+            >
+              <Ionicons name="trash-outline" size={16} color={colors.error} />
+            </Pressable>
+          </View>
+        </View>
+      )}
       {!hasLogged.current && (
         <Pressable
           onPress={handleLogPress}
@@ -260,5 +333,21 @@ const s = StyleSheet.create({
   },
   logBtnTextDisabled: {
     color: colors.textMuted,
+  },
+  videoRow: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  thumbnailWrapper: {
+    position: 'relative',
+  },
+  deleteThumbnailBtn: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    backgroundColor: colors.surface,
+    borderRadius: 10,
+    padding: 2,
   },
 });
