@@ -37,6 +37,13 @@ export function usePlans() {
     if (!force && lastFetched && plans.length > 0) return;
     if (!supabase) return;
 
+    // Ensure we have a valid auth session before querying (RLS requires it)
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      console.warn('fetchPlans: no auth session, skipping');
+      return;
+    }
+
     setLoading(true);
     try {
       const { data, error } = await (supabase.from('workout_plans') as any)

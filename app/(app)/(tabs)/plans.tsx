@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Pressable,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -109,10 +110,20 @@ function PlansContent() {
   const router = useRouter();
   const { planSummaries, isLoading, fetchPlans, setActivePlan, deletePlan } =
     usePlans();
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     fetchPlans();
   }, []);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await fetchPlans(true);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [fetchPlans]);
 
   const handleCreatePress = () => {
     router.push('/plans/create' as any);
@@ -177,6 +188,14 @@ function PlansContent() {
           renderItem={renderItem}
           contentContainerStyle={s.list}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={colors.accent}
+              colors={[colors.accent]}
+            />
+          }
         />
       )}
 

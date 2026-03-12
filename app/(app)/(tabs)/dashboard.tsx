@@ -273,7 +273,7 @@ export default function DashboardScreen() {
       .then(setBaselines)
       .catch(() => {})
       .finally(() => setRefreshingPRs(false));
-    fetchPlans();
+    fetchPlans(true);  // Force re-fetch on pull-to-refresh
   }, [refreshCompleted, getPRBaselines, fetchPlans]);
 
   // Refresh only when re-tapping the home icon while already on dashboard
