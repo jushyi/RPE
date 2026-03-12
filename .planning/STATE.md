@@ -197,7 +197,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 11 of 11 (Settings + Account Management)
 Plan: 2 of 3 complete (11-02 CSV data export)
 Status: Phase 11 In Progress
-Last activity: 2026-03-12 - Completed quick task 24: hide Start Workout card after completing planned workout
+Last activity: 2026-03-12 - Completed quick task 25: fix Start Workout button on TodaysWorkoutCard
 
 Progress: [██████████] 100%
 
