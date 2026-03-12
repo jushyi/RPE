@@ -62,8 +62,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **VID-01**: User can record a video during an active workout and attach it to a specific set
 - [x] **VID-02**: User can choose a video from gallery and attach it to a specific set
 - [x] **VID-03**: Videos upload to Supabase Storage in background (offline-first queue)
-- [ ] **VID-04**: Camera button appears on each logged SetCard during active workout
-- [ ] **VID-05**: User can replace or delete an attached video on a set
+- [x] **VID-04**: Camera button appears on each logged SetCard during active workout
+- [x] **VID-05**: User can replace or delete an attached video on a set
 - [ ] **VID-06**: Video thumbnails with play icon appear on sets in workout history detail
 - [ ] **VID-07**: Tapping thumbnail opens fullscreen native video player
 - [ ] **VID-08**: Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
