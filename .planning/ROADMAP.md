@@ -191,7 +191,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -210,6 +210,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 13. Coaching Options | 8/8 | Complete   | 2026-03-12 |
 | 14. Set Videos | 3/3 | Complete   | 2026-03-12 |
 | 15. Barbell Calculator | 0/3 | Not started | - |
+| 16. Push Notifications | 0/3 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -296,15 +297,24 @@ Plans:
 - [ ] 15-01-PLAN.md — Types, constants, pure utility functions (plate calc, RPE table, next-set recommendation) with TDD test coverage
 - [ ] 15-02-PLAN.md — Calculator tab route, PagerView layout, all 3 sub-tool UI components (PlateCalculator, RpeCalculator, NextSetCalculator), human verification
 
-### Phase 16: push notifications
+### Phase 16: Push Notifications
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Users have an in-app notification inbox showing notification history with deep linking from notification taps to relevant screens, with end-to-end testing of all existing notification types. Push infrastructure already exists from Phase 8 (local alarms/nudges) and Phase 13 (push via Expo Push API + Edge Functions) -- this phase adds the inbox UI, deep link routing, notification persistence, and a developer test screen.
+**Requirements**: NOTIF-01, NOTIF-02, NOTIF-03, NOTIF-04, NOTIF-05, NOTIF-06
 **Depends on:** Phase 15
-**Plans:** 0 plans
+**Success Criteria** (what must be TRUE):
+  1. Bell icon in dashboard header shows unread notification count and opens full-screen notification inbox
+  2. Tapping inbox items navigates to the relevant screen (session detail, progress chart, plan detail, or active workout)
+  3. Notifications are persisted in Supabase with RLS and 30-day retention
+  4. Push notification taps (cold-start and foreground) deep link to the correct screen
+  5. Developer test screen (hidden behind long-press on version text) triggers all 6 notification types
+  6. Local alarm/nudge notifications write records to the notifications table for inbox consistency
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 16 to break down)
+- [ ] 16-01-PLAN.md — Data layer: notifications migration + RLS, types, deep link router, relative time utility, notification type icons, notificationStore (Zustand + MMKV)
+- [ ] 16-02-PLAN.md — Inbox UI: BellBadge in dashboard header, NotificationInbox screen, deep link handlers (cold-start + foreground), Edge Function extensions to persist notifications
+- [ ] 16-03-PLAN.md — Dev test screen (6 trigger buttons + debug log), enrich notification payloads with deep link IDs, alarm/nudge notification persistence
 
 ### Phase 17: friend workout, pr and set video sharing. creating of groups to share with
 

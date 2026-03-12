@@ -87,6 +87,15 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **COACH-15**: Trainee receives push notification when coach updates their plan
 - [x] **COACH-16**: Coach receives weekly adherence summary (Sunday evening) for all trainees
 
+### Notification Inbox & Deep Linking
+
+- [ ] **NOTIF-01**: Bell icon in dashboard header with numeric unread badge, opens full-screen notification inbox
+- [ ] **NOTIF-02**: Tapping inbox items deep links to relevant screen (session detail, progress chart, plan detail, or active workout)
+- [ ] **NOTIF-03**: Notifications persisted in Supabase table with RLS and 30-day retention
+- [ ] **NOTIF-04**: Push notification taps (cold-start and foreground) deep link to correct screen
+- [ ] **NOTIF-05**: Developer test screen with trigger buttons for all 6 notification types and debug log
+- [ ] **NOTIF-06**: Local alarm/nudge notifications write records to notifications table for inbox consistency
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -180,14 +189,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VID-06 | Phase 14 | Planned |
 | VID-07 | Phase 14 | Planned |
 | VID-08 | Phase 14 | Planned |
+| NOTIF-01 | Phase 16 | Planned |
+| NOTIF-02 | Phase 16 | Planned |
+| NOTIF-03 | Phase 16 | Planned |
+| NOTIF-04 | Phase 16 | Planned |
+| NOTIF-05 | Phase 16 | Planned |
+| NOTIF-06 | Phase 16 | Planned |
 
 **Coverage:**
 - v1 requirements: 29 total (all complete)
 - Coaching requirements: 16 total (planned)
 - Video requirements: 8 total (planned)
-- Mapped to phases: 53
+- Notification requirements: 6 total (planned)
+- Mapped to phases: 59
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-12 after Phase 14 planning — 8 video requirements added*
+*Last updated: 2026-03-12 after Phase 16 planning -- 6 notification requirements added*
