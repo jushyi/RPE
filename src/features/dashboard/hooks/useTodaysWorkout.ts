@@ -68,28 +68,36 @@ export function determineTodaysWorkout(
 
 /**
  * Hook that determines today's planned workout by fetching the active plan
- * directly from Supabase (not MMKV cache) keyed by the authenticated userId.
+ * directly from Supabase using the auth session's user ID (not MMKV cache).
  */
 export function useTodaysWorkout(): { workout: TodaysWorkoutState; activePlan: Plan | null } {
   const [activePlan, setActivePlan] = useState<Plan | null>(null);
+  // Use authStore userId only as a trigger to re-fetch when auth changes
   const userId = useAuthStore((s) => s.userId);
 
   useEffect(() => {
     let cancelled = false;
 
-    if (!userId || !supabase) {
+    if (!supabase) {
       setActivePlan(null);
       return;
     }
 
     (async () => {
       try {
+        // Always use the live session user ID (not MMKV-cached authStore)
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          if (!cancelled) setActivePlan(null);
+          return;
+        }
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data, error } = await (supabase.from('workout_plans') as any)
           .select(
             '*, plan_days(id, plan_id, day_name, weekday, sort_order, plan_day_exercises(id, plan_day_id, exercise_id, sort_order, target_sets, notes, unit_override, weight_progression, exercise:exercises(id, name, equipment, muscle_groups)))',
           )
-          .eq('user_id', userId)
+          .eq('user_id', session.user.id)
           .eq('is_active', true)
           .limit(1)
           .single();

@@ -59,7 +59,12 @@ export async function flushSyncQueue(supabase: SupabaseClient): Promise<void> {
       .from(item.table)
       [item.operation](item.data);
     if (error) {
-      console.warn('Sync queue: failed to sync item to', item.table, ':', error.message ?? error);
+      // Duplicate key means the row already exists — treat as success
+      const msg = error.message ?? '';
+      if (msg.includes('duplicate key value violates unique constraint')) {
+        continue;
+      }
+      console.warn('Sync queue: failed to sync item to', item.table, ':', msg || error);
       failed.push(item);
     }
   }

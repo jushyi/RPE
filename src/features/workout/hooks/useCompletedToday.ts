@@ -15,6 +15,11 @@ interface StoredSessions {
   sessions: WorkoutSession[];
 }
 
+/** Clear today's MMKV cache (e.g. on sign-out) */
+export function clearCompletedTodayCache(): void {
+  mmkv.remove(KEY);
+}
+
 /** Append a completed session to today's MMKV cache */
 export function saveCompletedSession(session: WorkoutSession): void {
   const today = new Date().toISOString().split('T')[0];
@@ -37,8 +42,11 @@ function getCachedToday(): WorkoutSession[] {
   }
 }
 
-/** Fetch today's completed sessions from Supabase */
+/** Fetch today's completed sessions from Supabase (own sessions only) */
 async function fetchFromSupabase(): Promise<WorkoutSession[]> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return [];
+
   const today = new Date().toISOString().split('T')[0];
   const startOfDay = `${today}T00:00:00.000Z`;
   const endOfDay = `${today}T23:59:59.999Z`;
@@ -68,6 +76,7 @@ async function fetchFromSupabase(): Promise<WorkoutSession[]> {
         )
       )
     `)
+    .eq('user_id', session.user.id)
     .gte('started_at', startOfDay)
     .lte('started_at', endOfDay)
     .not('ended_at', 'is', null)
@@ -131,13 +140,11 @@ export function useCompletedToday(): {
   refreshing: boolean;
   refresh: () => void;
 } {
-  const [sessions, setSessions] = useState<WorkoutSession[]>(() => getCachedToday());
+  const [sessions, setSessions] = useState<WorkoutSession[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const refresh = useCallback(() => {
     setRefreshing(true);
-    const cached = getCachedToday();
-    setSessions(cached);
 
     fetchFromSupabase()
       .then((dbSessions) => {
@@ -151,7 +158,8 @@ export function useCompletedToday(): {
         setSessions(dbSessions);
       })
       .catch(() => {
-        // Offline — cached sessions are fine
+        // Offline — fall back to MMKV cache
+        setSessions(getCachedToday());
       })
       .finally(() => setRefreshing(false));
   }, []);
