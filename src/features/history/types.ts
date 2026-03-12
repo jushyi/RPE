@@ -48,6 +48,7 @@ export interface SessionListItem {
   durationMinutes: number | null; // ended_at - started_at
   planName: string | null; // null = freestyle
   dayName: string | null;
+  hasVideo: boolean;
 }
 
 // Delta comparison result

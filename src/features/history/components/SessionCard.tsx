@@ -38,12 +38,17 @@ export function SessionCard({ session, onPress }: SessionCardProps) {
       <Card>
         <View style={s.topRow}>
           <Text style={s.date}>{formatDate(session.date)}</Text>
-          {session.prCount > 0 && (
-            <View style={s.prBadge}>
-              <Ionicons name="trophy" size={14} color={colors.warning} />
-              <Text style={s.prText}>{session.prCount}</Text>
-            </View>
-          )}
+          <View style={s.badgeRow}>
+            {session.hasVideo && (
+              <Ionicons name="videocam" size={14} color={colors.accent} />
+            )}
+            {session.prCount > 0 && (
+              <View style={s.prBadge}>
+                <Ionicons name="trophy" size={14} color={colors.warning} />
+                <Text style={s.prText}>{session.prCount}</Text>
+              </View>
+            )}
+          </View>
         </View>
 
         <Text style={s.exercises} numberOfLines={1}>
@@ -85,6 +90,11 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 16,
     fontWeight: '700',
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   prBadge: {
     flexDirection: 'row',

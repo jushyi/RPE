@@ -89,6 +89,14 @@ export default function SessionDetailScreen() {
     [deleteExercise]
   );
 
+  const handleVideoDeleted = useCallback(
+    (setId: string) => {
+      // Re-fetch session to reflect the video_url change
+      if (sessionId) fetchSession(sessionId);
+    },
+    [sessionId, fetchSession]
+  );
+
   if (isLoading || !session) {
     return (
       <SafeAreaView style={s.safe}>
@@ -138,6 +146,7 @@ export default function SessionDetailScreen() {
                 delta={delta}
                 onDeleteSet={handleDeleteSet}
                 onDeleteExercise={handleDeleteExercise}
+                onVideoDeleted={handleVideoDeleted}
               />
             </View>
           );
