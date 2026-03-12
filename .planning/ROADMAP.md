@@ -207,7 +207,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
-| 13. Coaching Options | 8/8 | Complete   | 2026-03-12 |
+| 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
 | 14. Set Videos | 3/3 | Complete   | 2026-03-12 |
 | 15. Barbell Calculator | 0/3 | Not started | - |
 | 16. Push Notifications | 0/3 | Not started | - |
