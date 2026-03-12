@@ -205,6 +205,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
+| 12. Proper Onboarding | 0/2 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -218,15 +219,16 @@ Plans:
 - [ ] 11-02-PLAN.md — CSV data export: generation utilities with tests, Supabase queries for all data categories, share sheet integration
 - [ ] 11-03-PLAN.md — Delete account: migration, Edge Function, password re-entry, 7-day grace period banner on dashboard, wire all Settings actions together
 
-### Phase 12: proper onboarding
+### Phase 12: Proper Onboarding
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** New users experience a 4-step onboarding flow (Unit Preferences > PR Baselines > Body Stats Baseline > First Plan Prompt) that collects preferences and baseline data via PagerView with swipe navigation, replacing the old single-screen PR-only onboarding. Existing users are unaffected.
+**Requirements**: OB-01, OB-02, OB-03, OB-04, OB-05, OB-06
 **Depends on:** Phase 11
-**Plans:** 0 plans
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 12 to break down)
+- [ ] 12-01-PLAN.md — OnboardingPager structure (PagerView + StepDots), UnitPreferencesStep, PRBaselineStep, route guard update
+- [ ] 12-02-PLAN.md — BodyStatsStep, FirstPlanPromptStep, full flow wiring, human verification
 
 ### Phase 13: coaching options, create plans for others, get notifs when they finish and update their plans for the next week.
 
