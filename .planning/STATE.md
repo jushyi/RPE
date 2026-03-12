@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed quick-25
-last_updated: "2026-03-12T14:34:16.806Z"
+stopped_at: Completed quick-26
+last_updated: "2026-03-12T14:44:01.729Z"
 last_activity: "2026-03-12 - Completed quick task 25: fix Start Workout button on TodaysWorkoutCard"
 progress:
   total_phases: 11
@@ -347,6 +347,7 @@ Recent decisions affecting current work:
 - [Phase 11]: Password re-entry uses Alert.prompt on iOS, custom modal on Android
 - [Phase 11]: User signed out after scheduling deletion; must sign back in to cancel
 - [Phase 06]: Linear curve type for sparklines instead of cubic natural (prevents exaggeration with sparse data)
+- [Phase quick-26]: Used close-outline Ionicons icon as cancel affordance with confirmation alert using discardSession
 
 ### Roadmap Evolution
 
@@ -391,9 +392,10 @@ None yet.
 | 23 | Remove duplicate Home header banner from dashboard tab | 2026-03-12 | ebb87d9 | [23-regression-in-home-page-header-banner-sh](./quick/23-regression-in-home-page-header-banner-sh/) |
 | 24 | Hide Start Workout card after completing planned workout | 2026-03-12 | 84f9665 | [24-hide-start-workout-card-after-completing](./quick/24-hide-start-workout-card-after-completing/) |
 | 25 | Fix Start Workout button to use startFromPlan flow | 2026-03-12 | 96b345e | [25-the-start-workout-button-on-the-todays-w](./quick/25-the-start-workout-button-on-the-todays-w/) |
+| 26 | Add cancel workout button with confirmation dialog | 2026-03-12 | 47e5a7a | [26-there-should-be-a-way-to-cancel-the-curr](./quick/26-there-should-be-a-way-to-cancel-the-curr/) |
 
 ## Session Continuity
 
-Last session: 2026-03-12T14:29:00Z
-Stopped at: Completed quick-25
+Last session: 2026-03-12T14:43:57.070Z
+Stopped at: Completed quick-26
 Resume file: None
