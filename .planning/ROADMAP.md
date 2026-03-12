@@ -206,7 +206,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 9. Polish | 3/4 | In Progress|  |
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
-| 12. Proper Onboarding | 1/2 | In Progress|  |
+| 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
 | 13. Coaching Options | 0/6 | Planned | - |
 | 14. Set Videos | 0/3 | Planned | - |
 
@@ -227,7 +227,7 @@ Plans:
 **Goal:** New users experience a 4-step onboarding flow (Unit Preferences > PR Baselines > Body Stats Baseline > First Plan Prompt) that collects preferences and baseline data via PagerView with swipe navigation, replacing the old single-screen PR-only onboarding. Existing users are unaffected.
 **Requirements**: OB-01, OB-02, OB-03, OB-04, OB-05, OB-06
 **Depends on:** Phase 11
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 12-01-PLAN.md — OnboardingPager structure (PagerView + StepDots), UnitPreferencesStep, PRBaselineStep, route guard update
