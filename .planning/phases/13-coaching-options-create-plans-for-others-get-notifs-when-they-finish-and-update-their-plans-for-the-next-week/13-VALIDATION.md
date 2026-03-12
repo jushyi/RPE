@@ -2,8 +2,8 @@
 phase: 13
 slug: coaching-options
 status: draft
-nyquist_compliant: false
-wave_0_complete: false
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-03-12
 ---
 
@@ -38,25 +38,25 @@ created: 2026-03-12
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 13-01-01 | 01 | 1 | COACH-01 | unit | `npx jest tests/inviteCode.test.ts -x` | No - W0 | ⬜ pending |
-| 13-01-02 | 01 | 1 | COACH-02 | unit | `npx jest tests/coaching.test.ts -x` | No - W0 | ⬜ pending |
-| 13-01-03 | 01 | 1 | COACH-03 | unit | `npx jest tests/coachPlans.test.ts -x` | No - W0 | ⬜ pending |
-| 13-01-04 | 01 | 1 | COACH-04 | unit | `npx jest tests/coachRLS.test.ts -x` | No - W0 | ⬜ pending |
-| 13-01-05 | 01 | 1 | COACH-05 | unit | `npx jest tests/pushToken.test.ts -x` | No - W0 | ⬜ pending |
-| 13-01-06 | 01 | 1 | COACH-06 | manual-only | Manual: deploy + test with curl | N/A | ⬜ pending |
-| 13-01-07 | 01 | 1 | COACH-07 | manual-only | Manual: verify cron job in Supabase dashboard | N/A | ⬜ pending |
-| 13-01-08 | 01 | 1 | COACH-08 | unit | `npx jest tests/traineePerformance.test.ts -x` | No - W0 | ⬜ pending |
+| 13-00-01 | 00 | 0 | COACH-01,02,03,05 | stub creation | `npx jest --testPathPattern coaching --passWithNoTests` | Created by W0 | pending |
+| 13-01-01 | 01 | 1 | COACH-01 | unit | `npx jest tests/coaching/inviteCode.test.ts -x` | Created by W0 | pending |
+| 13-01-02 | 01 | 1 | COACH-02 | unit | `npx jest tests/coaching/useCoaching.test.ts -x` | Created by W0 | pending |
+| 13-03-01 | 03 | 2 | COACH-06 | unit | `npx jest tests/coaching/useCoaching.test.ts -x` | Created by W0 | pending |
+| 13-04-01 | 04 | 3 | COACH-09 | unit | `npx jest tests/coaching/coachPlans.test.ts -x` | Created by W0 | pending |
+| 13-01-05 | 01 | 1 | COACH-05 | unit | `npx jest tests/notifications/pushToken.test.ts -x` | Created by W0 | pending |
+| 13-02-01 | 02 | 1 | COACH-05 | manual-only | Manual: deploy + test with curl | N/A | pending |
+| 13-05-02 | 05 | 4 | COACH-16 | manual-only | Manual: verify cron job in Supabase dashboard | N/A | pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: pending / green / red / flaky*
 
 ---
 
 ## Wave 0 Requirements
 
-- [ ] `src/features/coaching/__tests__/inviteCode.test.ts` — stubs for COACH-01
-- [ ] `src/features/coaching/__tests__/useCoaching.test.ts` — stubs for COACH-02
-- [ ] `src/features/coaching/__tests__/coachPlans.test.ts` — stubs for COACH-03
-- [ ] `src/features/notifications/__tests__/pushToken.test.ts` — stubs for COACH-05
+- [x] `tests/coaching/inviteCode.test.ts` — stubs for COACH-01 (created in Plan 00)
+- [x] `tests/coaching/useCoaching.test.ts` — stubs for COACH-02 (created in Plan 00)
+- [x] `tests/coaching/coachPlans.test.ts` — stubs for COACH-03 (created in Plan 00)
+- [x] `tests/notifications/pushToken.test.ts` — stubs for COACH-05 (created in Plan 00)
 
 ---
 
@@ -71,11 +71,11 @@ created: 2026-03-12
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 30s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved

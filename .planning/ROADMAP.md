@@ -206,7 +206,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 1/2 | In Progress|  |
-| 13. Coaching Options | 0/5 | Planned | - |
+| 13. Coaching Options | 0/6 | Planned | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -244,13 +244,15 @@ Plans:
   5. Coach receives a weekly adherence summary for all trainees every Sunday evening
   6. Coach-assigned plans are visually distinguished and read-only in trainee's Plans tab
   7. Either party can disconnect the coaching relationship unilaterally
-**Plans:** 5 plans
+**Plans:** 6 plans
+
 
 Plans:
+- [ ] 13-00-PLAN.md — Wave 0: Test stubs for coaching logic modules (inviteCode, useCoaching, coachPlans, pushToken)
 - [ ] 13-01-PLAN.md — Database schema (coaching_relationships, invite_codes, push_tokens, coach_notes, plan extension), TypeScript types, push token registration
 - [ ] 13-02-PLAN.md — send-push Edge Function (generic push notification dispatch via Expo Push API)
 - [ ] 13-03-PLAN.md — Coaching relationship management: coachingStore, invite code flow, Plans tab toggle, coach/trainee UI components
-- [ ] 13-04-PLAN.md — Coach plan management: plan CRUD targeting trainee, inline performance, coach notes, trainee plans screen
+- [ ] 13-04-PLAN.md — Coach plan management: plan CRUD targeting trainee, inline performance, coach notes, trainee plans screen, trainee workout history
 - [ ] 13-05-PLAN.md — Notification triggers (workout complete, PR, plan update), weekly summary Edge Function, push token registration on startup
 
 ### Phase 14: feature to add and save videos of a certain set. can be viewed in history and in seperate tab in settings.
