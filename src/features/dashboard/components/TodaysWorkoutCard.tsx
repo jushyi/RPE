@@ -99,20 +99,16 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
     <Card title="Today's Workout">
       <Text style={s.noPlanText}>No plan set up yet</Text>
       <View style={s.noPlanBtns}>
-        <View style={s.noPlanBtn}>
           <Button
             title="Create a Plan"
             variant="secondary"
             onPress={() => router.push('/(app)/plans/create' as any)}
           />
-        </View>
-        <View style={s.noPlanBtn}>
           <Button
             title="Quick Workout"
             variant="secondary"
             onPress={startFreestyle}
           />
-        </View>
       </View>
     </Card>
     </View>
@@ -170,10 +166,7 @@ const s = StyleSheet.create({
     marginBottom: 14,
   },
   noPlanBtns: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 10,
-  },
-  noPlanBtn: {
-    flex: 1,
   },
 });
