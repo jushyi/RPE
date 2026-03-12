@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 13-04-PLAN.md
-last_updated: "2026-03-12T19:46:50.774Z"
+stopped_at: Completed 13-05-PLAN.md
+last_updated: "2026-03-12T19:51:43.420Z"
 last_activity: 2026-03-12 - Phase 12 verified and approved
 progress:
   total_phases: 15
-  completed_phases: 12
+  completed_phases: 13
   total_plans: 49
-  completed_plans: 46
+  completed_plans: 47
   percent: 86
 ---
 
@@ -401,6 +401,7 @@ Progress: [██████████] 100%
 | Phase 13 P03 | 3min | 2 tasks | 9 files |
 | Phase 14 P03 | 4min | 2 tasks | 10 files |
 | Phase 13 P04 | 3min | 3 tasks | 10 files |
+| Phase 13 P05 | 2min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -510,6 +511,8 @@ Recent decisions affecting current work:
 - [Phase 14]: Used Modal-based fullscreen video player instead of enterFullscreen() for broader expo-video compatibility
 - [Phase 14]: Long-press on video thumbnail for delete option (consistent with Phase 7 tap-to-expand/delete pattern)
 - [Phase 13]: Alarm fields hidden in coach-create mode (trainee sets own alarms)
+- [Phase 13]: Weekly summary dispatches directly to Expo Push API (no nested Edge Function call)
+- [Phase 13]: Push token registered in app layout top-level for every authenticated launch
 
 ### Roadmap Evolution
 
@@ -566,6 +569,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T19:46:50.772Z
-Stopped at: Completed 13-04-PLAN.md
+Last session: 2026-03-12T19:51:43.418Z
+Stopped at: Completed 13-05-PLAN.md
 Resume file: None

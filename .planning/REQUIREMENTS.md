@@ -82,10 +82,10 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **COACH-10**: Coach can see trainee's last-week performance inline while editing plans
 - [x] **COACH-11**: Coach can attach a text note when saving plan changes
 - [x] **COACH-12**: Coach can see trainee's workout logs (sets/reps/weight) but NOT body metrics
-- [ ] **COACH-13**: Coach receives push notification when trainee completes a workout
-- [ ] **COACH-14**: Coach receives push notification when trainee achieves a PR
-- [ ] **COACH-15**: Trainee receives push notification when coach updates their plan
-- [ ] **COACH-16**: Coach receives weekly adherence summary (Sunday evening) for all trainees
+- [x] **COACH-13**: Coach receives push notification when trainee completes a workout
+- [x] **COACH-14**: Coach receives push notification when trainee achieves a PR
+- [x] **COACH-15**: Trainee receives push notification when coach updates their plan
+- [x] **COACH-16**: Coach receives weekly adherence summary (Sunday evening) for all trainees
 
 ## v2 Requirements
 
