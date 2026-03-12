@@ -181,7 +181,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 11 of 11 (Settings + Account Management)
 Plan: 2 of 3 complete (11-02 CSV data export)
 Status: Phase 11 In Progress
-Last activity: 2026-03-12 - Completed quick task 21: fix layout warning - route settings is extraneous
+Last activity: 2026-03-12 - Completed quick task 22: fix ReferenceError removeSet in ExercisePage
 
 Progress: [██████████] 100%
 
@@ -354,9 +354,10 @@ None yet.
 | 19 | Fix sharp build failure in EAS development builds | 2026-03-12 | 4962a93 | [19-fix-sharp-build-failure-in-eas-developme](./quick/19-fix-sharp-build-failure-in-eas-developme/) |
 | 20 | Fix plans not showing on phone (auth session race condition) | 2026-03-12 | 3d267c5 | [20-phone-shows-no-plans-even-though-there-a](./quick/20-phone-shows-no-plans-even-though-there-a/) |
 | 21 | Fix layout warning - route settings is extraneous | 2026-03-12 | 0951f0a | [21-fix-layout-warning-route-settings-is-ext](./quick/21-fix-layout-warning-route-settings-is-ext/) |
+| 22 | Fix ReferenceError: Property removeSet doesn't exist in ExercisePage | 2026-03-12 | cbfcec9 | [22-fix-referenceerror-property-removeset-do](./quick/22-fix-referenceerror-property-removeset-do/) |
 
 ## Session Continuity
 
-Last session: 2026-03-12T14:01:14Z
-Stopped at: Completed quick-21
+Last session: 2026-03-12T14:03:10Z
+Stopped at: Completed quick-22
 Resume file: None
