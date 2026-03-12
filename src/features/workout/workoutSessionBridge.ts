@@ -30,7 +30,7 @@ export function getCompletedSession(): WorkoutSession | null {
 }
 
 export function clearCompletedSession() {
-  bridgeStorage.delete(SESSION_KEY);
+  bridgeStorage.remove(SESSION_KEY);
 }
 
 // --- Finishing flag ---

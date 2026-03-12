@@ -13,7 +13,7 @@ import SessionSummaryCard, {
   computeSessionSummary,
 } from '@/features/workout/components/SessionSummary';
 import WeightTargetPrompt from '@/features/workout/components/WeightTargetPrompt';
-import { enqueueCompletedSession, flushSyncQueue } from '@/features/workout/hooks/useSyncQueue';
+import { flushSyncQueue } from '@/features/workout/hooks/useSyncQueue';
 import { cachePreviousPerformance } from '@/features/workout/hooks/usePreviousPerformance';
 import { supabase } from '@/lib/supabase/client';
 import type { WorkoutSession } from '@/features/workout/types';
@@ -44,17 +44,10 @@ export default function WorkoutSummaryScreen() {
       }
     }
 
-    // Enqueue session for background sync
-    try {
-      enqueueCompletedSession(session);
-    } catch (err) {
-      console.error('Failed to enqueue session for sync:', err);
-    }
-
-    // Attempt to flush immediately
-    flushSyncQueue(supabase).catch((err) => {
-      console.warn('Flush sync queue failed:', err);
-    });
+    // Sync is now handled in finishWorkout (useWorkoutSession.ts) to ensure
+    // the workout is saved even if this screen doesn't mount properly.
+    // Attempt a flush in case finishWorkout's flush didn't complete.
+    flushSyncQueue(supabase).catch(() => {});
   }, [session]);
 
   const handleDone = () => {

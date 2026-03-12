@@ -86,7 +86,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
   enqueueSyncItem({
     id: generateId(),
     table: 'workout_sessions',
-    operation: 'insert',
+    operation: 'upsert',
     data: {
       id: session.id,
       user_id: session.user_id,
@@ -103,7 +103,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
     enqueueSyncItem({
       id: generateId(),
       table: 'session_exercises',
-      operation: 'insert',
+      operation: 'upsert',
       data: {
         id: exercise.id,
         session_id: session.id,
@@ -118,7 +118,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
       enqueueSyncItem({
         id: generateId(),
         table: 'set_logs',
-        operation: 'insert',
+        operation: 'upsert',
         data: {
           id: set.id,
           session_exercise_id: exercise.id,

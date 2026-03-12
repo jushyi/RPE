@@ -9,6 +9,8 @@ import { saveCompletedSession } from '@/features/workout/hooks/useCompletedToday
 import { cancelTodaysNudges } from '@/features/alarms/hooks/useAlarmScheduler';
 import { enqueueVideoUpload, flushVideoQueue } from '@/features/videos/utils/videoUploadQueue';
 import { notifyCoachWorkoutComplete } from '@/features/coaching/utils/notifyCoach';
+import { enqueueCompletedSession, flushSyncQueue } from '@/features/workout/hooks/useSyncQueue';
+import { supabase } from '@/lib/supabase/client';
 import type { PlanDay } from '@/features/plans/types';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionExercise, SetLog } from '@/features/workout/types';
@@ -76,6 +78,7 @@ export function useWorkoutSession() {
   );
 
   const finishWorkout = useCallback(() => {
+    if (isWorkoutFinishing()) return; // Guard against double-tap
     try {
       setIsFinishing(true);
       console.log('finishWorkout: calling finishSessionAction');
@@ -85,6 +88,14 @@ export function useWorkoutSession() {
       if (completed) {
         setCompletedSession(completed);
         saveCompletedSession(completed);
+
+        // Enqueue DB sync immediately (don't rely on summary screen mounting)
+        try {
+          enqueueCompletedSession(completed);
+          flushSyncQueue(supabase).catch(() => {});
+        } catch (err) {
+          console.warn('finishWorkout: failed to enqueue session sync:', err);
+        }
 
         // Fire-and-forget: cancel today's nudge so user doesn't get reminded after training
         try {

@@ -12,6 +12,7 @@ interface WorkoutHeaderProps {
   onFinishWorkout: () => void;
   onCancelWorkout: () => void;
   sessionTitle?: string;
+  isFinishing?: boolean;
 }
 
 export function WorkoutHeader({
@@ -23,6 +24,7 @@ export function WorkoutHeader({
   onFinishWorkout,
   onCancelWorkout,
   sessionTitle,
+  isFinishing = false,
 }: WorkoutHeaderProps) {
   return (
     <View style={s.container}>
@@ -44,11 +46,12 @@ export function WorkoutHeader({
       </View>
       <Pressable
         onPress={hasExercisesRemaining ? onEndWorkout : onFinishWorkout}
-        style={({ pressed }) => [s.endButton, pressed && s.endButtonPressed]}
+        disabled={isFinishing}
+        style={({ pressed }) => [s.endButton, pressed && s.endButtonPressed, isFinishing && s.endButtonDisabled]}
       >
-        <Ionicons name="stop-circle-outline" size={20} color={colors.error} />
-        <Text style={s.endButtonText}>
-          {hasExercisesRemaining ? 'End' : 'Finish'}
+        <Ionicons name="stop-circle-outline" size={20} color={isFinishing ? colors.textSecondary : colors.error} />
+        <Text style={[s.endButtonText, isFinishing && s.endButtonTextDisabled]}>
+          {isFinishing ? 'Saving...' : hasExercisesRemaining ? 'End' : 'Finish'}
         </Text>
       </Pressable>
     </View>
@@ -101,9 +104,15 @@ const s = StyleSheet.create({
   endButtonPressed: {
     opacity: 0.7,
   },
+  endButtonDisabled: {
+    opacity: 0.5,
+  },
   endButtonText: {
     color: colors.error,
     fontSize: 14,
     fontWeight: '600',
+  },
+  endButtonTextDisabled: {
+    color: colors.textSecondary,
   },
 });
