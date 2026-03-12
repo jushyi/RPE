@@ -14,6 +14,7 @@ import { setupAlarmChannel, registerAlarmCategory } from '@/features/alarms/util
 import { SNOOZE_MINUTES } from '@/features/alarms/constants';
 
 export default function RootLayout() {
+
   const { isAuthenticated, isLoading } = useAuth();
   const hasCompletedOnboarding = useAuthStore((s) => s.hasCompletedOnboarding);
   const segments = useSegments();

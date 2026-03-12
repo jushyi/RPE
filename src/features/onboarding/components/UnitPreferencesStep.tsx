@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
-import { useAuthStore } from '@/stores/authStore';
 
 interface UnitPreferencesStepProps {
-  onNext: () => void;
+  onNext: (weightUnit: 'kg' | 'lbs', measurementUnit: 'in' | 'cm') => void;
+  initialWeightUnit: 'kg' | 'lbs';
+  initialMeasurementUnit: 'in' | 'cm';
 }
 
 type WeightUnit = 'kg' | 'lbs';
@@ -70,19 +71,12 @@ const segStyles = StyleSheet.create({
  * User picks weight unit (kg/lbs) and measurement unit (in/cm).
  * This step is NOT skippable -- only "Next" is available.
  */
-export function UnitPreferencesStep({ onNext }: UnitPreferencesStepProps) {
-  const storeWeightUnit = useAuthStore((s) => s.preferredUnit);
-  const storeMeasurementUnit = useAuthStore((s) => s.preferredMeasurementUnit);
-  const setPreferredUnit = useAuthStore((s) => s.setPreferredUnit);
-  const setPreferredMeasurementUnit = useAuthStore((s) => s.setPreferredMeasurementUnit);
-
-  const [weightUnit, setWeightUnit] = useState<WeightUnit>(storeWeightUnit);
-  const [measurementUnit, setMeasurementUnit] = useState<MeasurementUnit>(storeMeasurementUnit);
+export function UnitPreferencesStep({ onNext, initialWeightUnit, initialMeasurementUnit }: UnitPreferencesStepProps) {
+  const [weightUnit, setWeightUnit] = useState<WeightUnit>(initialWeightUnit);
+  const [measurementUnit, setMeasurementUnit] = useState<MeasurementUnit>(initialMeasurementUnit);
 
   const handleNext = () => {
-    setPreferredUnit(weightUnit);
-    setPreferredMeasurementUnit(measurementUnit);
-    onNext();
+    onNext(weightUnit, measurementUnit);
   };
 
   return (

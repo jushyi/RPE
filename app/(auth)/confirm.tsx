@@ -16,7 +16,9 @@ export default function ConfirmScreen() {
       if (!supabase) return;
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        router.replace('/(app)/onboarding/pr-baseline');
+        // Refresh session to trigger onAuthStateChange in useAuth,
+        // which sets isAuthenticated → _layout guard routes to onboarding or dashboard
+        await supabase.auth.refreshSession();
       }
     };
 

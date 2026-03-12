@@ -1,8 +1,7 @@
 import { useState, useCallback } from 'react';
-import { View, Text, Pressable, ScrollView, Alert, Keyboard, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, Pressable, ScrollView, Alert, Keyboard, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Input } from '@/components/ui/Input';
-import { useAuthStore } from '@/stores/authStore';
 import { usePRBaselines } from '@/features/auth/hooks/usePRBaselines';
 import { colors } from '@/constants/theme';
 
@@ -11,13 +10,7 @@ type Unit = 'kg' | 'lbs';
 interface PRBaselineStepProps {
   onNext: () => void;
   onSkip: () => void;
-}
-
-interface LiftEntry {
-  exercise_name: string;
-  label: string;
-  weight: string;
-  unit: Unit;
+  weightUnit: Unit;
 }
 
 const LIFTS = [
@@ -61,21 +54,24 @@ function UnitToggle({
  * Defaults unit to the preference chosen in Step 1.
  * This step is skippable.
  */
-export function PRBaselineStep({ onNext, onSkip }: PRBaselineStepProps) {
-  const preferredUnit = useAuthStore((s) => s.preferredUnit);
+export function PRBaselineStep({ onNext, onSkip, weightUnit }: PRBaselineStepProps) {
   const { savePRBaselines, isLoading } = usePRBaselines();
 
-  const [lifts, setLifts] = useState<LiftEntry[]>(() =>
+  const [lifts, setLifts] = useState(() =>
     LIFTS.map((l) => ({
       exercise_name: l.exercise_name,
       label: l.label,
       weight: '',
-      unit: preferredUnit,
+      unitOverride: null as Unit | null,
     }))
   );
 
+  // Derive display unit: per-lift override if set, otherwise parent prop
+  const getUnit = useCallback((lift: { unitOverride: Unit | null }) =>
+    lift.unitOverride ?? weightUnit, [weightUnit]);
+
   const handleUnitChange = useCallback((index: number, unit: Unit) => {
-    setLifts((prev) => prev.map((l, i) => (i === index ? { ...l, unit } : l)));
+    setLifts((prev) => prev.map((l, i) => (i === index ? { ...l, unitOverride: unit } : l)));
   }, []);
 
   const handleWeightChange = useCallback((index: number, weight: string) => {
@@ -88,7 +84,7 @@ export function PRBaselineStep({ onNext, onSkip }: PRBaselineStepProps) {
     const baselines = lifts.map((l) => ({
       exercise_name: l.exercise_name,
       weight: parseFloat(l.weight) || 0,
-      unit: l.unit,
+      unit: getUnit(l),
     }));
 
     const hasValues = baselines.some((b) => b.weight > 0);
@@ -107,39 +103,37 @@ export function PRBaselineStep({ onNext, onSkip }: PRBaselineStepProps) {
   }, [lifts, savePRBaselines, onNext]);
 
   return (
-    <KeyboardAvoidingView
-      style={s.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    <ScrollView
+      style={s.scrollView}
+      contentContainerStyle={s.scrollContent}
+      keyboardShouldPersistTaps="handled"
     >
-      <ScrollView
-        style={s.scrollView}
-        contentContainerStyle={s.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Ionicons name="trophy-outline" size={48} color={colors.accent} style={s.icon} />
-        <Text style={s.title}>Set Your PRs</Text>
-        <Text style={s.subtitle}>
-          Enter your current personal records (optional)
-        </Text>
+      <Ionicons name="trophy-outline" size={48} color={colors.accent} style={s.icon} />
+      <Text style={s.title}>Set Your PRs</Text>
+      <Text style={s.subtitle}>
+        Enter your current personal records (optional)
+      </Text>
 
-        {lifts.map((lift, index) => (
+      {lifts.map((lift, index) => {
+        const unit = getUnit(lift);
+        return (
           <View key={lift.exercise_name} style={s.liftCard}>
             <View style={s.liftHeader}>
               <Text style={s.liftLabel}>{lift.label}</Text>
               <UnitToggle
-                value={lift.unit}
-                onChange={(unit) => handleUnitChange(index, unit)}
+                value={unit}
+                onChange={(u) => handleUnitChange(index, u)}
               />
             </View>
             <Input
-              placeholder={`Weight (${lift.unit})`}
+              placeholder={`Weight (${unit})`}
               value={lift.weight}
               onChangeText={(text) => handleWeightChange(index, text)}
               keyboardType="numeric"
             />
           </View>
-        ))}
-      </ScrollView>
+        );
+      })}
 
       <View style={s.footer}>
         <Pressable style={s.nextButton} onPress={handleNext} disabled={isLoading}>
@@ -149,21 +143,18 @@ export function PRBaselineStep({ onNext, onSkip }: PRBaselineStepProps) {
           <Text style={s.skipButtonText}>Skip</Text>
         </Pressable>
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
 const s = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 24,
-    paddingBottom: 24,
+    paddingBottom: 300,
   },
   icon: {
     alignSelf: 'center',

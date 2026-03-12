@@ -1,6 +1,6 @@
-import React, { useRef, useState, useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
-import PagerView from 'react-native-pager-view';
+import React, { useState, useCallback } from 'react';
+import { View, Pressable, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/stores/authStore';
@@ -18,83 +18,80 @@ interface OnboardingPagerProps {
 
 /**
  * Main onboarding flow wrapper.
- * 4-page PagerView: UnitPreferences, PRBaseline, BodyStats, FirstPlanPrompt.
- * Navigation via Next/Skip buttons and swipe gestures.
+ * 4 steps rendered one at a time: UnitPreferences, PRBaseline, BodyStats, FirstPlanPrompt.
  */
 export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
-  const pagerRef = useRef<PagerView>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const router = useRouter();
   const setOnboardingComplete = useAuthStore((s) => s.setOnboardingComplete);
+  const setPreferredUnit = useAuthStore((s) => s.setPreferredUnit);
+  const setPreferredMeasurementUnit = useAuthStore((s) => s.setPreferredMeasurementUnit);
+
+  const [weightUnit, setWeightUnit] = useState<'kg' | 'lbs'>('lbs');
+  const [measurementUnit, setMeasurementUnit] = useState<'in' | 'cm'>('in');
+
+  const goBack = useCallback(() => {
+    if (currentStep > 0) {
+      setCurrentStep((s) => s - 1);
+    }
+  }, [currentStep]);
 
   const goToNext = useCallback(() => {
     if (currentStep < TOTAL_STEPS - 1) {
-      pagerRef.current?.setPage(currentStep + 1);
+      setCurrentStep((s) => s + 1);
     } else {
       onComplete();
     }
   }, [currentStep, onComplete]);
 
-  const goToSkip = useCallback(() => {
-    if (currentStep < TOTAL_STEPS - 1) {
-      pagerRef.current?.setPage(currentStep + 1);
-    } else {
-      onComplete();
-    }
-  }, [currentStep, onComplete]);
+  const handleUnitsNext = useCallback((wu: 'kg' | 'lbs', mu: 'in' | 'cm') => {
+    setWeightUnit(wu);
+    setMeasurementUnit(mu);
+    setPreferredUnit(wu);
+    setPreferredMeasurementUnit(mu);
+    setCurrentStep(1);
+  }, [setPreferredUnit, setPreferredMeasurementUnit]);
 
-  const handlePageSelected = useCallback(
-    (e: { nativeEvent: { position: number } }) => {
-      setCurrentStep(e.nativeEvent.position);
-    },
-    []
-  );
-
-  /** Step 4: "Create Your First Plan" — mark onboarding complete BEFORE navigating */
   const handleCreatePlan = useCallback(() => {
     setOnboardingComplete();
     router.push('/(app)/plans/create' as any);
   }, [setOnboardingComplete, router]);
 
-  /** Step 4: "Skip for Now" — mark onboarding complete and go to dashboard */
   const handleSkipToComplete = useCallback(() => {
     onComplete();
   }, [onComplete]);
 
+  const renderStep = () => {
+    switch (currentStep) {
+      case 0:
+        return <UnitPreferencesStep onNext={handleUnitsNext} initialWeightUnit={weightUnit} initialMeasurementUnit={measurementUnit} />;
+      case 1:
+        return <PRBaselineStep onNext={goToNext} onSkip={goToNext} weightUnit={weightUnit} />;
+      case 2:
+        return <BodyStatsStep onNext={goToNext} onSkip={goToNext} weightUnit={weightUnit} measurementUnit={measurementUnit} />;
+      case 3:
+        return <FirstPlanPromptStep onCreatePlan={handleCreatePlan} onComplete={handleSkipToComplete} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <View style={s.container}>
-      <StepDots total={TOTAL_STEPS} current={currentStep} />
-
-      <PagerView
-        ref={pagerRef}
-        style={s.pager}
-        initialPage={0}
-        scrollEnabled={true}
-        onPageSelected={handlePageSelected}
-      >
-        {/* Step 0: Unit Preferences */}
-        <View key="0" style={s.page}>
-          <UnitPreferencesStep onNext={goToNext} />
-        </View>
-
-        {/* Step 1: PR Baselines */}
-        <View key="1" style={s.page}>
-          <PRBaselineStep onNext={goToNext} onSkip={goToSkip} />
-        </View>
-
-        {/* Step 2: Body Stats */}
-        <View key="2" style={s.page}>
-          <BodyStatsStep onNext={goToNext} onSkip={goToSkip} />
-        </View>
-
-        {/* Step 3: First Plan Prompt */}
-        <View key="3" style={s.page}>
-          <FirstPlanPromptStep
-            onCreatePlan={handleCreatePlan}
-            onComplete={handleSkipToComplete}
-          />
-        </View>
-      </PagerView>
+      <View style={s.header}>
+        {currentStep > 0 ? (
+          <Pressable onPress={goBack} style={s.backButton} hitSlop={12}>
+            <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
+          </Pressable>
+        ) : (
+          <View style={s.backPlaceholder} />
+        )}
+        <StepDots total={TOTAL_STEPS} current={currentStep} />
+        <View style={s.backPlaceholder} />
+      </View>
+      <View style={s.page}>
+        {renderStep()}
+      </View>
     </View>
   );
 }
@@ -103,8 +100,19 @@ const s = StyleSheet.create({
   container: {
     flex: 1,
   },
-  pager: {
-    flex: 1,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  backButton: {
+    width: 36,
+    alignItems: 'center',
+  },
+  backPlaceholder: {
+    width: 36,
   },
   page: {
     flex: 1,

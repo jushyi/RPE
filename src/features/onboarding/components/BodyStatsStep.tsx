@@ -6,12 +6,9 @@ import {
   ScrollView,
   Keyboard,
   StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Input } from '@/components/ui/Input';
-import { useAuthStore } from '@/stores/authStore';
 import { useBodyweightData } from '@/features/progress/hooks/useBodyweightData';
 import { useBodyMeasurements } from '@/features/body-metrics/hooks/useBodyMeasurements';
 import { colors } from '@/constants/theme';
@@ -22,13 +19,15 @@ type MeasurementUnit = 'in' | 'cm';
 interface BodyStatsStepProps {
   onNext: () => void;
   onSkip: () => void;
+  weightUnit: WeightUnit;
+  measurementUnit: MeasurementUnit;
 }
 
 interface MeasurementField {
   key: 'chest' | 'waist' | 'biceps' | 'quad';
   label: string;
   value: string;
-  unit: MeasurementUnit;
+  unitOverride: MeasurementUnit | null;
 }
 
 function UnitToggle<T extends string>({
@@ -67,21 +66,24 @@ function UnitToggle<T extends string>({
  * Collects optional bodyweight + 4 circumference measurements (chest, waist, biceps, quad).
  * Units default to the preferences selected in Step 1.
  */
-export function BodyStatsStep({ onNext, onSkip }: BodyStatsStepProps) {
-  const preferredUnit = useAuthStore((s) => s.preferredUnit);
-  const preferredMeasurementUnit = useAuthStore((s) => s.preferredMeasurementUnit);
+export function BodyStatsStep({ onNext, onSkip, weightUnit: preferredUnit, measurementUnit: preferredMeasurementUnit }: BodyStatsStepProps) {
   const { addEntry: addBodyweight } = useBodyweightData();
   const { addMeasurement } = useBodyMeasurements();
 
   const [bodyweight, setBodyweight] = useState('');
-  const [bodyweightUnit, setBodyweightUnit] = useState<WeightUnit>(preferredUnit);
+  const [bodyweightUnitOverride, setBodyweightUnitOverride] = useState<WeightUnit | null>(null);
 
   const [measurements, setMeasurements] = useState<MeasurementField[]>([
-    { key: 'chest', label: 'Chest', value: '', unit: preferredMeasurementUnit },
-    { key: 'waist', label: 'Waist', value: '', unit: preferredMeasurementUnit },
-    { key: 'biceps', label: 'Biceps', value: '', unit: preferredMeasurementUnit },
-    { key: 'quad', label: 'Quad', value: '', unit: preferredMeasurementUnit },
+    { key: 'chest', label: 'Chest', value: '', unitOverride: null },
+    { key: 'waist', label: 'Waist', value: '', unitOverride: null },
+    { key: 'biceps', label: 'Biceps', value: '', unitOverride: null },
+    { key: 'quad', label: 'Quad', value: '', unitOverride: null },
   ]);
+
+  // Derive display units: override if manually set, otherwise store preference
+  const bodyweightUnit = bodyweightUnitOverride ?? preferredUnit;
+  const getMeasUnit = useCallback((m: { unitOverride: MeasurementUnit | null }) =>
+    m.unitOverride ?? preferredMeasurementUnit, [preferredMeasurementUnit]);
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -94,7 +96,7 @@ export function BodyStatsStep({ onNext, onSkip }: BodyStatsStepProps) {
 
   const handleMeasurementUnitChange = useCallback((index: number, unit: MeasurementUnit) => {
     setMeasurements((prev) =>
-      prev.map((m, i) => (i === index ? { ...m, unit } : m))
+      prev.map((m, i) => (i === index ? { ...m, unitOverride: unit } : m))
     );
   }, []);
 
@@ -129,7 +131,7 @@ export function BodyStatsStep({ onNext, onSkip }: BodyStatsStepProps) {
           const val = parseFloat(m.value);
           if (val > 0) {
             data[m.key] = val;
-            data[`${m.key}_unit`] = m.unit;
+            data[`${m.key}_unit`] = getMeasUnit(m);
           }
         }
 
@@ -146,10 +148,7 @@ export function BodyStatsStep({ onNext, onSkip }: BodyStatsStepProps) {
   }, [bodyweight, bodyweightUnit, measurements, addBodyweight, addMeasurement, onNext]);
 
   return (
-    <KeyboardAvoidingView
-      style={s.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <View style={s.container}>
       <ScrollView
         style={s.scrollView}
         contentContainerStyle={s.scrollContent}
@@ -167,7 +166,7 @@ export function BodyStatsStep({ onNext, onSkip }: BodyStatsStepProps) {
             <Text style={s.fieldLabel}>Bodyweight</Text>
             <UnitToggle
               value={bodyweightUnit}
-              onChange={setBodyweightUnit}
+              onChange={setBodyweightUnitOverride}
               options={[
                 { label: 'kg', value: 'kg' as const },
                 { label: 'lbs', value: 'lbs' as const },
@@ -183,38 +182,41 @@ export function BodyStatsStep({ onNext, onSkip }: BodyStatsStepProps) {
         </View>
 
         {/* Circumference measurements */}
-        {measurements.map((m, index) => (
-          <View key={m.key} style={s.fieldCard}>
-            <View style={s.fieldHeader}>
-              <Text style={s.fieldLabel}>{m.label}</Text>
-              <UnitToggle
-                value={m.unit}
-                onChange={(unit) => handleMeasurementUnitChange(index, unit)}
-                options={[
-                  { label: 'in', value: 'in' as const },
-                  { label: 'cm', value: 'cm' as const },
-                ]}
+        {measurements.map((m, index) => {
+          const unit = getMeasUnit(m);
+          return (
+            <View key={m.key} style={s.fieldCard}>
+              <View style={s.fieldHeader}>
+                <Text style={s.fieldLabel}>{m.label}</Text>
+                <UnitToggle
+                  value={unit}
+                  onChange={(u) => handleMeasurementUnitChange(index, u)}
+                  options={[
+                    { label: 'in', value: 'in' as const },
+                    { label: 'cm', value: 'cm' as const },
+                  ]}
+                />
+              </View>
+              <Input
+                placeholder={`${m.label} (${unit})`}
+                value={m.value}
+                onChangeText={(text) => handleMeasurementChange(index, text)}
+                keyboardType="numeric"
               />
             </View>
-            <Input
-              placeholder={`${m.label} (${m.unit})`}
-              value={m.value}
-              onChangeText={(text) => handleMeasurementChange(index, text)}
-              keyboardType="numeric"
-            />
-          </View>
-        ))}
-      </ScrollView>
+          );
+        })}
 
-      <View style={s.footer}>
-        <Pressable style={s.nextButton} onPress={handleNext} disabled={isSaving}>
-          <Text style={s.nextButtonText}>{isSaving ? 'Saving...' : 'Next'}</Text>
-        </Pressable>
-        <Pressable style={s.skipButton} onPress={onSkip} disabled={isSaving}>
-          <Text style={s.skipButtonText}>Skip</Text>
-        </Pressable>
-      </View>
-    </KeyboardAvoidingView>
+        <View style={s.footer}>
+          <Pressable style={s.nextButton} onPress={handleNext} disabled={isSaving}>
+            <Text style={s.nextButtonText}>{isSaving ? 'Saving...' : 'Next'}</Text>
+          </Pressable>
+          <Pressable style={s.skipButton} onPress={onSkip} disabled={isSaving}>
+            <Text style={s.skipButtonText}>Skip</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -228,7 +230,7 @@ const s = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 24,
-    paddingBottom: 24,
+    paddingBottom: 300,
   },
   icon: {
     alignSelf: 'center',
