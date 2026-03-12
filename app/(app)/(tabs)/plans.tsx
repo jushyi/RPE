@@ -268,9 +268,13 @@ function PlansContent() {
               <TraineeCard
                 trainee={item}
                 onPress={() => {
-                  // Navigate to trainee's plans (future plan screen)
-                  // For now, just show an alert
-                  Alert.alert(item.display_name, 'Trainee plan view coming soon.');
+                  router.push({
+                    pathname: '/plans/trainee-plans' as any,
+                    params: {
+                      traineeId: item.id,
+                      traineeName: item.display_name,
+                    },
+                  });
                 }}
                 onDisconnect={() => {
                   if (rel) handleDisconnect(rel.id, item.display_name);
