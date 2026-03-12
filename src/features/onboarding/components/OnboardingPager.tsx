@@ -1,10 +1,14 @@
 import React, { useRef, useState, useCallback } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import PagerView from 'react-native-pager-view';
+import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
+import { useAuthStore } from '@/stores/authStore';
 import { StepDots } from './StepDots';
 import { UnitPreferencesStep } from './UnitPreferencesStep';
 import { PRBaselineStep } from './PRBaselineStep';
+import { BodyStatsStep } from './BodyStatsStep';
+import { FirstPlanPromptStep } from './FirstPlanPromptStep';
 
 const TOTAL_STEPS = 4;
 
@@ -14,12 +18,14 @@ interface OnboardingPagerProps {
 
 /**
  * Main onboarding flow wrapper.
- * 4-page PagerView: UnitPreferences, PRBaseline, BodyStats (placeholder), FirstPlanPrompt (placeholder).
+ * 4-page PagerView: UnitPreferences, PRBaseline, BodyStats, FirstPlanPrompt.
  * Navigation via Next/Skip buttons and swipe gestures.
  */
 export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
   const pagerRef = useRef<PagerView>(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const router = useRouter();
+  const setOnboardingComplete = useAuthStore((s) => s.setOnboardingComplete);
 
   const goToNext = useCallback(() => {
     if (currentStep < TOTAL_STEPS - 1) {
@@ -44,6 +50,17 @@ export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
     []
   );
 
+  /** Step 4: "Create Your First Plan" — mark onboarding complete BEFORE navigating */
+  const handleCreatePlan = useCallback(() => {
+    setOnboardingComplete();
+    router.push('/(app)/plans/create' as any);
+  }, [setOnboardingComplete, router]);
+
+  /** Step 4: "Skip for Now" — mark onboarding complete and go to dashboard */
+  const handleSkipToComplete = useCallback(() => {
+    onComplete();
+  }, [onComplete]);
+
   return (
     <View style={s.container}>
       <StepDots total={TOTAL_STEPS} current={currentStep} />
@@ -65,66 +82,19 @@ export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
           <PRBaselineStep onNext={goToNext} onSkip={goToSkip} />
         </View>
 
-        {/* Step 2: Body Stats (placeholder for future plan) */}
+        {/* Step 2: Body Stats */}
         <View key="2" style={s.page}>
-          <PlaceholderStep
-            title="Body Stats"
-            subtitle="Coming soon"
-            onNext={goToNext}
-            onSkip={goToSkip}
-            showSkip={true}
-            buttonLabel="Next"
-          />
+          <BodyStatsStep onNext={goToNext} onSkip={goToSkip} />
         </View>
 
-        {/* Step 3: First Plan Prompt (placeholder for future plan) */}
+        {/* Step 3: First Plan Prompt */}
         <View key="3" style={s.page}>
-          <PlaceholderStep
-            title="Create Your First Plan"
-            subtitle="Coming soon"
-            onNext={onComplete}
-            onSkip={onComplete}
-            showSkip={true}
-            buttonLabel="Get Started"
+          <FirstPlanPromptStep
+            onCreatePlan={handleCreatePlan}
+            onComplete={handleSkipToComplete}
           />
         </View>
       </PagerView>
-    </View>
-  );
-}
-
-/** Temporary placeholder for steps not yet implemented */
-function PlaceholderStep({
-  title,
-  subtitle,
-  onNext,
-  onSkip,
-  showSkip,
-  buttonLabel,
-}: {
-  title: string;
-  subtitle: string;
-  onNext: () => void;
-  onSkip: () => void;
-  showSkip: boolean;
-  buttonLabel: string;
-}) {
-  return (
-    <View style={s.placeholderContainer}>
-      <View style={s.placeholderContent}>
-        <Text style={s.placeholderTitle}>{title}</Text>
-        <Text style={s.placeholderSubtitle}>{subtitle}</Text>
-      </View>
-      <View style={s.placeholderFooter}>
-        <Pressable style={s.nextButton} onPress={onNext}>
-          <Text style={s.nextButtonText}>{buttonLabel}</Text>
-        </Pressable>
-        {showSkip && (
-          <Pressable style={s.skipButton} onPress={onSkip}>
-            <Text style={s.skipButtonText}>Skip</Text>
-          </Pressable>
-        )}
-      </View>
     </View>
   );
 }
@@ -138,50 +108,5 @@ const s = StyleSheet.create({
   },
   page: {
     flex: 1,
-  },
-  placeholderContainer: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  placeholderContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  placeholderTitle: {
-    color: colors.textPrimary,
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  placeholderSubtitle: {
-    color: colors.textSecondary,
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  placeholderFooter: {
-    paddingBottom: 24,
-  },
-  nextButton: {
-    backgroundColor: colors.accent,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  nextButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  skipButton: {
-    marginTop: 12,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  skipButtonText: {
-    color: colors.accent,
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
