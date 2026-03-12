@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes (completed 2026-03-10)
 - [x] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation (completed 2026-03-10)
 - [x] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen (1/3 plans complete) (completed 2026-03-10)
-- [ ] **Phase 7: Body Metrics** - Body measurements (chest, waist, biceps, quad, body fat %), combined dashboard card, detail screen with charts and history (gap closure in progress)
+- [x] **Phase 7: Body Metrics** - Body measurements (chest, waist, biceps, quad, body fat %), combined dashboard card, detail screen with charts and history (gap closure in progress) (completed 2026-03-12)
 - [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
 - [x] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline (completed 2026-03-11)
 - [ ] **Phase 10: Distribution** - EAS Build, TestFlight (iOS only), physical device verification
@@ -132,7 +132,7 @@ Plans:
   1. User can log body measurements (chest, waist, biceps, quad, body fat %) with a date and view past entries
   2. Dashboard shows a combined Body card with latest bodyweight + measurements, tappable to open detail screen
   3. Detail screen has Charts tab (entry form + per-measurement trend charts) and History tab (reverse-chronological list with edit/delete)
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans complete
 
 Plans:
 - [x] 07-01-PLAN.md — Data layer: body_measurements migration + RLS, types, unit conversion utils, bodyMeasurementStore (Zustand + MMKV), CRUD hooks, chart data hook, combined BodyCard on dashboard
@@ -199,7 +199,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 4. Active Workout | 6/6 | Complete   | 2026-03-10 |
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
-| 7. Body Metrics | 3/4 | In Progress|  |
+| 7. Body Metrics | 4/4 | Complete   | 2026-03-12 |
 | 8. Alarms + Accountability | 2/3 | In Progress|  |
 | 9. Polish | 3/3 | Complete   | 2026-03-11 |
 | 10. Distribution | 0/2 | Not started | - |
