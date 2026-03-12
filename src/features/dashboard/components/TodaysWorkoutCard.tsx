@@ -6,13 +6,23 @@ import { Button } from '@/components/ui/Button';
 import { useTodaysWorkout } from '@/features/dashboard/hooks/useTodaysWorkout';
 import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
 import { colors } from '@/constants/theme';
+import type { WorkoutSession } from '@/features/workout/types';
 
-export function TodaysWorkoutCard() {
+interface TodaysWorkoutCardProps {
+  completedSessions?: WorkoutSession[];
+}
+
+export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardProps) {
   const workout = useTodaysWorkout();
   const router = useRouter();
   const { startFreestyle } = useWorkoutSession();
 
   if (workout.state === 'planned' && workout.todayDay && workout.plan) {
+    // Hide card if the planned workout day has already been completed
+    if (completedSessions.some(s => s.plan_day_id === workout.todayDay!.id)) {
+      return null;
+    }
+
     return (
       <Pressable
         onPress={() =>

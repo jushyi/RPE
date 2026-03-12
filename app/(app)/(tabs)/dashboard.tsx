@@ -324,8 +324,8 @@ export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[ds.safe, { paddingTop: insets.top }]}>
-      <Animated.View style={[ds.header, { height: HEADER_HEIGHT, transform: [{ translateY: headerTranslateY }] }]}>
+    <View style={ds.safe}>
+      <Animated.View style={[ds.header, { height: HEADER_HEIGHT, top: insets.top, transform: [{ translateY: headerTranslateY }] }]}>
         <View style={ds.headerLeft}>
           <TappableAvatar
             displayName={displayName}
@@ -340,7 +340,7 @@ export default function DashboardScreen() {
       </Animated.View>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: HEADER_HEIGHT, paddingBottom: 40 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: insets.top + HEADER_HEIGHT, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={handleScroll}
@@ -352,7 +352,7 @@ export default function DashboardScreen() {
             onRefresh={refreshAll}
             tintColor={colors.textMuted}
             colors={[colors.accent]}
-            progressViewOffset={HEADER_HEIGHT}
+            progressViewOffset={insets.top + HEADER_HEIGHT}
           />
         }
       >
@@ -372,7 +372,7 @@ export default function DashboardScreen() {
 
         {/* Card 1: Today's Workout */}
         <View style={ds.cardWrap}>
-          <TodaysWorkoutCard />
+          <TodaysWorkoutCard completedSessions={completedToday} />
         </View>
 
         {/* Card 2: Progress Summary */}
