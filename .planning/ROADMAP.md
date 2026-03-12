@@ -164,12 +164,13 @@ Plans:
   1. App applies the dark/bold design language consistently across all screens (dark background, clean typography, accent colors that pop -- no default white/light screens remaining)
   2. App icon and splash screen are set and display correctly on both iOS and Android
   3. EAS Update OTA pipeline is configured and a test update successfully reaches a device without a new store submission
-**Plans:** 3/3 plans complete
+**Plans:** 4 plans (3 executed + 1 gap closure)
 
 Plans:
 - [ ] 09-01-PLAN.md -- Theme accent swap (blue to magenta) and centralize all hardcoded colors into theme.ts
 - [ ] 09-02-PLAN.md -- App icon/splash screen generation, app rename to "RPE", navigation transitions
 - [ ] 09-03-PLAN.md -- EAS Update OTA pipeline configuration, Skeleton loading component
+- [ ] 09-04-PLAN.md -- Gap closure: add LayoutAnimation transition to plan detail view/edit toggle
 
 ### Phase 10: Distribution
 **Goal**: The app is installable by the friend group on real iOS devices via TestFlight and all critical behaviors (offline logging, alarm delivery, RLS isolation, plan-history separation) are verified on physical hardware before distribution. Android distribution deferred.
@@ -202,7 +203,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
 | 7. Body Metrics | 4/4 | Complete   | 2026-03-12 |
 | 8. Alarms + Accountability | 3/4 | In Progress|  |
-| 9. Polish | 3/3 | Complete   | 2026-03-11 |
+| 9. Polish | 3/4 | In Progress|  |
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 1/2 | In Progress|  |
