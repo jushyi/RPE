@@ -19,10 +19,14 @@ async function uploadProfilePhoto(userId: string, uri: string): Promise<void> {
         .from('avatars')
         .getPublicUrl(filePath);
 
+      const cacheBustedUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase.from('profiles') as any)
-        .update({ avatar_url: urlData.publicUrl })
+        .update({ avatar_url: cacheBustedUrl })
         .eq('id', userId);
+
+      await supabase.auth.updateUser({ data: { avatar_url: cacheBustedUrl } });
     }
   } catch (err) {
     console.warn('Profile photo upload failed:', err);
