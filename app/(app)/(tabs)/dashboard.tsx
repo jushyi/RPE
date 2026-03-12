@@ -304,10 +304,10 @@ export default function DashboardScreen() {
     if (currentY <= 0 || currentY >= maxScroll) return;
 
     if (diff > 0 && headerVisible.current) {
-      // Scrolling down — hide (slide past safe area + header)
+      // Scrolling down — hide (slide behind status bar cover)
       headerVisible.current = false;
       Animated.timing(headerTranslateY, {
-        toValue: -(insets.top + HEADER_HEIGHT),
+        toValue: -HEADER_HEIGHT,
         duration: 200,
         useNativeDriver: true,
       }).start();
@@ -324,6 +324,7 @@ export default function DashboardScreen() {
 
   return (
     <View style={ds.safe}>
+      <View style={[ds.statusBarCover, { height: insets.top }]} />
       <Animated.View style={[ds.header, { height: HEADER_HEIGHT, top: insets.top, transform: [{ translateY: headerTranslateY }] }]}>
         <View style={ds.headerLeft}>
           <TappableAvatar
@@ -395,6 +396,14 @@ export default function DashboardScreen() {
 
 const ds = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
+  statusBarCover: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 20,
+    backgroundColor: colors.background,
+  },
   header: {
     position: 'absolute',
     top: 0,
