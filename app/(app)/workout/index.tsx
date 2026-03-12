@@ -36,6 +36,7 @@ export default function WorkoutScreen() {
     logCurrentSet,
     finishWorkout,
     endEarly,
+    cancelWorkout,
     addFreestyleExercise,
   } = useWorkoutSession();
 
@@ -124,10 +125,14 @@ export default function WorkoutScreen() {
             hasExercisesRemaining={hasExercisesRemaining}
             onEndWorkout={endEarly}
             onFinishWorkout={finishWorkout}
+            onCancelWorkout={cancelWorkout}
             sessionTitle={session.title}
           />
         ) : (
           <View style={s.emptyHeader}>
+            <Pressable onPress={cancelWorkout} style={s.cancelButton}>
+              <Ionicons name="close-outline" size={24} color={colors.textSecondary} />
+            </Pressable>
             <View style={s.emptyHeaderTitle}>
               <Text style={s.emptyHeaderText}>{session.title || 'Quick Workout'}</Text>
               <Text style={s.emptyHeaderSub}>Tap + to add an exercise</Text>
@@ -193,6 +198,10 @@ const s = StyleSheet.create({
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: colors.surfaceElevated,
+  },
+  cancelButton: {
+    padding: 8,
+    marginRight: 4,
   },
   emptyHeaderTitle: {
     flex: 1,

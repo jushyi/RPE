@@ -10,6 +10,7 @@ interface WorkoutHeaderProps {
   hasExercisesRemaining: boolean;
   onEndWorkout: () => void;
   onFinishWorkout: () => void;
+  onCancelWorkout: () => void;
   sessionTitle?: string;
 }
 
@@ -20,10 +21,14 @@ export function WorkoutHeader({
   hasExercisesRemaining,
   onEndWorkout,
   onFinishWorkout,
+  onCancelWorkout,
   sessionTitle,
 }: WorkoutHeaderProps) {
   return (
     <View style={s.container}>
+      <Pressable onPress={onCancelWorkout} style={s.cancelButton}>
+        <Ionicons name="close-outline" size={24} color={colors.textSecondary} />
+      </Pressable>
       <View style={s.titleContainer}>
         {sessionTitle ? (
           <Text style={s.sessionTitle} numberOfLines={1}>
@@ -60,6 +65,10 @@ const s = StyleSheet.create({
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: colors.surfaceElevated,
+  },
+  cancelButton: {
+    padding: 8,
+    marginRight: 4,
   },
   titleContainer: {
     flex: 1,

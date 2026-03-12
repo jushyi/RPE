@@ -34,6 +34,7 @@ export function useWorkoutSession() {
   const addExerciseAction = useWorkoutStore((s) => s.addExercise);
   const finishSessionAction = useWorkoutStore((s) => s.finishSession);
   const setCurrentExerciseIndex = useWorkoutStore((s) => s.setCurrentExerciseIndex);
+  const discardSessionAction = useWorkoutStore((s) => s.discardSession);
 
   const currentExercise = activeSession?.exercises[currentExerciseIndex] ?? null;
   const exerciseCount = activeSession?.exercises.length ?? 0;
@@ -121,6 +122,24 @@ export function useWorkoutSession() {
     }
   }, [activeSession, finishWorkout]);
 
+  const cancelWorkout = useCallback(() => {
+    Alert.alert(
+      'Cancel Workout?',
+      'All progress for this workout will be lost.',
+      [
+        { text: 'Keep Going', style: 'cancel' },
+        {
+          text: 'Cancel Workout',
+          style: 'destructive',
+          onPress: () => {
+            discardSessionAction();
+            router.back();
+          },
+        },
+      ]
+    );
+  }, [discardSessionAction, router]);
+
   const addFreestyleExercise = useCallback(
     (exercise: Exercise) => {
       const sessionExercise: SessionExercise = {
@@ -150,6 +169,7 @@ export function useWorkoutSession() {
     logCurrentSet,
     finishWorkout,
     endEarly,
+    cancelWorkout,
     addFreestyleExercise,
   };
 }
