@@ -5,6 +5,8 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useExerciseStore } from '@/stores/exerciseStore';
+import { useAuthStore } from '@/stores/authStore';
+import { notifyCoachPR } from '@/features/coaching/utils/notifyCoach';
 
 export interface PRBaseline {
   exercise_id: string;
@@ -115,6 +117,13 @@ export function usePRDetection(userId: string | undefined) {
       if (result.isPR) {
         // Update session PR cache
         sessionPRCacheRef.current.set(exerciseId, weight);
+
+        // Fire-and-forget: notify coaches of PR
+        if (userId) {
+          const userName = useAuthStore.getState().displayName;
+          const exerciseName = exercise?.name ?? 'Unknown';
+          notifyCoachPR(userId, userName, exerciseName).catch(() => {});
+        }
 
         // Enqueue Supabase upsert (fire-and-forget)
         if (userId) {

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
+import { notifyTraineePlanUpdate } from '@/features/coaching/utils/notifyTrainee';
 import type { Plan, TargetSet } from '@/features/plans/types';
 
 interface CreatePlanDay {
@@ -126,6 +127,10 @@ export function useCoachPlans(traineeId: string) {
 
       // Refresh plans list
       await fetchTraineePlans();
+
+      // Fire-and-forget: notify trainee that coach created a plan
+      const coachName = useAuthStore.getState().displayName;
+      notifyTraineePlanUpdate(traineeId, coachName, name, note).catch(() => {});
     },
     [userId, traineeId, fetchTraineePlans]
   );
@@ -210,8 +215,12 @@ export function useCoachPlans(traineeId: string) {
 
       // Refresh plans list
       await fetchTraineePlans();
+
+      // Fire-and-forget: notify trainee that coach updated their plan
+      const coachName = useAuthStore.getState().displayName;
+      notifyTraineePlanUpdate(traineeId, coachName, name, note).catch(() => {});
     },
-    [userId, fetchTraineePlans]
+    [userId, traineeId, fetchTraineePlans]
   );
 
   /**

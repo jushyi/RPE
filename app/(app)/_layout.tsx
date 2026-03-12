@@ -4,6 +4,7 @@ import * as Updates from 'expo-updates';
 import { colors } from '@/constants/theme';
 import { HeaderCloudIcon } from '@/components/layout/HeaderCloudIcon';
 import { useSyncQueue } from '@/features/workout/hooks/useSyncQueue';
+import { usePushToken } from '@/features/notifications/hooks/usePushToken';
 import { supabase } from '@/lib/supabase/client';
 
 /**
@@ -15,6 +16,9 @@ import { supabase } from '@/lib/supabase/client';
 export default function AppLayout() {
   // Auto-flush sync queue on connectivity restore
   useSyncQueue(supabase);
+
+  // Register push token on every app launch after auth
+  usePushToken();
 
   // Check for OTA updates on mount (production only)
   useEffect(() => {

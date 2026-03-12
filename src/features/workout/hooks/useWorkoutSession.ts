@@ -8,6 +8,7 @@ import { setCompletedSession, setIsFinishing } from '@/features/workout/workoutS
 import { saveCompletedSession } from '@/features/workout/hooks/useCompletedToday';
 import { cancelTodaysNudges } from '@/features/alarms/hooks/useAlarmScheduler';
 import { enqueueVideoUpload, flushVideoQueue } from '@/features/videos/utils/videoUploadQueue';
+import { notifyCoachWorkoutComplete } from '@/features/coaching/utils/notifyCoach';
 import type { PlanDay } from '@/features/plans/types';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionExercise, SetLog } from '@/features/workout/types';
@@ -90,6 +91,18 @@ export function useWorkoutSession() {
       } catch (_) {
         // Nudge cancel failure should not block workout save
       }
+
+      // Fire-and-forget: notify coaches that trainee completed a workout
+      const userName = useAuthStore.getState().displayName;
+      const sessionHadPR = completed.exercises.some((e) =>
+        e.logged_sets.some((s) => s.is_pr)
+      );
+      notifyCoachWorkoutComplete(
+        completed.user_id,
+        userName,
+        completed.title,
+        sessionHadPR
+      ).catch(() => {});
 
       router.replace('/workout/summary' as any);
     } else {
