@@ -78,10 +78,10 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **COACH-06**: Coach UI toggle in Plans tab: "My Plans" vs "Trainees"
 - [x] **COACH-07**: Coach-assigned plans are visually distinguished in trainee's plan list
 - [x] **COACH-08**: Trainee cannot edit coach-assigned plans (read-only)
-- [ ] **COACH-09**: Coach can create workout plans targeting a specific trainee
-- [ ] **COACH-10**: Coach can see trainee's last-week performance inline while editing plans
-- [ ] **COACH-11**: Coach can attach a text note when saving plan changes
-- [ ] **COACH-12**: Coach can see trainee's workout logs (sets/reps/weight) but NOT body metrics
+- [x] **COACH-09**: Coach can create workout plans targeting a specific trainee
+- [x] **COACH-10**: Coach can see trainee's last-week performance inline while editing plans
+- [x] **COACH-11**: Coach can attach a text note when saving plan changes
+- [x] **COACH-12**: Coach can see trainee's workout logs (sets/reps/weight) but NOT body metrics
 - [ ] **COACH-13**: Coach receives push notification when trainee completes a workout
 - [ ] **COACH-14**: Coach receives push notification when trainee achieves a PR
 - [ ] **COACH-15**: Trainee receives push notification when coach updates their plan
