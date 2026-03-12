@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
+stopped_at: Completed 14-01-PLAN.md
+last_updated: "2026-03-12T19:34:12.275Z"
+last_activity: 2026-03-12 - Phase 12 verified and approved
+progress:
+  total_phases: 15
+  completed_phases: 11
+  total_plans: 49
+  completed_plans: 42
+  percent: 86
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
 stopped_at: Completed 13-02-PLAN.md
 last_updated: "2026-03-12T19:29:10.597Z"
 last_activity: 2026-03-12 - Phase 12 verified and approved
 progress:
-  total_phases: 14
+  [█████████░] 86%
   completed_phases: 11
   total_plans: 49
   completed_plans: 40
@@ -379,6 +395,8 @@ Progress: [██████████] 100%
 | Phase 12 P02 | 15min | 2 tasks | 10 files |
 | Phase 13 P00 | 2min | 1 tasks | 4 files |
 | Phase 13 P02 | 1min | 1 tasks | 1 files |
+| Phase 13 P01 | 5min | 2 tasks | 13 files |
+| Phase 14 P01 | 5min | 2 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -478,6 +496,9 @@ Recent decisions affecting current work:
 - [Phase quick-30]: Cache-busting query param on avatar URL; profiles table as fallback avatar source
 - [Phase 13]: Used it.todo() stubs with commented imports for Nyquist compliance before source files exist
 - [Phase 13]: EXPO_ACCESS_TOKEN is optional in send-push Edge Function for dev compatibility
+- [Phase 13]: Used as-any for push_tokens table access (not in generated Supabase types yet)
+- [Phase 13]: coach_id defaults to null for backward compatibility with existing plans
+- [Phase 14]: Used File.arrayBuffer() SDK 55 API for video uploads instead of legacy readAsStringAsync+base64-arraybuffer
 
 ### Roadmap Evolution
 
@@ -485,6 +506,7 @@ Recent decisions affecting current work:
 - Phase 12 added: proper onboarding
 - Phase 13 added: coaching options, create plans for others, get notifs when they finish and update their plans for the next week
 - Phase 14 added: feature to add and save videos of a certain set. can be viewed in history and in seperate tab in settings.
+- Phase 15 added: Add barbell calculator tab with plate loading, weight calculations, RPE/1RM calculators, and next-set RPE recommendations
 
 ### Pending Todos
 
@@ -533,6 +555,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T19:29:10.594Z
-Stopped at: Completed 13-02-PLAN.md
+Last session: 2026-03-12T19:34:12.273Z
+Stopped at: Completed 14-01-PLAN.md
 Resume file: None

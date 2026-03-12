@@ -59,9 +59,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Set Videos
 
-- [ ] **VID-01**: User can record a video during an active workout and attach it to a specific set
-- [ ] **VID-02**: User can choose a video from gallery and attach it to a specific set
-- [ ] **VID-03**: Videos upload to Supabase Storage in background (offline-first queue)
+- [x] **VID-01**: User can record a video during an active workout and attach it to a specific set
+- [x] **VID-02**: User can choose a video from gallery and attach it to a specific set
+- [x] **VID-03**: Videos upload to Supabase Storage in background (offline-first queue)
 - [ ] **VID-04**: Camera button appears on each logged SetCard during active workout
 - [ ] **VID-05**: User can replace or delete an attached video on a set
 - [ ] **VID-06**: Video thumbnails with play icon appear on sets in workout history detail
@@ -73,7 +73,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **COACH-01**: Coach can generate an invite code to connect with a trainee
 - [x] **COACH-02**: Trainee can enter an invite code to establish a coaching relationship
 - [x] **COACH-03**: Users can be both coach and trainee simultaneously
-- [ ] **COACH-04**: Either party can disconnect the coaching relationship unilaterally
+- [x] **COACH-04**: Either party can disconnect the coaching relationship unilaterally
 - [x] **COACH-05**: Push notification infrastructure exists (token registration, server-side dispatch via Edge Function)
 - [ ] **COACH-06**: Coach UI toggle in Plans tab: "My Plans" vs "Trainees"
 - [ ] **COACH-07**: Coach-assigned plans are visually distinguished in trainee's plan list

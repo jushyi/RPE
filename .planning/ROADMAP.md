@@ -207,8 +207,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 10. Distribution | 0/2 | Not started | - |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
-| 13. Coaching Options | 2/6 | In Progress|  |
-| 14. Set Videos | 0/3 | Planned | - |
+| 13. Coaching Options | 3/6 | In Progress|  |
+| 14. Set Videos | 1/3 | In Progress|  |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -246,7 +246,7 @@ Plans:
   5. Coach receives a weekly adherence summary for all trainees every Sunday evening
   6. Coach-assigned plans are visually distinguished and read-only in trainee's Plans tab
   7. Either party can disconnect the coaching relationship unilaterally
-**Plans:** 2/6 plans executed
+**Plans:** 3/6 plans executed
 
 
 Plans:
@@ -268,9 +268,19 @@ Plans:
   3. Video thumbnails with play icon appear on sets in workout history detail
   4. Tapping thumbnail opens fullscreen native video player
   5. Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 - [ ] 14-01-PLAN.md -- Data layer: dependencies (expo-video, expo-video-thumbnails, base64-arraybuffer), migrations (video_url column, set-videos bucket), types, video capture/upload hooks, upload queue, thumbnail cache, shared components
 - [ ] 14-02-PLAN.md -- Active workout integration: VideoCaptureButton on SetCard, video attachment wiring in workout session, background upload on capture
 - [ ] 14-03-PLAN.md -- History playback + gallery: video thumbnails in SetRow, video badge on session cards, My Videos gallery screen in Settings with storage usage
+
+### Phase 15: Add barbell calculator tab with plate loading, weight calculations, RPE/1RM calculators, and next-set RPE recommendations
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 14
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 15 to break down)
