@@ -1,7 +1,6 @@
-// TODO: uncomment when implemented
-// import { useCoaching } from '@/features/coaching/hooks/useCoaching';
+import { useCoaching } from '@/features/coaching/hooks/useCoaching';
 
-// Stub for coaching relationship CRUD
+// Supabase-dependent tests are stubs -- these operations require a live database connection
 describe('useCoaching', () => {
   describe('generateCode', () => {
     it.todo('inserts invite code with 24h expiry');
