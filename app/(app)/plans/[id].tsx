@@ -9,6 +9,7 @@ import {
   TextInput,
   Alert,
   StyleSheet,
+  LayoutAnimation,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
@@ -98,6 +99,7 @@ export default function PlanDetailScreen() {
 
   const enterEditMode = useCallback(() => {
     if (!plan) return;
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     // Deep clone via DaySlot conversion (independent copy)
     setDraftName(plan.name);
     setDraftDays(planToDaySlots(plan));
@@ -105,6 +107,7 @@ export default function PlanDetailScreen() {
   }, [plan]);
 
   const cancelEdit = useCallback(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     // Discard draft - no persistence
     setIsEditing(false);
     setDraftName('');
@@ -122,6 +125,7 @@ export default function PlanDetailScreen() {
 
     const result = await updatePlan(updatedPlan);
     if (result?.success) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setIsEditing(false);
       setDraftName('');
       setDraftDays([]);
