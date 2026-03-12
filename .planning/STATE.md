@@ -3,6 +3,21 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
+stopped_at: Phase 16 context gathered
+last_updated: "2026-03-12T20:55:21.447Z"
+last_activity: "2026-03-12 - Completed quick task 31: Stack no-plan workout card buttons vertically"
+progress:
+  total_phases: 17
+  completed_phases: 12
+  total_plans: 54
+  completed_plans: 47
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
 stopped_at: Phase 15 context gathered
 last_updated: "2026-03-12T19:57:29.570Z"
 last_activity: 2026-03-12 - Phase 12 verified and approved
@@ -521,6 +536,8 @@ Recent decisions affecting current work:
 - Phase 13 added: coaching options, create plans for others, get notifs when they finish and update their plans for the next week
 - Phase 14 added: feature to add and save videos of a certain set. can be viewed in history and in seperate tab in settings.
 - Phase 15 added: Add barbell calculator tab with plate loading, weight calculations, RPE/1RM calculators, and next-set RPE recommendations
+- Phase 16 added: push notifications
+- Phase 17 added: friend workout, pr and set video sharing. creating of groups to share with
 
 ### Pending Todos
 
@@ -570,6 +587,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T19:57:29.568Z
-Stopped at: Phase 15 context gathered
-Resume file: .planning/phases/15-add-barbell-calculator-tab-with-plate-loading-weight-calculations-rpe-1rm-calculators-and-next-set-rpe-recommendations/15-CONTEXT.md
+Last session: 2026-03-12T20:55:21.443Z
+Stopped at: Phase 16 context gathered
+Resume file: .planning/phases/16-push-notifications/16-CONTEXT.md
