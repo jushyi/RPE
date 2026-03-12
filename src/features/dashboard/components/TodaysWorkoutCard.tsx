@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useTodaysWorkout } from '@/features/dashboard/hooks/useTodaysWorkout';
 import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
+import { usePlanStore } from '@/stores/planStore';
 import { colors } from '@/constants/theme';
 import type { WorkoutSession } from '@/features/workout/types';
 
@@ -15,7 +16,8 @@ interface TodaysWorkoutCardProps {
 export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardProps) {
   const workout = useTodaysWorkout();
   const router = useRouter();
-  const { startFreestyle } = useWorkoutSession();
+  const { startFreestyle, startFromPlan } = useWorkoutSession();
+  const activePlan = usePlanStore((s) => s.plans.find((p) => p.is_active));
 
   if (workout.state === 'planned' && workout.todayDay && workout.plan) {
     // Hide card if the planned workout day has already been completed
@@ -56,12 +58,12 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
             <Button
               title="Start Workout"
               variant="primary"
-              onPress={() =>
-                router.push({
-                  pathname: '/(app)/workout' as any,
-                  params: { planDayId: workout.todayDay!.id },
-                })
-              }
+              onPress={() => {
+                const planDay = activePlan?.plan_days.find(
+                  (d) => d.id === workout.todayDay!.id
+                );
+                if (planDay) startFromPlan(planDay);
+              }}
             />
           </View>
         </Card>
