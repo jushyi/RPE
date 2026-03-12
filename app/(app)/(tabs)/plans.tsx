@@ -22,6 +22,11 @@ import { colors } from '@/constants/theme';
 import { usePlans } from '@/features/plans/hooks/usePlans';
 import { PlanEmptyState } from '@/features/plans/components/PlanEmptyState';
 import { PlanCard } from '@/features/plans/components/PlanCard';
+import { CoachPlanBadge } from '@/features/coaching/components/CoachPlanBadge';
+import { CoachTraineeToggle, type CoachToggleValue } from '@/features/coaching/components/CoachTraineeToggle';
+import { TraineeCard } from '@/features/coaching/components/TraineeCard';
+import { InviteCodeModal } from '@/features/coaching/components/InviteCodeModal';
+import { useCoaching } from '@/features/coaching/hooks/useCoaching';
 import { HistoryList } from '@/features/history/components/HistoryList';
 import { useExercises } from '@/features/exercises/hooks/useExercises';
 import { ExerciseFilterBar } from '@/features/exercises/components/ExerciseFilterBar';
@@ -39,6 +44,7 @@ export default function PlansScreen() {
   const [activeTab, setActiveTab] = useState(0);
   const indicatorX = useSharedValue(0);
   const [tabWidth, setTabWidth] = useState(0);
+  const [inviteModalVisible, setInviteModalVisible] = useState(false);
 
   const handleTabPress = useCallback(
     (index: number) => {
@@ -73,6 +79,18 @@ export default function PlansScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['top']}>
+      {/* Header with person-add icon */}
+      <View style={s.headerRow}>
+        <View style={s.headerSpacer} />
+        <Pressable
+          style={s.headerIcon}
+          onPress={() => setInviteModalVisible(true)}
+          hitSlop={12}
+        >
+          <Ionicons name="person-add-outline" size={22} color={colors.textPrimary} />
+        </Pressable>
+      </View>
+
       {/* Tab Bar */}
       <View style={s.tabBar} onLayout={onTabBarLayout}>
         {TABS.map((tab, index) => (
@@ -112,6 +130,12 @@ export default function PlansScreen() {
           <ExercisesContent />
         </View>
       </PagerView>
+
+      {/* Invite Code Modal */}
+      <InviteCodeModal
+        visible={inviteModalVisible}
+        onClose={() => setInviteModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -121,20 +145,30 @@ function PlansContent() {
   const router = useRouter();
   const { planSummaries, isLoading, fetchPlans, setActivePlan, deletePlan } =
     usePlans();
+  const {
+    trainees,
+    coaches,
+    relationships,
+    hasAnyRelationship,
+    fetchRelationships,
+    disconnect,
+  } = useCoaching();
   const [refreshing, setRefreshing] = useState(false);
+  const [coachToggle, setCoachToggle] = useState<CoachToggleValue>('my-plans');
 
   useEffect(() => {
     fetchPlans();
+    fetchRelationships();
   }, []);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     try {
-      await fetchPlans(true);
+      await Promise.all([fetchPlans(true), fetchRelationships()]);
     } finally {
       setRefreshing(false);
     }
-  }, [fetchPlans]);
+  }, [fetchPlans, fetchRelationships]);
 
   const handleCreatePress = () => {
     router.push('/plans/create' as any);
@@ -175,6 +209,27 @@ function PlansContent() {
     );
   };
 
+  const handleDisconnect = (relationshipId: string, traineeName: string) => {
+    Alert.alert(
+      `Disconnect from ${traineeName}?`,
+      'This will end the coaching relationship. Existing plans will remain.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Disconnect',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await disconnect(relationshipId);
+            } catch (err) {
+              Alert.alert('Error', 'Failed to disconnect.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const renderItem = ({ item }: { item: PlanSummary }) => (
     <View style={s.cardWrapper}>
       <PlanCard
@@ -183,14 +238,65 @@ function PlansContent() {
         onLongPress={() => handleSetActive(item.id)}
         onDelete={() => handleDeletePlan(item)}
       />
+      {item.coach_id && (
+        <View style={s.coachBadgeRow}>
+          <CoachPlanBadge />
+        </View>
+      )}
     </View>
   );
 
   const showEmpty = !isLoading && planSummaries.length === 0;
+  const showTrainees = coachToggle === 'trainees' && hasAnyRelationship;
 
   return (
     <View style={s.plansContainer}>
-      {showEmpty ? (
+      {/* Coaching toggle -- only when user has relationships */}
+      {hasAnyRelationship && (
+        <CoachTraineeToggle value={coachToggle} onValueChange={setCoachToggle} />
+      )}
+
+      {showTrainees ? (
+        <FlatList
+          data={trainees}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            const rel = relationships.find(
+              (r) => r.trainee_id === item.id
+            );
+            return (
+              <TraineeCard
+                trainee={item}
+                onPress={() => {
+                  // Navigate to trainee's plans (future plan screen)
+                  // For now, just show an alert
+                  Alert.alert(item.display_name, 'Trainee plan view coming soon.');
+                }}
+                onDisconnect={() => {
+                  if (rel) handleDisconnect(rel.id, item.display_name);
+                }}
+              />
+            );
+          }}
+          contentContainerStyle={s.traineeList}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={s.emptyTrainees}>
+              <Text style={s.emptyTraineesText}>
+                No trainees yet. Share an invite code to connect.
+              </Text>
+            </View>
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={colors.accent}
+              colors={[colors.accent]}
+            />
+          }
+        />
+      ) : showEmpty ? (
         <PlanEmptyState onCreatePress={handleCreatePress} />
       ) : (
         <FlatList
@@ -210,7 +316,7 @@ function PlansContent() {
         />
       )}
 
-      {!showEmpty && (
+      {!showEmpty && !showTrainees && (
         <Pressable style={s.fab} onPress={handleCreatePress}>
           <Ionicons name="add" size={28} color={colors.white} />
         </Pressable>
@@ -330,6 +436,20 @@ const s = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    backgroundColor: colors.background,
+  },
+  headerSpacer: {
+    flex: 1,
+  },
+  headerIcon: {
+    padding: 6,
+  },
   tabBar: {
     flexDirection: 'row',
     backgroundColor: colors.background,
@@ -377,6 +497,26 @@ const s = StyleSheet.create({
   },
   cardWrapper: {
     marginBottom: 12,
+  },
+  coachBadgeRow: {
+    marginTop: 4,
+    paddingLeft: 4,
+  },
+  traineeList: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 100,
+  },
+  emptyTrainees: {
+    paddingTop: 60,
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  emptyTraineesText: {
+    color: colors.textMuted,
+    fontSize: 15,
+    textAlign: 'center',
+    lineHeight: 22,
   },
   fab: {
     position: 'absolute',
