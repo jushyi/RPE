@@ -61,8 +61,11 @@ export function MeasurementHistoryItem({
   if (entry.waist != null) {
     values.push({ label: 'Waist', display: `${entry.waist} ${entry.waist_unit ?? ''}` });
   }
-  if (entry.hips != null) {
-    values.push({ label: 'Hips', display: `${entry.hips} ${entry.hips_unit ?? ''}` });
+  if (entry.biceps != null) {
+    values.push({ label: 'Biceps', display: `${entry.biceps} ${entry.biceps_unit ?? ''}` });
+  }
+  if (entry.quad != null) {
+    values.push({ label: 'Quad', display: `${entry.quad} ${entry.quad_unit ?? ''}` });
   }
   if (entry.body_fat_pct != null) {
     values.push({ label: 'Body Fat', display: `${entry.body_fat_pct}%` });

@@ -56,7 +56,8 @@ export default function BodyMetricsScreen() {
   // Chart data hooks
   const chestData = useBodyMetricsChartData('chest', circumferenceUnit);
   const waistData = useBodyMetricsChartData('waist', circumferenceUnit);
-  const hipsData = useBodyMetricsChartData('hips', circumferenceUnit);
+  const bicepsData = useBodyMetricsChartData('biceps', circumferenceUnit);
+  const quadData = useBodyMetricsChartData('quad', circumferenceUnit);
   const bodyFatData = useBodyMetricsChartData('body_fat_pct', circumferenceUnit);
 
   // Bodyweight chart data
@@ -105,8 +106,10 @@ export default function BodyMetricsScreen() {
       chest_unit?: CircumferenceUnit | null;
       waist?: number | null;
       waist_unit?: CircumferenceUnit | null;
-      hips?: number | null;
-      hips_unit?: CircumferenceUnit | null;
+      biceps?: number | null;
+      biceps_unit?: CircumferenceUnit | null;
+      quad?: number | null;
+      quad_unit?: CircumferenceUnit | null;
       body_fat_pct?: number | null;
       measured_at: string;
       editId?: string;
@@ -120,7 +123,8 @@ export default function BodyMetricsScreen() {
       const hasMeasurement =
         data.chest != null ||
         data.waist != null ||
-        data.hips != null ||
+        data.biceps != null ||
+        data.quad != null ||
         data.body_fat_pct != null;
 
       if (hasMeasurement) {
@@ -129,8 +133,10 @@ export default function BodyMetricsScreen() {
           chest_unit: data.chest != null ? (data.chest_unit ?? 'in') : null,
           waist: data.waist ?? null,
           waist_unit: data.waist != null ? (data.waist_unit ?? 'in') : null,
-          hips: data.hips ?? null,
-          hips_unit: data.hips != null ? (data.hips_unit ?? 'in') : null,
+          biceps: data.biceps ?? null,
+          biceps_unit: data.biceps != null ? (data.biceps_unit ?? 'in') : null,
+          quad: data.quad ?? null,
+          quad_unit: data.quad != null ? (data.quad_unit ?? 'in') : null,
           body_fat_pct: data.body_fat_pct ?? null,
           measured_at: data.measured_at,
         };
@@ -254,14 +260,25 @@ export default function BodyMetricsScreen() {
               singlePointMessage="Log more entries to see trends"
             />
 
-            {/* Hips Chart */}
+            {/* Biceps Chart */}
             <MeasurementChart
-              label="Hips"
-              data={hipsData}
+              label="Biceps"
+              data={bicepsData}
               unit={circumferenceUnit}
               onToggleUnit={() => setCircumferenceUnit((u) => (u === 'in' ? 'cm' : 'in'))}
               showUnitToggle
-              emptyMessage="No hips data yet"
+              emptyMessage="No biceps data yet"
+              singlePointMessage="Log more entries to see trends"
+            />
+
+            {/* Quad Chart */}
+            <MeasurementChart
+              label="Quad"
+              data={quadData}
+              unit={circumferenceUnit}
+              onToggleUnit={() => setCircumferenceUnit((u) => (u === 'in' ? 'cm' : 'in'))}
+              showUnitToggle
+              emptyMessage="No quad data yet"
               singlePointMessage="Log more entries to see trends"
             />
 
