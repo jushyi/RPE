@@ -31,7 +31,7 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
             params: { id: workout.plan!.id },
           })
         }
-        style={({ pressed }) => [pressed && { opacity: 0.85 }]}
+        style={({ pressed }) => [s.wrap, pressed && { opacity: 0.85 }]}
       >
         <Card title="Today's Workout">
           <Text style={s.planName}>{workout.plan.name}</Text>
@@ -69,6 +69,7 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
 
   if (workout.state === 'rest-day') {
     return (
+      <View style={s.wrap}>
       <Card title="Today's Workout">
         <Text style={s.restTitle}>Rest Day</Text>
         {workout.nextDay && (
@@ -84,11 +85,13 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
           />
         </View>
       </Card>
+      </View>
     );
   }
 
   // no-plan state
   return (
+    <View style={s.wrap}>
     <Card title="Today's Workout">
       <Text style={s.noPlanText}>No plan set up yet</Text>
       <View style={s.noPlanBtns}>
@@ -108,10 +111,14 @@ export function TodaysWorkoutCard({ completedSessions = [] }: TodaysWorkoutCardP
         </View>
       </View>
     </Card>
+    </View>
   );
 }
 
 const s = StyleSheet.create({
+  wrap: {
+    marginBottom: 16,
+  },
   planName: {
     color: colors.textPrimary,
     fontSize: 17,

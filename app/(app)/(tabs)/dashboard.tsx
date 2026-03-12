@@ -371,9 +371,7 @@ export default function DashboardScreen() {
         )}
 
         {/* Card 1: Today's Workout */}
-        <View style={ds.cardWrap}>
-          <TodaysWorkoutCard completedSessions={completedToday} />
-        </View>
+        <TodaysWorkoutCard completedSessions={completedToday} />
 
         {/* Card 2: Progress Summary */}
         <View style={ds.cardWrap}>
@@ -432,7 +430,8 @@ const ds = StyleSheet.create({
   prLabel: { color: colors.textPrimary, fontSize: 16 },
   prValue: { color: colors.accent, fontWeight: 'bold', fontSize: 16 },
   completedSection: {
-    marginBottom: 16,
+    marginTop: 8,
+    marginBottom: 6,
   },
   completedCard: {
     backgroundColor: colors.surface,
