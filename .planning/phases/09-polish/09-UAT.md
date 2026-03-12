@@ -1,9 +1,9 @@
 ---
-status: diagnosed
+status: resolved
 phase: 09-polish
 source: [09-01-SUMMARY.md, 09-02-SUMMARY.md, 09-03-SUMMARY.md]
 started: 2026-03-12T12:00:00Z
-updated: 2026-03-12T12:10:00Z
+updated: 2026-03-12T00:00:00Z
 ---
 
 ## Current Test
@@ -50,7 +50,7 @@ skipped: 1
 ## Gaps
 
 - truth: "Clicking Edit on a plan navigates with a slide animation. Saving returns to plan detail with a slide animation."
-  status: failed
+  status: resolved
   reason: "User reported: clciking edit on a plan doesnt have an animation. also saving doesn't have an animation back to the plan detail."
   severity: minor
   test: 5
