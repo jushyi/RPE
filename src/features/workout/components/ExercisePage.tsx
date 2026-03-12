@@ -25,6 +25,7 @@ interface CelebrationState {
 
 export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: ExercisePageProps) {
   const toggleUnit = useWorkoutStore((s) => s.toggleExerciseUnit);
+  const removeSet = useWorkoutStore((s) => s.removeSet);
   const isPlanBased = exercise.target_sets.length > 0;
   const loggedCount = exercise.logged_sets.length;
   const [celebration, setCelebration] = useState<CelebrationState | null>(null);
