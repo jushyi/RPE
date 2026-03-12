@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { File } from 'expo-file-system';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
-import { usePlanStore } from '@/stores/planStore';
 import type { SignUpParams, SignInParams } from '../types';
 import type { User, AuthChangeEvent, Session } from '@supabase/supabase-js';
 
@@ -57,7 +56,6 @@ export function useAuth() {
           setAvatarUrl(session.user.user_metadata?.avatar_url || null);
         } else {
           setUser(null);
-          usePlanStore.getState().clearPlans();
           clearAuth();
         }
         setIsLoading(false);
@@ -99,7 +97,6 @@ export function useAuth() {
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
-    usePlanStore.getState().clearPlans();
     clearAuth();
   }, [clearAuth]);
 

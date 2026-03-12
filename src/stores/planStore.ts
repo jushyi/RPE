@@ -25,7 +25,6 @@ interface PlanActions {
   removePlan: (id: string) => void;
   setActivePlan: (id: string) => void;
   setLoading: (loading: boolean) => void;
-  clearPlans: () => void;
 }
 
 export const usePlanStore = create<PlanState & PlanActions>()(
@@ -58,7 +57,6 @@ export const usePlanStore = create<PlanState & PlanActions>()(
           })),
         })),
       setLoading: (isLoading) => set({ isLoading }),
-      clearPlans: () => set({ plans: [], lastFetched: null, isLoading: false }),
     }),
     {
       name: 'plan-storage',
