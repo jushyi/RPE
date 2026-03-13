@@ -29,6 +29,7 @@ interface SocialState {
 
 interface SocialActions {
   fetchGroups: () => Promise<void>;
+  fetchGroupMembers: (groupId: string) => Promise<void>;
   createGroup: (name: string, memberIds: string[]) => Promise<Group | null>;
   leaveGroup: (groupId: string) => Promise<void>;
   addMemberToGroup: (groupId: string, userId: string) => Promise<void>;
@@ -79,6 +80,30 @@ export const useSocialStore = create<SocialState & SocialActions>()(
         } catch (err) {
           console.warn('Failed to fetch groups:', err);
           set({ loading: false });
+        }
+      },
+
+      fetchGroupMembers: async (groupId: string) => {
+        try {
+          const { data, error } = await (supabase as any)
+            .from('group_members')
+            .select('*')
+            .eq('group_id', groupId)
+            .order('joined_at', { ascending: true });
+
+          if (error) {
+            console.warn('Failed to fetch group members:', error.message);
+            return;
+          }
+
+          set((state) => ({
+            groupMembers: {
+              ...state.groupMembers,
+              [groupId]: (data ?? []) as GroupMember[],
+            },
+          }));
+        } catch (err) {
+          console.warn('Failed to fetch group members:', err);
         }
       },
 

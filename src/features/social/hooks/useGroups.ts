@@ -11,6 +11,7 @@ export function useGroups() {
   const groupMembers = useSocialStore((s) => s.groupMembers);
   const loading = useSocialStore((s) => s.loading);
   const fetchGroups = useSocialStore((s) => s.fetchGroups);
+  const fetchGroupMembers = useSocialStore((s) => s.fetchGroupMembers);
   const createGroup = useSocialStore((s) => s.createGroup);
   const leaveGroup = useSocialStore((s) => s.leaveGroup);
   const addMember = useSocialStore((s) => s.addMemberToGroup);
@@ -35,6 +36,7 @@ export function useGroups() {
     loading,
     getMembersForGroup,
     isGroupMuted,
+    fetchGroupMembers,
     createGroup,
     leaveGroup,
     addMember,
