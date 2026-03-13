@@ -93,8 +93,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **NOTIF-02**: Tapping inbox items deep links to relevant screen (session detail, progress chart, plan detail, or active workout)
 - [x] **NOTIF-03**: Notifications persisted in Supabase table with RLS and 30-day retention
 - [x] **NOTIF-04**: Push notification taps (cold-start and foreground) deep link to correct screen
-- [ ] **NOTIF-05**: Developer test screen with trigger buttons for all 6 notification types and debug log
-- [ ] **NOTIF-06**: Local alarm/nudge notifications write records to notifications table for inbox consistency
+- [x] **NOTIF-05**: Developer test screen with trigger buttons for all 6 notification types and debug log
+- [x] **NOTIF-06**: Local alarm/nudge notifications write records to notifications table for inbox consistency
 
 ### Group Chat & Enhanced Sharing
 
