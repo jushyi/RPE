@@ -7,6 +7,7 @@ export interface HistorySetLog {
   is_pr: boolean;
   estimated_1rm: number | null;
   logged_at: string;
+  video_url?: string | null;
 }
 
 export interface HistoryExercise {
@@ -47,6 +48,7 @@ export interface SessionListItem {
   durationMinutes: number | null; // ended_at - started_at
   planName: string | null; // null = freestyle
   dayName: string | null;
+  hasVideo: boolean;
 }
 
 // Delta comparison result

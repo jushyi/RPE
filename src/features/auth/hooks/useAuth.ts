@@ -1,28 +1,36 @@
 import { useEffect, useState, useCallback } from 'react';
+import { File } from 'expo-file-system';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
+import { clearAllUserData } from '@/stores/clearUserData';
 import type { SignUpParams, SignInParams } from '../types';
 import type { User, AuthChangeEvent, Session } from '@supabase/supabase-js';
 
 async function uploadProfilePhoto(userId: string, uri: string): Promise<void> {
   try {
-    const response = await fetch(uri);
-    const blob = await response.blob();
     const filePath = `${userId}/avatar.jpg`;
+
+    const file = new File(uri);
+    const arrayBuffer = await file.arrayBuffer();
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(filePath, blob, { contentType: 'image/jpeg', upsert: true });
+      .upload(filePath, arrayBuffer, { contentType: 'image/jpeg', upsert: true });
 
     if (!uploadError) {
       const { data: urlData } = supabase.storage
         .from('avatars')
         .getPublicUrl(filePath);
 
+      const cacheBustedUrl = `${urlData.publicUrl}?t=${Date.now()}`;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase.from('profiles') as any)
-        .update({ avatar_url: urlData.publicUrl })
+        .update({ avatar_url: cacheBustedUrl })
         .eq('id', userId);
+
+      await supabase.auth.updateUser({ data: { avatar_url: cacheBustedUrl } });
+      useAuthStore.getState().setAvatarUrl(cacheBustedUrl);
     }
   } catch (err) {
     console.warn('Profile photo upload failed:', err);
@@ -32,7 +40,7 @@ async function uploadProfilePhoto(userId: string, uri: string): Promise<void> {
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { isAuthenticated, setAuthenticated, clearAuth } = useAuthStore();
+  const { isAuthenticated, setAuthenticated, setAvatarUrl, setDisplayName, clearAuth } = useAuthStore();
 
   useEffect(() => {
     if (!supabase) {
@@ -45,8 +53,11 @@ export function useAuth() {
         if (session?.user) {
           setUser(session.user);
           setAuthenticated(session.user.id);
+          setDisplayName(session.user.user_metadata?.display_name || 'User');
+          setAvatarUrl(session.user.user_metadata?.avatar_url || null);
         } else {
           setUser(null);
+          clearAllUserData();
           clearAuth();
         }
         setIsLoading(false);
@@ -56,7 +67,7 @@ export function useAuth() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [setAuthenticated, clearAuth]);
+  }, [setAuthenticated, setAvatarUrl, setDisplayName, clearAuth]);
 
   const signUp = useCallback(async ({ email, password, displayName, photoUri }: SignUpParams) => {
     const { data, error } = await supabase.auth.signUp({
@@ -88,6 +99,7 @@ export function useAuth() {
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    clearAllUserData();
     clearAuth();
   }, [clearAuth]);
 

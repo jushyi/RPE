@@ -33,7 +33,7 @@ export function useHistory() {
               exercise_id,
               sort_order,
               exercises(name, muscle_groups),
-              set_logs(id, weight, reps, is_pr, estimated_1rm)
+              set_logs(id, weight, reps, is_pr, estimated_1rm, video_url)
             ),
             workout_plans(name)
           `
@@ -58,8 +58,10 @@ export function useHistory() {
         if (offset === 0) {
           setSessions(normalized);
         } else {
-          // Append for pagination
-          setSessions([...sessions, ...normalized]);
+          // Append for pagination, deduplicating by id
+          const existingIds = new Set(sessions.map((s) => s.id));
+          const newSessions = normalized.filter((s) => !existingIds.has(s.id));
+          setSessions([...sessions, ...newSessions]);
         }
       } catch (err) {
         console.warn('Failed to fetch history sessions:', err);
@@ -105,6 +107,8 @@ export function useHistory() {
       session.ended_at
     );
 
+    const hasVideo = allSets.some((s) => !!s.video_url);
+
     return {
       id: session.id,
       date: session.ended_at ?? session.started_at,
@@ -114,6 +118,7 @@ export function useHistory() {
       durationMinutes,
       planName: session.plan_name ?? null,
       dayName: session.day_name ?? null,
+      hasVideo,
     };
   }, []);
 

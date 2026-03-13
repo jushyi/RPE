@@ -24,9 +24,14 @@ export default function LoginScreen() {
     displayName: string;
     photoUri?: string;
   }) => {
-    await signUp(data);
-    // Route to email confirmation screen — session activates after confirm
-    router.replace('/(auth)/confirm');
+    const result = await signUp(data);
+    if (result.session) {
+      // Email confirmation disabled — session is immediate, let layout guard route
+      router.replace('/(app)/onboarding' as any);
+    } else {
+      // Email confirmation required — wait for user to verify
+      router.replace('/(auth)/confirm');
+    }
   };
 
   return (

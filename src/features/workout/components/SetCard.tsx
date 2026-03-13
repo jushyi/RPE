@@ -1,10 +1,13 @@
-import React, { useState, useCallback, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, Pressable, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import {
   MAX_WEIGHT,
   MAX_REPS,
 } from '@/features/workout/constants';
+import { VideoCaptureButton } from '@/features/videos/components/VideoCaptureButton';
+import { useVideoUpload } from '@/features/videos/hooks/useVideoUpload';
 import type { TargetSet } from '@/features/plans/types';
 import type { SetLog } from '@/features/workout/types';
 
@@ -16,9 +19,15 @@ interface SetCardProps {
   onDelete?: () => void;
   isLogged?: boolean;
   loggedSet?: SetLog;
+  onVideoAttached?: (setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => void;
+  onVideoDeleted?: (setLogId: string) => void;
 }
 
-export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged, loggedSet }: SetCardProps) {
+export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged, loggedSet, onVideoAttached, onVideoDeleted }: SetCardProps) {
+  const { deleteVideo } = useVideoUpload();
+  const [localVideoUri, setLocalVideoUri] = useState<string | null>(null);
+  const [localThumbnailUri, setLocalThumbnailUri] = useState<string | null>(null);
+  const [pendingVideo, setPendingVideo] = useState<{ localUri: string; thumbnailUri: string; source: 'camera' | 'gallery' } | null>(null);
   const [weight, setWeight] = useState(() => {
     if (loggedSet) return String(loggedSet.weight);
     if (targetSet?.weight && targetSet.weight > 0) return String(targetSet.weight);
@@ -35,6 +44,18 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
     return '';
   });
   const hasLogged = useRef(!!loggedSet || (isLogged ?? false));
+
+  // Flush pending video when set gets logged (loggedSet.id becomes available)
+  useEffect(() => {
+    if (loggedSet?.id && pendingVideo) {
+      if (onVideoAttached) {
+        onVideoAttached(loggedSet.id, pendingVideo.localUri, pendingVideo.thumbnailUri, pendingVideo.source);
+      }
+      setLocalVideoUri(pendingVideo.localUri);
+      setLocalThumbnailUri(pendingVideo.thumbnailUri);
+      setPendingVideo(null);
+    }
+  }, [loggedSet?.id, pendingVideo, onVideoAttached]);
 
   const handleLogPress = useCallback(() => {
     const w = parseFloat(weight);
@@ -70,12 +91,72 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
     }
   }, []);
 
+  const handleVideoAttached = useCallback(
+    (localUri: string, thumbnailUri: string, source: 'camera' | 'gallery') => {
+      if (loggedSet?.id && onVideoAttached) {
+        // Already logged - attach immediately
+        setLocalVideoUri(localUri);
+        setLocalThumbnailUri(thumbnailUri);
+        onVideoAttached(loggedSet.id, localUri, thumbnailUri, source);
+      } else {
+        // Not yet logged - store as pending
+        setPendingVideo({ localUri, thumbnailUri, source });
+        setLocalVideoUri(localUri);
+        setLocalThumbnailUri(thumbnailUri);
+      }
+    },
+    [loggedSet?.id, onVideoAttached],
+  );
+
+  const handleDeleteVideo = useCallback(() => {
+    if (!loggedSet?.id) return;
+    Alert.alert(
+      'Remove Video?',
+      'This will delete the video from this set.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteVideo(loggedSet.id);
+            } catch {
+              // Storage delete failure is non-blocking
+            }
+            setLocalVideoUri(null);
+            setLocalThumbnailUri(null);
+            onVideoDeleted?.(loggedSet.id);
+          },
+        },
+      ],
+    );
+  }, [loggedSet?.id, deleteVideo, onVideoDeleted]);
+
+  const hasVideoAttachment = !!(localVideoUri || loggedSet?.video_url || pendingVideo);
+  const displayThumbnail = localThumbnailUri || null;
+
   return (
     <View style={[s.card, hasLogged.current && s.cardLogged]}>
       <View style={s.setHeader}>
         <Text style={s.setLabel}>Set {setNumber}</Text>
         <View style={s.setHeaderRight}>
           {hasLogged.current && <Text style={s.loggedBadge}>Logged</Text>}
+          <VideoCaptureButton
+            onVideoAttached={handleVideoAttached}
+            setLogId={loggedSet?.id}
+            hasVideo={hasVideoAttachment}
+            thumbnailUri={displayThumbnail}
+          />
+          {hasLogged.current && hasVideoAttachment && (
+            <Pressable
+              onPress={handleDeleteVideo}
+              style={({ pressed }) => [s.deleteVideoIconBtn, pressed && { opacity: 0.6 }]}
+              hitSlop={6}
+            >
+              <Ionicons name="trash-outline" size={16} color={colors.error} />
+            </Pressable>
+          )}
           {onDelete && (
             <Pressable
               onPress={onDelete}
@@ -260,5 +341,8 @@ const s = StyleSheet.create({
   },
   logBtnTextDisabled: {
     color: colors.textMuted,
+  },
+  deleteVideoIconBtn: {
+    padding: 2,
   },
 });

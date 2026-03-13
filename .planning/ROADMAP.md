@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Active Workout** - Focus mode screen, set logging, previous performance reference, PR detection, offline-first writes (completed 2026-03-10)
 - [x] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation (completed 2026-03-10)
 - [x] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen (1/3 plans complete) (completed 2026-03-10)
-- [x] **Phase 7: Body Metrics** - Body measurements (chest, waist, hips, body fat %), combined dashboard card, detail screen with charts and history (completed 2026-03-10)
+- [x] **Phase 7: Body Metrics** - Body measurements (chest, waist, biceps, quad, body fat %), combined dashboard card, detail screen with charts and history (gap closure in progress) (completed 2026-03-12)
 - [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
 - [x] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline (completed 2026-03-11)
 - [ ] **Phase 10: Distribution** - EAS Build, TestFlight (iOS only), physical device verification
@@ -68,7 +68,7 @@ Plans:
   3. User can view all created plans and navigate to any plan's detail
   4. User can edit an existing plan (change exercises, days, or targets) and delete a plan entirely
   5. Plan edits do not alter previously logged workout sessions (plans and actuals remain separate)
-**Plans:** 3/3 plans complete
+**Plans:** 5 plans (3 executed + 2 gap closure)
 
 Plans:
 - [ ] 03-01-PLAN.md — Schema (3 tables + RLS + active trigger), types, planStore, usePlans hook, Plans tab with list screen and empty state
@@ -86,7 +86,7 @@ Plans:
   4. Previous session's weight and reps for the current exercise are displayed inline while logging
   5. When a logged set exceeds the user's stored PR, the app immediately flags it as a personal record
   6. All set logging writes to local storage instantly and syncs to Supabase in the background — logging never waits for a network response
-**Plans:** 6/6 plans complete
+**Plans:** 8 plans (6 executed + 2 gap closure)
 
 Plans:
 - [ ] 04-01-PLAN.md — Database schema (workout_sessions, session_exercises, set_logs + RLS), TypeScript types, workoutStore with MMKV persistence
@@ -117,7 +117,7 @@ Plans:
   2. User can log their bodyweight and view a bodyweight trend chart over time
   3. Home screen shows a progress summary including recent PRs, streak count, and recent stats
   4. Home screen shows today's planned workout (from the active plan) with a quick-start button that launches the active workout screen
-**Plans:** 3/3 plans complete
+**Plans:** 5 plans (3 executed + 2 gap closure)
 
 Plans:
 - [x] 06-01-PLAN.md — Data layer: Victory Native XL + Skia install, types, chartHelpers, bodyweight migration, chart RPC aggregation, bodyweightStore, all data hooks (chart data, bodyweight, today's workout, progress summary), unit tests (completed 2026-03-10)
@@ -125,18 +125,20 @@ Plans:
 - [ ] 06-03-PLAN.md — Dashboard refactor: TodaysWorkoutCard (3 states), ProgressSummaryCard (streak + PRs + stats + sparklines), compose cards in locked order, remove Sign Out
 
 ### Phase 7: Body Metrics
-**Goal**: Users can track body composition changes via body measurements (chest, waist, hips, body fat %) with a combined dashboard card and full detail screen featuring charts and history. Progress photos (HIST-05) deferred per user decision.
+**Goal**: Users can track body composition changes via body measurements (chest, waist, biceps, quad, body fat %) with a combined dashboard card and full detail screen featuring charts and history. Progress photos (HIST-05) deferred per user decision.
 **Depends on**: Phase 6
 **Requirements**: HIST-04, HIST-05
 **Success Criteria** (what must be TRUE):
-  1. User can log body measurements (chest, waist, hips, body fat %) with a date and view past entries
+  1. User can log body measurements (chest, waist, biceps, quad, body fat %) with a date and view past entries
   2. Dashboard shows a combined Body card with latest bodyweight + measurements, tappable to open detail screen
   3. Detail screen has Charts tab (entry form + per-measurement trend charts) and History tab (reverse-chronological list with edit/delete)
-**Plans:** 2/2 plans complete
+**Plans:** 4/4 plans complete
 
 Plans:
-- [ ] 07-01-PLAN.md — Data layer: body_measurements migration + RLS, types, unit conversion utils, bodyMeasurementStore (Zustand + MMKV), CRUD hooks, chart data hook, combined BodyCard on dashboard
-- [ ] 07-02-PLAN.md — Full body metrics detail screen: PagerView Charts/History tabs, measurement entry form (4 fields + bodyweight, per-input unit toggles, date picker), per-measurement trend charts, history list with edit/delete, human verification
+- [x] 07-01-PLAN.md — Data layer: body_measurements migration + RLS, types, unit conversion utils, bodyMeasurementStore (Zustand + MMKV), CRUD hooks, chart data hook, combined BodyCard on dashboard
+- [x] 07-02-PLAN.md — Full body metrics detail screen: PagerView Charts/History tabs, measurement entry form (4 fields + bodyweight, per-input unit toggles, date picker), per-measurement trend charts, history list with edit/delete, human verification
+- [ ] 07-03-PLAN.md — Gap closure: replace hips with biceps/quad across entire vertical slice (migration, types, form, charts, history, dashboard, CSV)
+- [ ] 07-04-PLAN.md — Gap closure: fix bodyweight date picker bug, show bodyweight in history items
 
 ### Phase 8: Alarms + Accountability
 **Goal**: Users are woken up for planned training days by a real alarm that must be dismissed, and receive a nudge notification any time they skip a planned session — the accountability loop that makes the app a training partner, not just a logger.
@@ -146,12 +148,13 @@ Plans:
   1. When creating or editing a plan day, user is prompted to set an alarm time for that day — alarm setup is part of plan creation, not a separate settings screen
   2. On a scheduled training day, the alarm fires at the set time with sound and vibration, displays a full-screen notification, and requires explicit dismissal before it stops
   3. If a planned training day passes without a logged workout session, the user receives a nudge notification before the end of that day
-**Plans:** 2/3 plans executed
+**Plans:** 4 plans (3 executed + 1 gap closure)
 
 Plans:
 - [ ] 08-01-PLAN.md — Data layer: expo-notifications install, migration (alarm columns on plan_days), alarm types/constants/utils, notification setup, alarm scheduler, alarmStore, Jest mocks, unit tests
 - [ ] 08-02-PLAN.md — Alarm UI: time picker row in DaySlotEditor (toggle + picker when weekday mapped), alarm scheduling wired into plan save/delete/activate, notification category + snooze handler on app startup
 - [ ] 08-03-PLAN.md — Missed workout nudge: auto-cancel on workout completion, settings screen with global alarm pause toggle
+- [ ] 08-04-PLAN.md — Gap closure: show alarm time in read-only plan details view (PlanDaySection)
 
 ### Phase 9: Polish
 **Goal**: The app looks and feels like a deliberate, dark-and-bold tool -- not a prototype -- with consistent magenta theming, branded icon/splash, and the OTA update pipeline in place for rapid iteration once the friend group is using it.
@@ -161,12 +164,13 @@ Plans:
   1. App applies the dark/bold design language consistently across all screens (dark background, clean typography, accent colors that pop -- no default white/light screens remaining)
   2. App icon and splash screen are set and display correctly on both iOS and Android
   3. EAS Update OTA pipeline is configured and a test update successfully reaches a device without a new store submission
-**Plans:** 3/3 plans complete
+**Plans:** 4 plans (3 executed + 1 gap closure)
 
 Plans:
 - [ ] 09-01-PLAN.md -- Theme accent swap (blue to magenta) and centralize all hardcoded colors into theme.ts
 - [ ] 09-02-PLAN.md -- App icon/splash screen generation, app rename to "RPE", navigation transitions
 - [ ] 09-03-PLAN.md -- EAS Update OTA pipeline configuration, Skeleton loading component
+- [ ] 09-04-PLAN.md -- Gap closure: add LayoutAnimation transition to plan detail view/edit toggle
 
 ### Phase 10: Distribution
 **Goal**: The app is installable by the friend group on real iOS devices via TestFlight and all critical behaviors (offline logging, alarm delivery, RLS isolation, plan-history separation) are verified on physical hardware before distribution. Android distribution deferred.
@@ -178,7 +182,7 @@ Plans:
   3. On a physical device with no network: user can log a full workout session, reconnect, and see it appear in history
   4. A second test account cannot read or modify the first account's workout data (RLS isolation confirmed)
   5. Editing a plan does not alter previously logged workout sessions (plan-history isolation confirmed)
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 10-01-PLAN.md — EAS Build config fixes (expo-notifications plugin, submit config, EAS secrets), App Store Connect listing, build + auto-submit to TestFlight
@@ -187,7 +191,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -197,20 +201,192 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 4. Active Workout | 6/6 | Complete   | 2026-03-10 |
 | 5. Workout History | 0/2 | Not started | - |
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
-| 7. Body Metrics | 2/2 | Complete   | 2026-03-10 |
-| 8. Alarms + Accountability | 2/3 | In Progress|  |
-| 9. Polish | 3/3 | Complete   | 2026-03-11 |
-| 10. Distribution | 0/2 | Not started | - |
+| 7. Body Metrics | 4/4 | Complete   | 2026-03-12 |
+| 8. Alarms + Accountability | 3/4 | In Progress|  |
+| 9. Polish | 3/4 | In Progress|  |
+| 10. Distribution | 1/2 | In Progress|  |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
+| 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
+| 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
+| 14. Set Videos | 5/5 | Complete   | 2026-03-13 |
+| 15. Barbell Calculator | 3/3 | Complete    | 2026-03-13 |
+| 15.1. Reverse Bar Loading + Plate Inventory | 2/2 | Complete    | 2026-03-13 |
+| 16. Push Notifications | 5/5 | Complete    | 2026-03-13 |
+| 17. Social Sharing | 6/6 | Complete    | 2026-03-13 |
+| 18. Group Chat | 5/5 | Complete    | 2026-03-13 |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
 **Goal:** Users have a dedicated Settings tab for account management -- unit preferences, alarm controls, data export (CSV via share sheet), sign out with confirmation, and account deletion with password re-entry, 7-day grace period, and server-side cleanup via Supabase Edge Function.
 **Requirements**: SETT-01, SETT-02, SETT-03, SETT-04, SETT-05, SETT-06, SETT-07
 **Depends on:** Phase 10
-**Plans:** 3/3 plans complete
+**Plans:** 5 plans (3 executed + 2 gap closure)
 
 Plans:
 - [ ] 11-01-PLAN.md — Settings tab route (4th tab), profile header, preference toggles (weight/measurement units), notifications section, account section with sign out confirmation
 - [ ] 11-02-PLAN.md — CSV data export: generation utilities with tests, Supabase queries for all data categories, share sheet integration
 - [ ] 11-03-PLAN.md — Delete account: migration, Edge Function, password re-entry, 7-day grace period banner on dashboard, wire all Settings actions together
+
+### Phase 12: Proper Onboarding
+
+**Goal:** New users experience a 4-step onboarding flow (Unit Preferences > PR Baselines > Body Stats Baseline > First Plan Prompt) that collects preferences and baseline data via PagerView with swipe navigation, replacing the old single-screen PR-only onboarding. Existing users are unaffected.
+**Requirements**: OB-01, OB-02, OB-03, OB-04, OB-05, OB-06
+**Depends on:** Phase 11
+**Plans:** 2/2 plans complete
+
+Plans:
+- [ ] 12-01-PLAN.md — OnboardingPager structure (PagerView + StepDots), UnitPreferencesStep, PRBaselineStep, route guard update
+- [ ] 12-02-PLAN.md — BodyStatsStep, FirstPlanPromptStep, full flow wiring, human verification
+
+### Phase 13: Coaching Options
+
+**Goal:** One user (coach) can create and manage workout plans for another user (trainee), receive push notifications when trainees complete workouts or hit PRs, get a weekly adherence summary, and update trainee plans with inline performance data. This is the app's first multi-user interaction feature.
+**Requirements**: COACH-01, COACH-02, COACH-03, COACH-04, COACH-05, COACH-06, COACH-07, COACH-08, COACH-09, COACH-10, COACH-11, COACH-12, COACH-13, COACH-14, COACH-15, COACH-16
+**Depends on:** Phase 12
+**Success Criteria** (what must be TRUE):
+  1. Coach can generate an invite code and a trainee can enter it to establish a coaching relationship
+  2. Coach can create and edit workout plans targeting a specific trainee, with inline last-week performance data
+  3. Coach receives push notifications when trainee completes a workout or hits a PR
+  4. Trainee receives push notification when coach updates their plan (with optional note)
+  5. Coach receives a weekly adherence summary for all trainees every Sunday evening
+  6. Coach-assigned plans are visually distinguished and read-only in trainee's Plans tab
+  7. Either party can disconnect the coaching relationship unilaterally
+**Plans:** 8/8 plans complete
+
+
+Plans:
+- [ ] 13-00-PLAN.md — Wave 0: Test stubs for coaching logic modules (inviteCode, useCoaching, coachPlans, pushToken)
+- [ ] 13-01-PLAN.md — Database schema (coaching_relationships, invite_codes, push_tokens, coach_notes, plan extension), TypeScript types, push token registration
+- [ ] 13-02-PLAN.md — send-push Edge Function (generic push notification dispatch via Expo Push API)
+- [ ] 13-03-PLAN.md — Coaching relationship management: coachingStore, invite code flow, Plans tab toggle, coach/trainee UI components
+- [ ] 13-04-PLAN.md — Coach plan management: plan CRUD targeting trainee, inline performance, coach notes, trainee plans screen, trainee workout history
+- [ ] 13-05-PLAN.md — Notification triggers (workout complete, PR, plan update), weekly summary Edge Function, push token registration on startup
+- [ ] 13-06-PLAN.md — Gap closure: fix trainee history infinite loop, coach plans filter, keyboard avoidance, focus refresh
+- [ ] 13-07-PLAN.md — Gap closure: InviteCodeModal UX fixes (fade overlay, tap-to-dismiss, keyboard avoidance)
+
+### Phase 14: Set Videos
+
+**Goal:** Users can record or upload a video for a specific set during an active workout, view those videos as thumbnails in workout history detail, and browse all videos in a dedicated gallery screen accessible from Settings. One video per set, stored in Supabase Storage with offline-first upload queue.
+**Requirements**: VID-01, VID-02, VID-03, VID-04, VID-05, VID-06, VID-07, VID-08
+**Depends on:** Phase 13
+**Success Criteria** (what must be TRUE):
+  1. User can record a video or pick from gallery and attach it to a logged set during an active workout
+  2. Video uploads to Supabase Storage in background (offline-first queue)
+  3. Video thumbnails with play icon appear on sets in workout history detail
+  4. Tapping thumbnail opens fullscreen native video player
+  5. Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
+**Plans:** 5/5 plans complete
+
+Plans:
+- [ ] 14-01-PLAN.md -- Data layer: dependencies (expo-video, expo-video-thumbnails, base64-arraybuffer), migrations (video_url column, set-videos bucket), types, video capture/upload hooks, upload queue, thumbnail cache, shared components
+- [ ] 14-02-PLAN.md -- Active workout integration: VideoCaptureButton on SetCard, video attachment wiring in workout session, background upload on capture
+- [ ] 14-03-PLAN.md -- History playback + gallery: video thumbnails in SetRow, video badge on session cards, My Videos gallery screen in Settings with storage usage
+- [ ] 14-04-PLAN.md -- Gap closure: pre-log video capture, inline Video column in inputRow, local file cleanup after upload
+- [ ] 14-05-PLAN.md -- Gap closure: shared swipe-down dismissable VideoPlayerModal, swipe-left gallery delete, emoji audit
+
+### Phase 15: Add barbell calculator tab with plate loading, weight calculations, RPE/1RM calculators, and next-set RPE recommendations
+
+**Goal:** Users have a dedicated Calculator tab with three standalone utility tools: a plate loading visualizer with color-coded barbell diagram, a combined RPE/1RM calculator with percentage grid, and a next-set RPE-based weight recommendation engine -- all using the user's preferred unit setting and requiring no network connectivity.
+**Requirements**: CALC-01, CALC-02, CALC-03, CALC-04, CALC-05, CALC-06, CALC-07
+**Depends on:** Phase 14
+**Success Criteria** (what must be TRUE):
+  1. User can navigate to the Calc tab (between Plans and Settings) and see three sub-tools via segmented tabs with swipe navigation
+  2. Plate calculator shows a visual barbell diagram with color-coded plates when a target weight is entered
+  3. RPE/1RM calculator shows estimated 1RM and an RPE percentage grid when weight and reps are entered
+  4. Next Set calculator shows a recommended weight (rounded to loadable increment) with explanation when last set data and targets are entered
+  5. All calculations correctly use the user's preferred unit setting (lb/kg)
+**Plans:** 3/3 plans complete
+
+Plans:
+- [ ] 15-00-PLAN.md — Wave 0: Test stubs for calculator utility functions (plateCalculator, rpeTable, nextSetCalc)
+- [ ] 15-01-PLAN.md — Types, constants, pure utility functions (plate calc, RPE table, next-set recommendation) with TDD test coverage
+- [ ] 15-02-PLAN.md — Calculator tab route, PagerView layout, all 3 sub-tool UI components (PlateCalculator, RpeCalculator, NextSetCalculator), human verification
+
+### Phase 15.1: reverse bar loading for plates tab in calc. also ability to choose which plates i actually have. some users may not have the red 55 lbs or 35kg plates. adaptable for situations (INSERTED)
+
+**Goal:** Enhance the Plates sub-tool with reverse bar loading mode (Plates > Weight via +/- steppers) and customizable plate inventory (toggle plate sizes on/off per unit, persisted in MMKV), with dynamic barbell diagram and enhanced remainder warnings.
+**Requirements**: PCALC-01, PCALC-02, PCALC-03, PCALC-04, PCALC-05
+**Depends on:** Phase 15
+**Plans:** 2/2 plans complete
+
+Plans:
+- [ ] 15.1-01-PLAN.md -- Plate inventory hook (MMKV), reverse calc utilities, MyPlatesSection component, dynamic BarbellDiagram, inventory integration in PlateCalculator
+- [ ] 15.1-02-PLAN.md -- Mode toggle segmented control, PlateStepperList component, reverse mode UI in PlateCalculator, human verification
+
+### Phase 16: Push Notifications
+
+**Goal:** Users have an in-app notification inbox showing notification history with deep linking from notification taps to relevant screens, with end-to-end testing of all existing notification types. Push infrastructure already exists from Phase 8 (local alarms/nudges) and Phase 13 (push via Expo Push API + Edge Functions) -- this phase adds the inbox UI, deep link routing, notification persistence, and a developer test screen.
+**Requirements**: NOTIF-01, NOTIF-02, NOTIF-03, NOTIF-04, NOTIF-05, NOTIF-06
+**Depends on:** Phase 15
+**Success Criteria** (what must be TRUE):
+  1. Bell icon in dashboard header shows unread notification count and opens full-screen notification inbox
+  2. Tapping inbox items navigates to the relevant screen (session detail, progress chart, plan detail, or active workout)
+  3. Notifications are persisted in Supabase with RLS and 30-day retention
+  4. Push notification taps (cold-start and foreground) deep link to the correct screen
+  5. Developer test screen (hidden behind long-press on version text) triggers all 6 notification types
+  6. Local alarm/nudge notifications write records to the notifications table for inbox consistency
+**Plans:** 5/5 plans complete
+
+Plans:
+- [ ] 16-01-PLAN.md — Data layer: notifications migration + RLS, types, deep link router, relative time utility, notification type icons, notificationStore (Zustand + MMKV)
+- [ ] 16-02-PLAN.md — Inbox UI: BellBadge in dashboard header, NotificationInbox screen, deep link handlers (cold-start + foreground), Edge Function extensions to persist notifications
+- [ ] 16-03-PLAN.md — Dev test screen (6 trigger buttons + debug log), enrich notification payloads with deep link IDs, alarm/nudge notification persistence
+
+### Phase 17: Friend Workout, PR and Set Video Sharing
+
+**Goal:** Users can connect as friends (via invite codes or handle search), create groups, and share workout summaries, PR achievements, and set videos to those groups. Each group has a card-based timeline feed with icon-based reactions. Group chat/messaging deferred to Phase 18.
+**Requirements**: SOCL-01, SOCL-02, SOCL-03, SOCL-04, SOCL-05, SOCL-06, SOCL-07, SOCL-08, SOCL-09, SOCL-10, SOCL-11, SOCL-12, SOCL-13, SOCL-14
+**Depends on:** Phase 16
+**Success Criteria** (what must be TRUE):
+  1. User can set a unique handle and be found by other users via handle search
+  2. User can connect as friends via invite codes or handle search (mutual acceptance required)
+  3. User can create groups, manage membership, and leave groups
+  4. Group feed shows card-based reverse-chronological shared content (workouts, PRs, videos)
+  5. User can share workout summaries, PRs, and set videos to selected groups after completing a workout
+  6. Group members can add icon-based reactions to shared items
+  7. Push notifications sent to non-muted group members on new shares
+  8. Body metrics are never shared
+**Plans:** 6/6 plans complete
+
+Plans:
+- [ ] 17-01-PLAN.md — Database migration (social tables + RLS), TypeScript types, pure utility functions with tests, Zustand stores
+- [ ] 17-02-PLAN.md — Social tab route, friendship system (invite codes, handle search, friend requests, accept/reject, unfriend)
+- [ ] 17-03-PLAN.md — Group CRUD, membership management, group list on Social tab
+- [ ] 17-04-PLAN.md — Group feed screen with workout/PR/video cards, cursor-based pagination, icon-based reactions
+- [ ] 17-05-PLAN.md — Share flow on workout summary screen, push notifications for group shares
+- [ ] 17-06-PLAN.md — Handle setup in Settings profile section and onboarding flow
+
+### Phase 18: Group Chat + Enhanced Sharing
+
+**Goal:** Users can send real-time text, image, and video messages in group chats (Chat tab alongside Feed tab within each group), with delivered/read receipts, typing indicators, message edit/delete, and push notifications. The share flow is enhanced with per-content-type checkboxes (workout summary, individual PRs, individual videos), and retroactive sharing from workout history is supported.
+**Requirements**: CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05, CHAT-06, CHAT-07, CHAT-08, CHAT-09, CHAT-10
+**Depends on:** Phase 17
+**Success Criteria** (what must be TRUE):
+  1. User can see a Chat tab alongside Feed tab within each group screen
+  2. User can send and receive text messages in real-time via Supabase Realtime
+  3. User can send images and videos in chat messages
+  4. Delivered and read receipts show on own messages (WhatsApp-style checkmarks)
+  5. Typing indicators show when another user is typing
+  6. User can edit own messages within 15 minutes and delete own messages at any time
+  7. Push notifications sent to non-muted group members on new chat messages
+  8. Share flow shows content-type checkboxes for granular selection (summary, individual PRs, individual videos)
+  9. User can share past workouts from history detail screen via the same share flow
+  10. Retroactively shared feed cards show both share date and original workout date
+**Plans:** 5/5 plans complete
+
+Plans:
+- [ ] 18-01-PLAN.md — Data layer: migration (messages + read_receipts + chat-media bucket), types, pure utility functions with tests, chatStore
+- [ ] 18-02-PLAN.md — Enhanced share flow: content-type checkboxes, retroactive sharing from history detail
+- [ ] 18-03-PLAN.md — Chat screen UI: GroupTabs (Feed|Chat), useChat hook with Realtime, MessageBubble, MessageInput
+- [ ] 18-04-PLAN.md — Chat features: typing indicators, read receipts, chat media upload, message edit/delete
+- [ ] 18-05-PLAN.md — Push notifications for chat, final integration, human verification
+
+### Phase 19: github actions, ci-cd pipline, builds triggers on new tags. ota update action as well to production branch
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 18
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 19 to break down)

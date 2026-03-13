@@ -35,8 +35,10 @@ export function useBodyMeasurements() {
             chest_unit: row.chest_unit,
             waist: row.waist != null ? Number(row.waist) : null,
             waist_unit: row.waist_unit,
-            hips: row.hips != null ? Number(row.hips) : null,
-            hips_unit: row.hips_unit,
+            biceps: row.biceps != null ? Number(row.biceps) : null,
+            biceps_unit: row.biceps_unit,
+            quad: row.quad != null ? Number(row.quad) : null,
+            quad_unit: row.quad_unit,
             body_fat_pct: row.body_fat_pct != null ? Number(row.body_fat_pct) : null,
             measured_at: row.measured_at,
             created_at: row.created_at,
@@ -71,8 +73,10 @@ export function useBodyMeasurements() {
             chest_unit: data.chest_unit,
             waist: data.waist,
             waist_unit: data.waist_unit,
-            hips: data.hips,
-            hips_unit: data.hips_unit,
+            biceps: data.biceps,
+            biceps_unit: data.biceps_unit,
+            quad: data.quad,
+            quad_unit: data.quad_unit,
             body_fat_pct: data.body_fat_pct,
             measured_at: data.measured_at,
           })
@@ -88,8 +92,10 @@ export function useBodyMeasurements() {
             chest_unit: inserted.chest_unit,
             waist: inserted.waist != null ? Number(inserted.waist) : null,
             waist_unit: inserted.waist_unit,
-            hips: inserted.hips != null ? Number(inserted.hips) : null,
-            hips_unit: inserted.hips_unit,
+            biceps: inserted.biceps != null ? Number(inserted.biceps) : null,
+            biceps_unit: inserted.biceps_unit,
+            quad: inserted.quad != null ? Number(inserted.quad) : null,
+            quad_unit: inserted.quad_unit,
             body_fat_pct: inserted.body_fat_pct != null ? Number(inserted.body_fat_pct) : null,
             measured_at: inserted.measured_at,
             created_at: inserted.created_at,
@@ -145,6 +151,30 @@ export function useBodyMeasurements() {
 
   const latest = measurements.length > 0 ? measurements[0] : null;
 
+  // Build a composite of the most recent non-null value for each metric
+  // across all entries (measurements are sorted newest-first)
+  const latestByMetric = (() => {
+    if (measurements.length === 0) return null;
+    const result: Partial<Pick<BodyMeasurement,
+      'chest' | 'chest_unit' | 'waist' | 'waist_unit' |
+      'biceps' | 'biceps_unit' | 'quad' | 'quad_unit' | 'body_fat_pct'
+    >> = {};
+    const fields = ['chest', 'waist', 'biceps', 'quad', 'body_fat_pct'] as const;
+    for (const field of fields) {
+      for (const m of measurements) {
+        if (m[field] != null) {
+          result[field] = m[field] as any;
+          if (field !== 'body_fat_pct') {
+            const unitKey = `${field}_unit` as keyof BodyMeasurement;
+            (result as any)[unitKey] = m[unitKey];
+          }
+          break;
+        }
+      }
+    }
+    return Object.keys(result).length > 0 ? result : null;
+  })();
+
   return {
     measurements,
     isLoading,
@@ -153,5 +183,6 @@ export function useBodyMeasurements() {
     updateMeasurement,
     deleteMeasurement,
     latest,
+    latestByMetric,
   };
 }

@@ -51,8 +51,17 @@ export const useBodyMeasurementStore = create<BodyMeasurementState & BodyMeasure
     }),
     {
       name: 'body-measurement-storage',
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => mmkvStorage),
+      migrate: (persisted: unknown, version: number) => {
+        const state = persisted as BodyMeasurementState & BodyMeasurementActions;
+        if (version < 2) {
+          // v1→v2: hips field replaced with biceps/quad — drop old measurements
+          // so they re-fetch from server with correct schema
+          return { ...state, measurements: [], lastFetched: null };
+        }
+        return state;
+      },
     }
   )
 );

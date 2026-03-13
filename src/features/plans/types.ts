@@ -41,6 +41,7 @@ export interface Plan {
   user_id: string;
   name: string;
   is_active: boolean;
+  coach_id: string | null;
   created_at: string;
   updated_at: string;
   plan_days: PlanDay[];
@@ -51,6 +52,7 @@ export interface PlanSummary {
   user_id: string;
   name: string;
   is_active: boolean;
+  coach_id: string | null;
   created_at: string;
   updated_at: string;
   day_count: number;

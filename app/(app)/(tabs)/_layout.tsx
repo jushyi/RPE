@@ -36,18 +36,6 @@ export default function TabsLayout() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="home-outline" size={20} color={color} />
           ),
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.textPrimary,
-        }}
-      />
-      <Tabs.Screen
-        name="exercises"
-        options={{
-          title: 'Exercises',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="barbell-outline" size={20} color={color} />
-          ),
         }}
       />
       <Tabs.Screen
@@ -56,6 +44,24 @@ export default function TabsLayout() {
           title: 'Plans',
           tabBarIcon: ({ color }) => (
             <Ionicons name="clipboard-outline" size={20} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="calculator"
+        options={{
+          title: 'Calc',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="calculator-outline" size={20} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="social"
+        options={{
+          title: 'Social',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="people-outline" size={20} color={color} />
           ),
         }}
       />

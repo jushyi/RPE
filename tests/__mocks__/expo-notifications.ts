@@ -9,6 +9,7 @@ export const setNotificationChannelAsync = jest.fn().mockResolvedValue(undefined
 export const requestPermissionsAsync = jest.fn().mockResolvedValue({ status: 'granted' });
 export const getPermissionsAsync = jest.fn().mockResolvedValue({ status: 'granted' });
 export const addNotificationResponseReceivedListener = jest.fn().mockReturnValue({ remove: jest.fn() });
+export const setBadgeCountAsync = jest.fn().mockResolvedValue(true);
 export const AndroidImportance = {
   MAX: 5,
   HIGH: 4,

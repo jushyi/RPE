@@ -14,6 +14,7 @@ interface SessionExerciseCardProps {
   delta?: ExerciseDelta;
   onDeleteSet: (setId: string, sessionExerciseId: string) => void;
   onDeleteExercise?: (sessionExerciseId: string) => void;
+  onVideoDeleted?: (setId: string) => void;
 }
 
 function renderRightActions(
@@ -39,6 +40,7 @@ export function SessionExerciseCard({
   delta,
   onDeleteSet,
   onDeleteExercise,
+  onVideoDeleted,
 }: SessionExerciseCardProps) {
   const swipeableRef = useRef<Swipeable>(null);
   const showE1RM = exercise.exercise.track_prs && exercise.set_logs.length > 0;
@@ -95,6 +97,7 @@ export function SessionExerciseCard({
           set={set}
           sessionExerciseId={exercise.id}
           onDeleteSet={onDeleteSet}
+          onVideoDeleted={onVideoDeleted}
         />
       ))}
     </Card>

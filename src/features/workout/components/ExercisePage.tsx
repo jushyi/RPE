@@ -14,6 +14,8 @@ interface ExercisePageProps {
   onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => void;
   onDetectPR?: (exerciseId: string, weight: number, unit: 'kg' | 'lbs') => Promise<PRResult>;
   onRemove?: (exerciseId: string) => void;
+  onVideoAttached?: (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => void;
+  onVideoDeleted?: (exerciseId: string, setLogId: string) => void;
 }
 
 interface CelebrationState {
@@ -23,8 +25,9 @@ interface CelebrationState {
   unit: string;
 }
 
-export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: ExercisePageProps) {
+export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove, onVideoAttached, onVideoDeleted }: ExercisePageProps) {
   const toggleUnit = useWorkoutStore((s) => s.toggleExerciseUnit);
+  const removeSet = useWorkoutStore((s) => s.removeSet);
   const isPlanBased = exercise.target_sets.length > 0;
   const loggedCount = exercise.logged_sets.length;
   const [celebration, setCelebration] = useState<CelebrationState | null>(null);
@@ -86,6 +89,8 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove }: Exerc
         onDelete={totalSets > 1 ? () => handleDeleteSet(setNumber, !!loggedSet) : undefined}
         isLogged={!!loggedSet}
         loggedSet={loggedSet}
+        onVideoAttached={onVideoAttached ? (setLogId, localUri, thumbnailUri, source) => onVideoAttached(exercise.id, setLogId, localUri, thumbnailUri, source) : undefined}
+        onVideoDeleted={onVideoDeleted ? (setLogId) => onVideoDeleted(exercise.id, setLogId) : undefined}
       />
     );
   }

@@ -4,9 +4,13 @@ import { useRouter } from 'expo-router';
 import { useWorkoutStore } from '@/stores/workoutStore';
 import { useAuthStore } from '@/stores/authStore';
 import { usePlanStore } from '@/stores/planStore';
-import { setCompletedSession, setIsFinishing } from '@/features/workout/workoutSessionBridge';
+import { setCompletedSession, setIsFinishing, isWorkoutFinishing } from '@/features/workout/workoutSessionBridge';
 import { saveCompletedSession } from '@/features/workout/hooks/useCompletedToday';
 import { cancelTodaysNudges } from '@/features/alarms/hooks/useAlarmScheduler';
+import { enqueueVideoUpload, flushVideoQueue } from '@/features/videos/utils/videoUploadQueue';
+import { notifyCoachWorkoutComplete } from '@/features/coaching/utils/notifyCoach';
+import { enqueueCompletedSession, flushSyncQueue } from '@/features/workout/hooks/useSyncQueue';
+import { supabase } from '@/lib/supabase/client';
 import type { PlanDay } from '@/features/plans/types';
 import type { Exercise } from '@/features/exercises/types';
 import type { SessionExercise, SetLog } from '@/features/workout/types';
@@ -34,6 +38,7 @@ export function useWorkoutSession() {
   const addExerciseAction = useWorkoutStore((s) => s.addExercise);
   const finishSessionAction = useWorkoutStore((s) => s.finishSession);
   const setCurrentExerciseIndex = useWorkoutStore((s) => s.setCurrentExerciseIndex);
+  const discardSessionAction = useWorkoutStore((s) => s.discardSession);
 
   const currentExercise = activeSession?.exercises[currentExerciseIndex] ?? null;
   const exerciseCount = activeSession?.exercises.length ?? 0;
@@ -73,25 +78,71 @@ export function useWorkoutSession() {
   );
 
   const finishWorkout = useCallback(() => {
-    setIsFinishing(true);
-    const completed = finishSessionAction();
-    if (completed) {
-      setCompletedSession(completed);
-      saveCompletedSession(completed);
+    if (isWorkoutFinishing()) return; // Guard against double-tap
+    try {
+      setIsFinishing(true);
+      console.log('finishWorkout: calling finishSessionAction');
+      const completed = finishSessionAction();
+      console.log('finishWorkout: finishSessionAction returned', completed ? 'session' : 'null');
 
-      // Fire-and-forget: cancel today's nudge so user doesn't get reminded after training
-      try {
-        const plans = usePlanStore.getState().plans;
-        const jsDay = new Date().getDay();
-        const todayWeekday = (jsDay + 6) % 7; // Convert to 0=Mon..6=Sun
-        cancelTodaysNudges(plans, todayWeekday);
-      } catch (_) {
-        // Nudge cancel failure should not block workout save
+      if (completed) {
+        setCompletedSession(completed);
+        saveCompletedSession(completed);
+
+        // Enqueue DB sync immediately (don't rely on summary screen mounting)
+        try {
+          enqueueCompletedSession(completed);
+          // Flush session sync first, THEN flush video queue (videos need set_logs to exist)
+          flushSyncQueue(supabase)
+            .then(() => {
+              console.log('[Video] Session synced, flushing video queue');
+              return flushVideoQueue();
+            })
+            .catch((err) => console.warn('finishWorkout: sync/video flush error:', err));
+        } catch (err) {
+          console.warn('finishWorkout: failed to enqueue session sync:', err);
+        }
+
+        // Fire-and-forget: cancel today's nudge so user doesn't get reminded after training
+        try {
+          const plans = usePlanStore.getState().plans;
+          const jsDay = new Date().getDay();
+          const todayWeekday = (jsDay + 6) % 7; // Convert to 0=Mon..6=Sun
+          cancelTodaysNudges(plans, todayWeekday);
+        } catch (_) {
+          // Nudge cancel failure should not block workout save
+        }
+
+        // Fire-and-forget: notify coaches that trainee completed a workout
+        const userName = useAuthStore.getState().displayName;
+        const sessionHadPR = completed.exercises.some((e) =>
+          e.logged_sets.some((s) => s.is_pr)
+        );
+        notifyCoachWorkoutComplete(
+          completed.user_id,
+          userName,
+          completed.title,
+          sessionHadPR,
+          completed.id
+        ).catch(() => {});
+
+        console.log('finishWorkout: navigating to summary');
+        router.replace('/workout/summary' as any);
+
+        // Safety fallback: if navigation doesn't fire within 500ms, retry
+        setTimeout(() => {
+          if (isWorkoutFinishing()) {
+            console.warn('finishWorkout: navigation may have stalled, retrying');
+            router.replace('/workout/summary' as any);
+          }
+        }, 500);
+      } else {
+        setIsFinishing(false);
       }
-
-      router.replace('/workout/summary' as any);
-    } else {
+    } catch (error) {
+      console.error('finishWorkout failed:', error);
       setIsFinishing(false);
+      Alert.alert('Error', 'Failed to save workout. Please try again.');
     }
   }, [finishSessionAction, router]);
 
@@ -121,6 +172,23 @@ export function useWorkoutSession() {
     }
   }, [activeSession, finishWorkout]);
 
+  const cancelWorkout = useCallback(() => {
+    Alert.alert(
+      'Cancel Workout?',
+      'All progress for this workout will be lost.',
+      [
+        { text: 'Keep Going', style: 'cancel' },
+        {
+          text: 'Cancel Workout',
+          style: 'destructive',
+          onPress: () => {
+            discardSessionAction();
+          },
+        },
+      ]
+    );
+  }, [discardSessionAction, router]);
+
   const addFreestyleExercise = useCallback(
     (exercise: Exercise) => {
       const sessionExercise: SessionExercise = {
@@ -140,6 +208,41 @@ export function useWorkoutSession() {
     [exerciseCount, addExerciseAction, setCurrentExerciseIndex]
   );
 
+  const attachVideoToSet = useCallback(
+    async (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => {
+      if (!userId) {
+        console.warn('[Video] No userId, skipping video attach');
+        return;
+      }
+      console.log('[Video] attachVideoToSet called:', { exerciseId, setLogId, localUri, source });
+      // Enqueue for upload — don't flush yet, set_logs may not exist in Supabase.
+      // flushVideoQueue is called after session sync in finishWorkout.
+      try {
+        await enqueueVideoUpload({
+          setLogId,
+          userId,
+          localUri,
+          thumbnailUri,
+          createdAt: new Date().toISOString(),
+          source,
+        });
+      } catch (err: any) {
+        const msg = err?.message || 'Failed to save video';
+        console.warn('[Video] enqueueVideoUpload failed:', msg);
+        Alert.alert('Video Error', msg);
+      }
+    },
+    [userId],
+  );
+
+  const removeVideoFromSet = useCallback(
+    (_exerciseId: string, _setLogId: string) => {
+      // Video deletion from storage is handled by SetCard via useVideoUpload.deleteVideo
+      // This callback allows the session hook to clear any local state if needed in the future
+    },
+    [],
+  );
+
   return {
     session: activeSession,
     currentExercise,
@@ -150,6 +253,9 @@ export function useWorkoutSession() {
     logCurrentSet,
     finishWorkout,
     endEarly,
+    cancelWorkout,
     addFreestyleExercise,
+    attachVideoToSet,
+    removeVideoFromSet,
   };
 }

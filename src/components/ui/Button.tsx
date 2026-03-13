@@ -37,7 +37,10 @@ export function Button({
     <Pressable
       onPress={onPress}
       disabled={isDisabled}
-      style={containerStyle}
+      style={({ pressed }) => [
+        ...containerStyle,
+        pressed && !isDisabled && s.pressed,
+      ]}
     >
       {loading ? (
         <ActivityIndicator
@@ -71,6 +74,9 @@ const s = StyleSheet.create({
   ghost: {},
   disabled: {
     opacity: 0.5,
+  },
+  pressed: {
+    opacity: 0.7,
   },
   text: {
     fontWeight: 'bold',

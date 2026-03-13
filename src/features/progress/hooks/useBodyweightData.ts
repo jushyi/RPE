@@ -38,12 +38,12 @@ export function useBodyweightData() {
   }, [userId, setEntries, setLoading]);
 
   const addEntry = useCallback(
-    async (weight: number, unit: 'kg' | 'lbs') => {
+    async (weight: number, unit: 'kg' | 'lbs', loggedAt?: string) => {
       if (!supabase || !userId) return;
 
       // Optimistic: create a temporary entry
       const tempId = `temp-${Date.now()}`;
-      const today = new Date().toISOString().split('T')[0];
+      const today = loggedAt ?? new Date().toISOString().split('T')[0];
       const tempEntry: BodyweightEntry = {
         id: tempId,
         weight,

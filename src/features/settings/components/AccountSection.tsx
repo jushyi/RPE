@@ -1,5 +1,6 @@
 import { View, Text, Pressable, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
@@ -11,6 +12,7 @@ interface AccountSectionProps {
 
 export function AccountSection({ onExport, onDelete, isExporting }: AccountSectionProps) {
   const { signOut } = useAuth();
+  const router = useRouter();
 
   const handleSignOut = () => {
     Alert.alert(
@@ -27,6 +29,14 @@ export function AccountSection({ onExport, onDelete, isExporting }: AccountSecti
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Account</Text>
       <View style={styles.card}>
+        <Pressable style={styles.row} onPress={() => router.push('/videos' as any)}>
+          <Ionicons name="videocam-outline" size={22} color={colors.textSecondary} style={styles.rowIcon} />
+          <Text style={styles.rowLabel}>My Videos</Text>
+          <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+        </Pressable>
+
+        <View style={styles.divider} />
+
         <Pressable style={[styles.row, isExporting && styles.rowDisabled]} onPress={onExport} disabled={isExporting}>
           <Ionicons name="download-outline" size={22} color={isExporting ? colors.textMuted : colors.textSecondary} style={styles.rowIcon} />
           <Text style={[styles.rowLabel, isExporting && styles.rowLabelDisabled]}>Export Data</Text>

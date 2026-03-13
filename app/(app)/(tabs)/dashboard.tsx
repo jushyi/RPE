@@ -2,10 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, Alert, Animated, RefreshControl } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { File as ExpoFile } from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useAuthStore } from '@/stores/authStore';
 import { usePRBaselines } from '@/features/auth/hooks/usePRBaselines';
 import { usePlans } from '@/features/plans/hooks/usePlans';
 import { useCompletedToday } from '@/features/workout/hooks/useCompletedToday';
@@ -18,6 +20,8 @@ import { TodaysWorkoutCard } from '@/features/dashboard/components/TodaysWorkout
 import { ProgressSummaryCard } from '@/features/dashboard/components/ProgressSummaryCard';
 import { BodyCard } from '@/features/body-metrics/components/BodyCard';
 import { DeletionBanner } from '@/features/settings/components/DeletionBanner';
+import { BellBadge } from '@/features/notifications/components/BellBadge';
+import { useUnreadCount } from '@/features/notifications/hooks/useUnreadCount';
 
 import type { PRBaseline } from '@/lib/supabase/types/database';
 import type { WorkoutSession } from '@/features/workout/types';
@@ -211,29 +215,23 @@ export default function DashboardScreen() {
   const { fetchPlans } = usePlans();
   const { sessions: completedToday, refreshing, refresh: refreshCompleted } = useCompletedToday();
   const navigation = useNavigation();
+
+  // Drive unread count refresh on app foreground (BellBadge reads from store directly)
+  useUnreadCount();
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
   const [refreshingPRs, setRefreshingPRs] = useState(false);
 
-  const displayName =
-    user?.user_metadata?.display_name ?? user?.email?.split('@')[0] ?? 'Athlete';
-
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(
-    user?.user_metadata?.avatar_url ?? null
-  );
-
-  // Sync avatar with auth user metadata on session refresh / reload
-  useEffect(() => {
-    const url = user?.user_metadata?.avatar_url ?? null;
-    if (url) setAvatarUrl(url);
-  }, [user?.user_metadata?.avatar_url]);
+  const { avatarUrl, displayName: storeName, setAvatarUrl } = useAuthStore();
+  const displayName = storeName !== 'User' ? storeName
+    : user?.user_metadata?.display_name ?? user?.email?.split('@')[0] ?? 'Athlete';
 
   const handlePhotoChanged = async (uri: string) => {
     const previousUrl = avatarUrl;
     setAvatarUrl(uri); // Show immediately (optimistic)
     if (!supabase || !user) return;
     try {
-      const response = await fetch(uri);
-      const arrayBuffer = await response.arrayBuffer();
+      const expoFile = new ExpoFile(uri);
+      const arrayBuffer = await expoFile.arrayBuffer();
 
       const filePath = `${user.id}/avatar.jpg`;
       const { error: uploadError } = await supabase.storage
@@ -273,7 +271,7 @@ export default function DashboardScreen() {
       .then(setBaselines)
       .catch(() => {})
       .finally(() => setRefreshingPRs(false));
-    fetchPlans();
+    fetchPlans(true);  // Force re-fetch on pull-to-refresh
   }, [refreshCompleted, getPRBaselines, fetchPlans]);
 
   // Refresh only when re-tapping the home icon while already on dashboard
@@ -286,6 +284,7 @@ export default function DashboardScreen() {
     return unsubscribe;
   }, [navigation, refreshAll]);
 
+  const insets = useSafeAreaInsets();
   const HEADER_HEIGHT = 80;
   const lastScrollY = useRef(0);
   const headerTranslateY = useRef(new Animated.Value(0)).current;
@@ -303,7 +302,7 @@ export default function DashboardScreen() {
     if (currentY <= 0 || currentY >= maxScroll) return;
 
     if (diff > 0 && headerVisible.current) {
-      // Scrolling down — hide
+      // Scrolling down — hide (slide behind status bar cover)
       headerVisible.current = false;
       Animated.timing(headerTranslateY, {
         toValue: -HEADER_HEIGHT,
@@ -321,11 +320,10 @@ export default function DashboardScreen() {
     }
   };
 
-  const insets = useSafeAreaInsets();
-
   return (
-    <View style={[ds.safe, { paddingTop: insets.top }]}>
-      <Animated.View style={[ds.header, { height: HEADER_HEIGHT, transform: [{ translateY: headerTranslateY }] }]}>
+    <View style={ds.safe}>
+      <View style={[ds.statusBarCover, { height: insets.top }]} />
+      <Animated.View style={[ds.header, { height: HEADER_HEIGHT, top: insets.top, transform: [{ translateY: headerTranslateY }] }]}>
         <View style={ds.headerLeft}>
           <TappableAvatar
             displayName={displayName}
@@ -337,10 +335,11 @@ export default function DashboardScreen() {
             <Text style={ds.name} numberOfLines={1}>{displayName}</Text>
           </View>
         </View>
+        <BellBadge />
       </Animated.View>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: HEADER_HEIGHT, paddingBottom: 40 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingTop: insets.top + HEADER_HEIGHT, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={handleScroll}
@@ -352,7 +351,7 @@ export default function DashboardScreen() {
             onRefresh={refreshAll}
             tintColor={colors.textMuted}
             colors={[colors.accent]}
-            progressViewOffset={HEADER_HEIGHT}
+            progressViewOffset={insets.top + HEADER_HEIGHT}
           />
         }
       >
@@ -371,9 +370,7 @@ export default function DashboardScreen() {
         )}
 
         {/* Card 1: Today's Workout */}
-        <View style={ds.cardWrap}>
-          <TodaysWorkoutCard />
-        </View>
+        <TodaysWorkoutCard completedSessions={completedToday} />
 
         {/* Card 2: Progress Summary */}
         <View style={ds.cardWrap}>
@@ -396,6 +393,14 @@ export default function DashboardScreen() {
 
 const ds = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background },
+  statusBarCover: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 20,
+    backgroundColor: colors.background,
+  },
   header: {
     position: 'absolute',
     top: 0,
@@ -424,7 +429,8 @@ const ds = StyleSheet.create({
   prLabel: { color: colors.textPrimary, fontSize: 16 },
   prValue: { color: colors.accent, fontWeight: 'bold', fontSize: 16 },
   completedSection: {
-    marginBottom: 16,
+    marginTop: 8,
+    marginBottom: 6,
   },
   completedCard: {
     backgroundColor: colors.surface,

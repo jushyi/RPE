@@ -7,6 +7,7 @@ import { createMMKV } from 'react-native-mmkv';
 import NetInfo from '@react-native-community/netinfo';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { WorkoutSession } from '@/features/workout/types';
+import { calculateEpley1RM } from '@/features/history/utils/epley';
 
 // Named MMKV instance for sync queue
 const syncStorage = createMMKV({ id: 'sync-queue' });
@@ -58,6 +59,12 @@ export async function flushSyncQueue(supabase: SupabaseClient): Promise<void> {
       .from(item.table)
       [item.operation](item.data);
     if (error) {
+      // Duplicate key means the row already exists — treat as success
+      const msg = error.message ?? '';
+      if (msg.includes('duplicate key value violates unique constraint')) {
+        continue;
+      }
+      console.warn('Sync queue: failed to sync item to', item.table, ':', msg || error);
       failed.push(item);
     }
   }
@@ -84,7 +91,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
   enqueueSyncItem({
     id: generateId(),
     table: 'workout_sessions',
-    operation: 'insert',
+    operation: 'upsert',
     data: {
       id: session.id,
       user_id: session.user_id,
@@ -101,7 +108,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
     enqueueSyncItem({
       id: generateId(),
       table: 'session_exercises',
-      operation: 'insert',
+      operation: 'upsert',
       data: {
         id: exercise.id,
         session_id: session.id,
@@ -116,7 +123,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
       enqueueSyncItem({
         id: generateId(),
         table: 'set_logs',
-        operation: 'insert',
+        operation: 'upsert',
         data: {
           id: set.id,
           session_exercise_id: exercise.id,
@@ -125,6 +132,7 @@ export function enqueueCompletedSession(session: WorkoutSession): void {
           reps: set.reps,
           unit: set.unit,
           is_pr: set.is_pr,
+          estimated_1rm: calculateEpley1RM(set.weight, set.reps),
           logged_at: set.logged_at,
         },
         created_at: now,

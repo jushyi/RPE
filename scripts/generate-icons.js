@@ -1,3 +1,7 @@
+// NOTE: Requires sharp (npm install sharp) — intentionally not in devDependencies
+// to avoid native compilation failures in EAS cloud builds.
+// Icons are pre-generated; only re-run if design changes.
+
 /**
  * Generate app icon PNGs for RPE app.
  * Design: Bold geometric dumbbell (magenta #ec4899) on dark (#0a0a0a) background.

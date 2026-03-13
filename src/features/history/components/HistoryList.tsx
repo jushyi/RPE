@@ -149,6 +149,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   list: {
+    paddingTop: 12,
     paddingHorizontal: 16,
     paddingBottom: 100,
   },

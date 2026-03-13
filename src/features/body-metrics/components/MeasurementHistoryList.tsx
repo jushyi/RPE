@@ -10,9 +10,11 @@ import {
 import { colors } from '@/constants/theme';
 import { MeasurementHistoryItem } from './MeasurementHistoryItem';
 import type { BodyMeasurement } from '../types';
+import type { BodyweightEntry } from '@/features/progress/types';
 
 interface MeasurementHistoryListProps {
   measurements: BodyMeasurement[];
+  bodyweightEntries?: BodyweightEntry[];
   isLoading: boolean;
   onRefresh: () => Promise<void>;
   onEdit: (entry: BodyMeasurement) => void;
@@ -21,6 +23,7 @@ interface MeasurementHistoryListProps {
 
 export function MeasurementHistoryList({
   measurements,
+  bodyweightEntries,
   isLoading,
   onRefresh,
   onEdit,
@@ -54,13 +57,17 @@ export function MeasurementHistoryList({
     <FlatList
       data={measurements}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <MeasurementHistoryItem
-          entry={item}
-          onEdit={() => onEdit(item)}
-          onDelete={() => onDelete(item.id)}
-        />
-      )}
+      renderItem={({ item }) => {
+        const bwEntry = bodyweightEntries?.find(bw => bw.logged_at === item.measured_at);
+        return (
+          <MeasurementHistoryItem
+            entry={item}
+            bodyweightEntry={bwEntry ? { weight: bwEntry.weight, unit: bwEntry.unit } : undefined}
+            onEdit={() => onEdit(item)}
+            onDelete={() => onDelete(item.id)}
+          />
+        );
+      }}
       contentContainerStyle={s.list}
       showsVerticalScrollIndicator={false}
       refreshControl={

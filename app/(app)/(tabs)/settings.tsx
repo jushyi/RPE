@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Alert, Platform, Modal, View, Text, TextInput, Pressable } from 'react-native';
+import Constants from 'expo-constants';
+import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
-import { ProfileHeader } from '@/features/settings/components/ProfileHeader';
+import { ProfileSection } from '@/features/settings/components/ProfileSection';
 import { PreferencesSection } from '@/features/settings/components/PreferencesSection';
 import { NotificationsSection } from '@/features/settings/components/NotificationsSection';
 import { AccountSection } from '@/features/settings/components/AccountSection';
@@ -9,6 +11,7 @@ import { useDataExport } from '@/features/settings/hooks/useDataExport';
 import { useDeleteAccount } from '@/features/settings/hooks/useDeleteAccount';
 
 export default function SettingsTab() {
+  const router = useRouter();
   const { exportData, isExporting } = useDataExport();
   const { scheduleDelete, isDeleting } = useDeleteAccount();
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
@@ -84,7 +87,7 @@ export default function SettingsTab() {
   return (
     <>
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <ProfileHeader />
+        <ProfileSection />
         <PreferencesSection />
         <NotificationsSection />
         <AccountSection
@@ -92,6 +95,9 @@ export default function SettingsTab() {
           onDelete={handleDelete}
           isExporting={isExporting}
         />
+        <Pressable onLongPress={() => router.push('/(app)/dev-tools' as any)} delayLongPress={2000}>
+          <Text style={styles.versionText}>v{Constants.expoConfig?.version ?? '1.0.0'}</Text>
+        </Pressable>
       </ScrollView>
 
       {/* Android password input modal */}
@@ -200,5 +206,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: colors.error,
+  },
+  versionText: {
+    textAlign: 'center',
+    color: colors.textMuted,
+    fontSize: 12,
+    marginTop: 24,
+    marginBottom: 16,
   },
 });

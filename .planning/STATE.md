@@ -3,11 +3,307 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
+stopped_at: Completed quick-40
+last_updated: "2026-03-13T20:38:50.105Z"
+last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
+progress:
+  total_phases: 20
+  completed_phases: 18
+  total_plans: 74
+  completed_plans: 73
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-40
+last_updated: "2026-03-13T20:34:17.046Z"
+last_activity: "2026-03-13 - Completed quick task 40: set up ota updates for production profiles"
+progress:
+  total_phases: 19
+  completed_phases: 18
+  total_plans: 74
+  completed_plans: 73
+  percent: 95
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-39
+last_updated: "2026-03-13T20:15:14.224Z"
+last_activity: "2026-03-13 - Completed quick task 38: fix random spaces in input hint placeholders"
+progress:
+  [██████████] 95%
+  completed_phases: 17
+  total_plans: 74
+  completed_plans: 70
+  percent: 92
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-38
+last_updated: "2026-03-13T19:54:20.931Z"
+last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
+progress:
+  [█████████░] 92%
+  completed_phases: 17
+  total_plans: 74
+  completed_plans: 67
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-37
+last_updated: "2026-03-13T17:28:51.786Z"
+last_activity: "2026-03-12 - Completed quick task 32: Trainee weekday modification on coach plans"
+progress:
+  total_phases: 19
+  completed_phases: 14
+  total_plans: 70
+  completed_plans: 54
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-03-13T17:19:59.063Z"
+last_activity: "2026-03-12 - Completed quick task 32: Trainee weekday modification on coach plans"
+progress:
+  total_phases: 18
+  completed_phases: 14
+  total_plans: 70
+  completed_plans: 54
+  percent: 74
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-36
+last_updated: "2026-03-13T16:13:18Z"
+last_activity: "2026-03-13 - Completed quick task 36: Fix fullscreen video player button layout"
+progress:
+  [███████░░░] 74%
+  completed_phases: 13
+  total_plans: 70
+  completed_plans: 51
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-35
+last_updated: "2026-03-12T22:55:00.000Z"
+last_activity: "2026-03-12 - Completed quick task 35: Refactor useTodaysWorkout to fetch active plan from Supabase"
+progress:
+  total_phases: 18
+  completed_phases: 13
+  total_plans: 63
+  completed_plans: 49
+  percent: 89
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Phase 17 context gathered
+last_updated: "2026-03-12T20:59:03.325Z"
+last_activity: "2026-03-12 - Completed quick task 32: Trainee weekday modification on coach plans"
+progress:
+  [█████████░] 89%
+  completed_phases: 12
+  total_plans: 54
+  completed_plans: 47
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Phase 15 context gathered
+last_updated: "2026-03-12T19:57:29.570Z"
+last_activity: 2026-03-12 - Phase 12 verified and approved
+progress:
+  total_phases: 15
+  completed_phases: 13
+  total_plans: 49
+  completed_plans: 47
+  percent: 86
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed 13-02-PLAN.md
+last_updated: "2026-03-12T19:29:10.597Z"
+last_activity: 2026-03-12 - Phase 12 verified and approved
+progress:
+  [█████████░] 86%
+  completed_phases: 11
+  total_plans: 49
+  completed_plans: 40
+  percent: 80
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Phase 12 complete (verified + approved)
+last_updated: "2026-03-12T21:00:00.000Z"
+last_activity: "2026-03-12 - Phase 12 (Proper Onboarding) verified and approved"
+progress:
+  [████████░░] 80%
+  completed_phases: 12
+  total_plans: 49
+  completed_plans: 40
+  percent: 82
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Phase 14 context gathered
+last_updated: "2026-03-12T18:13:08.010Z"
+last_activity: "2026-03-12 - Completed quick task 29: Replace deprecated SafeAreaView with react-native-safe-area-context"
+progress:
+  [████████░░] 78%
+  completed_phases: 10
+  total_plans: 46
+  completed_plans: 37
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-28
+last_updated: "2026-03-12T17:43:06.108Z"
+last_activity: "2026-03-12 - Completed quick task 27: Move exercises into plans tab as third inner tab"
+progress:
+  total_phases: 14
+  completed_phases: 10
+  total_plans: 46
+  completed_plans: 37
+  percent: 80
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-27
+last_updated: "2026-03-12T17:35:16.979Z"
+last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
+progress:
+  [████████░░] 80%
+  completed_phases: 9
+  total_plans: 46
+  completed_plans: 36
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Phase 12 context gathered
+last_updated: "2026-03-12T16:23:43.081Z"
+last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
+progress:
+  total_phases: 13
+  completed_phases: 10
+  total_plans: 37
+  completed_plans: 35
+  percent: 95
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed 07-03-PLAN.md
+last_updated: "2026-03-12T15:23:15.356Z"
+last_activity: "2026-03-12 - Completed quick task 26: there should be a way to cancel the current in progress workout"
+progress:
+  [██████████] 95%
+  completed_phases: 10
+  total_plans: 36
+  completed_plans: 34
+  percent: 92
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-26
+last_updated: "2026-03-12T14:44:01.729Z"
+last_activity: "2026-03-12 - Completed quick task 25: fix Start Workout button on TodaysWorkoutCard"
+progress:
+  [█████████░] 92%
+  completed_phases: 10
+  total_plans: 34
+  completed_plans: 32
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed 06-04-PLAN.md
+last_updated: "2026-03-12T14:28:30.404Z"
+last_activity: "2026-03-12 - Completed quick task 24: hide Start Workout card after completing planned workout"
+progress:
+  total_phases: 11
+  completed_phases: 10
+  total_plans: 34
+  completed_plans: 32
+  percent: 94
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
 stopped_at: Completed 11-03-PLAN.md
 last_updated: "2026-03-11T14:39:08.963Z"
 last_activity: "2026-03-11 - Completed 11-02: CSV data export utilities and hook"
 progress:
-  total_phases: 11
+  [█████████░] 94%
   completed_phases: 10
   total_plans: 33
   completed_plans: 31
@@ -178,10 +474,10 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 
 ## Current Position
 
-Phase: 11 of 11 (Settings + Account Management)
-Plan: 2 of 3 complete (11-02 CSV data export)
-Status: Phase 11 In Progress
-Last activity: 2026-03-11 - Completed 11-02: CSV data export utilities and hook
+Phase: 12 of 14 (Proper Onboarding)
+Plan: 2 of 2 complete
+Status: Phase 12 Complete (verified + human approved)
+Last activity: 2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar
 
 Progress: [██████████] 100%
 
@@ -229,6 +525,51 @@ Progress: [██████████] 100%
 | Phase 11 P02 | 4min | 2 tasks | 7 files |
 | Phase 11 P01 | 3min | 1 tasks | 7 files |
 | Phase 11 P03 | 4min | 2 tasks | 8 files |
+| Phase 06 P04 | 2min | 2 tasks | 4 files |
+| Phase 07 P04 | 2min | 1 tasks | 4 files |
+| Phase 07 P03 | 6min | 2 tasks | 13 files |
+| Phase 08 P04 | 1min | 1 tasks | 1 files |
+| Phase 12 P01 | 3min | 2 tasks | 6 files |
+| Phase 09 P04 | 1min | 1 tasks | 1 files |
+| Phase 12 P02 | 15min | 2 tasks | 10 files |
+| Phase 13 P00 | 2min | 1 tasks | 4 files |
+| Phase 13 P02 | 1min | 1 tasks | 1 files |
+| Phase 13 P01 | 5min | 2 tasks | 13 files |
+| Phase 14 P01 | 5min | 2 tasks | 15 files |
+| Phase 14 P02 | 3min | 1 tasks | 5 files |
+| Phase 13 P03 | 3min | 2 tasks | 9 files |
+| Phase 14 P03 | 4min | 2 tasks | 10 files |
+| Phase 13 P04 | 3min | 3 tasks | 10 files |
+| Phase 13 P05 | 2min | 2 tasks | 7 files |
+| Phase 13 P07 | 1min | 1 tasks | 1 files |
+| Phase 13 P06 | 2min | 2 tasks | 4 files |
+| Phase 14 P05 | 2min | 2 tasks | 3 files |
+| Phase 14 P04 | 4min | 2 tasks | 8 files |
+| Phase 15 P00 | 1min | 1 tasks | 3 files |
+| Phase 15 P01 | 3min | 2 tasks | 7 files |
+| Phase 15.1 P01 | 4min | 2 tasks | 9 files |
+| Phase 15.1 P02 | 12min | 2 tasks | 2 files |
+| Phase 16 P01 | 4 | 2 tasks | 12 files |
+| Phase 16 P01 | 4min | 2 tasks | 12 files |
+| Phase 16 P02 | 4min | 2 tasks | 12 files |
+| Phase 16 P02 | 3min | 2 tasks | 12 files |
+| Phase 16 P03 | 4min | 2 tasks | 9 files |
+| Phase 16 P03 | 5 | 2 tasks | 6 files |
+| Phase 17 P01 | 6 | 2 tasks | 12 files |
+| Phase 16 P04 | 2min | 2 tasks | 1 files |
+| Phase 16 P05 | 1 | 2 tasks | 2 files |
+| Phase 17 P02 | 2min | 2 tasks | 9 files |
+| Phase 17 P06 | 3 | 2 tasks | 5 files |
+| Phase 17 P03 | 4 | 2 tasks | 7 files |
+| Phase 17 P04 | 4 | 2 tasks | 10 files |
+| Phase 17 P05 | 5 | 2 tasks | 4 files |
+| Phase 18 P01 | 4min | 2 tasks | 11 files |
+| Phase 18 P02 | 5min | 2 tasks | 6 files |
+| Phase 18 P05 | 9 | 1 tasks | 12 files |
+| Phase 18 P05 | 9min | 2 tasks | 12 files |
+| Phase 10-distribution P01 | 5 | 2 tasks | 2 files |
+| Phase 18 P03 | 15 | 2 tasks | 6 files |
+| Phase 18 P04 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -314,10 +655,102 @@ Recent decisions affecting current work:
 - [Phase 11]: Edge Function uses Deno.serve with CORS headers and service_role for admin deletion ops
 - [Phase 11]: Password re-entry uses Alert.prompt on iOS, custom modal on Android
 - [Phase 11]: User signed out after scheduling deletion; must sign back in to cancel
+- [Phase 06]: Linear curve type for sparklines instead of cubic natural (prevents exaggeration with sparse data)
+- [Phase quick-26]: Used close-outline Ionicons icon as cancel affordance with confirmation alert using discardSession
+- [Phase 07]: Bodyweight addEntry uses loggedAt ?? today for backward compat with all existing callers
+- [Phase 07]: Hips data dropped in migration (acceptable per user request)
+- [Phase 08]: Inline 12h time formatter for alarm_time display in PlanDaySection
+- [Phase 12]: Duplicated SegmentedToggle locally in UnitPreferencesStep rather than extracting shared component
+- [Phase 12]: PRBaselineStep uses own UI rather than reusing PRBaselineForm for clean onNext/onSkip callback pattern
+- [Phase quick-27]: Exercises content copied inline into plans.tsx rather than extracting shared component
+- [Phase 09]: Reused LayoutAnimation.Presets.easeInEaseOut for plan detail edit toggle (consistent with Phase 03 pattern)
+- [Phase 12]: Replaced PagerView with conditional rendering for reliable unit prop propagation between onboarding steps
+- [Phase 12]: Auth confirm.tsx uses refreshSession() for routing instead of hardcoded onboarding route
+- [Phase quick-30]: Cache-busting query param on avatar URL; profiles table as fallback avatar source
+- [Phase 13]: Used it.todo() stubs with commented imports for Nyquist compliance before source files exist
+- [Phase 13]: EXPO_ACCESS_TOKEN is optional in send-push Edge Function for dev compatibility
+- [Phase 13]: Used as-any for push_tokens table access (not in generated Supabase types yet)
+- [Phase 13]: coach_id defaults to null for backward compatibility with existing plans
+- [Phase 14]: Used File.arrayBuffer() SDK 55 API for video uploads instead of legacy readAsStringAsync+base64-arraybuffer
+- [Phase 14]: VideoCaptureButton only visible after set is logged; video props threaded through 4 layers
+- [Phase 13]: expo-clipboard added for invite code copy-to-clipboard functionality
+- [Phase 13]: Person-add icon always visible in Plans tab header regardless of coaching relationships
+- [Phase 13]: CoachTraineeToggle renders only when hasAnyRelationship (coach or trainee)
+- [Phase 14]: Used Modal-based fullscreen video player instead of enterFullscreen() for broader expo-video compatibility
+- [Phase 14]: Long-press on video thumbnail for delete option (consistent with Phase 7 tap-to-expand/delete pattern)
+- [Phase 13]: Alarm fields hidden in coach-create mode (trainee sets own alarms)
+- [Phase 13]: Weekly summary dispatches directly to Expo Push API (no nested Edge Function call)
+- [Phase 13]: Push token registered in app layout top-level for every authenticated launch
+- [Phase 13]: Used onStartShouldSetResponder on Animated.View to block press propagation instead of nested Pressable
+- [Phase 13]: Used useRef offset tracking to fix trainee history infinite loop (sessions.length in useCallback deps)
+- [Phase 13]: Used session.user.id for fetchPlans user_id filter to prevent coach trainee plans from appearing in coach's own list
+- [Phase 14]: Used presentationStyle pageSheet with animationType slide for native iOS swipe-down dismiss on video player
+- [Phase 14]: Replaced long-press delete with Swipeable swipe-left-to-delete matching SessionExerciseCard pattern
+- [Phase 14]: pendingVideo state pattern for pre-log capture with useEffect flush when setLogId becomes available
+- [Phase 14]: Camera files deleted after upload; gallery files preserved (user photo library)
+- [Phase 15]: Followed Phase 13 it.todo() stub pattern with commented-out imports for calculator test scaffolding
+- [Phase 15]: Used epsilon tolerance (0.001) in plate greedy algorithm to handle floating point near-misses
+- [Phase 15]: RPE table uses standard Tuchscherer values; roundToLoadable exported separately for UI reuse
+- [Phase 15.1]: MMKV plate-inventory store with separate keys per unit (inventory-lb, inventory-kg)
+- [Phase 15.1]: getMissingPlateMessage finds smallest disabled plate <= remainder for targeted warnings
+- [Phase 15.1]: BarbellDiagram computes dynamic SLEEVE_WIDTH from actual plate count with minimum of 10 slots
+- [Phase 15.1]: Renamed mode toggles to Calculate/Load after UAT feedback for cleaner UX
+- [Phase 15.1]: Barbell diagram always visible (empty bar when no plates) for persistent spatial context
+- [Phase 16]: Used async IIFE pattern for fire-and-forget Supabase calls in synchronous Zustand actions (avoids .then() not a function on test mock chains)
+- [Phase 16]: refreshUnreadCount computed locally from notifications array (no Supabase round-trip) for simpler state management
+- [Phase 16]: bellBadge.test.ts created as Wave 0 stubs (it.todo pattern) — will activate in Plan 02 when BellBadge component ships
+- [Phase 16]: void async IIFE pattern for fire-and-forget Supabase mutations in Zustand store actions
+- [Phase 16]: Client-side 30-day notification pruning on fetch (simpler than pg_cron)
+- [Phase 16]: BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle
+- [Phase 16]: Cold-start deep links handled in app/(app)/_layout.tsx via useLastNotificationResponse; foreground taps in root app/_layout.tsx
+- [Phase 16]: BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle
+- [Phase 16]: Cold-start deep links in app/(app)/_layout.tsx via useLastNotificationResponse; foreground taps in root app/_layout.tsx via DEFAULT_ACTION_IDENTIFIER
+- [Phase 16]: Edge Function notification inserts use as-any type cast for notifications table (not in generated types)
+- [Phase 16]: Optional parameters for backward-compatible enriched notification payloads (sessionId, exerciseId, planId)
+- [Phase 16]: Fire-and-forget Supabase inserts in alarm/nudge scheduling matching existing codebase pattern
+- [Phase 16]: Optional parameters for backward-compatible enriched payloads (sessionId, exerciseId, planId) so existing callers still work
+- [Phase 16]: Long-press on version text (2s) for hidden dev tools access in production builds
+- [Phase 17]: Reaction icons use Ionicons key strings (fire -> flame-outline), NOT emoji characters per CLAUDE.md
+- [Phase 17]: socialStore uses Record<string,T> instead of Map<string,T> for MMKV JSON serialization compatibility
+- [Phase 17]: createGroup always inserts creator as group_member in same call to prevent Pitfall 3
+- [Phase 16]: setNotificationHandler placed at module level (not useEffect) so it runs synchronously at expo-notifications load time for foreground display
+- [Phase 16]: Notifications table (20260318000000) was already applied on remote Supabase — db push not required
+- [Phase 16]: Applied headerTitleStyle per-screen rather than as screenOptions default to avoid unintentional global override
+- [Phase 17]: Social tab is 5th position (Home, Plans, Calc, Social, Settings); sender profile lookup added in friend-requests.tsx
+- [Phase 17]: HandleSetup exposes onValidChange callback so HandleStep can track valid handle value without duplicating validation logic
+- [Phase 17]: ProfileSection wraps ProfileHeader and HandleSetup so settings.tsx stays clean
+- [Phase 17]: fetchGroupMembers added to socialStore as missing critical functionality — needed for group-detail member display without waiting for add/remove side-effect refresh
+- [Phase 17]: Inline add-member picker in group-detail (toggle show/hide) avoids a separate screen, consistent with plan's inline friend list spec
+- [Phase 17]: ReactionBar picker uses Ionicons plus/close toggle (no emoji characters per CLAUDE.md)
+- [Phase 17]: group-detail feed placeholder replaced with View Feed navigation button to group-feed screen
+- [Phase 17]: useShareFlow derives content at hook instantiation via useMemo keyed on session.id to avoid re-computation
+- [Phase 17]: SharePrompt starts collapsed to reduce visual noise; expands on tap to reveal full pickers
+- [Phase 17]: notifyGroupOnShare fetches non-muted members directly from Supabase (not store cache) for accurate mute status at time of share
+- [Phase 18]: chatStore updated to use Zustand persist with MMKV (chat-store id) and import canonical Message/GroupReadReceipt from types/chat.ts
+- [Phase 18]: getMessageReadStatus uses lexicographic string >= comparison for UUID IDs - works because same message ID = read
+- [Phase 18-02]: ContentTypeCheckboxes uses Ionicons checkmark-circle/ellipse-outline per plan spec; useShareFlow migrated to ShareableContent type; workout_date convention in retroactive share payloads (no schema change)
+- [Phase 18]: send-push Edge Function extended with chat_message type: server-side group_member+mute lookup for security
+- [Phase 18]: useTypingIndicator uses separate group-typing channel; useChat uses group-chat channel to avoid Presence/postgres_changes conflicts
+- [Phase 10-distribution]: EAS Build requires interactive Apple account login for Distribution Certificate validation on first production build
+- [Phase 10-distribution]: ascAppId 6760412044 in eas.json submit.production.ios enables EAS auto-submit to App Store Connect
+- [Phase 18]: useChat uses useRef for Realtime channel to prevent stale closures on subscribe/unsubscribe cycle
+- [Phase 18]: GroupTabs renders feedContent or ChatScreen conditionally (not PagerView) for reliable prop propagation
+- [Phase 18]: createTypingDebounce returns { trigger, cancel } object for testability with cancel in tests
+- [Phase 18]: Debounce logic extracted as pure function createTypingDebounce in chatUtils.ts for unit testing with jest fake timers
+- [Phase quick-40]: --message flag left at end of eas update scripts so caller appends message string as npm run arg
 
 ### Roadmap Evolution
 
+- Phase 19 added: github actions, ci-cd pipline, builds triggers on new tags. ota update action as well to production branch
 - Phase 11 added: Add settings tab, move sign out to it and have a delete account option with data export
+- Phase 12 added: proper onboarding
+- Phase 13 added: coaching options, create plans for others, get notifs when they finish and update their plans for the next week
+- Phase 14 added: feature to add and save videos of a certain set. can be viewed in history and in seperate tab in settings.
+- Phase 15 added: Add barbell calculator tab with plate loading, weight calculations, RPE/1RM calculators, and next-set RPE recommendations
+- Phase 16 added: push notifications
+- Phase 17 added: friend workout, pr and set video sharing. creating of groups to share with
+- Phase 18 added: deferred group chat features from phase 17 discussion
+- Phase 15.1 inserted after Phase 15: Reverse bar loading, customizable plate inventory for calculator (URGENT)
 
 ### Pending Todos
 
@@ -351,9 +784,31 @@ None yet.
 | 16 | Set up MCP server for Expo build tracking | 2026-03-10 | ea1be5a | [16-set-up-mcp-server-for-expo-build-trackin](./quick/16-set-up-mcp-server-for-expo-build-trackin/) |
 | 17 | Create GitHub repo RPE (public) and connect to local | 2026-03-10 | 1fc9649 | [17-create-github-repo-and-connect-to-local](./quick/17-create-github-repo-and-connect-to-local/) |
 | 18 | Make main default branch, merge master in, replace README | 2026-03-10 | e4af128 | [18-make-main-default-branch-merge-master-in](./quick/18-make-main-default-branch-merge-master-in/) |
+| 19 | Fix sharp build failure in EAS development builds | 2026-03-12 | 4962a93 | [19-fix-sharp-build-failure-in-eas-developme](./quick/19-fix-sharp-build-failure-in-eas-developme/) |
+| 20 | Fix plans not showing on phone (auth session race condition) | 2026-03-12 | 3d267c5 | [20-phone-shows-no-plans-even-though-there-a](./quick/20-phone-shows-no-plans-even-though-there-a/) |
+| 21 | Fix layout warning - route settings is extraneous | 2026-03-12 | 0951f0a | [21-fix-layout-warning-route-settings-is-ext](./quick/21-fix-layout-warning-route-settings-is-ext/) |
+| 22 | Fix ReferenceError: Property removeSet doesn't exist in ExercisePage | 2026-03-12 | cbfcec9 | [22-fix-referenceerror-property-removeset-do](./quick/22-fix-referenceerror-property-removeset-do/) |
+| 23 | Remove duplicate Home header banner from dashboard tab | 2026-03-12 | ebb87d9 | [23-regression-in-home-page-header-banner-sh](./quick/23-regression-in-home-page-header-banner-sh/) |
+| 24 | Hide Start Workout card after completing planned workout | 2026-03-12 | 84f9665 | [24-hide-start-workout-card-after-completing](./quick/24-hide-start-workout-card-after-completing/) |
+| 25 | Fix Start Workout button to use startFromPlan flow | 2026-03-12 | 96b345e | [25-the-start-workout-button-on-the-todays-w](./quick/25-the-start-workout-button-on-the-todays-w/) |
+| 26 | Add cancel workout button with confirmation dialog | 2026-03-12 | 47e5a7a | [26-there-should-be-a-way-to-cancel-the-curr](./quick/26-there-should-be-a-way-to-cancel-the-curr/) |
+| 27 | Move exercises into plans tab as third inner tab | 2026-03-12 | 14918b3 | [27-move-exercises-off-the-home-tab-and-into](./quick/27-move-exercises-off-the-home-tab-and-into/) |
+| 28 | Fix Metro bundler nullthrows error (cache clear) | 2026-03-12 | 6ceed3b | [28-fix-metro-bundler-nullthrows-error-got-u](./quick/28-fix-metro-bundler-nullthrows-error-got-u/) |
+| 29 | Replace deprecated SafeAreaView with react-native-safe-area-context | 2026-03-12 | 6c669d4 | [29-replace-deprecated-safeareaview-with-rea](./quick/29-replace-deprecated-safeareaview-with-rea/) |
+| 30 | Fix profile photo persistence and consistent avatar fallback | 2026-03-12 | bacf406 | [30-profile-photo-doesn-t-save-on-account-cr](./quick/30-profile-photo-doesn-t-save-on-account-cr/) |
+| 31 | Stack no-plan workout card buttons vertically | 2026-03-12 | f151db0 | [31-stack-no-plan-workout-card-buttons-verti](./quick/31-stack-no-plan-workout-card-buttons-verti/) |
+| 32 | Trainee weekday modification on coach plans via tappable chip | 2026-03-12 | 1688396 | [32-make-it-so-trainees-can-modify-the-actua](./quick/32-make-it-so-trainees-can-modify-the-actua/) |
+| 33 | Fix finish workout silent failure with MMKV bridge | 2026-03-12 | 80383e8 | [33-starting-a-workout-and-clicking-finish-d](./quick/33-starting-a-workout-and-clicking-finish-d/) |
+| 34 | Fix TodaysWorkoutCard showing stale workout data after account switch | 2026-03-12 | 718c566 | [34-fix-todays-workout-card-showing-stale-wo](./quick/34-fix-todays-workout-card-showing-stale-wo/) |
+| 35 | Refactor useTodaysWorkout to fetch active plan from Supabase | 2026-03-12 | 0925632 | [35-refactor-usetodaysworkout-to-fetch-activ](./quick/35-refactor-usetodaysworkout-to-fetch-activ/) |
+| 36 | Fix fullscreen video player button layout | 2026-03-13 | c5b5179 | [36-the-video-playback-fullscreen-looks-a-li](./quick/36-the-video-playback-fullscreen-looks-a-li/) |
+| 37 | Redesign plate calculator bar graphic to extend from left edge with plates against collar | 2026-03-13 | 2d017ae | [37-redesign-plate-calculator-bar-graphic-to](./quick/37-redesign-plate-calculator-bar-graphic-to/) |
+| 38 | some input hints throughout the app have random spaces between which makes it look weird | 2026-03-13 | d4e9c9e | [38-some-input-hints-throughout-the-app-have](./quick/38-some-input-hints-throughout-the-app-have/) |
+| 39 | bar diagram collar taller and right bar slightly taller than left bar | 2026-03-13 | d3decaf | [39-bar-diagram-collar-taller-and-right-bar-](./quick/39-bar-diagram-collar-taller-and-right-bar-/) |
+| 40 | set up ota updates for production profiles | 2026-03-13 | d764a04 | [40-set-up-ota-updates-for-production-profil](./quick/40-set-up-ota-updates-for-production-profil/) |
 
 ## Session Continuity
 
-Last session: 2026-03-11T14:33:18.779Z
-Stopped at: Completed 11-03-PLAN.md
+Last session: 2026-03-13T20:34:16.974Z
+Stopped at: Completed quick-40
 Resume file: None

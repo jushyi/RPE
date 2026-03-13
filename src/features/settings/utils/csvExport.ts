@@ -86,15 +86,17 @@ export function generateBodyMetricsCSV(bodyweight: any[], measurements: any[]): 
   ]);
   const bwCSV = toCSV(bwHeaders, bwRows);
 
-  const mHeaders = ['Date', 'Chest', 'Chest Unit', 'Waist', 'Waist Unit', 'Hips', 'Hips Unit', 'Body Fat %'];
+  const mHeaders = ['Date', 'Chest', 'Chest Unit', 'Waist', 'Waist Unit', 'Biceps', 'Biceps Unit', 'Quad', 'Quad Unit', 'Body Fat %'];
   const mRows: (string | number | null)[][] = measurements.map((m) => [
     m.logged_at ? new Date(m.logged_at).toISOString().split('T')[0] : '',
     m.chest ?? '',
     m.chest_unit ?? '',
     m.waist ?? '',
     m.waist_unit ?? '',
-    m.hips ?? '',
-    m.hips_unit ?? '',
+    m.biceps ?? '',
+    m.biceps_unit ?? '',
+    m.quad ?? '',
+    m.quad_unit ?? '',
     m.body_fat_pct ?? '',
   ]);
   const mCSV = toCSV(mHeaders, mRows);

@@ -57,6 +57,58 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ALRM-02**: Alarms fire with sound and vibration and must be dismissed
 - [x] **ALRM-03**: User receives notification if a planned workout day passes without a logged session
 
+### Set Videos
+
+- [x] **VID-01**: User can record a video during an active workout and attach it to a specific set
+- [x] **VID-02**: User can choose a video from gallery and attach it to a specific set
+- [x] **VID-03**: Videos upload to Supabase Storage in background (offline-first queue)
+- [x] **VID-04**: Camera button appears on each logged SetCard during active workout
+- [x] **VID-05**: User can replace or delete an attached video on a set
+- [x] **VID-06**: Video thumbnails with play icon appear on sets in workout history detail
+- [x] **VID-07**: Tapping thumbnail opens fullscreen native video player
+- [x] **VID-08**: Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
+
+### Coaching
+
+- [x] **COACH-01**: Coach can generate an invite code to connect with a trainee
+- [x] **COACH-02**: Trainee can enter an invite code to establish a coaching relationship
+- [x] **COACH-03**: Users can be both coach and trainee simultaneously
+- [x] **COACH-04**: Either party can disconnect the coaching relationship unilaterally
+- [x] **COACH-05**: Push notification infrastructure exists (token registration, server-side dispatch via Edge Function)
+- [x] **COACH-06**: Coach UI toggle in Plans tab: "My Plans" vs "Trainees"
+- [x] **COACH-07**: Coach-assigned plans are visually distinguished in trainee's plan list
+- [x] **COACH-08**: Trainee cannot edit coach-assigned plans (read-only)
+- [x] **COACH-09**: Coach can create workout plans targeting a specific trainee
+- [x] **COACH-10**: Coach can see trainee's last-week performance inline while editing plans
+- [x] **COACH-11**: Coach can attach a text note when saving plan changes
+- [x] **COACH-12**: Coach can see trainee's workout logs (sets/reps/weight) but NOT body metrics
+- [x] **COACH-13**: Coach receives push notification when trainee completes a workout
+- [x] **COACH-14**: Coach receives push notification when trainee achieves a PR
+- [x] **COACH-15**: Trainee receives push notification when coach updates their plan
+- [x] **COACH-16**: Coach receives weekly adherence summary (Sunday evening) for all trainees
+
+### Notification Inbox & Deep Linking
+
+- [x] **NOTIF-01**: Bell icon in dashboard header with numeric unread badge, opens full-screen notification inbox
+- [x] **NOTIF-02**: Tapping inbox items deep links to relevant screen (session detail, progress chart, plan detail, or active workout)
+- [x] **NOTIF-03**: Notifications persisted in Supabase table with RLS and 30-day retention
+- [x] **NOTIF-04**: Push notification taps (cold-start and foreground) deep link to correct screen
+- [x] **NOTIF-05**: Developer test screen with trigger buttons for all 6 notification types and debug log
+- [x] **NOTIF-06**: Local alarm/nudge notifications write records to notifications table for inbox consistency
+
+### Group Chat & Enhanced Sharing
+
+- [x] **CHAT-01**: Real-time group chat messaging via Supabase Realtime (text messages appear instantly)
+- [x] **CHAT-02**: Images and videos supported in chat messages (upload to chat-media Storage bucket)
+- [x] **CHAT-03**: Delivered + read receipts on own messages (WhatsApp-style checkmarks)
+- [x] **CHAT-04**: Typing indicators show "[Name] is typing..." via Supabase Realtime Presence
+- [x] **CHAT-05**: User can edit own messages within 15-minute window (shows "edited" indicator)
+- [x] **CHAT-06**: User can delete own messages at any time (shows "This message was deleted" placeholder)
+- [x] **CHAT-07**: Push notifications for new chat messages (respects per-group mute toggle)
+- [x] **CHAT-08**: Per-share content-type selection with checkboxes (workout summary, individual PRs, individual videos)
+- [x] **CHAT-09**: Retroactive sharing from workout history detail screen (any past workout, no time limit)
+- [x] **CHAT-10**: Chat tab alongside Feed tab within each group screen
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -126,12 +178,56 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ALRM-01 | Phase 8 | Complete |
 | ALRM-02 | Phase 8 | Complete |
 | ALRM-03 | Phase 8 | Complete |
+| COACH-01 | Phase 13 | Planned |
+| COACH-02 | Phase 13 | Planned |
+| COACH-03 | Phase 13 | Planned |
+| COACH-04 | Phase 13 | Planned |
+| COACH-05 | Phase 13 | Planned |
+| COACH-06 | Phase 13 | Planned |
+| COACH-07 | Phase 13 | Planned |
+| COACH-08 | Phase 13 | Planned |
+| COACH-09 | Phase 13 | Planned |
+| COACH-10 | Phase 13 | Planned |
+| COACH-11 | Phase 13 | Planned |
+| COACH-12 | Phase 13 | Planned |
+| COACH-13 | Phase 13 | Planned |
+| COACH-14 | Phase 13 | Planned |
+| COACH-15 | Phase 13 | Planned |
+| COACH-16 | Phase 13 | Planned |
+| VID-01 | Phase 14 | Planned |
+| VID-02 | Phase 14 | Planned |
+| VID-03 | Phase 14 | Planned |
+| VID-04 | Phase 14 | Planned |
+| VID-05 | Phase 14 | Planned |
+| VID-06 | Phase 14 | Planned |
+| VID-07 | Phase 14 | Planned |
+| VID-08 | Phase 14 | Planned |
+| NOTIF-01 | Phase 16 | Planned |
+| NOTIF-02 | Phase 16 | Planned |
+| NOTIF-03 | Phase 16 | Planned |
+| NOTIF-04 | Phase 16 | Planned |
+| NOTIF-05 | Phase 16 | Planned |
+| NOTIF-06 | Phase 16 | Planned |
+| CHAT-01 | Phase 18 | Planned |
+| CHAT-02 | Phase 18 | Planned |
+| CHAT-03 | Phase 18 | Planned |
+| CHAT-04 | Phase 18 | Planned |
+| CHAT-05 | Phase 18 | Planned |
+| CHAT-06 | Phase 18 | Planned |
+| CHAT-07 | Phase 18 | Planned |
+| CHAT-08 | Phase 18 | Planned |
+| CHAT-09 | Phase 18 | Planned |
+| CHAT-10 | Phase 18 | Planned |
 
 **Coverage:**
-- v1 requirements: 29 total
-- Mapped to phases: 29
+- v1 requirements: 29 total (all complete)
+- Coaching requirements: 16 total (planned)
+- Video requirements: 8 total (planned)
+- Notification requirements: 6 total (planned)
+- Chat requirements: 10 total (planned)
+- Mapped to phases: 69
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-09 after roadmap creation — all 29 requirements mapped*
+*Last updated: 2026-03-12 after Phase 18 planning -- 10 chat requirements added*

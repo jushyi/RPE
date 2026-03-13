@@ -36,10 +36,20 @@ export default function WorkoutScreen() {
     logCurrentSet,
     finishWorkout,
     endEarly,
+    cancelWorkout,
     addFreestyleExercise,
+    attachVideoToSet,
+    removeVideoFromSet,
   } = useWorkoutSession();
 
   const [pickerVisible, setPickerVisible] = useState(false);
+  const [finishing, setFinishing] = useState(false);
+
+  const handleFinish = useCallback(() => {
+    setFinishing(true);
+    finishWorkout();
+  }, [finishWorkout]);
+
   const pagerRef = useRef<PagerView>(null);
 
   // If no active session and no plan_day_id, redirect back
@@ -123,21 +133,29 @@ export default function WorkoutScreen() {
             totalSets={totalSets}
             hasExercisesRemaining={hasExercisesRemaining}
             onEndWorkout={endEarly}
-            onFinishWorkout={finishWorkout}
+            onFinishWorkout={handleFinish}
+            onCancelWorkout={cancelWorkout}
             sessionTitle={session.title}
+            isFinishing={finishing}
           />
         ) : (
           <View style={s.emptyHeader}>
+            <Pressable onPress={cancelWorkout} style={s.cancelButton}>
+              <Ionicons name="close-outline" size={24} color={colors.textSecondary} />
+            </Pressable>
             <View style={s.emptyHeaderTitle}>
               <Text style={s.emptyHeaderText}>{session.title || 'Quick Workout'}</Text>
               <Text style={s.emptyHeaderSub}>Tap + to add an exercise</Text>
             </View>
             <Pressable
               onPress={endEarly}
-              style={({ pressed }) => [s.endButton, pressed && s.endButtonPressed]}
+              disabled={finishing}
+              style={({ pressed }) => [s.endButton, pressed && s.endButtonPressed, finishing && { opacity: 0.5 }]}
             >
-              <Ionicons name="stop-circle-outline" size={20} color={colors.error} />
-              <Text style={s.endButtonText}>End</Text>
+              <Ionicons name="stop-circle-outline" size={20} color={finishing ? colors.textSecondary : colors.error} />
+              <Text style={[s.endButtonText, finishing && { color: colors.textSecondary }]}>
+                {finishing ? 'Saving...' : 'End'}
+              </Text>
             </Pressable>
           </View>
         )}
@@ -148,6 +166,8 @@ export default function WorkoutScreen() {
             onLogSet={handleLogSet}
             onDetectPR={detectPR}
             onRemoveExercise={isFreestyle ? handleRemoveExercise : undefined}
+            onVideoAttached={attachVideoToSet}
+            onVideoDeleted={removeVideoFromSet}
             pagerRef={pagerRef}
           />
         ) : (
@@ -193,6 +213,10 @@ const s = StyleSheet.create({
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: colors.surfaceElevated,
+  },
+  cancelButton: {
+    padding: 8,
+    marginRight: 4,
   },
   emptyHeaderTitle: {
     flex: 1,

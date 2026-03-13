@@ -16,6 +16,7 @@ import { useSessionDetail } from '@/features/history/hooks/useSessionDetail';
 import { useHistory } from '@/features/history/hooks/useHistory';
 import { SessionDetailHeader } from '@/features/history/components/SessionDetailHeader';
 import { SessionExerciseCard } from '@/features/history/components/SessionExerciseCard';
+import RetroShareButton from '@/features/social/components/RetroShareButton';
 
 function formatShortDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -89,6 +90,14 @@ export default function SessionDetailScreen() {
     [deleteExercise]
   );
 
+  const handleVideoDeleted = useCallback(
+    (setId: string) => {
+      // Re-fetch session to reflect the video_url change
+      if (sessionId) fetchSession(sessionId);
+    },
+    [sessionId, fetchSession]
+  );
+
   if (isLoading || !session) {
     return (
       <SafeAreaView style={s.safe}>
@@ -115,9 +124,12 @@ export default function SessionDetailScreen() {
           <Text style={s.navTitleText} numberOfLines={1}>{title}</Text>
           <Text style={s.navSubtitle}>{dateStr}</Text>
         </View>
-        <Pressable onPress={handleDeleteSession} style={s.navButton}>
-          <Ionicons name="trash-outline" size={22} color={colors.error} />
-        </Pressable>
+        <View style={s.navRightButtons}>
+          <RetroShareButton sessionId={sessionId!} />
+          <Pressable onPress={handleDeleteSession} style={s.navButton}>
+            <Ionicons name="trash-outline" size={22} color={colors.error} />
+          </Pressable>
+        </View>
       </View>
 
       <ScrollView
@@ -138,6 +150,7 @@ export default function SessionDetailScreen() {
                 delta={delta}
                 onDeleteSet={handleDeleteSet}
                 onDeleteExercise={handleDeleteExercise}
+                onVideoDeleted={handleVideoDeleted}
               />
             </View>
           );
@@ -165,6 +178,10 @@ const s = StyleSheet.create({
   },
   navButton: {
     padding: 8,
+  },
+  navRightButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   navTitle: {
     flex: 1,

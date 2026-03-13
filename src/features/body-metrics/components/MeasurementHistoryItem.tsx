@@ -6,6 +6,7 @@ import type { BodyMeasurement } from '../types';
 
 interface MeasurementHistoryItemProps {
   entry: BodyMeasurement;
+  bodyweightEntry?: { weight: number; unit: string };
   onEdit: () => void;
   onDelete: () => void;
 }
@@ -21,6 +22,7 @@ function formatDate(dateStr: string): string {
 
 export function MeasurementHistoryItem({
   entry,
+  bodyweightEntry,
   onEdit,
   onDelete,
 }: MeasurementHistoryItemProps) {
@@ -50,14 +52,20 @@ export function MeasurementHistoryItem({
   };
 
   const values: { label: string; display: string }[] = [];
+  if (bodyweightEntry) {
+    values.push({ label: 'Weight', display: `${bodyweightEntry.weight} ${bodyweightEntry.unit}` });
+  }
   if (entry.chest != null) {
     values.push({ label: 'Chest', display: `${entry.chest} ${entry.chest_unit ?? ''}` });
   }
   if (entry.waist != null) {
     values.push({ label: 'Waist', display: `${entry.waist} ${entry.waist_unit ?? ''}` });
   }
-  if (entry.hips != null) {
-    values.push({ label: 'Hips', display: `${entry.hips} ${entry.hips_unit ?? ''}` });
+  if (entry.biceps != null) {
+    values.push({ label: 'Biceps', display: `${entry.biceps} ${entry.biceps_unit ?? ''}` });
+  }
+  if (entry.quad != null) {
+    values.push({ label: 'Quad', display: `${entry.quad} ${entry.quad_unit ?? ''}` });
   }
   if (entry.body_fat_pct != null) {
     values.push({ label: 'Body Fat', display: `${entry.body_fat_pct}%` });
