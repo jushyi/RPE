@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: Completed quick-40
 last_updated: "2026-03-13T20:34:17.046Z"
-last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
+last_activity: "2026-03-13 - Completed quick task 40: set up ota updates for production profiles"
 progress:
   total_phases: 19
   completed_phases: 18
@@ -789,6 +789,7 @@ None yet.
 | 37 | Redesign plate calculator bar graphic to extend from left edge with plates against collar | 2026-03-13 | 2d017ae | [37-redesign-plate-calculator-bar-graphic-to](./quick/37-redesign-plate-calculator-bar-graphic-to/) |
 | 38 | some input hints throughout the app have random spaces between which makes it look weird | 2026-03-13 | d4e9c9e | [38-some-input-hints-throughout-the-app-have](./quick/38-some-input-hints-throughout-the-app-have/) |
 | 39 | bar diagram collar taller and right bar slightly taller than left bar | 2026-03-13 | d3decaf | [39-bar-diagram-collar-taller-and-right-bar-](./quick/39-bar-diagram-collar-taller-and-right-bar-/) |
+| 40 | set up ota updates for production profiles | 2026-03-13 | d764a04 | [40-set-up-ota-updates-for-production-profil](./quick/40-set-up-ota-updates-for-production-profil/) |
 
 ## Session Continuity
 
