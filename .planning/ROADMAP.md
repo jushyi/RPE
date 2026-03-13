@@ -301,6 +301,16 @@ Plans:
 - [ ] 15-01-PLAN.md — Types, constants, pure utility functions (plate calc, RPE table, next-set recommendation) with TDD test coverage
 - [ ] 15-02-PLAN.md — Calculator tab route, PagerView layout, all 3 sub-tool UI components (PlateCalculator, RpeCalculator, NextSetCalculator), human verification
 
+### Phase 15.1: reverse bar loading for plates tab in calc. also ability to choose which plates i actually have. some users may not have the red 55 lbs or 35kg plates. adaptable for situations (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 15
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 15.1 to break down)
+
 ### Phase 16: Push Notifications
 
 **Goal:** Users have an in-app notification inbox showing notification history with deep linking from notification taps to relevant screens, with end-to-end testing of all existing notification types. Push infrastructure already exists from Phase 8 (local alarms/nudges) and Phase 13 (push via Expo Push API + Edge Functions) -- this phase adds the inbox UI, deep link routing, notification persistence, and a developer test screen.
