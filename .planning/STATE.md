@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 14-05-PLAN.md
-last_updated: "2026-03-13T13:30:29.045Z"
+stopped_at: Completed 14-04-PLAN.md
+last_updated: "2026-03-13T13:32:10.527Z"
 last_activity: "2026-03-12 - Completed quick task 32: Trainee weekday modification on coach plans"
 progress:
   total_phases: 18
-  completed_phases: 12
+  completed_phases: 13
   total_plans: 70
-  completed_plans: 50
+  completed_plans: 51
 ---
 
 ---
@@ -451,6 +451,7 @@ Progress: [██████████] 100%
 | Phase 13 P07 | 1min | 1 tasks | 1 files |
 | Phase 13 P06 | 2min | 2 tasks | 4 files |
 | Phase 14 P05 | 2min | 2 tasks | 3 files |
+| Phase 14 P04 | 4min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -567,6 +568,8 @@ Recent decisions affecting current work:
 - [Phase 13]: Used session.user.id for fetchPlans user_id filter to prevent coach trainee plans from appearing in coach's own list
 - [Phase 14]: Used presentationStyle pageSheet with animationType slide for native iOS swipe-down dismiss on video player
 - [Phase 14]: Replaced long-press delete with Swipeable swipe-left-to-delete matching SessionExerciseCard pattern
+- [Phase 14]: pendingVideo state pattern for pre-log capture with useEffect flush when setLogId becomes available
+- [Phase 14]: Camera files deleted after upload; gallery files preserved (user photo library)
 
 ### Roadmap Evolution
 
@@ -631,6 +634,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T13:30:29.042Z
-Stopped at: Completed 14-05-PLAN.md
+Last session: 2026-03-13T13:32:10.523Z
+Stopped at: Completed 14-04-PLAN.md
 Resume file: None

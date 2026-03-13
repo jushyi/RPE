@@ -208,7 +208,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
 | 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
-| 14. Set Videos | 4/5 | In Progress|  |
+| 14. Set Videos | 5/5 | Complete   | 2026-03-13 |
 | 15. Barbell Calculator | 0/3 | Not started | - |
 | 16. Push Notifications | 0/3 | Not started | - |
 | 17. Social Sharing | 0/6 | Not started | - |
@@ -274,7 +274,7 @@ Plans:
   3. Video thumbnails with play icon appear on sets in workout history detail
   4. Tapping thumbnail opens fullscreen native video player
   5. Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans complete
 
 Plans:
 - [ ] 14-01-PLAN.md -- Data layer: dependencies (expo-video, expo-video-thumbnails, base64-arraybuffer), migrations (video_url column, set-videos bucket), types, video capture/upload hooks, upload queue, thumbnail cache, shared components
