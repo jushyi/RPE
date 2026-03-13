@@ -15,6 +15,15 @@ import { SNOOZE_MINUTES } from '@/features/alarms/constants';
 import { getDeepLinkRoute } from '@/features/notifications/utils/deepLinkRouter';
 import type { NotificationData } from '@/features/notifications/types';
 
+// Configure foreground notification presentation
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function RootLayout() {
 
   const { isAuthenticated, isLoading } = useAuth();
