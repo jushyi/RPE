@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Checkpoint 10-01-T3: Apple auth gate - run eas build interactively"
-last_updated: "2026-03-13T20:22:21.612Z"
+stopped_at: Completed 18-03-PLAN.md
+last_updated: "2026-03-13T20:23:21.853Z"
 last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
 progress:
   total_phases: 19
   completed_phases: 17
   total_plans: 74
-  completed_plans: 71
+  completed_plans: 72
   percent: 95
 ---
 
@@ -553,6 +553,7 @@ Progress: [██████████] 100%
 | Phase 18 P05 | 9 | 1 tasks | 12 files |
 | Phase 18 P05 | 9min | 2 tasks | 12 files |
 | Phase 10-distribution P01 | 5 | 2 tasks | 2 files |
+| Phase 18 P03 | 15 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -716,6 +717,8 @@ Recent decisions affecting current work:
 - [Phase 18]: useTypingIndicator uses separate group-typing channel; useChat uses group-chat channel to avoid Presence/postgres_changes conflicts
 - [Phase 10-distribution]: EAS Build requires interactive Apple account login for Distribution Certificate validation on first production build
 - [Phase 10-distribution]: ascAppId 6760412044 in eas.json submit.production.ios enables EAS auto-submit to App Store Connect
+- [Phase 18]: useChat uses useRef for Realtime channel to prevent stale closures on subscribe/unsubscribe cycle
+- [Phase 18]: GroupTabs renders feedContent or ChatScreen conditionally (not PagerView) for reliable prop propagation
 
 ### Roadmap Evolution
 
@@ -785,6 +788,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T20:22:21.609Z
-Stopped at: Checkpoint 10-01-T3: Apple auth gate - run eas build interactively
+Last session: 2026-03-13T20:23:21.850Z
+Stopped at: Completed 18-03-PLAN.md
 Resume file: None
