@@ -18,6 +18,7 @@ import {
 import { notifyGroupOnShare } from '@/features/social/utils/notifyGroup';
 import { supabase } from '@/lib/supabase/client';
 import type { WorkoutSession } from '@/features/workout/types';
+import type { ShareableContent } from '@/features/social/types/chat';
 
 export interface PRItem {
   name: string;
@@ -37,7 +38,7 @@ export interface VideoItem {
   video_url: string;
 }
 
-export interface ShareableContent {
+export interface DerivedShareContent {
   workoutSummary: true;
   prItems: PRItem[];
   videoItems: VideoItem[];
@@ -45,17 +46,17 @@ export interface ShareableContent {
 
 export interface UseShareFlowResult {
   /** Derived shareable content from the session */
-  content: ShareableContent;
-  /** Keys of currently selected content items */
-  selectedContent: Set<string>;
+  content: DerivedShareContent;
+  /** ShareableContent selection state (workoutSummary flag, selectedPRs, selectedVideos) */
+  shareableContent: ShareableContent;
+  /** Update shareableContent selection */
+  setShareableContent: (value: ShareableContent) => void;
   /** IDs of currently selected groups */
   selectedGroups: Set<string>;
   /** Whether a share request is in progress */
   sharing: boolean;
   /** Whether the share was completed successfully */
   shared: boolean;
-  /** Toggle a content item's selection */
-  toggleContent: (key: string) => void;
   /** Toggle a group's selection */
   toggleGroup: (groupId: string) => void;
   /** Execute the share */
@@ -69,7 +70,7 @@ export interface UseShareFlowResult {
 function deriveShareableContent(
   session: WorkoutSession,
   prs: PRItem[]
-): ShareableContent {
+): DerivedShareContent {
   // Collect video items: only sets with a confirmed video_url (Pitfall 6: skip uploading)
   const videoItems: VideoItem[] = [];
   for (const exercise of session.exercises) {
@@ -99,6 +100,15 @@ function deriveShareableContent(
   };
 }
 
+/** Build the initial ShareableContent state: all items selected by default */
+function buildInitialShareableContent(content: DerivedShareContent): ShareableContent {
+  return {
+    workoutSummary: true,
+    selectedPRs: content.prItems.map((_, i) => String(i)),
+    selectedVideos: content.videoItems.map((_, i) => String(i)),
+  };
+}
+
 export function useShareFlow(
   session: WorkoutSession,
   prs: PRItem[]
@@ -111,24 +121,12 @@ export function useShareFlow(
     [session.id]
   );
 
-  const [selectedContent, setSelectedContent] = useState<Set<string>>(
-    () => new Set<string>(['workout'])
+  const [shareableContent, setShareableContent] = useState<ShareableContent>(
+    () => buildInitialShareableContent(content)
   );
   const [selectedGroups, setSelectedGroups] = useState<Set<string>>(() => new Set<string>());
   const [sharing, setSharing] = useState(false);
   const [shared, setShared] = useState(false);
-
-  const toggleContent = (key: string) => {
-    setSelectedContent((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
-      }
-      return next;
-    });
-  };
 
   const toggleGroup = (groupId: string) => {
     setSelectedGroups((prev) => {
@@ -144,7 +142,13 @@ export function useShareFlow(
 
   const share = async () => {
     if (sharing || shared) return;
-    if (selectedContent.size === 0 || selectedGroups.size === 0) return;
+
+    const hasSelectedContent =
+      shareableContent.workoutSummary ||
+      shareableContent.selectedPRs.length > 0 ||
+      shareableContent.selectedVideos.length > 0;
+
+    if (!hasSelectedContent || selectedGroups.size === 0) return;
 
     setSharing(true);
 
@@ -170,25 +174,27 @@ export function useShareFlow(
       // Determine the primary content type for notification (most significant)
       let notificationContentType: 'workout' | 'pr' | 'video' = 'workout';
 
-      if (selectedContent.has('workout')) {
+      if (shareableContent.workoutSummary) {
         const item = buildWorkoutPayload(session);
         items.push({ content_type: item.content_type, payload: item.payload });
       }
 
-      // PR items: keys are "pr-0", "pr-1", etc.
-      for (let i = 0; i < content.prItems.length; i++) {
-        if (selectedContent.has(`pr-${i}`)) {
-          const pr = content.prItems[i];
+      // PR items: selectedPRs contains string indices into content.prItems
+      for (const prId of shareableContent.selectedPRs) {
+        const i = parseInt(prId, 10);
+        const pr = content.prItems[i];
+        if (pr) {
           const item = buildPRPayload(pr.name, pr.weight, 0, pr.unit as 'kg' | 'lbs');
           items.push({ content_type: item.content_type, payload: item.payload });
           notificationContentType = 'pr';
         }
       }
 
-      // Video items: keys are "video-0", "video-1", etc.
-      for (let i = 0; i < content.videoItems.length; i++) {
-        if (selectedContent.has(`video-${i}`)) {
-          const v = content.videoItems[i];
+      // Video items: selectedVideos contains string indices into content.videoItems
+      for (const videoId of shareableContent.selectedVideos) {
+        const i = parseInt(videoId, 10);
+        const v = content.videoItems[i];
+        if (v) {
           const item = buildVideoPayload(
             v.video_url,
             v.exercise_name,
@@ -239,11 +245,11 @@ export function useShareFlow(
 
   return {
     content,
-    selectedContent,
+    shareableContent,
+    setShareableContent,
     selectedGroups,
     sharing,
     shared,
-    toggleContent,
     toggleGroup,
     share,
   };
