@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 17-04-PLAN.md
-last_updated: "2026-03-13T19:31:55.744Z"
+stopped_at: Completed 17-05-PLAN.md
+last_updated: "2026-03-13T19:36:29.803Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
-  completed_phases: 16
+  completed_phases: 17
   total_plans: 74
-  completed_plans: 66
+  completed_plans: 67
 ---
 
 ---
@@ -515,6 +515,7 @@ Progress: [██████████] 100%
 | Phase 17 P06 | 3 | 2 tasks | 5 files |
 | Phase 17 P03 | 4 | 2 tasks | 7 files |
 | Phase 17 P04 | 4 | 2 tasks | 10 files |
+| Phase 17 P05 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -668,6 +669,9 @@ Recent decisions affecting current work:
 - [Phase 17]: Inline add-member picker in group-detail (toggle show/hide) avoids a separate screen, consistent with plan's inline friend list spec
 - [Phase 17]: ReactionBar picker uses Ionicons plus/close toggle (no emoji characters per CLAUDE.md)
 - [Phase 17]: group-detail feed placeholder replaced with View Feed navigation button to group-feed screen
+- [Phase 17]: useShareFlow derives content at hook instantiation via useMemo keyed on session.id to avoid re-computation
+- [Phase 17]: SharePrompt starts collapsed to reduce visual noise; expands on tap to reveal full pickers
+- [Phase 17]: notifyGroupOnShare fetches non-muted members directly from Supabase (not store cache) for accurate mute status at time of share
 
 ### Roadmap Evolution
 
@@ -735,6 +739,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T19:31:55.741Z
-Stopped at: Completed 17-04-PLAN.md
+Last session: 2026-03-13T19:36:29.800Z
+Stopped at: Completed 17-05-PLAN.md
 Resume file: None
