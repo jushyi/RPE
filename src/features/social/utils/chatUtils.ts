@@ -47,6 +47,50 @@ export function getMessageReadStatus(
 }
 
 /**
+ * Creates a debounced typing indicator controller.
+ *
+ * - `trigger()`: calls onStart immediately, then schedules onStop after `delayMs` of inactivity.
+ *   Each call to trigger() resets the timer (debounce behavior).
+ * - `cancel()`: clears the pending timer so onStop is never called.
+ *
+ * This is a pure function with no side effects on the returned functions,
+ * making it straightforward to unit-test with jest fake timers.
+ *
+ * @param onStart - Called each time typing begins (or continues)
+ * @param onStop - Called once after `delayMs` ms of inactivity
+ * @param delayMs - Idle timeout before onStop fires (default: 2000)
+ */
+export function createTypingDebounce(
+  onStart: () => void,
+  onStop: () => void,
+  delayMs: number = 2000
+): { trigger: () => void; cancel: () => void } {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+
+  const trigger = () => {
+    onStart();
+
+    if (timer !== null) {
+      clearTimeout(timer);
+    }
+
+    timer = setTimeout(() => {
+      timer = null;
+      onStop();
+    }, delayMs);
+  };
+
+  const cancel = () => {
+    if (timer !== null) {
+      clearTimeout(timer);
+      timer = null;
+    }
+  };
+
+  return { trigger, cancel };
+}
+
+/**
  * Formats a message timestamp for display in the chat UI.
  *
  * - Today: "HH:MM" (e.g., "14:30")
