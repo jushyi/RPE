@@ -210,6 +210,19 @@ Deno.serve(async (req) => {
       } catch (err) {
         console.warn(`Failed to send weekly summary to coach ${coachId}:`, err);
       }
+
+      // Persist notification record for this coach (fire-and-forget)
+      try {
+        await adminClient.from('notifications' as any).insert({
+          user_id: coachId,
+          type: 'weekly_summary',
+          title: 'Weekly Training Summary',
+          body,
+          data: { type: 'weekly_summary' },
+        });
+      } catch (insertErr) {
+        console.warn(`Failed to persist notification record for coach ${coachId}:`, insertErr);
+      }
     }
 
     return new Response(

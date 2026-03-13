@@ -101,6 +101,20 @@ Deno.serve(async (req) => {
 
     const result = await expoResponse.json();
 
+    // Persist notification records for each recipient (fire-and-forget, must not block delivery)
+    try {
+      const notificationRecords = recipient_ids.map((recipientId: string) => ({
+        user_id: recipientId,
+        type: (data as any)?.type ?? 'unknown',
+        title,
+        body,
+        data: data ?? {},
+      }));
+      await adminClient.from('notifications' as any).insert(notificationRecords);
+    } catch (insertErr) {
+      console.warn('Failed to persist notification records:', insertErr);
+    }
+
     return new Response(
       JSON.stringify({ sent: messages.length, result }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },

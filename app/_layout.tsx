@@ -12,6 +12,8 @@ import { useAuthStore } from '@/stores/authStore';
 import { ConnectivityBanner } from '@/components/layout/ConnectivityBanner';
 import { setupAlarmChannel, registerAlarmCategory } from '@/features/alarms/utils/notificationSetup';
 import { SNOOZE_MINUTES } from '@/features/alarms/constants';
+import { getDeepLinkRoute } from '@/features/notifications/utils/deepLinkRouter';
+import type { NotificationData } from '@/features/notifications/types';
 
 export default function RootLayout() {
 
@@ -46,13 +48,20 @@ export default function RootLayout() {
               repeats: false,
             },
           }).catch((err) => console.warn('Failed to schedule snooze:', err));
+        } else if (actionId === Notifications.DEFAULT_ACTION_IDENTIFIER) {
+          // Foreground notification tap — route to the relevant screen
+          const data = response.notification.request.content.data as NotificationData;
+          const route = getDeepLinkRoute(data);
+          if (route) {
+            router.push(route as any);
+          }
         }
         // DISMISS action needs no handling
       }
     );
 
     return () => subscription.remove();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     if (isLoading) return;
