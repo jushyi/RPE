@@ -40,7 +40,7 @@ decisions:
 metrics:
   duration: 9min
   completed: "2026-03-13"
-  tasks_completed: 1
+  tasks_completed: 2
   tasks_total: 2
   files_created: 10
   files_modified: 2
@@ -159,6 +159,17 @@ Replaced direct `FlatList` render with `<GroupTabs groupId feedContent={...} />`
 - **Found during:** Task 1 - potential conflict between postgres_changes subscription and Presence on same channel
 - **Fix:** Used `group-typing:${groupId}` for Presence (typing) and `group-chat:${groupId}` for postgres_changes (messages), keeping clean separation per Supabase best practices
 - **Commit:** b81a9b3
+
+## Human Verification: APPROVED
+
+Task 2 (human-verify checkpoint) approved by user on 2026-03-13.
+All 18 verification steps confirmed passing:
+- Group chat with real-time messaging, typing indicators, read receipts
+- Image and video support in chat
+- Message edit (within 15 min) and delete
+- Push notifications for chat (respects mute)
+- Enhanced share flow with content-type checkboxes
+- Retroactive sharing from workout history
 
 ## Self-Check: PASSED
 
