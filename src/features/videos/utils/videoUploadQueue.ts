@@ -30,18 +30,20 @@ export async function enqueueVideoUpload(item: VideoUploadItem): Promise<void> {
   const ext = item.localUri.split('.').pop() || 'mp4';
   const persistentUri = `${Paths.document.uri}set-video-${item.setLogId}.${ext}`;
 
+  let finalUri = persistentUri;
   try {
     const sourceFile = new File(item.localUri);
     const destFile = new File(persistentUri);
     sourceFile.copy(destFile);
   } catch {
-    // If copy fails (e.g., already in documents dir), keep original URI
+    // If copy fails, fall back to original URI so upload can still proceed
+    finalUri = item.localUri;
   }
 
   const queueItem: VideoUploadItem = {
     ...item,
     originalUri: item.localUri,
-    localUri: persistentUri,
+    localUri: finalUri,
   };
 
   const queue = getVideoQueue();

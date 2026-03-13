@@ -58,8 +58,10 @@ export function useHistory() {
         if (offset === 0) {
           setSessions(normalized);
         } else {
-          // Append for pagination
-          setSessions([...sessions, ...normalized]);
+          // Append for pagination, deduplicating by id
+          const existingIds = new Set(sessions.map((s) => s.id));
+          const newSessions = normalized.filter((s) => !existingIds.has(s.id));
+          setSessions([...sessions, ...newSessions]);
         }
       } catch (err) {
         console.warn('Failed to fetch history sessions:', err);

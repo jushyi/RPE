@@ -7,7 +7,6 @@ import {
   MAX_REPS,
 } from '@/features/workout/constants';
 import { VideoCaptureButton } from '@/features/videos/components/VideoCaptureButton';
-import { VideoThumbnail } from '@/features/videos/components/VideoThumbnail';
 import { useVideoUpload } from '@/features/videos/hooks/useVideoUpload';
 import type { TargetSet } from '@/features/plans/types';
 import type { SetLog } from '@/features/workout/types';
@@ -196,32 +195,25 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
             selectTextOnFocus
           />
         </View>
-        <View style={s.separator} />
-        <View style={s.inputGroupSmall}>
-          <Text style={s.inputLabel}>Video</Text>
+        <View style={s.videoCol}>
           <VideoCaptureButton
             onVideoAttached={handleVideoAttached}
             setLogId={loggedSet?.id}
             hasVideo={hasVideoAttachment}
+            thumbnailUri={displayThumbnail}
           />
         </View>
       </View>
-      {hasLogged.current && displayThumbnail && (
+      {hasLogged.current && hasVideoAttachment && (
         <View style={s.videoRow}>
-          <View style={s.thumbnailWrapper}>
-            <VideoThumbnail
-              thumbnailUri={displayThumbnail}
-              onPress={() => {/* Preview handled in future plan */}}
-              size={40}
-            />
-            <Pressable
-              onPress={handleDeleteVideo}
-              style={s.deleteThumbnailBtn}
-              hitSlop={6}
-            >
-              <Ionicons name="trash-outline" size={16} color={colors.error} />
-            </Pressable>
-          </View>
+          <Pressable
+            onPress={handleDeleteVideo}
+            style={({ pressed }) => [s.deleteVideoBtn, pressed && { opacity: 0.6 }]}
+            hitSlop={6}
+          >
+            <Ionicons name="trash-outline" size={14} color={colors.error} />
+            <Text style={s.deleteVideoText}>Remove video</Text>
+          </Pressable>
         </View>
       )}
       {!hasLogged.current && (
@@ -355,20 +347,24 @@ const s = StyleSheet.create({
   logBtnTextDisabled: {
     color: colors.textMuted,
   },
+  videoCol: {
+    marginLeft: 8,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
   videoRow: {
-    marginTop: 10,
+    marginTop: 8,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  thumbnailWrapper: {
-    position: 'relative',
+  deleteVideoBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
-  deleteThumbnailBtn: {
-    position: 'absolute',
-    top: -6,
-    right: -6,
-    backgroundColor: colors.surface,
-    borderRadius: 10,
-    padding: 2,
+  deleteVideoText: {
+    color: colors.error,
+    fontSize: 12,
+    fontWeight: '500',
   },
 });
