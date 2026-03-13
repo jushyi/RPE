@@ -40,6 +40,7 @@ export async function enqueueVideoUpload(item: VideoUploadItem): Promise<void> {
 
   const queueItem: VideoUploadItem = {
     ...item,
+    originalUri: item.localUri,
     localUri: persistentUri,
   };
 
@@ -100,6 +101,21 @@ export async function flushVideoQueue(): Promise<void> {
         .update({ video_url: publicUrl })
         .eq('id', item.setLogId);
       removeFromQueue(item.setLogId);
+
+      // Clean up local files after successful upload
+      // Always delete the documents-dir queue copy
+      try {
+        const queueFile = new File(item.localUri);
+        await queueFile.delete();
+      } catch { /* ignore if already deleted */ }
+
+      // Delete original camera file (NOT gallery files - those belong to the user's photo library)
+      if (item.source === 'camera' && item.originalUri) {
+        try {
+          const originalFile = new File(item.originalUri);
+          await originalFile.delete();
+        } catch { /* ignore - may already be cleaned by OS */ }
+      }
     } catch {
       failed.push(item);
     }
