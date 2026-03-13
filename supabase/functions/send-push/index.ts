@@ -12,12 +12,27 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // JWT already validated by Supabase gateway (verify_jwt: true).
-    // Service role client for DB queries that bypass RLS.
     const adminClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
+
+    // Manually verify JWT (verify_jwt=false at gateway to support ES256 tokens)
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
+    }
+    const jwt = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await adminClient.auth.getUser(jwt);
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
+    }
 
     const { recipient_ids, title, body, data } = await req.json() as {
       recipient_ids: string[];

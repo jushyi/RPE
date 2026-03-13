@@ -105,20 +105,28 @@ export default function DevToolsScreen() {
   };
 
   const invokeSendPush = async (
-    userId: string,
     token: string,
-    payload: { title: string; body: string; data: Record<string, unknown> },
+    payload: { recipient_ids: string[]; title: string; body: string; data: Record<string, unknown> },
   ) => {
-    const { error } = await supabase.functions.invoke('send-push', {
-      headers: { Authorization: `Bearer ${token}` },
-      body: { recipient_ids: [userId], ...payload },
+    const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+    const resp = await fetch(`${supabaseUrl}/functions/v1/send-push`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
     });
-    if (error) throw error;
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => '');
+      throw new Error(`send-push ${resp.status}: ${text}`);
+    }
   };
 
   const getFreshSession = async () => {
     const { data: { session }, error } = await supabase.auth.refreshSession();
-    if (error || !session) throw new Error('Not authenticated');
+    console.log('[dev-tools] refreshSession result — access_token prefix:', session?.access_token?.slice(0, 20), 'error:', error?.message);
+    if (error || !session) throw new Error(`Not authenticated: ${error?.message}`);
     return session;
   };
 
@@ -126,7 +134,8 @@ export default function DevToolsScreen() {
     updateStatus('plan_update', 'sending');
     try {
       const session = await getFreshSession();
-      await invokeSendPush(session.user.id, session.access_token, {
+      await invokeSendPush(session.access_token, {
+        recipient_ids: [session.user.id],
         title: 'Plan Updated',
         body: 'Your training plan has been updated',
         data: { type: 'plan_update', plan_id: 'test-plan' },
@@ -142,7 +151,8 @@ export default function DevToolsScreen() {
     updateStatus('weekly_summary', 'sending');
     try {
       const session = await getFreshSession();
-      await invokeSendPush(session.user.id, session.access_token, {
+      await invokeSendPush(session.access_token, {
+        recipient_ids: [session.user.id],
         title: 'Weekly Summary',
         body: 'Your weekly training summary is ready',
         data: { type: 'weekly_summary' },
