@@ -116,11 +116,16 @@ export default function DevToolsScreen() {
     if (error) throw error;
   };
 
+  const getFreshSession = async () => {
+    const { data: { session }, error } = await supabase.auth.refreshSession();
+    if (error || !session) throw new Error('Not authenticated');
+    return session;
+  };
+
   const triggerPlanUpdate = async () => {
     updateStatus('plan_update', 'sending');
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Not authenticated');
+      const session = await getFreshSession();
       await invokeSendPush(session.user.id, session.access_token, {
         title: 'Plan Updated',
         body: 'Your training plan has been updated',
@@ -136,8 +141,7 @@ export default function DevToolsScreen() {
   const triggerWeeklySummary = async () => {
     updateStatus('weekly_summary', 'sending');
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Not authenticated');
+      const session = await getFreshSession();
       await invokeSendPush(session.user.id, session.access_token, {
         title: 'Weekly Summary',
         body: 'Your weekly training summary is ready',
