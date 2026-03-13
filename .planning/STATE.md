@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Completed 16-02-PLAN.md
-last_updated: "2026-03-13T18:39:33.698Z"
+last_updated: "2026-03-13T18:40:30.804Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
@@ -505,6 +505,7 @@ Progress: [██████████] 100%
 | Phase 16 P01 | 4 | 2 tasks | 12 files |
 | Phase 16 P01 | 4min | 2 tasks | 12 files |
 | Phase 16 P02 | 4min | 2 tasks | 12 files |
+| Phase 16 P02 | 3min | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -638,6 +639,9 @@ Recent decisions affecting current work:
 - [Phase 16]: Client-side 30-day notification pruning on fetch (simpler than pg_cron)
 - [Phase 16]: BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle
 - [Phase 16]: Cold-start deep links handled in app/(app)/_layout.tsx via useLastNotificationResponse; foreground taps in root app/_layout.tsx
+- [Phase 16]: BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle
+- [Phase 16]: Cold-start deep links in app/(app)/_layout.tsx via useLastNotificationResponse; foreground taps in root app/_layout.tsx via DEFAULT_ACTION_IDENTIFIER
+- [Phase 16]: Edge Function notification inserts use as-any type cast for notifications table (not in generated types)
 
 ### Roadmap Evolution
 
@@ -705,6 +709,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:39:33.695Z
+Last session: 2026-03-13T18:40:30.801Z
 Stopped at: Completed 16-02-PLAN.md
 Resume file: None

@@ -1,91 +1,127 @@
 ---
 phase: 16-push-notifications
-plan: "02"
+plan: 02
 subsystem: notifications
-tags: [notifications, bell-badge, deep-link, inbox, edge-functions]
-dependency_graph:
-  requires: [16-01]
-  provides: [notification-inbox-ui, bell-badge, deep-link-routing, edge-function-persistence]
-  affects: [dashboard, app-layout, root-layout, send-push, weekly-summary]
-tech_stack:
+tags: [react-native, expo-notifications, deep-link, zustand, ionicons, flatlist, bell-badge]
+
+requires:
+  - phase: 16-push-notifications
+    plan: 01
+    provides: NotificationRecord types, notificationStore, deepLinkRouter, NOTIFICATION_ICONS, relativeTime, bellBadge test stubs
+
+provides:
+  - BellBadge component with formatBadgeCount utility (exported, tested)
+  - NotificationItem, NotificationInbox, EmptyInbox UI components
+  - useUnreadCount hook driving refresh-on-foreground cycle
+  - Notification inbox route at /(app)/notifications
+  - Cold-start deep link routing via useLastNotificationResponse
+  - Foreground notification tap routing via DEFAULT_ACTION_IDENTIFIER handler
+  - send-push Edge Function persists notification records per recipient
+  - weekly-summary Edge Function persists notification record per coach
+
+affects:
+  - 16-03 (dev tools, if any additional notification UI needed)
+
+tech-stack:
   added: []
-  patterns: [zustand-store-read-in-component, useLastNotificationResponse-cold-start, fire-and-forget-insert]
-key_files:
+  patterns:
+    - "useLastNotificationResponse for cold-start deep link routing in app layout"
+    - "DEFAULT_ACTION_IDENTIFIER handler for foreground notification tap routing in root layout"
+    - "Fire-and-forget notification insert in Edge Functions after push delivery (try/catch wrapping)"
+
+key-files:
   created:
-    - src/features/notifications/hooks/useUnreadCount.ts
     - src/features/notifications/components/BellBadge.tsx
-    - src/features/notifications/components/EmptyInbox.tsx
     - src/features/notifications/components/NotificationItem.tsx
     - src/features/notifications/components/NotificationInbox.tsx
+    - src/features/notifications/components/EmptyInbox.tsx
+    - src/features/notifications/hooks/useUnreadCount.ts
     - app/(app)/notifications.tsx
   modified:
-    - app/(app)/_layout.tsx
     - app/(app)/(tabs)/dashboard.tsx
+    - app/(app)/_layout.tsx
     - app/_layout.tsx
     - supabase/functions/send-push/index.ts
     - supabase/functions/weekly-summary/index.ts
     - tests/notifications/bellBadge.test.ts
-decisions:
-  - "[Phase 16]: BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle"
-  - "[Phase 16]: from('notifications' as any) pattern for Edge Function inserts (notifications table not in generated Supabase types)"
-  - "[Phase 16]: Cold-start deep links handled in app/(app)/_layout.tsx via useLastNotificationResponse; foreground taps in root app/_layout.tsx"
-metrics:
-  duration: 4min
-  completed_date: "2026-03-13"
-  tasks: 2
-  files: 12
+
+key-decisions:
+  - "BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle"
+  - "from('notifications' as any) pattern for Edge Function inserts (notifications table not in generated Supabase types)"
+  - "Cold-start deep links handled in app/(app)/_layout.tsx via useLastNotificationResponse; foreground taps in root app/_layout.tsx"
+
+patterns-established:
+  - "Cold-start deep link: useLastNotificationResponse + getDeepLinkRoute in app layout"
+  - "Foreground tap: DEFAULT_ACTION_IDENTIFIER check in root layout notification response listener"
+
+requirements-completed: [NOTIF-01, NOTIF-02, NOTIF-04]
+
+duration: 3min
+completed: 2026-03-13
 ---
 
-# Phase 16 Plan 02: Notification Inbox UI and Edge Function Persistence Summary
+# Phase 16 Plan 02: Notification Inbox UI and Deep Link Routing Summary
 
-One-liner: Bell badge in dashboard header with full notification inbox, deep link routing from push taps (foreground and cold-start), and Edge Function persistence writing notification records after push delivery.
+**Bell badge in dashboard header with full notification inbox, deep link routing from push taps (foreground and cold-start), and Edge Function persistence writing notification records after push delivery**
 
-## Tasks Completed
+## Performance
 
-| # | Task | Commit | Key Files |
-|---|------|--------|-----------|
-| 1 | BellBadge, NotificationItem, NotificationInbox, EmptyInbox, inbox route | 7f1f9b9 | BellBadge.tsx, NotificationInbox.tsx, notifications.tsx, dashboard.tsx, _layout.tsx |
-| 2 | Extend Edge Functions + foreground deep link handler | dfe0391 | send-push/index.ts, weekly-summary/index.ts, app/_layout.tsx |
+- **Duration:** 3 min
+- **Started:** 2026-03-13T18:35:50Z
+- **Completed:** 2026-03-13T18:38:54Z
+- **Tasks:** 2
+- **Files modified:** 12
 
-## What Was Built
+## Accomplishments
+- BellBadge component with numeric unread badge in dashboard header, useUnreadCount hook driving refresh-on-foreground
+- Full notification inbox with FlatList, pull-to-refresh, mark-all-read, type icons, relative timestamps, and deep link routing on item tap
+- Cold-start notification taps route to correct screen via useLastNotificationResponse in app layout
+- Foreground notification taps route to correct screen via DEFAULT_ACTION_IDENTIFIER handler in root layout
+- send-push and weekly-summary Edge Functions persist notification records after push delivery
+- All 6 bellBadge tests activated and passing (upgraded from it.todo stubs)
 
-### Notification Inbox UI
+## Task Commits
 
-- `useUnreadCount` hook: subscribes to AppState changes, calls `refreshUnreadCount()` on mount and every time the app returns to foreground
-- `BellBadge`: Pressable bell icon with numeric badge overlay (accent background). Count 0 hides badge, count >= 10 shows "9+". Navigates to `/(app)/notifications` on press. Exports `formatBadgeCount` utility function.
-- `EmptyInbox`: Centered placeholder with notifications-off-outline icon and "No notifications yet" label
-- `NotificationItem`: Row layout with unread dot, type icon (from NOTIFICATION_ICONS), title (bold if unread), body (2-line truncate), relative timestamp, and chevron. Pressable with onPress callback.
-- `NotificationInbox`: FlatList with pull-to-refresh, "Mark all read" header (hidden when unread count is 0), per-item deep link navigation via `getDeepLinkRoute`, `EmptyInbox` as ListEmptyComponent
+1. **Task 1: BellBadge, NotificationItem, NotificationInbox, EmptyInbox components and inbox route** - `7f1f9b9` (feat)
+2. **Task 2: Extend Edge Functions to persist notifications + foreground deep link handler** - `dfe0391` (feat)
 
-### Route and Layout Changes
+## Files Created/Modified
+- `src/features/notifications/components/BellBadge.tsx` - Bell icon with unread count badge, exports formatBadgeCount
+- `src/features/notifications/components/NotificationItem.tsx` - Single notification row with unread dot, type icon, title/body/timestamp
+- `src/features/notifications/components/NotificationInbox.tsx` - FlatList inbox with mark-all-read and pull-to-refresh
+- `src/features/notifications/components/EmptyInbox.tsx` - Empty state with notifications-off icon
+- `src/features/notifications/hooks/useUnreadCount.ts` - Hook refreshing unread count on mount and AppState foreground
+- `app/(app)/notifications.tsx` - Notification inbox route
+- `app/(app)/(tabs)/dashboard.tsx` - Added BellBadge to header, useUnreadCount hook call
+- `app/(app)/_layout.tsx` - Registered notifications screen, cold-start deep link handler
+- `app/_layout.tsx` - Foreground notification tap handler (DEFAULT_ACTION_IDENTIFIER)
+- `supabase/functions/send-push/index.ts` - Notification record insert per recipient after push
+- `supabase/functions/weekly-summary/index.ts` - Notification record insert per coach after push
+- `tests/notifications/bellBadge.test.ts` - Activated 6 tests for formatBadgeCount
 
-- `app/(app)/notifications.tsx`: Minimal stack route wrapping `NotificationInbox`
-- `app/(app)/_layout.tsx`: Added `<Stack.Screen name="notifications" />` registration and cold-start deep link handler using `useLastNotificationResponse` + `getDeepLinkRoute`
-- `app/(app)/(tabs)/dashboard.tsx`: Imports `BellBadge` and `useUnreadCount`, calls hook in component body, adds `<BellBadge />` to right of header Animated.View
-
-### Edge Function Extensions
-
-- `send-push/index.ts`: After push delivery succeeds, bulk-inserts one notification record per recipient_id into the `notifications` table. Wrapped in try/catch so table write failure never blocks push delivery.
-- `weekly-summary/index.ts`: After sending each coach's push, inserts a `weekly_summary` notification record for that coach. Also wrapped in try/catch (fire-and-forget).
-
-### Foreground Deep Link Handler
-
-- `app/_layout.tsx`: Added `else if (actionId === DEFAULT_ACTION_IDENTIFIER)` branch in the existing `addNotificationResponseReceivedListener`. Extracts `data` from notification content, calls `getDeepLinkRoute`, and routes via `router.push` if a route exists.
+## Decisions Made
+- BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle
+- Cold-start deep link uses useLastNotificationResponse in app/(app)/_layout.tsx alongside usePushToken (co-located auth-dependent hooks)
+- Foreground tap handler extends existing addNotificationResponseReceivedListener with else-if branch for DEFAULT_ACTION_IDENTIFIER
+- Edge Function notification inserts use `as any` type cast since notifications table is not in generated Supabase types yet
 
 ## Deviations from Plan
 
-None — plan executed exactly as written.
+None - plan executed exactly as written.
 
-## Test Results
+## Issues Encountered
+- Pre-existing test failure in tests/settings/csvExport.test.ts (expects "Hips" column header but Phase 15 migration replaced Hips with Biceps/Quad). Out of scope -- not caused by this plan's changes.
 
-All notification tests pass:
-- `bellBadge.test.ts`: 6 tests activated and passing (formatBadgeCount: null for 0, count strings for 1-9, "9+" for >= 10)
-- All other notification test files: 35 tests passing, 4 todo stubs
+## User Setup Required
 
-Pre-existing unrelated failures (not caused by this plan):
-- `tests/settings/csvExport.test.ts`: 2 failures (Hips column header mismatch — pre-existing before this plan)
-- `tests/workout/sync-queue.test.ts`: 1 failure (pre-existing before this plan)
+None - no external service configuration required.
 
-## Self-Check: PASSED
+## Next Phase Readiness
+- Full notification system operational: data layer, inbox UI, bell badge, deep link routing, and Edge Function persistence all wired
+- Notification system ready for any future notification types (just add to NotificationType union and NOTIFICATION_ICONS)
 
-All created files exist on disk. Both task commits (7f1f9b9, dfe0391) verified in git log.
+## Self-Check: PENDING
+
+---
+*Phase: 16-push-notifications*
+*Completed: 2026-03-13*
