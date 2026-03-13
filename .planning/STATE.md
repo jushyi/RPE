@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 17-02-PLAN.md
-last_updated: "2026-03-13T19:15:29.274Z"
+stopped_at: Completed 17-06-PLAN.md
+last_updated: "2026-03-13T19:19:14.664Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
   completed_phases: 16
   total_plans: 74
-  completed_plans: 63
+  completed_plans: 64
 ---
 
 ---
@@ -512,6 +512,7 @@ Progress: [██████████] 100%
 | Phase 16 P04 | 2min | 2 tasks | 1 files |
 | Phase 16 P05 | 1 | 2 tasks | 2 files |
 | Phase 17 P02 | 2min | 2 tasks | 9 files |
+| Phase 17 P06 | 3 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -659,6 +660,8 @@ Recent decisions affecting current work:
 - [Phase 16]: Notifications table (20260318000000) was already applied on remote Supabase — db push not required
 - [Phase 16]: Applied headerTitleStyle per-screen rather than as screenOptions default to avoid unintentional global override
 - [Phase 17]: Social tab is 5th position (Home, Plans, Calc, Social, Settings); sender profile lookup added in friend-requests.tsx
+- [Phase 17]: HandleSetup exposes onValidChange callback so HandleStep can track valid handle value without duplicating validation logic
+- [Phase 17]: ProfileSection wraps ProfileHeader and HandleSetup so settings.tsx stays clean
 
 ### Roadmap Evolution
 
@@ -726,6 +729,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T19:13:38.479Z
-Stopped at: Completed 17-02-PLAN.md
+Last session: 2026-03-13T19:19:14.661Z
+Stopped at: Completed 17-06-PLAN.md
 Resume file: None
