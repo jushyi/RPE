@@ -3,7 +3,7 @@
  * Shows session stats, weight target prompts for manual progression exercises,
  * and handles session sync + previous performance caching on completion.
  */
-import React, { useState, useEffect, useSyncExternalStore, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useSyncExternalStore, useCallback } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -13,6 +13,7 @@ import SessionSummaryCard, {
   computeSessionSummary,
 } from '@/features/workout/components/SessionSummary';
 import WeightTargetPrompt from '@/features/workout/components/WeightTargetPrompt';
+import SharePrompt from '@/features/social/components/SharePrompt';
 import { flushSyncQueue } from '@/features/workout/hooks/useSyncQueue';
 import { cachePreviousPerformance } from '@/features/workout/hooks/usePreviousPerformance';
 import { getUploadState, subscribeUploadState } from '@/features/videos/utils/videoUploadQueue';
@@ -88,6 +89,22 @@ export default function WorkoutSummaryScreen() {
 
   const summary = computeSessionSummary(session);
 
+  // Extracted from inline IIFE so it can be shared with SharePrompt
+  const prExercises = useMemo(() => {
+    if (summary.prs_hit === 0) return [];
+    return session.exercises
+      .filter((ex) => ex.logged_sets.some((set) => set.is_pr))
+      .map((ex) => {
+        const prSets = ex.logged_sets.filter((set) => set.is_pr);
+        const maxPR = prSets.reduce((max, set) => set.weight > max.weight ? set : max, prSets[0]);
+        return {
+          name: ex.exercise_name,
+          weight: maxPR.weight,
+          unit: maxPR.unit,
+        };
+      });
+  }, [session, summary.prs_hit]);
+
   return (
     <SafeAreaView style={s.container}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -105,33 +122,20 @@ export default function WorkoutSummaryScreen() {
 
         <SessionSummaryCard session={session} />
 
-        {summary.prs_hit > 0 && (() => {
-          const prExercises = session.exercises
-            .filter((ex) => ex.logged_sets.some((set) => set.is_pr))
-            .map((ex) => {
-              const prSets = ex.logged_sets.filter((set) => set.is_pr);
-              const maxPR = prSets.reduce((max, set) => set.weight > max.weight ? set : max, prSets[0]);
-              return {
-                name: ex.exercise_name,
-                weight: maxPR.weight,
-                unit: maxPR.unit,
-              };
-            });
-          return (
-            <View style={s.prSection}>
-              <View style={s.prHeader}>
-                <Ionicons name="trophy-outline" size={22} color={colors.warning} />
-                <Text style={s.prTitle}>Personal Records</Text>
-              </View>
-              {prExercises.map((pr) => (
-                <View key={pr.name} style={s.prRow}>
-                  <Text style={s.prExerciseName} numberOfLines={1}>{pr.name}</Text>
-                  <Text style={s.prWeight}>New PR: {pr.weight} {pr.unit}</Text>
-                </View>
-              ))}
+        {prExercises.length > 0 && (
+          <View style={s.prSection}>
+            <View style={s.prHeader}>
+              <Ionicons name="trophy-outline" size={22} color={colors.warning} />
+              <Text style={s.prTitle}>Personal Records</Text>
             </View>
-          );
-        })()}
+            {prExercises.map((pr) => (
+              <View key={pr.name} style={s.prRow}>
+                <Text style={s.prExerciseName} numberOfLines={1}>{pr.name}</Text>
+                <Text style={s.prWeight}>New PR: {pr.weight} {pr.unit}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
         {showTargets &&
           summary.exercises_with_manual_progression.length > 0 && (
@@ -143,6 +147,9 @@ export default function WorkoutSummaryScreen() {
               />
             </View>
           )}
+
+        {/* Share with groups */}
+        <SharePrompt session={session} prs={prExercises} />
 
         {/* Video upload status banner */}
         {isUploading && (
