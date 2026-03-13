@@ -68,7 +68,7 @@ Plans:
   3. User can view all created plans and navigate to any plan's detail
   4. User can edit an existing plan (change exercises, days, or targets) and delete a plan entirely
   5. Plan edits do not alter previously logged workout sessions (plans and actuals remain separate)
-**Plans:** 3/3 plans complete
+**Plans:** 5 plans (3 executed + 2 gap closure)
 
 Plans:
 - [ ] 03-01-PLAN.md — Schema (3 tables + RLS + active trigger), types, planStore, usePlans hook, Plans tab with list screen and empty state
@@ -117,7 +117,7 @@ Plans:
   2. User can log their bodyweight and view a bodyweight trend chart over time
   3. Home screen shows a progress summary including recent PRs, streak count, and recent stats
   4. Home screen shows today's planned workout (from the active plan) with a quick-start button that launches the active workout screen
-**Plans:** 3/3 plans complete
+**Plans:** 5 plans (3 executed + 2 gap closure)
 
 Plans:
 - [x] 06-01-PLAN.md — Data layer: Victory Native XL + Skia install, types, chartHelpers, bodyweight migration, chart RPC aggregation, bodyweightStore, all data hooks (chart data, bodyweight, today's workout, progress summary), unit tests (completed 2026-03-10)
@@ -208,7 +208,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
 | 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
-| 14. Set Videos | 3/3 | Complete   | 2026-03-12 |
+| 14. Set Videos | 3/5 | In Progress|  |
 | 15. Barbell Calculator | 0/3 | Not started | - |
 | 16. Push Notifications | 0/3 | Not started | - |
 | 17. Social Sharing | 0/6 | Not started | - |
@@ -219,7 +219,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 **Goal:** Users have a dedicated Settings tab for account management -- unit preferences, alarm controls, data export (CSV via share sheet), sign out with confirmation, and account deletion with password re-entry, 7-day grace period, and server-side cleanup via Supabase Edge Function.
 **Requirements**: SETT-01, SETT-02, SETT-03, SETT-04, SETT-05, SETT-06, SETT-07
 **Depends on:** Phase 10
-**Plans:** 3/3 plans complete
+**Plans:** 5 plans (3 executed + 2 gap closure)
 
 Plans:
 - [ ] 11-01-PLAN.md — Settings tab route (4th tab), profile header, preference toggles (weight/measurement units), notifications section, account section with sign out confirmation
@@ -274,12 +274,14 @@ Plans:
   3. Video thumbnails with play icon appear on sets in workout history detail
   4. Tapping thumbnail opens fullscreen native video player
   5. Settings has "My Videos" gallery screen showing all videos chronologically with storage usage and delete capability
-**Plans:** 3/3 plans complete
+**Plans:** 5 plans (3 executed + 2 gap closure)
 
 Plans:
 - [ ] 14-01-PLAN.md -- Data layer: dependencies (expo-video, expo-video-thumbnails, base64-arraybuffer), migrations (video_url column, set-videos bucket), types, video capture/upload hooks, upload queue, thumbnail cache, shared components
 - [ ] 14-02-PLAN.md -- Active workout integration: VideoCaptureButton on SetCard, video attachment wiring in workout session, background upload on capture
 - [ ] 14-03-PLAN.md -- History playback + gallery: video thumbnails in SetRow, video badge on session cards, My Videos gallery screen in Settings with storage usage
+- [ ] 14-04-PLAN.md -- Gap closure: pre-log video capture, inline Video column in inputRow, local file cleanup after upload
+- [ ] 14-05-PLAN.md -- Gap closure: shared swipe-down dismissable VideoPlayerModal, swipe-left gallery delete, emoji audit
 
 ### Phase 15: Add barbell calculator tab with plate loading, weight calculations, RPE/1RM calculators, and next-set RPE recommendations
 
