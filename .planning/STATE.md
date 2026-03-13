@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 14-04-PLAN.md
-last_updated: "2026-03-13T13:32:10.527Z"
-last_activity: "2026-03-12 - Completed quick task 32: Trainee weekday modification on coach plans"
+stopped_at: Completed quick-36
+last_updated: "2026-03-13T16:13:18Z"
+last_activity: "2026-03-13 - Completed quick task 36: Fix fullscreen video player button layout"
 progress:
   total_phases: 18
   completed_phases: 13
@@ -631,9 +631,10 @@ None yet.
 | 33 | Fix finish workout silent failure with MMKV bridge | 2026-03-12 | 80383e8 | [33-starting-a-workout-and-clicking-finish-d](./quick/33-starting-a-workout-and-clicking-finish-d/) |
 | 34 | Fix TodaysWorkoutCard showing stale workout data after account switch | 2026-03-12 | 718c566 | [34-fix-todays-workout-card-showing-stale-wo](./quick/34-fix-todays-workout-card-showing-stale-wo/) |
 | 35 | Refactor useTodaysWorkout to fetch active plan from Supabase | 2026-03-12 | 0925632 | [35-refactor-usetodaysworkout-to-fetch-activ](./quick/35-refactor-usetodaysworkout-to-fetch-activ/) |
+| 36 | Fix fullscreen video player button layout | 2026-03-13 | c5b5179 | [36-the-video-playback-fullscreen-looks-a-li](./quick/36-the-video-playback-fullscreen-looks-a-li/) |
 
 ## Session Continuity
 
-Last session: 2026-03-13T13:32:10.523Z
-Stopped at: Completed 14-04-PLAN.md
+Last session: 2026-03-13T16:13:18Z
+Stopped at: Completed quick-36
 Resume file: None
