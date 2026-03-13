@@ -211,7 +211,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 14. Set Videos | 5/5 | Complete   | 2026-03-13 |
 | 15. Barbell Calculator | 3/3 | Complete    | 2026-03-13 |
 | 15.1. Reverse Bar Loading + Plate Inventory | 2/2 | Complete    | 2026-03-13 |
-| 16. Push Notifications | 3/3 | Complete    | 2026-03-13 |
+| 16. Push Notifications | 4/5 | In Progress|  |
 | 17. Social Sharing | 1/6 | In Progress|  |
 | 18. Group Chat | 0/5 | Not started | - |
 
@@ -325,7 +325,7 @@ Plans:
   4. Push notification taps (cold-start and foreground) deep link to the correct screen
   5. Developer test screen (hidden behind long-press on version text) triggers all 6 notification types
   6. Local alarm/nudge notifications write records to the notifications table for inbox consistency
-**Plans:** 3/3 plans complete
+**Plans:** 4/5 plans executed
 
 Plans:
 - [ ] 16-01-PLAN.md — Data layer: notifications migration + RLS, types, deep link router, relative time utility, notification type icons, notificationStore (Zustand + MMKV)

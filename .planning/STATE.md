@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 17-01-PLAN.md
-last_updated: "2026-03-13T19:08:21.329Z"
+stopped_at: Completed 16-04-PLAN.md
+last_updated: "2026-03-13T19:09:26.491Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
   completed_phases: 15
   total_plans: 74
-  completed_plans: 60
+  completed_plans: 61
 ---
 
 ---
@@ -509,6 +509,7 @@ Progress: [██████████] 100%
 | Phase 16 P03 | 4min | 2 tasks | 9 files |
 | Phase 16 P03 | 5 | 2 tasks | 6 files |
 | Phase 17 P01 | 6 | 2 tasks | 12 files |
+| Phase 16 P04 | 2min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -652,6 +653,8 @@ Recent decisions affecting current work:
 - [Phase 17]: Reaction icons use Ionicons key strings (fire -> flame-outline), NOT emoji characters per CLAUDE.md
 - [Phase 17]: socialStore uses Record<string,T> instead of Map<string,T> for MMKV JSON serialization compatibility
 - [Phase 17]: createGroup always inserts creator as group_member in same call to prevent Pitfall 3
+- [Phase 16]: setNotificationHandler placed at module level (not useEffect) so it runs synchronously at expo-notifications load time for foreground display
+- [Phase 16]: Notifications table (20260318000000) was already applied on remote Supabase — db push not required
 
 ### Roadmap Evolution
 
@@ -719,6 +722,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T19:08:14.783Z
-Stopped at: Completed 17-01-PLAN.md
+Last session: 2026-03-13T19:09:26.488Z
+Stopped at: Completed 16-04-PLAN.md
 Resume file: None
