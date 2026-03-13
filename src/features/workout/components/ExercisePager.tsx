@@ -12,7 +12,7 @@ interface ExercisePagerProps {
   onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => void;
   onDetectPR?: (exerciseId: string, weight: number, unit: 'kg' | 'lbs') => Promise<PRResult>;
   onRemoveExercise?: (exerciseId: string) => void;
-  onVideoAttached?: (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string) => void;
+  onVideoAttached?: (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => void;
   onVideoDeleted?: (exerciseId: string, setLogId: string) => void;
   pagerRef: React.RefObject<PagerView | null>;
 }

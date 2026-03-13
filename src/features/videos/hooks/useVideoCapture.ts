@@ -1,6 +1,7 @@
 /**
  * Hook for capturing or selecting videos from camera/gallery.
  * Follows the ProfilePhotoPicker pattern with Alert-based source selection.
+ * Returns source tag (camera/gallery) for cleanup decisions.
  */
 
 import { useState, useCallback } from 'react';
@@ -11,12 +12,13 @@ import { generateAndCacheThumbnail } from '../utils/thumbnailCache';
 interface VideoCaptureResult {
   localUri: string;
   thumbnailUri: string;
+  source: 'camera' | 'gallery';
 }
 
 export function useVideoCapture() {
   const [isCapturing, setIsCapturing] = useState(false);
 
-  const launchCamera = useCallback(async (): Promise<VideoCaptureResult | null> => {
+  const launchCamera = useCallback(async (): Promise<{ localUri: string } | null> => {
     const { granted } = await ImagePicker.requestCameraPermissionsAsync();
     if (!granted) {
       Alert.alert('Permission Required', 'Camera access is needed to record set videos.');
@@ -29,12 +31,12 @@ export function useVideoCapture() {
       allowsEditing: true,
     });
     if (!result.canceled && result.assets[0]) {
-      return { localUri: result.assets[0].uri, thumbnailUri: '' };
+      return { localUri: result.assets[0].uri };
     }
     return null;
   }, []);
 
-  const launchGallery = useCallback(async (): Promise<VideoCaptureResult | null> => {
+  const launchGallery = useCallback(async (): Promise<{ localUri: string } | null> => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) {
       Alert.alert('Permission Required', 'Gallery access is needed to select videos.');
@@ -46,13 +48,14 @@ export function useVideoCapture() {
       allowsEditing: true,
     });
     if (!result.canceled && result.assets[0]) {
-      return { localUri: result.assets[0].uri, thumbnailUri: '' };
+      return { localUri: result.assets[0].uri };
     }
     return null;
   }, []);
 
   const captureOrPickVideo = useCallback(
-    (setLogId: string): Promise<VideoCaptureResult | null> => {
+    (setLogId?: string): Promise<VideoCaptureResult | null> => {
+      const thumbnailKey = setLogId || `pending-${Date.now()}`;
       return new Promise((resolve) => {
         Alert.alert('Attach Video', 'Choose a video source', [
           {
@@ -63,10 +66,10 @@ export function useVideoCapture() {
                 const result = await launchCamera();
                 if (result) {
                   const thumbnailUri = await generateAndCacheThumbnail(
-                    setLogId,
+                    thumbnailKey,
                     result.localUri,
                   );
-                  resolve({ localUri: result.localUri, thumbnailUri });
+                  resolve({ localUri: result.localUri, thumbnailUri, source: 'camera' });
                 } else {
                   resolve(null);
                 }
@@ -85,10 +88,10 @@ export function useVideoCapture() {
                 const result = await launchGallery();
                 if (result) {
                   const thumbnailUri = await generateAndCacheThumbnail(
-                    setLogId,
+                    thumbnailKey,
                     result.localUri,
                   );
-                  resolve({ localUri: result.localUri, thumbnailUri });
+                  resolve({ localUri: result.localUri, thumbnailUri, source: 'gallery' });
                 } else {
                   resolve(null);
                 }

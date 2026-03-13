@@ -14,6 +14,8 @@ export interface VideoUploadItem {
   localUri: string;
   thumbnailUri: string;
   createdAt: string;
+  source?: 'camera' | 'gallery';
+  originalUri?: string;
 }
 
 /** Video entry for the gallery/history display */

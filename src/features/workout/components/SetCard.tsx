@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -20,7 +20,7 @@ interface SetCardProps {
   onDelete?: () => void;
   isLogged?: boolean;
   loggedSet?: SetLog;
-  onVideoAttached?: (setLogId: string, localUri: string, thumbnailUri: string) => void;
+  onVideoAttached?: (setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => void;
   onVideoDeleted?: (setLogId: string) => void;
 }
 
@@ -28,6 +28,7 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
   const { deleteVideo } = useVideoUpload();
   const [localVideoUri, setLocalVideoUri] = useState<string | null>(null);
   const [localThumbnailUri, setLocalThumbnailUri] = useState<string | null>(null);
+  const [pendingVideo, setPendingVideo] = useState<{ localUri: string; thumbnailUri: string; source: 'camera' | 'gallery' } | null>(null);
   const [weight, setWeight] = useState(() => {
     if (loggedSet) return String(loggedSet.weight);
     if (targetSet?.weight && targetSet.weight > 0) return String(targetSet.weight);
@@ -44,6 +45,18 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
     return '';
   });
   const hasLogged = useRef(!!loggedSet || (isLogged ?? false));
+
+  // Flush pending video when set gets logged (loggedSet.id becomes available)
+  useEffect(() => {
+    if (loggedSet?.id && pendingVideo) {
+      if (onVideoAttached) {
+        onVideoAttached(loggedSet.id, pendingVideo.localUri, pendingVideo.thumbnailUri, pendingVideo.source);
+      }
+      setLocalVideoUri(pendingVideo.localUri);
+      setLocalThumbnailUri(pendingVideo.thumbnailUri);
+      setPendingVideo(null);
+    }
+  }, [loggedSet?.id, pendingVideo, onVideoAttached]);
 
   const handleLogPress = useCallback(() => {
     const w = parseFloat(weight);
@@ -80,11 +93,17 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
   }, []);
 
   const handleVideoAttached = useCallback(
-    (localUri: string, thumbnailUri: string) => {
-      setLocalVideoUri(localUri);
-      setLocalThumbnailUri(thumbnailUri);
+    (localUri: string, thumbnailUri: string, source: 'camera' | 'gallery') => {
       if (loggedSet?.id && onVideoAttached) {
-        onVideoAttached(loggedSet.id, localUri, thumbnailUri);
+        // Already logged - attach immediately
+        setLocalVideoUri(localUri);
+        setLocalThumbnailUri(thumbnailUri);
+        onVideoAttached(loggedSet.id, localUri, thumbnailUri, source);
+      } else {
+        // Not yet logged - store as pending
+        setPendingVideo({ localUri, thumbnailUri, source });
+        setLocalVideoUri(localUri);
+        setLocalThumbnailUri(thumbnailUri);
       }
     },
     [loggedSet?.id, onVideoAttached],
@@ -115,7 +134,7 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
     );
   }, [loggedSet?.id, deleteVideo, onVideoDeleted]);
 
-  const hasVideoAttachment = !!(localVideoUri || loggedSet?.video_url);
+  const hasVideoAttachment = !!(localVideoUri || loggedSet?.video_url || pendingVideo);
   const displayThumbnail = localThumbnailUri || null;
 
   return (
@@ -124,13 +143,6 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
         <Text style={s.setLabel}>Set {setNumber}</Text>
         <View style={s.setHeaderRight}>
           {hasLogged.current && <Text style={s.loggedBadge}>Logged</Text>}
-          {hasLogged.current && loggedSet?.id && (
-            <VideoCaptureButton
-              onVideoAttached={handleVideoAttached}
-              setLogId={loggedSet.id}
-              hasVideo={hasVideoAttachment}
-            />
-          )}
           {onDelete && (
             <Pressable
               onPress={onDelete}
@@ -182,6 +194,15 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
             placeholder="--"
             placeholderTextColor={colors.textMuted}
             selectTextOnFocus
+          />
+        </View>
+        <View style={s.separator} />
+        <View style={s.inputGroupSmall}>
+          <Text style={s.inputLabel}>Video</Text>
+          <VideoCaptureButton
+            onVideoAttached={handleVideoAttached}
+            setLogId={loggedSet?.id}
+            hasVideo={hasVideoAttachment}
           />
         </View>
       </View>

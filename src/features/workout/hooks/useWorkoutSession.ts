@@ -202,7 +202,7 @@ export function useWorkoutSession() {
   );
 
   const attachVideoToSet = useCallback(
-    async (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string) => {
+    async (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => {
       if (!userId) return;
       // Enqueue upload for background processing (offline-first)
       try {
@@ -212,6 +212,7 @@ export function useWorkoutSession() {
           localUri,
           thumbnailUri,
           createdAt: new Date().toISOString(),
+          source,
         });
         // Fire-and-forget flush attempt
         flushVideoQueue().catch(() => {});

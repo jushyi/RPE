@@ -14,7 +14,7 @@ interface ExercisePageProps {
   onLogSet: (exerciseId: string, weight: number, reps: number, rpe: number | null, unit: 'kg' | 'lbs', isPR: boolean) => void;
   onDetectPR?: (exerciseId: string, weight: number, unit: 'kg' | 'lbs') => Promise<PRResult>;
   onRemove?: (exerciseId: string) => void;
-  onVideoAttached?: (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string) => void;
+  onVideoAttached?: (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => void;
   onVideoDeleted?: (exerciseId: string, setLogId: string) => void;
 }
 
@@ -89,7 +89,7 @@ export function ExercisePage({ exercise, onLogSet, onDetectPR, onRemove, onVideo
         onDelete={totalSets > 1 ? () => handleDeleteSet(setNumber, !!loggedSet) : undefined}
         isLogged={!!loggedSet}
         loggedSet={loggedSet}
-        onVideoAttached={onVideoAttached ? (setLogId, localUri, thumbnailUri) => onVideoAttached(exercise.id, setLogId, localUri, thumbnailUri) : undefined}
+        onVideoAttached={onVideoAttached ? (setLogId, localUri, thumbnailUri, source) => onVideoAttached(exercise.id, setLogId, localUri, thumbnailUri, source) : undefined}
         onVideoDeleted={onVideoDeleted ? (setLogId) => onVideoDeleted(exercise.id, setLogId) : undefined}
       />
     );
