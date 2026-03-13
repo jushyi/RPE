@@ -15,7 +15,9 @@ interface BarbellDiagramProps {
 
 const DIAGRAM_HEIGHT = 267;
 const BAR_HEIGHT = 36;
-const BAR_Y = (DIAGRAM_HEIGHT - BAR_HEIGHT) / 2;
+const LEFT_BAR_Y = (DIAGRAM_HEIGHT - BAR_HEIGHT) / 2;
+const SLEEVE_HEIGHT = 42;
+const SLEEVE_Y = (DIAGRAM_HEIGHT - SLEEVE_HEIGHT) / 2;
 const PLATE_WIDTH = 29;
 const PLATE_GAP = 5;
 const BAR_COLOR = colors.surfaceElevated;
@@ -24,7 +26,7 @@ const MIN_PLATE_HEIGHT = 84;
 
 const COLLAR_X = 29;
 const COLLAR_WIDTH = 15;
-const COLLAR_HEIGHT = 57;
+const COLLAR_HEIGHT = 70;
 const COLLAR_Y = (DIAGRAM_HEIGHT - COLLAR_HEIGHT) / 2;
 const COLLAR_COLOR = '#555';
 
@@ -99,12 +101,21 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
         viewBox={`0 0 ${TOTAL_WIDTH} ${DIAGRAM_HEIGHT}`}
         preserveAspectRatio="xMinYMid meet"
       >
-        {/* Bar — extends from left edge to end */}
+        {/* Left bar stub */}
         <Rect
           x={0}
-          y={BAR_Y}
-          width={TOTAL_WIDTH}
+          y={LEFT_BAR_Y}
+          width={COLLAR_X}
           height={BAR_HEIGHT}
+          rx={0}
+          fill={BAR_COLOR}
+        />
+        {/* Right sleeve */}
+        <Rect
+          x={COLLAR_X + COLLAR_WIDTH}
+          y={SLEEVE_Y}
+          width={TOTAL_WIDTH - COLLAR_X - COLLAR_WIDTH}
+          height={SLEEVE_HEIGHT}
           rx={0}
           fill={BAR_COLOR}
         />
