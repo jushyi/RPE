@@ -16,7 +16,7 @@ interface BarbellDiagramProps {
 const DIAGRAM_HEIGHT = 267;
 const BAR_HEIGHT = 36;
 const LEFT_BAR_Y = (DIAGRAM_HEIGHT - BAR_HEIGHT) / 2;
-const SLEEVE_HEIGHT = 42;
+const SLEEVE_HEIGHT = 50;
 const SLEEVE_Y = (DIAGRAM_HEIGHT - SLEEVE_HEIGHT) / 2;
 const PLATE_WIDTH = 29;
 const PLATE_GAP = 5;
@@ -26,7 +26,7 @@ const MIN_PLATE_HEIGHT = 84;
 
 const COLLAR_X = 29;
 const COLLAR_WIDTH = 15;
-const COLLAR_HEIGHT = 70;
+const COLLAR_HEIGHT = 75;
 const COLLAR_Y = (DIAGRAM_HEIGHT - COLLAR_HEIGHT) / 2;
 const COLLAR_COLOR = '#555';
 
