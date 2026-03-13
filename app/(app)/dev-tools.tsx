@@ -199,9 +199,6 @@ export default function DevToolsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.heading}>Dev Tools</Text>
-      <Text style={styles.subheading}>Notification Testing</Text>
-
       <View style={styles.buttonGrid}>
         {buttons.map(({ type, label, onPress, icon }) => {
           const statusIcon = getStatusIcon(buttonStatus[type]);
@@ -248,17 +245,6 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
     paddingBottom: 40,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.textPrimary,
-    marginBottom: 4,
-  },
-  subheading: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginBottom: 24,
   },
   buttonGrid: {
     gap: 10,
