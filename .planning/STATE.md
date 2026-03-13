@@ -430,7 +430,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 12 of 14 (Proper Onboarding)
 Plan: 2 of 2 complete
 Status: Phase 12 Complete (verified + human approved)
-Last activity: 2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar
+Last activity: 2026-03-13 - Completed quick task 38: fix random spaces in input hint placeholders
 
 Progress: [██████████] 100%
 
@@ -736,6 +736,7 @@ None yet.
 | 35 | Refactor useTodaysWorkout to fetch active plan from Supabase | 2026-03-12 | 0925632 | [35-refactor-usetodaysworkout-to-fetch-activ](./quick/35-refactor-usetodaysworkout-to-fetch-activ/) |
 | 36 | Fix fullscreen video player button layout | 2026-03-13 | c5b5179 | [36-the-video-playback-fullscreen-looks-a-li](./quick/36-the-video-playback-fullscreen-looks-a-li/) |
 | 37 | Redesign plate calculator bar graphic to extend from left edge with plates against collar | 2026-03-13 | 2d017ae | [37-redesign-plate-calculator-bar-graphic-to](./quick/37-redesign-plate-calculator-bar-graphic-to/) |
+| 38 | some input hints throughout the app have random spaces between which makes it look weird | 2026-03-13 | d4e9c9e | [38-some-input-hints-throughout-the-app-have](./quick/38-some-input-hints-throughout-the-app-have/) |
 
 ## Session Continuity
 
