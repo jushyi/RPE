@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/stores/authStore';
 import { calculatePlates } from '@/features/calculator/utils/plateCalculator';
@@ -8,16 +8,18 @@ import type { BarPreset } from '@/features/calculator/types';
 import { BarWeightPicker } from './BarWeightPicker';
 import { BarbellDiagram } from './BarbellDiagram';
 
+type CalcUnit = 'kg' | 'lbs';
+
 export function PlateCalculator() {
   const preferredUnit = useAuthStore((s) => s.preferredUnit);
+  const [unit, setUnit] = useState<CalcUnit>(preferredUnit === 'kg' ? 'kg' : 'lbs');
   const [weightText, setWeightText] = useState('');
   const [barPreset, setBarPreset] = useState<BarPreset>(BAR_PRESETS[0]);
 
   const targetWeight = parseFloat(weightText) || 0;
-  const barWeight =
-    preferredUnit === 'kg' ? barPreset.weightKg : barPreset.weightLb;
-  const availablePlates = preferredUnit === 'kg' ? KG_PLATES : LB_PLATES;
-  const unitLabel = preferredUnit === 'kg' ? 'kg' : 'lb';
+  const barWeight = unit === 'kg' ? barPreset.weightKg : barPreset.weightLb;
+  const availablePlates = unit === 'kg' ? KG_PLATES : LB_PLATES;
+  const unitLabel = unit === 'kg' ? 'kg' : 'lb';
 
   const breakdown = useMemo(() => {
     if (targetWeight <= 0) return null;
@@ -38,6 +40,22 @@ export function PlateCalculator() {
       contentContainerStyle={s.content}
       keyboardShouldPersistTaps="handled"
     >
+      {/* Unit Toggle */}
+      <View style={s.toggleRow}>
+        <Pressable
+          style={[s.toggleBtn, unit === 'lbs' && s.toggleBtnActive]}
+          onPress={() => setUnit('lbs')}
+        >
+          <Text style={[s.toggleText, unit === 'lbs' && s.toggleTextActive]}>lb</Text>
+        </Pressable>
+        <Pressable
+          style={[s.toggleBtn, unit === 'kg' && s.toggleBtnActive]}
+          onPress={() => setUnit('kg')}
+        >
+          <Text style={[s.toggleText, unit === 'kg' && s.toggleTextActive]}>kg</Text>
+        </Pressable>
+      </View>
+
       {/* Weight Input */}
       <Text style={s.label}>Target Weight ({unitLabel})</Text>
       <TextInput
@@ -55,7 +73,7 @@ export function PlateCalculator() {
         <BarWeightPicker
           selected={barPreset}
           onSelect={setBarPreset}
-          unit={preferredUnit}
+          unit={unit}
         />
       </View>
 
@@ -70,8 +88,8 @@ export function PlateCalculator() {
 
       {breakdown && breakdown !== 'below_bar' && (
         <>
-          {/* Barbell Diagram */}
-          <BarbellDiagram plates={breakdown.plates} unit={preferredUnit} />
+          {/* Barbell Diagram — one side only */}
+          <BarbellDiagram plates={breakdown.plates} unit={unit} />
 
           {/* Per Side Summary */}
           {perSideSummary.length > 0 && (
@@ -103,6 +121,31 @@ const s = StyleSheet.create({
   content: {
     padding: 16,
     paddingBottom: 40,
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.surfaceElevated,
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  toggleBtn: {
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+  },
+  toggleBtnActive: {
+    backgroundColor: colors.accent,
+  },
+  toggleText: {
+    color: colors.textSecondary,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  toggleTextActive: {
+    color: '#fff',
   },
   label: {
     color: colors.textSecondary,

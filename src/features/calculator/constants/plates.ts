@@ -1,7 +1,7 @@
 import { BarPreset } from '../types';
 
 /** Standard lb plates in descending order for greedy algorithm */
-export const LB_PLATES = [45, 35, 25, 10, 5, 2.5];
+export const LB_PLATES = [55, 45, 35, 25, 10, 5, 2.5];
 
 /** Standard kg plates in descending order for greedy algorithm */
 export const KG_PLATES = [25, 20, 15, 10, 5, 2.5, 1.25];
@@ -14,14 +14,15 @@ export const BAR_PRESETS: BarPreset[] = [
   { label: 'Training Bar', weightLb: 15, weightKg: 7 },
 ];
 
-/** IPF-style plate colors for lb plates */
+/** IPF-style plate colors for lb plates — mapped from kg equivalents */
 export const PLATE_COLORS_LB: Record<number, string> = {
-  45: '#EF4444',   // red
-  35: '#3B82F6',   // blue
-  25: '#22C55E',   // green
-  10: '#FBBF24',   // yellow
-  5: '#F5F5F5',    // white
-  2.5: '#9CA3AF',  // gray
+  55: '#EF4444',   // red   (25 kg)
+  45: '#3B82F6',   // blue  (20 kg)
+  35: '#FBBF24',   // yellow (15 kg)
+  25: '#22C55E',   // green (10 kg)
+  10: '#F5F5F5',   // white  (5 kg)
+  5: '#EF4444',    // red   (2.5 kg)
+  2.5: '#9CA3AF',  // gray  (1.25 kg)
 };
 
 /** IPF-style plate colors for kg plates */
@@ -38,6 +39,7 @@ export const PLATE_COLORS_KG: Record<number, string> = {
 /** Relative plate heights (proportion of max diameter) keyed by weight */
 export const PLATE_HEIGHTS: Record<number, number> = {
   // lb plates
+  55: 1.0,
   45: 1.0,
   35: 0.88,
   25: 0.75,

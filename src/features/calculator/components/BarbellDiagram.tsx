@@ -13,15 +13,16 @@ interface BarbellDiagramProps {
   unit: 'kg' | 'lbs';
 }
 
-const DIAGRAM_HEIGHT = 160;
-const BAR_HEIGHT = 14;
+const DIAGRAM_HEIGHT = 180;
+const BAR_HEIGHT = 16;
 const BAR_Y = (DIAGRAM_HEIGHT - BAR_HEIGHT) / 2;
-const PLATE_WIDTH = 12;
-const PLATE_GAP = 2;
-const SLEEVE_WIDTH = 6;
+const PLATE_WIDTH = 18;
+const PLATE_GAP = 3;
+const COLLAR_WIDTH = 10;
 const BAR_COLOR = colors.surfaceElevated;
-const MAX_PLATE_HEIGHT = 120;
-const MIN_PLATE_HEIGHT = 36;
+const MAX_PLATE_HEIGHT = 150;
+const MIN_PLATE_HEIGHT = 44;
+const BAR_LEFT_PAD = 20;
 
 export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
   const plateColors = unit === 'kg' ? PLATE_COLORS_KG : PLATE_COLORS_LB;
@@ -34,16 +35,11 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
     }
   }
 
-  const totalPlateSlots = expandedPlates.length;
-  const sideWidth = totalPlateSlots * (PLATE_WIDTH + PLATE_GAP) + SLEEVE_WIDTH;
+  const plateAreaWidth =
+    expandedPlates.length * (PLATE_WIDTH + PLATE_GAP) + COLLAR_WIDTH;
+  const totalWidth = BAR_LEFT_PAD + plateAreaWidth + 20;
 
-  // Total diagram width: left plates + bar center + right plates
-  const barCenterWidth = 40;
-  const totalWidth = sideWidth * 2 + barCenterWidth;
-
-  const centerX = totalWidth / 2;
-
-  const renderPlates = (side: 'left' | 'right') => {
+  const renderPlates = () => {
     return expandedPlates.map((weight, idx) => {
       const heightRatio = PLATE_HEIGHTS[weight] ?? 0.5;
       const plateH = Math.max(
@@ -53,18 +49,13 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
       const plateY = (DIAGRAM_HEIGHT - plateH) / 2;
       const color = plateColors[weight] ?? '#666';
 
-      // Position: from bar center outward
-      // heaviest first = closest to center (idx 0 closest)
-      const offset = SLEEVE_WIDTH + idx * (PLATE_WIDTH + PLATE_GAP);
       const x =
-        side === 'right'
-          ? centerX + barCenterWidth / 2 + offset
-          : centerX - barCenterWidth / 2 - offset - PLATE_WIDTH;
+        BAR_LEFT_PAD + COLLAR_WIDTH + idx * (PLATE_WIDTH + PLATE_GAP);
 
-      const showLabel = plateH >= 40;
+      const showLabel = plateH >= 44;
 
       return (
-        <React.Fragment key={`${side}-${idx}`}>
+        <React.Fragment key={`plate-${idx}`}>
           <Rect
             x={x}
             y={plateY}
@@ -76,8 +67,8 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
           {showLabel && (
             <SvgText
               x={x + PLATE_WIDTH / 2}
-              y={DIAGRAM_HEIGHT / 2 + 4}
-              fontSize={9}
+              y={DIAGRAM_HEIGHT / 2 + 5}
+              fontSize={11}
               fill={weight >= 25 || weight === 5 ? '#000' : '#fff'}
               textAnchor="middle"
               fontWeight="bold"
@@ -97,7 +88,7 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
         height={DIAGRAM_HEIGHT}
         viewBox={`0 0 ${totalWidth} ${DIAGRAM_HEIGHT}`}
       >
-        {/* Bar */}
+        {/* Bar — extends from left edge to end */}
         <Rect
           x={0}
           y={BAR_Y}
@@ -106,27 +97,18 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
           rx={3}
           fill={BAR_COLOR}
         />
-        {/* Center collar lines */}
+        {/* Collar mark */}
         <Line
-          x1={centerX - 2}
-          y1={BAR_Y - 2}
-          x2={centerX - 2}
-          y2={BAR_Y + BAR_HEIGHT + 2}
+          x1={BAR_LEFT_PAD}
+          y1={BAR_Y - 3}
+          x2={BAR_LEFT_PAD}
+          y2={BAR_Y + BAR_HEIGHT + 3}
           stroke={colors.textMuted}
-          strokeWidth={1}
-        />
-        <Line
-          x1={centerX + 2}
-          y1={BAR_Y - 2}
-          x2={centerX + 2}
-          y2={BAR_Y + BAR_HEIGHT + 2}
-          stroke={colors.textMuted}
-          strokeWidth={1}
+          strokeWidth={2}
         />
 
-        {/* Plates */}
-        {renderPlates('left')}
-        {renderPlates('right')}
+        {/* Plates — one side only */}
+        {renderPlates()}
       </Svg>
     </View>
   );

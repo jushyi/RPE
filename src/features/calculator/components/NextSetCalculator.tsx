@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/stores/authStore';
@@ -14,19 +14,6 @@ export function NextSetCalculator() {
   const [lastRpeText, setLastRpeText] = useState('');
   const [targetRpeText, setTargetRpeText] = useState('');
   const [targetRepsText, setTargetRepsText] = useState('');
-  const [targetDefaultsSet, setTargetDefaultsSet] = useState(false);
-
-  // Default target RPE and reps to last values when they're first filled
-  useEffect(() => {
-    if (targetDefaultsSet) return;
-    const lastRpe = parseFloat(lastRpeText);
-    const lastReps = parseInt(lastRepsText, 10);
-    if (lastRpe > 0 && lastReps > 0) {
-      if (!targetRpeText) setTargetRpeText(lastRpeText);
-      if (!targetRepsText) setTargetRepsText(lastRepsText);
-      setTargetDefaultsSet(true);
-    }
-  }, [lastRpeText, lastRepsText, targetDefaultsSet, targetRpeText, targetRepsText]);
 
   const lastWeight = parseFloat(lastWeightText) || 0;
   const lastReps = parseInt(lastRepsText, 10) || 0;

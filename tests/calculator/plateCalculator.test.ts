@@ -5,27 +5,38 @@ describe('calculatePlates', () => {
   describe('standard lb weights', () => {
     it('returns correct plates for 225 lb with 45 lb bar', () => {
       const result = calculatePlates(225, 45, LB_PLATES);
-      expect(result.plates).toEqual([{ weight: 45, count: 2 }]);
+      // per side = 90: 1x55 + 1x35
+      expect(result.plates).toEqual([
+        { weight: 55, count: 1 },
+        { weight: 35, count: 1 },
+      ]);
       expect(result.remainder).toBe(0);
     });
 
     it('returns correct plates for 135 lb with 45 lb bar', () => {
       const result = calculatePlates(135, 45, LB_PLATES);
+      // per side = 45: 0x55, 1x45
       expect(result.plates).toEqual([{ weight: 45, count: 1 }]);
       expect(result.remainder).toBe(0);
     });
 
     it('returns correct plates for 315 lb with 45 lb bar', () => {
       const result = calculatePlates(315, 45, LB_PLATES);
-      expect(result.plates).toEqual([{ weight: 45, count: 3 }]);
+      // per side = 135: 2x55 + 1x25
+      expect(result.plates).toEqual([
+        { weight: 55, count: 2 },
+        { weight: 25, count: 1 },
+      ]);
       expect(result.remainder).toBe(0);
     });
 
     it('returns correct plates for 185 lb with 45 lb bar (no floating point issues)', () => {
       const result = calculatePlates(185, 45, LB_PLATES);
+      // per side = 70: 1x55 + 1x10 + 1x5
       expect(result.plates).toEqual([
-        { weight: 45, count: 1 },
-        { weight: 25, count: 1 },
+        { weight: 55, count: 1 },
+        { weight: 10, count: 1 },
+        { weight: 5, count: 1 },
       ]);
       expect(result.remainder).toBe(0);
     });
