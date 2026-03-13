@@ -104,21 +104,31 @@ export default function DevToolsScreen() {
     }
   };
 
+  const invokeSendPush = async (
+    userId: string,
+    token: string,
+    payload: { title: string; body: string; data: Record<string, unknown> },
+  ) => {
+    const { error } = await supabase.functions.invoke('send-push', {
+      headers: { Authorization: `Bearer ${token}` },
+      body: { recipient_ids: [userId], ...payload },
+    });
+    if (error) throw error;
+  };
+
   const triggerPlanUpdate = async () => {
     updateStatus('plan_update', 'sending');
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-      await supabase.functions.invoke('send-push', {
-        body: {
-          recipient_ids: [user.id],
-          title: 'Plan Updated',
-          body: 'Your training plan has been updated',
-          data: { type: 'plan_update', plan_id: 'test-plan' },
-        },
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
+      await invokeSendPush(session.user.id, session.access_token, {
+        title: 'Plan Updated',
+        body: 'Your training plan has been updated',
+        data: { type: 'plan_update', plan_id: 'test-plan' },
       });
       updateStatus('plan_update', 'success');
-    } catch {
+    } catch (e) {
+      console.warn('triggerPlanUpdate error:', e);
       updateStatus('plan_update', 'error');
     }
   };
@@ -126,18 +136,16 @@ export default function DevToolsScreen() {
   const triggerWeeklySummary = async () => {
     updateStatus('weekly_summary', 'sending');
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-      await supabase.functions.invoke('send-push', {
-        body: {
-          recipient_ids: [user.id],
-          title: 'Weekly Summary',
-          body: 'Your weekly training summary is ready',
-          data: { type: 'weekly_summary' },
-        },
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Not authenticated');
+      await invokeSendPush(session.user.id, session.access_token, {
+        title: 'Weekly Summary',
+        body: 'Your weekly training summary is ready',
+        data: { type: 'weekly_summary' },
       });
       updateStatus('weekly_summary', 'success');
-    } catch {
+    } catch (e) {
+      console.warn('triggerWeeklySummary error:', e);
       updateStatus('weekly_summary', 'error');
     }
   };
