@@ -8,6 +8,7 @@ import { createMMKV } from 'react-native-mmkv';
 import { File, Paths } from 'expo-file-system';
 import NetInfo from '@react-native-community/netinfo';
 import { supabase } from '@/lib/supabase/client';
+import { useHistoryStore } from '@/stores/historyStore';
 import type { VideoUploadItem } from '../types';
 
 const storage = createMMKV({ id: 'video-upload-queue' });
@@ -187,6 +188,8 @@ export async function flushVideoQueue(): Promise<void> {
       : `${failed.length} of ${queue.length} videos failed to upload.`;
     setUploadState({ status: 'error', error: errMsg, pending: failed.length });
   } else {
+    // Invalidate history cache so next fetch picks up video_url
+    useHistoryStore.setState({ lastFetched: null });
     setUploadState({ status: 'success', pending: 0 });
   }
 }

@@ -93,13 +93,22 @@ export function SetRow({ set, sessionExerciseId, onDeleteSet, onVideoDeleted }: 
             style={s.prIcon}
           />
         )}
-        {set.video_url && thumbnailUri && (
+        {!!set.video_url && (
           <Pressable onLongPress={handleLongPress} style={s.thumbnailWrapper}>
-            <VideoThumbnail
-              thumbnailUri={thumbnailUri}
-              onPress={handleThumbnailPress}
-              size={40}
-            />
+            {thumbnailUri ? (
+              <VideoThumbnail
+                thumbnailUri={thumbnailUri}
+                onPress={handleThumbnailPress}
+                size={40}
+              />
+            ) : (
+              <Pressable
+                onPress={handleThumbnailPress}
+                style={({ pressed }) => [s.videoFallback, pressed && { opacity: 0.7 }]}
+              >
+                <Ionicons name="play-circle" size={24} color={colors.accent} />
+              </Pressable>
+            )}
           </Pressable>
         )}
         <Pressable onPress={handleDelete} hitSlop={8} style={s.deleteButton}>
@@ -107,11 +116,13 @@ export function SetRow({ set, sessionExerciseId, onDeleteSet, onVideoDeleted }: 
         </Pressable>
       </View>
 
-      <VideoPlayerModal
-        videoUrl={set.video_url!}
-        visible={showPlayer}
-        onClose={() => setShowPlayer(false)}
-      />
+      {!!set.video_url && (
+        <VideoPlayerModal
+          videoUrl={set.video_url}
+          visible={showPlayer}
+          onClose={() => setShowPlayer(false)}
+        />
+      )}
     </>
   );
 }
@@ -147,6 +158,14 @@ const s = StyleSheet.create({
   },
   thumbnailWrapper: {
     marginLeft: 8,
+  },
+  videoFallback: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: colors.surfaceElevated,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   deleteButton: {
     marginLeft: 8,
