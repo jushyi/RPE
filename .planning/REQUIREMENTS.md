@@ -98,15 +98,15 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Group Chat & Enhanced Sharing
 
-- [ ] **CHAT-01**: Real-time group chat messaging via Supabase Realtime (text messages appear instantly)
+- [x] **CHAT-01**: Real-time group chat messaging via Supabase Realtime (text messages appear instantly)
 - [ ] **CHAT-02**: Images and videos supported in chat messages (upload to chat-media Storage bucket)
-- [ ] **CHAT-03**: Delivered + read receipts on own messages (WhatsApp-style checkmarks)
+- [x] **CHAT-03**: Delivered + read receipts on own messages (WhatsApp-style checkmarks)
 - [ ] **CHAT-04**: Typing indicators show "[Name] is typing..." via Supabase Realtime Presence
-- [ ] **CHAT-05**: User can edit own messages within 15-minute window (shows "edited" indicator)
-- [ ] **CHAT-06**: User can delete own messages at any time (shows "This message was deleted" placeholder)
+- [x] **CHAT-05**: User can edit own messages within 15-minute window (shows "edited" indicator)
+- [x] **CHAT-06**: User can delete own messages at any time (shows "This message was deleted" placeholder)
 - [ ] **CHAT-07**: Push notifications for new chat messages (respects per-group mute toggle)
-- [ ] **CHAT-08**: Per-share content-type selection with checkboxes (workout summary, individual PRs, individual videos)
-- [ ] **CHAT-09**: Retroactive sharing from workout history detail screen (any past workout, no time limit)
+- [x] **CHAT-08**: Per-share content-type selection with checkboxes (workout summary, individual PRs, individual videos)
+- [x] **CHAT-09**: Retroactive sharing from workout history detail screen (any past workout, no time limit)
 - [ ] **CHAT-10**: Chat tab alongside Feed tab within each group screen
 
 ## v2 Requirements
