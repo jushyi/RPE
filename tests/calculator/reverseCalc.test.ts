@@ -68,13 +68,14 @@ describe('getMissingPlateMessage', () => {
   });
 
   it('returns generic message when no disabled plate would help', () => {
+    // All plates enabled -- remainder 3 is not loadable with any plate
     const msg = getMissingPlateMessage(
-      5,
-      [55, 45, 25, 10, 5],       // enabled - 5 IS enabled
+      3,
+      [55, 45, 35, 25, 10, 5, 2.5],
       [55, 45, 35, 25, 10, 5, 2.5],
       'lb'
     );
-    expect(msg).toContain('5 lb unaccounted');
+    expect(msg).toContain('3 lb unaccounted');
     expect(msg).not.toContain('not in your inventory');
   });
 });
