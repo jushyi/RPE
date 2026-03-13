@@ -203,7 +203,11 @@ export function useWorkoutSession() {
 
   const attachVideoToSet = useCallback(
     async (exerciseId: string, setLogId: string, localUri: string, thumbnailUri: string, source?: 'camera' | 'gallery') => {
-      if (!userId) return;
+      if (!userId) {
+        console.warn('[Video] No userId, skipping video attach');
+        return;
+      }
+      console.log('[Video] attachVideoToSet called:', { exerciseId, setLogId, localUri, source });
       // Enqueue upload for background processing (offline-first)
       try {
         await enqueueVideoUpload({
@@ -215,9 +219,9 @@ export function useWorkoutSession() {
           source,
         });
         // Fire-and-forget flush attempt
-        flushVideoQueue().catch(() => {});
-      } catch {
-        // Enqueue failure should not block workout flow
+        flushVideoQueue().catch((err) => console.warn('[Video] flushVideoQueue error:', err));
+      } catch (err) {
+        console.warn('[Video] enqueueVideoUpload failed:', err);
       }
     },
     [userId],

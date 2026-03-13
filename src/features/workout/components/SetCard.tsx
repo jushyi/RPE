@@ -142,6 +142,21 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
         <Text style={s.setLabel}>Set {setNumber}</Text>
         <View style={s.setHeaderRight}>
           {hasLogged.current && <Text style={s.loggedBadge}>Logged</Text>}
+          <VideoCaptureButton
+            onVideoAttached={handleVideoAttached}
+            setLogId={loggedSet?.id}
+            hasVideo={hasVideoAttachment}
+            thumbnailUri={displayThumbnail}
+          />
+          {hasLogged.current && hasVideoAttachment && (
+            <Pressable
+              onPress={handleDeleteVideo}
+              style={({ pressed }) => [s.deleteVideoIconBtn, pressed && { opacity: 0.6 }]}
+              hitSlop={6}
+            >
+              <Ionicons name="trash-outline" size={16} color={colors.error} />
+            </Pressable>
+          )}
           {onDelete && (
             <Pressable
               onPress={onDelete}
@@ -195,27 +210,7 @@ export function SetCard({ targetSet, setNumber, unit, onLog, onDelete, isLogged,
             selectTextOnFocus
           />
         </View>
-        <View style={s.videoCol}>
-          <VideoCaptureButton
-            onVideoAttached={handleVideoAttached}
-            setLogId={loggedSet?.id}
-            hasVideo={hasVideoAttachment}
-            thumbnailUri={displayThumbnail}
-          />
-        </View>
       </View>
-      {hasLogged.current && hasVideoAttachment && (
-        <View style={s.videoRow}>
-          <Pressable
-            onPress={handleDeleteVideo}
-            style={({ pressed }) => [s.deleteVideoBtn, pressed && { opacity: 0.6 }]}
-            hitSlop={6}
-          >
-            <Ionicons name="trash-outline" size={14} color={colors.error} />
-            <Text style={s.deleteVideoText}>Remove video</Text>
-          </Pressable>
-        </View>
-      )}
       {!hasLogged.current && (
         <Pressable
           onPress={handleLogPress}
@@ -347,24 +342,7 @@ const s = StyleSheet.create({
   logBtnTextDisabled: {
     color: colors.textMuted,
   },
-  videoCol: {
-    marginLeft: 8,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  videoRow: {
-    marginTop: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  deleteVideoBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  deleteVideoText: {
-    color: colors.error,
-    fontSize: 12,
-    fontWeight: '500',
+  deleteVideoIconBtn: {
+    padding: 2,
   },
 });

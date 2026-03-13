@@ -44,7 +44,7 @@ export function VideoCaptureButton({
       <Pressable onPress={handlePress} style={({ pressed }) => [s.thumbnailContainer, pressed && { opacity: 0.7 }]}>
         <Image source={{ uri: thumbnailUri }} style={s.thumbnailImage} resizeMode="cover" />
         <View style={s.thumbnailOverlay}>
-          <Ionicons name="videocam" size={14} color="rgba(255,255,255,0.9)" />
+          <Ionicons name="videocam" size={12} color="rgba(255,255,255,0.9)" />
         </View>
       </Pressable>
     );
@@ -54,7 +54,7 @@ export function VideoCaptureButton({
     <Pressable onPress={handlePress} style={({ pressed }) => [s.container, pressed && { opacity: 0.7 }]}>
       <Ionicons
         name="videocam-outline"
-        size={22}
+        size={18}
         color={colors.textMuted}
       />
     </Pressable>
@@ -63,17 +63,17 @@ export function VideoCaptureButton({
 
 const s = StyleSheet.create({
   container: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 8,
     backgroundColor: colors.surfaceElevated,
     alignItems: 'center',
     justifyContent: 'center',
   },
   thumbnailContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: colors.surfaceElevated,
   },

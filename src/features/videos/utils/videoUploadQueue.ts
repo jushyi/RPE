@@ -35,8 +35,9 @@ export async function enqueueVideoUpload(item: VideoUploadItem): Promise<void> {
     const sourceFile = new File(item.localUri);
     const destFile = new File(persistentUri);
     sourceFile.copy(destFile);
-  } catch {
-    // If copy fails, fall back to original URI so upload can still proceed
+    console.log('[VideoQueue] Copied to documents:', persistentUri);
+  } catch (err) {
+    console.warn('[VideoQueue] Copy failed, using original URI:', item.localUri, err);
     finalUri = item.localUri;
   }
 
@@ -49,6 +50,7 @@ export async function enqueueVideoUpload(item: VideoUploadItem): Promise<void> {
   const queue = getVideoQueue();
   queue.push(queueItem);
   storage.set(QUEUE_KEY, JSON.stringify(queue));
+  console.log('[VideoQueue] Enqueued video for set:', item.setLogId, 'uri:', finalUri);
 }
 
 /** Remove a successfully uploaded item from the queue */
@@ -95,9 +97,13 @@ export async function flushVideoQueue(): Promise<void> {
   const queue = getVideoQueue();
   const failed: VideoUploadItem[] = [];
 
+  console.log('[VideoQueue] Flushing', queue.length, 'items');
+
   for (const item of queue) {
     try {
+      console.log('[VideoQueue] Uploading:', item.setLogId, 'from:', item.localUri);
       const publicUrl = await uploadSetVideo(item.userId, item.setLogId, item.localUri);
+      console.log('[VideoQueue] Upload success:', item.setLogId, '->', publicUrl);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase.from('set_logs') as any)
         .update({ video_url: publicUrl })
@@ -105,20 +111,20 @@ export async function flushVideoQueue(): Promise<void> {
       removeFromQueue(item.setLogId);
 
       // Clean up local files after successful upload
-      // Always delete the documents-dir queue copy
       try {
         const queueFile = new File(item.localUri);
-        await queueFile.delete();
+        queueFile.delete();
       } catch { /* ignore if already deleted */ }
 
       // Delete original camera file (NOT gallery files - those belong to the user's photo library)
       if (item.source === 'camera' && item.originalUri) {
         try {
           const originalFile = new File(item.originalUri);
-          await originalFile.delete();
+          originalFile.delete();
         } catch { /* ignore - may already be cleaned by OS */ }
       }
-    } catch {
+    } catch (err) {
+      console.warn('[VideoQueue] Upload failed for:', item.setLogId, err);
       failed.push(item);
     }
   }
