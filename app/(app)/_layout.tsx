@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import * as Updates from 'expo-updates';
+import * as Notifications from 'expo-notifications';
 import { colors } from '@/constants/theme';
 import { HeaderCloudIcon } from '@/components/layout/HeaderCloudIcon';
 import { useSyncQueue } from '@/features/workout/hooks/useSyncQueue';
 import { usePushToken } from '@/features/notifications/hooks/usePushToken';
+import { getDeepLinkRoute } from '@/features/notifications/utils/deepLinkRouter';
+import type { NotificationData } from '@/features/notifications/types';
 import { supabase } from '@/lib/supabase/client';
 
 /**
@@ -14,11 +17,26 @@ import { supabase } from '@/lib/supabase/client';
  * Checks for OTA updates on mount in production builds.
  */
 export default function AppLayout() {
+  const router = useRouter();
+
   // Auto-flush sync queue on connectivity restore
   useSyncQueue(supabase);
 
   // Register push token on every app launch after auth
   usePushToken();
+
+  // Handle cold-start deep links from notification taps
+  const lastResponse = Notifications.useLastNotificationResponse();
+  useEffect(() => {
+    if (!lastResponse) return;
+    if (lastResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER) {
+      const data = lastResponse.notification.request.content.data as NotificationData;
+      const route = getDeepLinkRoute(data);
+      if (route) {
+        router.push(route as any);
+      }
+    }
+  }, [lastResponse, router]);
 
   // Check for OTA updates on mount (production only)
   useEffect(() => {
@@ -80,6 +98,10 @@ export default function AppLayout() {
         <Stack.Screen
           name="videos"
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="notifications"
+          options={{ title: 'Notifications' }}
         />
     </Stack>
   );

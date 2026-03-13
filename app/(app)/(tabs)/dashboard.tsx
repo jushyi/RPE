@@ -20,6 +20,8 @@ import { TodaysWorkoutCard } from '@/features/dashboard/components/TodaysWorkout
 import { ProgressSummaryCard } from '@/features/dashboard/components/ProgressSummaryCard';
 import { BodyCard } from '@/features/body-metrics/components/BodyCard';
 import { DeletionBanner } from '@/features/settings/components/DeletionBanner';
+import { BellBadge } from '@/features/notifications/components/BellBadge';
+import { useUnreadCount } from '@/features/notifications/hooks/useUnreadCount';
 
 import type { PRBaseline } from '@/lib/supabase/types/database';
 import type { WorkoutSession } from '@/features/workout/types';
@@ -213,6 +215,9 @@ export default function DashboardScreen() {
   const { fetchPlans } = usePlans();
   const { sessions: completedToday, refreshing, refresh: refreshCompleted } = useCompletedToday();
   const navigation = useNavigation();
+
+  // Drive unread count refresh on app foreground (BellBadge reads from store directly)
+  useUnreadCount();
   const [baselines, setBaselines] = useState<PRBaseline[]>([]);
   const [refreshingPRs, setRefreshingPRs] = useState(false);
 
@@ -330,6 +335,7 @@ export default function DashboardScreen() {
             <Text style={ds.name} numberOfLines={1}>{displayName}</Text>
           </View>
         </View>
+        <BellBadge />
       </Animated.View>
       <ScrollView
         style={{ flex: 1 }}
