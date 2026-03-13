@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Alert, Platform, Modal, View, Text, TextInput, 
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
-import { ProfileHeader } from '@/features/settings/components/ProfileHeader';
+import { ProfileSection } from '@/features/settings/components/ProfileSection';
 import { PreferencesSection } from '@/features/settings/components/PreferencesSection';
 import { NotificationsSection } from '@/features/settings/components/NotificationsSection';
 import { AccountSection } from '@/features/settings/components/AccountSection';
@@ -87,7 +87,7 @@ export default function SettingsTab() {
   return (
     <>
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <ProfileHeader />
+        <ProfileSection />
         <PreferencesSection />
         <NotificationsSection />
         <AccountSection
