@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 15.1 context gathered
-last_updated: "2026-03-13T17:48:30.284Z"
+stopped_at: Completed 15.1-01-PLAN.md
+last_updated: "2026-03-13T18:09:31.177Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
   completed_phases: 14
-  total_plans: 70
-  completed_plans: 54
+  total_plans: 72
+  completed_plans: 55
 ---
 
 ---
@@ -500,6 +500,7 @@ Progress: [██████████] 100%
 | Phase 14 P04 | 4min | 2 tasks | 8 files |
 | Phase 15 P00 | 1min | 1 tasks | 3 files |
 | Phase 15 P01 | 3min | 2 tasks | 7 files |
+| Phase 15.1 P01 | 4min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -621,6 +622,9 @@ Recent decisions affecting current work:
 - [Phase 15]: Followed Phase 13 it.todo() stub pattern with commented-out imports for calculator test scaffolding
 - [Phase 15]: Used epsilon tolerance (0.001) in plate greedy algorithm to handle floating point near-misses
 - [Phase 15]: RPE table uses standard Tuchscherer values; roundToLoadable exported separately for UI reuse
+- [Phase 15.1]: MMKV plate-inventory store with separate keys per unit (inventory-lb, inventory-kg)
+- [Phase 15.1]: getMissingPlateMessage finds smallest disabled plate <= remainder for targeted warnings
+- [Phase 15.1]: BarbellDiagram computes dynamic SLEEVE_WIDTH from actual plate count with minimum of 10 slots
 
 ### Roadmap Evolution
 
@@ -688,6 +692,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T17:48:30.281Z
-Stopped at: Phase 15.1 context gathered
-Resume file: .planning/phases/15.1-reverse-bar-loading-for-plates-tab-in-calc-also-ability-to-choose-which-plates-i-actually-have-some-users-may-not-have-the-red-55-lbs-or-35kg-plates-adaptable-for-situations/15.1-CONTEXT.md
+Last session: 2026-03-13T18:09:31.174Z
+Stopped at: Completed 15.1-01-PLAN.md
+Resume file: None
