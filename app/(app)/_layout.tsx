@@ -100,6 +100,10 @@ export default function AppLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="social"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="notifications"
           options={{
             title: 'Notifications',

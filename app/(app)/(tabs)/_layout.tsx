@@ -57,6 +57,15 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="social"
+        options={{
+          title: 'Social',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="people-outline" size={20} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
