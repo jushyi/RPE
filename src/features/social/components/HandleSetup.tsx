@@ -255,8 +255,7 @@ export function HandleSetup({ currentHandle, onSave, mode, onValidChange }: Hand
       {mode === 'step' && (
         <View style={s.stepHint}>
           <Text style={s.hintText}>
-            3-20 characters, lowercase letters, numbers and underscores only.
-            Must start with a letter.
+            {'3-20 characters, lowercase letters, numbers and underscores only. Must start with a letter.'}
           </Text>
         </View>
       )}
