@@ -99,9 +99,9 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Group Chat & Enhanced Sharing
 
 - [x] **CHAT-01**: Real-time group chat messaging via Supabase Realtime (text messages appear instantly)
-- [ ] **CHAT-02**: Images and videos supported in chat messages (upload to chat-media Storage bucket)
+- [x] **CHAT-02**: Images and videos supported in chat messages (upload to chat-media Storage bucket)
 - [x] **CHAT-03**: Delivered + read receipts on own messages (WhatsApp-style checkmarks)
-- [ ] **CHAT-04**: Typing indicators show "[Name] is typing..." via Supabase Realtime Presence
+- [x] **CHAT-04**: Typing indicators show "[Name] is typing..." via Supabase Realtime Presence
 - [x] **CHAT-05**: User can edit own messages within 15-minute window (shows "edited" indicator)
 - [x] **CHAT-06**: User can delete own messages at any time (shows "This message was deleted" placeholder)
 - [x] **CHAT-07**: Push notifications for new chat messages (respects per-group mute toggle)
