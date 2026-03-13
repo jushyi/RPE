@@ -113,15 +113,17 @@ async function uploadSetVideo(
   localUri: string,
 ): Promise<string> {
   const file = new File(localUri);
+  const arrayBuffer = await file.arrayBuffer();
 
   const ext = localUri.split('.').pop()?.toLowerCase() || 'mp4';
   const contentType = ext === 'mov' ? 'video/quicktime' : 'video/mp4';
   const filePath = `${userId}/${setLogId}.${ext}`;
 
-  // Pass File directly as Blob — avoids loading entire video into memory
+  console.log('[VideoQueue] Uploading', (arrayBuffer.byteLength / 1024 / 1024).toFixed(1), 'MB to', filePath);
+
   const { error } = await supabase.storage
     .from('set-videos')
-    .upload(filePath, file as unknown as Blob, {
+    .upload(filePath, arrayBuffer, {
       contentType,
       upsert: true,
     });
