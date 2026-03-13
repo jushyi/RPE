@@ -92,7 +92,13 @@ export function useWorkoutSession() {
         // Enqueue DB sync immediately (don't rely on summary screen mounting)
         try {
           enqueueCompletedSession(completed);
-          flushSyncQueue(supabase).catch(() => {});
+          // Flush session sync first, THEN flush video queue (videos need set_logs to exist)
+          flushSyncQueue(supabase)
+            .then(() => {
+              console.log('[Video] Session synced, flushing video queue');
+              return flushVideoQueue();
+            })
+            .catch((err) => console.warn('finishWorkout: sync/video flush error:', err));
         } catch (err) {
           console.warn('finishWorkout: failed to enqueue session sync:', err);
         }
@@ -208,7 +214,8 @@ export function useWorkoutSession() {
         return;
       }
       console.log('[Video] attachVideoToSet called:', { exerciseId, setLogId, localUri, source });
-      // Enqueue upload for background processing (offline-first)
+      // Enqueue for upload — don't flush yet, set_logs may not exist in Supabase.
+      // flushVideoQueue is called after session sync in finishWorkout.
       try {
         await enqueueVideoUpload({
           setLogId,
@@ -218,8 +225,6 @@ export function useWorkoutSession() {
           createdAt: new Date().toISOString(),
           source,
         });
-        // Fire-and-forget flush attempt
-        flushVideoQueue().catch((err) => console.warn('[Video] flushVideoQueue error:', err));
       } catch (err) {
         console.warn('[Video] enqueueVideoUpload failed:', err);
       }
