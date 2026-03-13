@@ -209,7 +209,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
 | 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
 | 14. Set Videos | 5/5 | Complete   | 2026-03-13 |
-| 15. Barbell Calculator | 0/3 | Not started | - |
+| 15. Barbell Calculator | 1/3 | In Progress|  |
 | 16. Push Notifications | 0/3 | Not started | - |
 | 17. Social Sharing | 0/6 | Not started | - |
 | 18. Group Chat | 0/5 | Not started | - |
@@ -294,7 +294,7 @@ Plans:
   3. RPE/1RM calculator shows estimated 1RM and an RPE percentage grid when weight and reps are entered
   4. Next Set calculator shows a recommended weight (rounded to loadable increment) with explanation when last set data and targets are entered
   5. All calculations correctly use the user's preferred unit setting (lb/kg)
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 - [ ] 15-00-PLAN.md — Wave 0: Test stubs for calculator utility functions (plateCalculator, rpeTable, nextSetCalc)
