@@ -1,22 +1,57 @@
-// TODO: uncomment when implemented
-// import { RPE_TABLE, getWeightForRpeAndReps } from '@/features/calculator/utils/rpeTable';
-// import { calculateEpley1RM } from '@/features/history/utils/epley';
+import { RPE_TABLE, getWeightForRpeAndReps } from '@/features/calculator/utils/rpeTable';
 
 describe('RPE_TABLE', () => {
-  it.todo('RPE 10 at 1 rep equals 100%'); // CALC-03
-  it.todo('has entries for RPE 6 through 10 in 0.5 increments'); // CALC-03
-  it.todo('each RPE row has 12 rep entries'); // CALC-03
-  it.todo('percentages decrease as reps increase for same RPE'); // CALC-03
+  it('RPE 10 at 1 rep equals 100%', () => {
+    expect(RPE_TABLE[10][0]).toBe(100);
+  });
+
+  it('has entries for RPE 6 through 10 in 0.5 increments', () => {
+    const expectedKeys = [10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6];
+    for (const key of expectedKeys) {
+      expect(RPE_TABLE[key]).toBeDefined();
+    }
+  });
+
+  it('each RPE row has 12 rep entries', () => {
+    for (const key of Object.keys(RPE_TABLE)) {
+      expect(RPE_TABLE[Number(key)]).toHaveLength(12);
+    }
+  });
+
+  it('percentages decrease as reps increase for same RPE', () => {
+    const row = RPE_TABLE[10];
+    for (let i = 1; i < row.length; i++) {
+      expect(row[i]).toBeLessThan(row[i - 1]);
+    }
+  });
 });
 
 describe('getWeightForRpeAndReps', () => {
-  it.todo('returns correct weight for known RPE/rep/1RM combination'); // CALC-03
-  it.todo('returns 0 for reps outside 1-12 range'); // CALC-03
-  it.todo('returns 0 for invalid RPE value'); // CALC-03
-});
+  it('returns 100 for e1RM 100, RPE 10, 1 rep', () => {
+    expect(getWeightForRpeAndReps(100, 10, 1)).toBe(100);
+  });
 
-describe('1RM estimation consistency', () => {
-  it.todo('Epley formula matches existing calculateEpley1RM for known inputs'); // CALC-04
-  it.todo('1RM at 1 rep returns the weight itself'); // CALC-04
-  it.todo('returns 0 for invalid inputs'); // CALC-04
+  it('returns 86.3 for e1RM 100, RPE 10, 5 reps', () => {
+    expect(getWeightForRpeAndReps(100, 10, 5)).toBe(86.3);
+  });
+
+  it('returns 86.3 for e1RM 100, RPE 8, 3 reps', () => {
+    expect(getWeightForRpeAndReps(100, 8, 3)).toBe(86.3);
+  });
+
+  it('supports half-step RPE (9.5 at 2 reps)', () => {
+    expect(getWeightForRpeAndReps(100, 9.5, 2)).toBe(93.9);
+  });
+
+  it('returns 0 for RPE not in table (RPE 5)', () => {
+    expect(getWeightForRpeAndReps(100, 5, 1)).toBe(0);
+  });
+
+  it('returns 0 for reps > 12', () => {
+    expect(getWeightForRpeAndReps(100, 10, 15)).toBe(0);
+  });
+
+  it('returns 0 for reps < 1', () => {
+    expect(getWeightForRpeAndReps(100, 10, 0)).toBe(0);
+  });
 });
