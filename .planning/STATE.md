@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Completed 16-03-PLAN.md
-last_updated: "2026-03-13T18:41:43.047Z"
+last_updated: "2026-03-13T18:42:08.555Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
@@ -507,6 +507,7 @@ Progress: [██████████] 100%
 | Phase 16 P02 | 4min | 2 tasks | 12 files |
 | Phase 16 P02 | 3min | 2 tasks | 12 files |
 | Phase 16 P03 | 4min | 2 tasks | 9 files |
+| Phase 16 P03 | 5 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -645,6 +646,8 @@ Recent decisions affecting current work:
 - [Phase 16]: Edge Function notification inserts use as-any type cast for notifications table (not in generated types)
 - [Phase 16]: Optional parameters for backward-compatible enriched notification payloads (sessionId, exerciseId, planId)
 - [Phase 16]: Fire-and-forget Supabase inserts in alarm/nudge scheduling matching existing codebase pattern
+- [Phase 16]: Optional parameters for backward-compatible enriched payloads (sessionId, exerciseId, planId) so existing callers still work
+- [Phase 16]: Long-press on version text (2s) for hidden dev tools access in production builds
 
 ### Roadmap Evolution
 
@@ -712,6 +715,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:41:43.044Z
+Last session: 2026-03-13T18:42:05.337Z
 Stopped at: Completed 16-03-PLAN.md
 Resume file: None
