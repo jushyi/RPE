@@ -27,6 +27,13 @@ interface HandleSetupProps {
    * 'step'   — shown in onboarding; save is triggered externally via ref or direct call.
    */
   mode: 'inline' | 'step';
+  /**
+   * Optional: called whenever the valid state changes.
+   * In 'step' mode the parent can use this to enable/disable the Next button
+   * and to know the current valid handle value to pass to setMyHandle.
+   * validHandle is non-null only when format is valid AND uniqueness check passed.
+   */
+  onValidChange?: (validHandle: string | null) => void;
 }
 
 /**
@@ -39,7 +46,7 @@ interface HandleSetupProps {
  * - 'inline' mode: shows Save button and Edit toggle when a handle already exists
  * - 'step' mode: no Save button — caller calls onSave when ready (e.g., "Next" button)
  */
-export function HandleSetup({ currentHandle, onSave, mode }: HandleSetupProps) {
+export function HandleSetup({ currentHandle, onSave, mode, onValidChange }: HandleSetupProps) {
   const [isEditing, setIsEditing] = useState(mode === 'step' || !currentHandle);
   const [inputValue, setInputValue] = useState(currentHandle ?? '');
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -77,16 +84,20 @@ export function HandleSetup({ currentHandle, onSave, mode }: HandleSetupProps) {
       if (error) {
         console.warn('Uniqueness check failed:', error.message);
         setIsAvailable(null);
+        onValidChange?.(null);
       } else {
-        setIsAvailable(data === null); // null means no other user has that handle
+        const available = data === null; // null means no other user has that handle
+        setIsAvailable(available);
+        onValidChange?.(available ? handle : null);
       }
     } catch (err) {
       console.warn('Uniqueness check error:', err);
       setIsAvailable(null);
+      onValidChange?.(null);
     } finally {
       setIsCheckingUniqueness(false);
     }
-  }, []);
+  }, [onValidChange]);
 
   const handleInputChange = useCallback(
     (text: string) => {
@@ -103,15 +114,17 @@ export function HandleSetup({ currentHandle, onSave, mode }: HandleSetupProps) {
       if (!error && lower.length >= 3) {
         if (debounceTimer.current) clearTimeout(debounceTimer.current);
         setIsCheckingUniqueness(true);
+        onValidChange?.(null); // not yet confirmed available
         debounceTimer.current = setTimeout(() => {
           checkUniqueness(lower);
         }, 500);
       } else {
         setIsCheckingUniqueness(false);
+        onValidChange?.(null);
         if (debounceTimer.current) clearTimeout(debounceTimer.current);
       }
     },
-    [checkUniqueness]
+    [checkUniqueness, onValidChange]
   );
 
   const handleSave = useCallback(async () => {

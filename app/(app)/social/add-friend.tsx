@@ -114,6 +114,8 @@ export default function AddFriendScreen() {
         style={s.scroll}
         contentContainerStyle={s.content}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        automaticallyAdjustKeyboardInsets
       >
         {/* Section A: Invite Code */}
         <Text style={s.sectionTitle}>Invite Code</Text>
