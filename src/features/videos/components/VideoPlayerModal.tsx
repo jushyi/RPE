@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -43,9 +43,21 @@ export function VideoPlayerModal({ videoUrl, visible, onClose }: VideoPlayerModa
 function VideoPlayerInner({ videoUrl, visible, onClose }: VideoPlayerModalProps) {
   const videoViewRef = useRef<any>(null);
   const { useVideoPlayer, VideoView } = ExpoVideo!;
+  const [isPlaying, setIsPlaying] = useState(true);
   const player = useVideoPlayer(visible ? videoUrl : null, (p) => {
     p.play();
   });
+
+  const togglePlayPause = useCallback(() => {
+    if (!player) return;
+    if (isPlaying) {
+      player.pause();
+      setIsPlaying(false);
+    } else {
+      player.play();
+      setIsPlaying(true);
+    }
+  }, [player, isPlaying]);
 
   return (
     <Modal
@@ -56,13 +68,16 @@ function VideoPlayerInner({ videoUrl, visible, onClose }: VideoPlayerModalProps)
       onRequestClose={onClose}
     >
       <View style={s.playerContainer}>
-        <VideoView
-          ref={videoViewRef}
-          player={player}
-          style={s.videoView}
-          nativeControls
-          contentFit="contain"
-        />
+        <Pressable style={s.videoTapArea} onPress={togglePlayPause}>
+          <VideoView
+            ref={videoViewRef}
+            player={player}
+            style={s.videoView}
+            nativeControls={false}
+            contentFit="contain"
+            allowsVideoFrameAnalysis={false}
+          />
+        </Pressable>
         <Pressable style={s.closeButton} onPress={onClose} hitSlop={12}>
           <Ionicons name="close-circle" size={32} color={colors.white} />
         </Pressable>
@@ -82,10 +97,14 @@ const s = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  videoTapArea: {
+    width: '100%',
+    height: '100%',
+  },
   closeButton: {
     position: 'absolute',
     top: 50,
-    right: 20,
+    left: 20,
     zIndex: 10,
   },
   unavailableText: {
