@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 16-push-notifications
 source: [16-01-SUMMARY.md, 16-02-SUMMARY.md, 16-03-SUMMARY.md]
 started: 2026-03-13T18:45:00Z
@@ -66,29 +66,36 @@ skipped: 2
   reason: "User reported: WARN  Failed to fetch notifications: Could not find the table 'public.notifications' in the schema cache"
   severity: blocker
   test: 4
-  artifacts: []
-  missing: []
-
-- truth: "Notification Inbox header matches the style of other screen headers in the app"
-  status: failed
-  reason: "User reported: header doesn't match the headers in the rest of the app, otherwise pass"
-  severity: cosmetic
-  test: 3
-  artifacts: []
-  missing: []
+  root_cause: "Migration 20260318000000_create_notifications.sql was never pushed to the remote Supabase project — the table exists in local migration files only"
+  artifacts:
+    - path: "supabase/migrations/20260318000000_create_notifications.sql"
+      issue: "Migration file exists locally but has not been applied to remote Supabase database"
+  missing:
+    - "Run `supabase db push` to apply the pending migration to the remote Supabase project"
 
 - truth: "Dev tools notification triggers deliver actual notifications to the device (local and push)"
   status: failed
   reason: "User reported: see debug but see no actual notifs on phone, local or push"
   severity: major
   test: 8
-  artifacts: []
-  missing: []
+  root_cause: "Notifications.setNotificationHandler is never called, so expo-notifications suppresses all foreground notifications — listeners fire (debug log works) but nothing is presented to the OS"
+  artifacts:
+    - path: "app/_layout.tsx"
+      issue: "Missing Notifications.setNotificationHandler call at module level"
+  missing:
+    - "Add Notifications.setNotificationHandler({ handleNotification: async () => ({ shouldShowAlert: true, shouldPlaySound: true, shouldSetBadge: false }) }) at top of app/_layout.tsx before RootLayout"
 
-- truth: "Dev Tools screen header matches the style of other screen headers in the app"
+- truth: "Notification Inbox and Dev Tools screen headers match the style of other screen headers in the app"
   status: failed
-  reason: "User reported: also dev tools header doesn't match the other headers in the app"
+  reason: "User reported: header doesn't match the headers in the rest of the app (both notifications and dev-tools screens)"
   severity: cosmetic
-  test: 8
-  artifacts: []
-  missing: []
+  test: 3
+  root_cause: "Stack.Screen options for notifications and dev-tools are missing headerTitleStyle (fontWeight/fontSize), and dev-tools.tsx renders a duplicate in-body title"
+  artifacts:
+    - path: "app/(app)/_layout.tsx"
+      issue: "Stack.Screen entries for notifications and dev-tools missing headerTitleStyle: { fontWeight: '700', fontSize: 18 }"
+    - path: "app/(app)/dev-tools.tsx"
+      issue: "Renders duplicate heading/subheading text in scroll content that duplicates the Stack header title"
+  missing:
+    - "Add headerTitleStyle: { fontWeight: '700', fontSize: 18 } to notifications and dev-tools Stack.Screen options in app/(app)/_layout.tsx"
+    - "Remove redundant heading/subheading JSX from dev-tools.tsx scroll content"
