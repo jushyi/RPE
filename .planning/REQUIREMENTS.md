@@ -104,10 +104,10 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **CHAT-04**: Typing indicators show "[Name] is typing..." via Supabase Realtime Presence
 - [x] **CHAT-05**: User can edit own messages within 15-minute window (shows "edited" indicator)
 - [x] **CHAT-06**: User can delete own messages at any time (shows "This message was deleted" placeholder)
-- [ ] **CHAT-07**: Push notifications for new chat messages (respects per-group mute toggle)
+- [x] **CHAT-07**: Push notifications for new chat messages (respects per-group mute toggle)
 - [x] **CHAT-08**: Per-share content-type selection with checkboxes (workout summary, individual PRs, individual videos)
 - [x] **CHAT-09**: Retroactive sharing from workout history detail screen (any past workout, no time limit)
-- [ ] **CHAT-10**: Chat tab alongside Feed tab within each group screen
+- [x] **CHAT-10**: Chat tab alongside Feed tab within each group screen
 
 ## v2 Requirements
 

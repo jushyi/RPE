@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed quick-39
-last_updated: "2026-03-13T20:15:46.253Z"
+stopped_at: "Checkpoint 18-05-T2: human verification required"
+last_updated: "2026-03-13T20:15:58.116Z"
 last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
 progress:
   total_phases: 19
@@ -710,6 +710,8 @@ Recent decisions affecting current work:
 - [Phase 18]: chatStore updated to use Zustand persist with MMKV (chat-store id) and import canonical Message/GroupReadReceipt from types/chat.ts
 - [Phase 18]: getMessageReadStatus uses lexicographic string >= comparison for UUID IDs - works because same message ID = read
 - [Phase 18-02]: ContentTypeCheckboxes uses Ionicons checkmark-circle/ellipse-outline per plan spec; useShareFlow migrated to ShareableContent type; workout_date convention in retroactive share payloads (no schema change)
+- [Phase 18]: send-push Edge Function extended with chat_message type: server-side group_member+mute lookup for security
+- [Phase 18]: useTypingIndicator uses separate group-typing channel; useChat uses group-chat channel to avoid Presence/postgres_changes conflicts
 
 ### Roadmap Evolution
 
@@ -779,6 +781,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T20:15:14.221Z
-Stopped at: Completed quick-39
+Last session: 2026-03-13T20:15:58.113Z
+Stopped at: Checkpoint 18-05-T2: human verification required
 Resume file: None

@@ -213,7 +213,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 15.1. Reverse Bar Loading + Plate Inventory | 2/2 | Complete    | 2026-03-13 |
 | 16. Push Notifications | 5/5 | Complete    | 2026-03-13 |
 | 17. Social Sharing | 6/6 | Complete    | 2026-03-13 |
-| 18. Group Chat | 2/5 | In Progress|  |
+| 18. Group Chat | 3/5 | In Progress|  |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -372,7 +372,7 @@ Plans:
   8. Share flow shows content-type checkboxes for granular selection (summary, individual PRs, individual videos)
   9. User can share past workouts from history detail screen via the same share flow
   10. Retroactively shared feed cards show both share date and original workout date
-**Plans:** 2/5 plans executed
+**Plans:** 3/5 plans executed
 
 Plans:
 - [ ] 18-01-PLAN.md — Data layer: migration (messages + read_receipts + chat-media bucket), types, pure utility functions with tests, chatStore
