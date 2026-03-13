@@ -19,20 +19,20 @@ decisions:
   - "--message flag left at end so caller appends message string as arg (npm run update:production \"Fix bug\")"
   - "eas.json production build profile channel:production already matches OTA target — no changes needed there"
 metrics:
-  duration: 5min
+  duration: 10min
   completed: 2026-03-13
 ---
 
 # Phase quick-40: Set Up OTA Updates for Production Profile Summary
 
-**One-liner:** Added `update:production` and `update:preview` npm scripts wrapping `eas update --channel` for convenient OTA publishing to TestFlight users.
+**One-liner:** Added `update:production` and `update:preview` npm scripts wrapping `eas update --channel` and published the initial OTA bundle (group 1b8953a6) to the production channel for TestFlight users.
 
 ## Tasks Completed
 
 | # | Name | Status | Commit |
 |---|------|--------|--------|
 | 1 | Add OTA update npm scripts to package.json | Complete | dbf1cc4 |
-| 2 | Publish initial OTA bundle to production channel | Awaiting human action | — |
+| 2 | Publish initial OTA bundle to production channel | Complete | human action |
 
 ## What Was Built
 
@@ -51,16 +51,24 @@ Usage:
 
 The `eas.json` production build profile already has `"channel": "production"` matching the OTA target. The `app.json` already has `runtimeVersion: { policy: "appVersion" }` and the EAS updates URL configured. No changes were needed to either file.
 
-### Task 2: First OTA bundle publish (awaiting human action)
+### Task 2: First OTA bundle published
 
-The EAS CLI requires interactive authentication for the `eas update` command. This step requires running the command in a terminal.
+Published the initial bundle to the production channel. Verification output confirmed:
+
+- Branch: production (ID: 019cdd3d-a028-7f0f-b2dc-0555cabf8b56)
+- Platforms: android, ios
+- Runtime Version: 1.0.0
+- Message: "Initial OTA bundle for production"
+- Group ID: 1b8953a6-9063-420c-8c89-6f8f6c087f6a
+
+TestFlight users running the 1.0.0 binary will receive this bundle automatically on next launch.
 
 ## Verification
 
 - [x] package.json has `update:production` and `update:preview` scripts with correct channel flags
 - [x] `eas.json` production build profile channel is "production" (confirmed, no change needed)
 - [x] `app.json` runtimeVersion policy is "appVersion" (confirmed, no change needed)
-- [ ] EAS update published to production channel (awaiting human confirmation)
+- [x] EAS update published to production channel — bundle group 1b8953a6, platforms ios + android, runtime 1.0.0
 
 ## Deviations from Plan
 
@@ -69,4 +77,5 @@ None - plan executed exactly as written.
 ## Self-Check: PASSED
 
 - package.json scripts verified: `eas update --channel production --message` and `eas update --channel preview --message`
-- Commit dbf1cc4 exists and staged correct file
+- Commit dbf1cc4 exists with correct package.json change
+- OTA bundle confirmed published: group ID 1b8953a6-9063-420c-8c89-6f8f6c087f6a, branch production

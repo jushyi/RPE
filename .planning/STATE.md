@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Checkpoint quick-40 Task 2: waiting for human to publish OTA bundle"
-last_updated: "2026-03-13T20:29:39.678Z"
+stopped_at: Completed quick-40
+last_updated: "2026-03-13T20:34:17.046Z"
 last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
 progress:
   total_phases: 19
@@ -722,6 +722,7 @@ Recent decisions affecting current work:
 - [Phase 18]: GroupTabs renders feedContent or ChatScreen conditionally (not PagerView) for reliable prop propagation
 - [Phase 18]: createTypingDebounce returns { trigger, cancel } object for testability with cancel in tests
 - [Phase 18]: Debounce logic extracted as pure function createTypingDebounce in chatUtils.ts for unit testing with jest fake timers
+- [Phase quick-40]: --message flag left at end of eas update scripts so caller appends message string as npm run arg
 
 ### Roadmap Evolution
 
@@ -791,6 +792,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T20:29:39.675Z
-Stopped at: Checkpoint quick-40 Task 2: waiting for human to publish OTA bundle
+Last session: 2026-03-13T20:34:16.974Z
+Stopped at: Completed quick-40
 Resume file: None
