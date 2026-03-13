@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 18-05-PLAN.md
-last_updated: "2026-03-13T20:20:19.437Z"
+stopped_at: "Checkpoint 10-01-T3: Apple auth gate - run eas build interactively"
+last_updated: "2026-03-13T20:22:21.612Z"
 last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
 progress:
   total_phases: 19
   completed_phases: 17
   total_plans: 74
-  completed_plans: 70
+  completed_plans: 71
   percent: 95
 ---
 
@@ -552,6 +552,7 @@ Progress: [██████████] 100%
 | Phase 18 P02 | 5min | 2 tasks | 6 files |
 | Phase 18 P05 | 9 | 1 tasks | 12 files |
 | Phase 18 P05 | 9min | 2 tasks | 12 files |
+| Phase 10-distribution P01 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -713,6 +714,8 @@ Recent decisions affecting current work:
 - [Phase 18-02]: ContentTypeCheckboxes uses Ionicons checkmark-circle/ellipse-outline per plan spec; useShareFlow migrated to ShareableContent type; workout_date convention in retroactive share payloads (no schema change)
 - [Phase 18]: send-push Edge Function extended with chat_message type: server-side group_member+mute lookup for security
 - [Phase 18]: useTypingIndicator uses separate group-typing channel; useChat uses group-chat channel to avoid Presence/postgres_changes conflicts
+- [Phase 10-distribution]: EAS Build requires interactive Apple account login for Distribution Certificate validation on first production build
+- [Phase 10-distribution]: ascAppId 6760412044 in eas.json submit.production.ios enables EAS auto-submit to App Store Connect
 
 ### Roadmap Evolution
 
@@ -782,6 +785,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T20:20:19.434Z
-Stopped at: Completed 18-05-PLAN.md
+Last session: 2026-03-13T20:22:21.609Z
+Stopped at: Checkpoint 10-01-T3: Apple auth gate - run eas build interactively
 Resume file: None

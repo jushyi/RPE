@@ -182,7 +182,7 @@ Plans:
   3. On a physical device with no network: user can log a full workout session, reconnect, and see it appear in history
   4. A second test account cannot read or modify the first account's workout data (RLS isolation confirmed)
   5. Editing a plan does not alter previously logged workout sessions (plan-history isolation confirmed)
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 10-01-PLAN.md — EAS Build config fixes (expo-notifications plugin, submit config, EAS secrets), App Store Connect listing, build + auto-submit to TestFlight
@@ -204,7 +204,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Body Metrics | 4/4 | Complete   | 2026-03-12 |
 | 8. Alarms + Accountability | 3/4 | In Progress|  |
 | 9. Polish | 3/4 | In Progress|  |
-| 10. Distribution | 0/2 | Not started | - |
+| 10. Distribution | 1/2 | In Progress|  |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
 | 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
