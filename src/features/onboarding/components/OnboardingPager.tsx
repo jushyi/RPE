@@ -5,12 +5,13 @@ import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/stores/authStore';
 import { StepDots } from './StepDots';
+import { HandleStep } from './HandleStep';
 import { UnitPreferencesStep } from './UnitPreferencesStep';
 import { PRBaselineStep } from './PRBaselineStep';
 import { BodyStatsStep } from './BodyStatsStep';
 import { FirstPlanPromptStep } from './FirstPlanPromptStep';
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 interface OnboardingPagerProps {
   onComplete: () => void;
@@ -18,7 +19,12 @@ interface OnboardingPagerProps {
 
 /**
  * Main onboarding flow wrapper.
- * 4 steps rendered one at a time: UnitPreferences, PRBaseline, BodyStats, FirstPlanPrompt.
+ * 5 steps rendered one at a time:
+ *   0 - HandleStep (new: optional handle / username setup)
+ *   1 - UnitPreferences
+ *   2 - PRBaseline
+ *   3 - BodyStats
+ *   4 - FirstPlanPrompt
  */
 export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -49,7 +55,7 @@ export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
     setMeasurementUnit(mu);
     setPreferredUnit(wu);
     setPreferredMeasurementUnit(mu);
-    setCurrentStep(1);
+    setCurrentStep(2); // step 1 (units) -> step 2 (PRBaseline)
   }, [setPreferredUnit, setPreferredMeasurementUnit]);
 
   const handleCreatePlan = useCallback(() => {
@@ -64,13 +70,36 @@ export function OnboardingPager({ onComplete }: OnboardingPagerProps) {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <UnitPreferencesStep onNext={handleUnitsNext} initialWeightUnit={weightUnit} initialMeasurementUnit={measurementUnit} />;
+        // Handle step: onNext and onSkip both advance to step 1
+        return <HandleStep onNext={goToNext} onSkip={goToNext} />;
       case 1:
-        return <PRBaselineStep onNext={goToNext} onSkip={goToNext} weightUnit={weightUnit} />;
+        return (
+          <UnitPreferencesStep
+            onNext={handleUnitsNext}
+            initialWeightUnit={weightUnit}
+            initialMeasurementUnit={measurementUnit}
+          />
+        );
       case 2:
-        return <BodyStatsStep onNext={goToNext} onSkip={goToNext} weightUnit={weightUnit} measurementUnit={measurementUnit} />;
+        return (
+          <PRBaselineStep onNext={goToNext} onSkip={goToNext} weightUnit={weightUnit} />
+        );
       case 3:
-        return <FirstPlanPromptStep onCreatePlan={handleCreatePlan} onComplete={handleSkipToComplete} />;
+        return (
+          <BodyStatsStep
+            onNext={goToNext}
+            onSkip={goToNext}
+            weightUnit={weightUnit}
+            measurementUnit={measurementUnit}
+          />
+        );
+      case 4:
+        return (
+          <FirstPlanPromptStep
+            onCreatePlan={handleCreatePlan}
+            onComplete={handleSkipToComplete}
+          />
+        );
       default:
         return null;
     }
