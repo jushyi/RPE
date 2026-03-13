@@ -29,11 +29,7 @@ const COLLAR_Y = (DIAGRAM_HEIGHT - COLLAR_HEIGHT) / 2;
 const COLLAR_COLOR = '#555';
 
 const PLATE_START_X = COLLAR_X + COLLAR_WIDTH + 3;
-
-// Fixed sleeve length — fits 10 plates + extra bar visible at end
-const MAX_PLATES_PER_SIDE = 10;
-const SLEEVE_WIDTH = MAX_PLATES_PER_SIDE * (PLATE_WIDTH + PLATE_GAP);
-const TOTAL_WIDTH = COLLAR_X + COLLAR_WIDTH + SLEEVE_WIDTH + 10;
+const MIN_PLATES_FOR_SIZING = 10;
 
 export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
   const plateColors = unit === 'kg' ? PLATE_COLORS_KG : PLATE_COLORS_LB;
@@ -45,6 +41,14 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
       expandedPlates.push(p.weight);
     }
   }
+
+  // Dynamic width based on actual plate count
+  const plateCount = expandedPlates.length;
+  const SLEEVE_WIDTH = Math.max(
+    MIN_PLATES_FOR_SIZING * (PLATE_WIDTH + PLATE_GAP),
+    plateCount * (PLATE_WIDTH + PLATE_GAP)
+  );
+  const TOTAL_WIDTH = COLLAR_X + COLLAR_WIDTH + SLEEVE_WIDTH + 10;
 
   const renderPlates = () => {
     return expandedPlates.map((weight, idx) => {

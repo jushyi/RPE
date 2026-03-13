@@ -4,9 +4,12 @@ import { colors } from '@/constants/theme';
 import { useAuthStore } from '@/stores/authStore';
 import { calculatePlates } from '@/features/calculator/utils/plateCalculator';
 import { LB_PLATES, KG_PLATES, BAR_PRESETS } from '@/features/calculator/constants/plates';
+import { getMissingPlateMessage } from '@/features/calculator/utils/reverseCalc';
+import { usePlateInventory } from '@/features/calculator/hooks/usePlateInventory';
 import type { BarPreset } from '@/features/calculator/types';
 import { BarWeightPicker } from './BarWeightPicker';
 import { BarbellDiagram } from './BarbellDiagram';
+import { MyPlatesSection } from './MyPlatesSection';
 
 type CalcUnit = 'kg' | 'lbs';
 
@@ -16,9 +19,13 @@ export function PlateCalculator() {
   const [weightText, setWeightText] = useState('');
   const [barPreset, setBarPreset] = useState<BarPreset>(BAR_PRESETS[0]);
 
+  const { enabledPlates, allPlates, toggle, enabledCount, totalCount } =
+    usePlateInventory(unit);
+
   const targetWeight = parseFloat(weightText) || 0;
   const barWeight = unit === 'kg' ? barPreset.weightKg : barPreset.weightLb;
-  const availablePlates = unit === 'kg' ? KG_PLATES : LB_PLATES;
+  const availablePlates = enabledPlates;
+  const fullPlates = unit === 'kg' ? KG_PLATES : LB_PLATES;
   const unitLabel = unit === 'kg' ? 'kg' : 'lb';
 
   const breakdown = useMemo(() => {
@@ -77,6 +84,25 @@ export function PlateCalculator() {
         />
       </View>
 
+      {/* My Plates Inventory */}
+      <View style={s.pickerWrapper}>
+        <MyPlatesSection
+          enabledPlates={enabledPlates}
+          allPlates={allPlates}
+          unit={unit}
+          onToggle={toggle}
+        />
+      </View>
+
+      {/* Empty inventory warning */}
+      {enabledCount === 0 && (
+        <View style={s.warningCard}>
+          <Text style={s.warningText}>
+            Enable at least one plate size in My Plates
+          </Text>
+        </View>
+      )}
+
       {/* Results */}
       {breakdown === 'below_bar' && (
         <View style={s.messageCard}>
@@ -103,7 +129,12 @@ export function PlateCalculator() {
           {breakdown.remainder > 0 && (
             <View style={s.warningCard}>
               <Text style={s.warningText}>
-                Cannot load exactly -- {breakdown.remainder} {unitLabel} unaccounted
+                {getMissingPlateMessage(
+                  breakdown.remainder,
+                  enabledPlates,
+                  fullPlates,
+                  unitLabel
+                )}
               </Text>
             </View>
           )}
