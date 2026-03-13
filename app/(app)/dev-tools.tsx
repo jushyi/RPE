@@ -5,7 +5,7 @@
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ScrollView, StyleSheet, View, Text, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,6 +22,7 @@ type ButtonStatus = 'idle' | 'sending' | 'success' | 'error';
 
 export default function DevToolsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [debugLog, setDebugLog] = useState<DebugEntry[]>([]);
   const [buttonStatus, setButtonStatus] = useState<Record<string, ButtonStatus>>({
     alarm: 'idle',
@@ -158,7 +159,7 @@ export default function DevToolsScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <View style={[styles.safe, { paddingTop: insets.top }]}>
       <View style={styles.navBar}>
         <Pressable onPress={() => router.back()} style={styles.navButton}>
           <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
@@ -204,7 +205,7 @@ export default function DevToolsScreen() {
         ))
       )}
     </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

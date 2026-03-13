@@ -20,13 +20,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Verify the calling user
-    const userClient = createClient(
+    // Verify the calling user — extract JWT and call getUser(token) explicitly
+    const jwt = authHeader.replace('Bearer ', '');
+    const adminClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_ANON_KEY')!,
-      { global: { headers: { Authorization: authHeader } } },
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
-    const { data: { user }, error: userError } = await userClient.auth.getUser();
+    const { data: { user }, error: userError } = await adminClient.auth.getUser(jwt);
 
     if (userError || !user) {
       return new Response(
@@ -34,12 +34,6 @@ Deno.serve(async (req) => {
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       );
     }
-
-    // Service role client for reading push tokens across users (bypasses RLS)
-    const adminClient = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
-    );
 
     const { recipient_ids, title, body, data } = await req.json() as {
       recipient_ids: string[];
