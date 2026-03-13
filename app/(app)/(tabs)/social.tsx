@@ -13,17 +13,40 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useFriendships } from '@/features/social/hooks/useFriendships';
+import { useGroups } from '@/features/social/hooks/useGroups';
 import { FriendListItem } from '@/features/social/components/FriendListItem';
-import type { FriendProfile } from '@/features/social/types';
+import { GroupCard } from '@/features/social/components/GroupCard';
+import type { FriendProfile, Group } from '@/features/social/types';
+import { supabase } from '@/lib/supabase/client';
+import { useEffect, useRef, useState } from 'react';
 
 export default function SocialTab() {
   const router = useRouter();
   const {
     friends,
     pendingCount,
-    loading,
+    loading: friendsLoading,
     actions,
   } = useFriendships();
+
+  const {
+    groups,
+    loading: groupsLoading,
+    getMembersForGroup,
+  } = useGroups();
+
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const fetchedUserRef = useRef(false);
+
+  useEffect(() => {
+    if (fetchedUserRef.current) return;
+    fetchedUserRef.current = true;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setCurrentUserId(session?.user?.id ?? null);
+    });
+  }, []);
+
+  const loading = friendsLoading || groupsLoading;
 
   const handleUnfriend = useCallback(
     async (friendId: string) => {
@@ -45,6 +68,25 @@ export default function SocialTab() {
       <FriendListItem friend={item} onUnfriend={handleUnfriend} />
     ),
     [handleUnfriend]
+  );
+
+  const renderGroup = useCallback(
+    ({ item }: { item: Group }) => {
+      const members = getMembersForGroup(item.id);
+      const memberCount = members.length;
+      const isMuted = currentUserId
+        ? (members.find((m) => m.user_id === currentUserId)?.muted ?? false)
+        : false;
+
+      return (
+        <GroupCard
+          group={item}
+          memberCount={memberCount}
+          isMuted={isMuted}
+        />
+      );
+    },
+    [getMembersForGroup, currentUserId]
   );
 
   return (
@@ -98,7 +140,7 @@ export default function SocialTab() {
           </>
         }
         ListEmptyComponent={
-          loading ? (
+          friendsLoading ? (
             <ActivityIndicator color={colors.accent} style={s.loader} />
           ) : (
             <View style={s.emptyState}>
@@ -110,11 +152,37 @@ export default function SocialTab() {
           <>
             {/* Groups section */}
             <View style={s.sectionHeader}>
-              <Text style={s.sectionTitle}>Groups</Text>
+              <Text style={s.sectionTitle}>
+                Groups
+                {groups.length > 0 ? (
+                  <Text style={s.sectionCount}> {groups.length}</Text>
+                ) : null}
+              </Text>
+              <Pressable
+                style={s.addGroupBtn}
+                onPress={() => router.push('/(app)/social/create-group' as any)}
+                hitSlop={8}
+              >
+                <Ionicons name="add-circle-outline" size={22} color={colors.accent} />
+              </Pressable>
             </View>
-            <View style={s.emptyState}>
-              <Text style={s.emptyText}>No groups yet.</Text>
-            </View>
+
+            {groupsLoading ? (
+              <ActivityIndicator color={colors.accent} style={s.loader} />
+            ) : groups.length > 0 ? (
+              <FlatList
+                data={groups}
+                keyExtractor={(item) => item.id}
+                renderItem={renderGroup}
+                scrollEnabled={false}
+              />
+            ) : (
+              <View style={s.emptyState}>
+                <Text style={s.emptyText}>
+                  No groups yet. Create one to start sharing.
+                </Text>
+              </View>
+            )}
           </>
         }
       />
@@ -178,6 +246,9 @@ const s = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: colors.accent,
+  },
+  addGroupBtn: {
+    padding: 4,
   },
   emptyState: {
     paddingVertical: 24,
