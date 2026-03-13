@@ -6,9 +6,9 @@ import { RPE_TABLE } from '@/features/calculator/utils/rpeTable';
 import { Card } from '@/components/ui/Card';
 import { RpeTable } from './RpeTable';
 
-/** Snap to nearest valid RPE key (6, 6.5, 7, ... 10). Returns 0 if out of range. */
+/** Snap to nearest valid RPE key (1, 1.5, 2, ... 10). Returns 0 if out of range. */
 function snapRpe(raw: number): number {
-  if (raw < 6 || raw > 10) return 0;
+  if (raw < 1 || raw > 10) return 0;
   return Math.round(raw * 2) / 2; // nearest 0.5
 }
 
@@ -68,7 +68,7 @@ export function RpeCalculator() {
         value={rpeText}
         onChangeText={setRpeText}
         keyboardType="decimal-pad"
-        placeholder="6 - 10"
+        placeholder="1 - 10"
         placeholderTextColor={colors.textMuted}
         returnKeyType="done"
       />

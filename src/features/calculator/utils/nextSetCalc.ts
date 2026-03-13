@@ -6,7 +6,7 @@ import { NextSetInput, NextSetResult } from '../types';
  * Returns 0 if out of range.
  */
 export function snapRpe(raw: number): number {
-  if (raw < 6 || raw > 10) return 0;
+  if (raw < 1 || raw > 10) return 0;
   return Math.round(raw * 2) / 2;
 }
 
@@ -37,7 +37,7 @@ export function calculateNextSet(input: NextSetInput): NextSetResult {
     return {
       recommendedWeight: input.lastWeight,
       percentChange: 0,
-      explanation: 'RPE must be between 6 and 10',
+      explanation: 'RPE must be between 1 and 10',
     };
   }
 
@@ -57,7 +57,7 @@ export function calculateNextSet(input: NextSetInput): NextSetResult {
     return {
       recommendedWeight: input.lastWeight,
       percentChange: 0,
-      explanation: 'Target RPE must be between 6 and 10',
+      explanation: 'Target RPE must be between 1 and 10',
     };
   }
 

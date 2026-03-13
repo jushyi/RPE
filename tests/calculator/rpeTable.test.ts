@@ -5,8 +5,8 @@ describe('RPE_TABLE', () => {
     expect(RPE_TABLE[10][0]).toBe(100);
   });
 
-  it('has entries for RPE 6 through 10 in 0.5 increments', () => {
-    const expectedKeys = [10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6];
+  it('has entries for RPE 1 through 10 in 0.5 increments', () => {
+    const expectedKeys = [10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1];
     for (const key of expectedKeys) {
       expect(RPE_TABLE[key]).toBeDefined();
     }
@@ -43,8 +43,12 @@ describe('getWeightForRpeAndReps', () => {
     expect(getWeightForRpeAndReps(100, 9.5, 2)).toBe(93.9);
   });
 
-  it('returns 0 for RPE not in table (RPE 5)', () => {
-    expect(getWeightForRpeAndReps(100, 5, 1)).toBe(0);
+  it('returns valid weight for RPE 5 (now in extended table)', () => {
+    expect(getWeightForRpeAndReps(100, 5, 1)).toBe(83.3);
+  });
+
+  it('returns 0 for RPE below 1 (RPE 0.5)', () => {
+    expect(getWeightForRpeAndReps(100, 0.5, 1)).toBe(0);
   });
 
   it('returns 0 for reps > 12', () => {

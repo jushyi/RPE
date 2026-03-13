@@ -90,16 +90,28 @@ describe('calculateNextSet', () => {
     expect(result.explanation).toContain('RPE');
   });
 
-  it('handles invalid RPE/rep combination gracefully', () => {
+  it('handles RPE below valid range gracefully', () => {
     const result = calculateNextSet({
       lastWeight: 225,
       lastReps: 5,
-      lastRpe: 5, // invalid RPE
+      lastRpe: 0.5, // below valid range
       targetRpe: 8,
       targetReps: 5,
       unit: 'lbs',
     });
     expect(result.recommendedWeight).toBe(225);
     expect(result.percentChange).toBe(0);
+  });
+
+  it('works with low RPE values (RPE 3)', () => {
+    const result = calculateNextSet({
+      lastWeight: 135,
+      lastReps: 5,
+      lastRpe: 3,
+      targetRpe: 8,
+      targetReps: 5,
+      unit: 'lbs',
+    });
+    expect(result.recommendedWeight).toBeGreaterThan(135);
   });
 });

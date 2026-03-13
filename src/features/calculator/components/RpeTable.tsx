@@ -7,7 +7,7 @@ interface RpeTableProps {
   e1rm: number;
 }
 
-const RPE_ROWS = [10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6];
+const RPE_ROWS = [10, 9.5, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1];
 const REP_COLS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 export function RpeTable({ e1rm }: RpeTableProps) {
