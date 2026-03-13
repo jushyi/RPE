@@ -4,6 +4,21 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Completed quick-40
+last_updated: "2026-03-13T20:38:50.105Z"
+last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
+progress:
+  total_phases: 20
+  completed_phases: 18
+  total_plans: 74
+  completed_plans: 73
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-40
 last_updated: "2026-03-13T20:34:17.046Z"
 last_activity: "2026-03-13 - Completed quick task 40: set up ota updates for production profiles"
 progress:
@@ -726,6 +741,7 @@ Recent decisions affecting current work:
 
 ### Roadmap Evolution
 
+- Phase 19 added: github actions, ci-cd pipline, builds triggers on new tags. ota update action as well to production branch
 - Phase 11 added: Add settings tab, move sign out to it and have a delete account option with data export
 - Phase 12 added: proper onboarding
 - Phase 13 added: coaching options, create plans for others, get notifs when they finish and update their plans for the next week

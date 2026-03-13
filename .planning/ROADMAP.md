@@ -213,7 +213,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 15.1. Reverse Bar Loading + Plate Inventory | 2/2 | Complete    | 2026-03-13 |
 | 16. Push Notifications | 5/5 | Complete    | 2026-03-13 |
 | 17. Social Sharing | 6/6 | Complete    | 2026-03-13 |
-| 18. Group Chat | 5/5 | Complete   | 2026-03-13 |
+| 18. Group Chat | 5/5 | Complete    | 2026-03-13 |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -380,3 +380,13 @@ Plans:
 - [ ] 18-03-PLAN.md — Chat screen UI: GroupTabs (Feed|Chat), useChat hook with Realtime, MessageBubble, MessageInput
 - [ ] 18-04-PLAN.md — Chat features: typing indicators, read receipts, chat media upload, message edit/delete
 - [ ] 18-05-PLAN.md — Push notifications for chat, final integration, human verification
+
+### Phase 19: github actions, ci-cd pipline, builds triggers on new tags. ota update action as well to production branch
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 18
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 19 to break down)
