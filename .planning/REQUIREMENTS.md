@@ -89,10 +89,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Notification Inbox & Deep Linking
 
-- [ ] **NOTIF-01**: Bell icon in dashboard header with numeric unread badge, opens full-screen notification inbox
+- [x] **NOTIF-01**: Bell icon in dashboard header with numeric unread badge, opens full-screen notification inbox
 - [ ] **NOTIF-02**: Tapping inbox items deep links to relevant screen (session detail, progress chart, plan detail, or active workout)
-- [ ] **NOTIF-03**: Notifications persisted in Supabase table with RLS and 30-day retention
-- [ ] **NOTIF-04**: Push notification taps (cold-start and foreground) deep link to correct screen
+- [x] **NOTIF-03**: Notifications persisted in Supabase table with RLS and 30-day retention
+- [x] **NOTIF-04**: Push notification taps (cold-start and foreground) deep link to correct screen
 - [ ] **NOTIF-05**: Developer test screen with trigger buttons for all 6 notification types and debug log
 - [ ] **NOTIF-06**: Local alarm/nudge notifications write records to notifications table for inbox consistency
 

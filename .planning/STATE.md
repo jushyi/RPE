@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 15.1-02-PLAN.md
-last_updated: "2026-03-13T18:26:42.550Z"
+stopped_at: Completed 16-01-PLAN.md
+last_updated: "2026-03-13T18:33:31.627Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
   completed_phases: 15
   total_plans: 72
-  completed_plans: 56
+  completed_plans: 57
 ---
 
 ---
@@ -502,6 +502,7 @@ Progress: [██████████] 100%
 | Phase 15 P01 | 3min | 2 tasks | 7 files |
 | Phase 15.1 P01 | 4min | 2 tasks | 9 files |
 | Phase 15.1 P02 | 12min | 2 tasks | 2 files |
+| Phase 16 P01 | 4 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -628,6 +629,9 @@ Recent decisions affecting current work:
 - [Phase 15.1]: BarbellDiagram computes dynamic SLEEVE_WIDTH from actual plate count with minimum of 10 slots
 - [Phase 15.1]: Renamed mode toggles to Calculate/Load after UAT feedback for cleaner UX
 - [Phase 15.1]: Barbell diagram always visible (empty bar when no plates) for persistent spatial context
+- [Phase 16]: Used async IIFE pattern for fire-and-forget Supabase calls in synchronous Zustand actions (avoids .then() not a function on test mock chains)
+- [Phase 16]: refreshUnreadCount computed locally from notifications array (no Supabase round-trip) for simpler state management
+- [Phase 16]: bellBadge.test.ts created as Wave 0 stubs (it.todo pattern) — will activate in Plan 02 when BellBadge component ships
 
 ### Roadmap Evolution
 
@@ -695,6 +699,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:21:15.487Z
-Stopped at: Completed 15.1-02-PLAN.md
+Last session: 2026-03-13T18:33:31.624Z
+Stopped at: Completed 16-01-PLAN.md
 Resume file: None
