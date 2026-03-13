@@ -103,6 +103,10 @@ export default function AppLayout() {
           name="notifications"
           options={{ title: 'Notifications' }}
         />
+        <Stack.Screen
+          name="dev-tools"
+          options={{ title: 'Dev Tools' }}
+        />
     </Stack>
   );
 }
