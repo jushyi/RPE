@@ -12,7 +12,8 @@ export async function notifyCoachWorkoutComplete(
   traineeId: string,
   traineeName: string,
   workoutTitle: string,
-  hasPR: boolean
+  hasPR: boolean,
+  sessionId?: string
 ): Promise<void> {
   try {
     if (!supabase) return;
@@ -32,7 +33,7 @@ export async function notifyCoachWorkoutComplete(
         recipient_ids: coachIds,
         title: hasPR ? 'PR Alert' : 'Workout Complete',
         body: `${traineeName} finished ${workoutTitle}`,
-        data: { type: 'workout_complete', trainee_id: traineeId },
+        data: { type: 'workout_complete', trainee_id: traineeId, session_id: sessionId },
       },
     });
   } catch (err) {
@@ -47,7 +48,8 @@ export async function notifyCoachWorkoutComplete(
 export async function notifyCoachPR(
   traineeId: string,
   traineeName: string,
-  exerciseName: string
+  exerciseName: string,
+  exerciseId?: string
 ): Promise<void> {
   try {
     if (!supabase) return;
@@ -67,7 +69,7 @@ export async function notifyCoachPR(
         recipient_ids: coachIds,
         title: 'New PR',
         body: `${traineeName} hit a PR on ${exerciseName}`,
-        data: { type: 'pr_achieved', trainee_id: traineeId },
+        data: { type: 'pr_achieved', trainee_id: traineeId, exercise_id: exerciseId, exercise_name: exerciseName },
       },
     });
   } catch (err) {

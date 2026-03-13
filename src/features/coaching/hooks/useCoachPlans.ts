@@ -130,7 +130,7 @@ export function useCoachPlans(traineeId: string) {
 
       // Fire-and-forget: notify trainee that coach created a plan
       const coachName = useAuthStore.getState().displayName;
-      notifyTraineePlanUpdate(traineeId, coachName, name, note).catch(() => {});
+      notifyTraineePlanUpdate(traineeId, coachName, name, note, planData.id).catch(() => {});
     },
     [userId, traineeId, fetchTraineePlans]
   );
@@ -218,7 +218,7 @@ export function useCoachPlans(traineeId: string) {
 
       // Fire-and-forget: notify trainee that coach updated their plan
       const coachName = useAuthStore.getState().displayName;
-      notifyTraineePlanUpdate(traineeId, coachName, name, note).catch(() => {});
+      notifyTraineePlanUpdate(traineeId, coachName, name, note, planId).catch(() => {});
     },
     [userId, traineeId, fetchTraineePlans]
   );

@@ -122,7 +122,7 @@ export function usePRDetection(userId: string | undefined) {
         if (userId) {
           const userName = useAuthStore.getState().displayName;
           const exerciseName = exercise?.name ?? 'Unknown';
-          notifyCoachPR(userId, userName, exerciseName).catch(() => {});
+          notifyCoachPR(userId, userName, exerciseName, exerciseId).catch(() => {});
         }
 
         // Enqueue Supabase upsert (fire-and-forget)

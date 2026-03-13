@@ -15,6 +15,7 @@ import {
   ALARM_CATEGORY_ID,
   NUDGE_DELAY_HOURS,
 } from '../constants';
+import { supabase } from '@/lib/supabase/client';
 
 /**
  * Schedule a weekly alarm notification for a plan day.
@@ -37,6 +38,22 @@ export async function scheduleAlarm(config: AlarmConfig): Promise<void> {
       minute: config.minute,
     },
   });
+
+  // Fire-and-forget: persist notification record to Supabase
+  try {
+    if (supabase) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await (supabase as any).from('notifications').insert({
+          user_id: user.id,
+          type: 'alarm',
+          title: 'Wake-up alarm',
+          body: `Alarm for ${config.dayName ?? 'training day'}`,
+          data: { type: 'alarm' },
+        });
+      }
+    }
+  } catch { /* fire-and-forget */ }
 }
 
 /**
@@ -60,11 +77,13 @@ export async function scheduleNudge(config: AlarmConfig): Promise<void> {
     nudgeWeekday = (nudgeWeekday + 1) % 7;
   }
 
+  const nudgeBody = getRandomNudgeMessage(config.dayName);
+
   await Notifications.scheduleNotificationAsync({
     identifier: nudgeNotificationId(config.planDayId),
     content: {
       title: 'Workout reminder',
-      body: getRandomNudgeMessage(config.dayName),
+      body: nudgeBody,
       sound: true,
       ...(NUDGE_CHANNEL_ID ? { channelId: NUDGE_CHANNEL_ID } : {}),
     },
@@ -75,6 +94,22 @@ export async function scheduleNudge(config: AlarmConfig): Promise<void> {
       minute: config.minute,
     },
   });
+
+  // Fire-and-forget: persist notification record to Supabase
+  try {
+    if (supabase) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await (supabase as any).from('notifications').insert({
+          user_id: user.id,
+          type: 'nudge',
+          title: 'Missed workout',
+          body: nudgeBody,
+          data: { type: 'nudge' },
+        });
+      }
+    }
+  } catch { /* fire-and-forget */ }
 }
 
 /**

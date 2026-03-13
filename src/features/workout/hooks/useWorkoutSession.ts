@@ -122,7 +122,8 @@ export function useWorkoutSession() {
           completed.user_id,
           userName,
           completed.title,
-          sessionHadPR
+          sessionHadPR,
+          completed.id
         ).catch(() => {});
 
         console.log('finishWorkout: navigating to summary');

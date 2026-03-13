@@ -12,7 +12,8 @@ export async function notifyTraineePlanUpdate(
   traineeId: string,
   coachName: string,
   planName: string,
-  note?: string
+  note?: string,
+  planId?: string
 ): Promise<void> {
   try {
     if (!supabase) return;
@@ -26,7 +27,7 @@ export async function notifyTraineePlanUpdate(
         recipient_ids: [traineeId],
         title: 'Plan Updated',
         body,
-        data: { type: 'plan_update' },
+        data: { type: 'plan_update', plan_id: planId },
       },
     });
   } catch (err) {
