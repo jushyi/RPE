@@ -101,11 +101,17 @@ export default function AppLayout() {
         />
         <Stack.Screen
           name="notifications"
-          options={{ title: 'Notifications' }}
+          options={{
+            title: 'Notifications',
+            headerTitleStyle: { fontWeight: '700', fontSize: 18 },
+          }}
         />
         <Stack.Screen
           name="dev-tools"
-          options={{ title: 'Dev Tools' }}
+          options={{
+            title: 'Dev Tools',
+            headerTitleStyle: { fontWeight: '700', fontSize: 18 },
+          }}
         />
     </Stack>
   );
