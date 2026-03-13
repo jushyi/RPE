@@ -5,6 +5,8 @@
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ScrollView, StyleSheet, View, Text, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import * as Notifications from 'expo-notifications';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -19,6 +21,7 @@ interface DebugEntry {
 type ButtonStatus = 'idle' | 'sending' | 'success' | 'error';
 
 export default function DevToolsScreen() {
+  const router = useRouter();
   const [debugLog, setDebugLog] = useState<DebugEntry[]>([]);
   const [buttonStatus, setButtonStatus] = useState<Record<string, ButtonStatus>>({
     alarm: 'idle',
@@ -155,6 +158,16 @@ export default function DevToolsScreen() {
   ];
 
   return (
+    <SafeAreaView style={styles.safe} edges={['top']}>
+      <View style={styles.navBar}>
+        <Pressable onPress={() => router.back()} style={styles.navButton}>
+          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+        </Pressable>
+        <View style={styles.navTitle}>
+          <Text style={styles.navTitleText}>Dev Tools</Text>
+        </View>
+        <View style={styles.navButton} />
+      </View>
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.buttonGrid}>
         {buttons.map(({ type, label, onPress, icon }) => {
@@ -191,10 +204,34 @@ export default function DevToolsScreen() {
         ))
       )}
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  navBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    paddingVertical: 8,
+  },
+  navButton: {
+    padding: 8,
+    width: 40,
+  },
+  navTitle: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  navTitleText: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '700',
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,

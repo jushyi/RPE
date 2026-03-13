@@ -105,17 +105,11 @@ export default function AppLayout() {
         />
         <Stack.Screen
           name="notifications"
-          options={{
-            title: 'Notifications',
-            headerTitleStyle: { color: colors.textPrimary, fontWeight: '700', fontSize: 18 },
-          }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="dev-tools"
-          options={{
-            title: 'Dev Tools',
-            headerTitleStyle: { color: colors.textPrimary, fontWeight: '700', fontSize: 18 },
-          }}
+          options={{ headerShown: false }}
         />
     </Stack>
   );
