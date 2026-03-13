@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 16-03-PLAN.md
-last_updated: "2026-03-13T18:45:53.465Z"
+stopped_at: Completed 17-01-PLAN.md
+last_updated: "2026-03-13T19:08:21.329Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
-  completed_phases: 16
-  total_plans: 72
-  completed_plans: 59
+  completed_phases: 15
+  total_plans: 74
+  completed_plans: 60
 ---
 
 ---
@@ -508,6 +508,7 @@ Progress: [██████████] 100%
 | Phase 16 P02 | 3min | 2 tasks | 12 files |
 | Phase 16 P03 | 4min | 2 tasks | 9 files |
 | Phase 16 P03 | 5 | 2 tasks | 6 files |
+| Phase 17 P01 | 6 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -648,6 +649,9 @@ Recent decisions affecting current work:
 - [Phase 16]: Fire-and-forget Supabase inserts in alarm/nudge scheduling matching existing codebase pattern
 - [Phase 16]: Optional parameters for backward-compatible enriched payloads (sessionId, exerciseId, planId) so existing callers still work
 - [Phase 16]: Long-press on version text (2s) for hidden dev tools access in production builds
+- [Phase 17]: Reaction icons use Ionicons key strings (fire -> flame-outline), NOT emoji characters per CLAUDE.md
+- [Phase 17]: socialStore uses Record<string,T> instead of Map<string,T> for MMKV JSON serialization compatibility
+- [Phase 17]: createGroup always inserts creator as group_member in same call to prevent Pitfall 3
 
 ### Roadmap Evolution
 
@@ -715,6 +719,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:42:05.337Z
-Stopped at: Completed 16-03-PLAN.md
+Last session: 2026-03-13T19:08:14.783Z
+Stopped at: Completed 17-01-PLAN.md
 Resume file: None

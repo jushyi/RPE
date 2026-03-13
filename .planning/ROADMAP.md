@@ -212,7 +212,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 15. Barbell Calculator | 3/3 | Complete    | 2026-03-13 |
 | 15.1. Reverse Bar Loading + Plate Inventory | 2/2 | Complete    | 2026-03-13 |
 | 16. Push Notifications | 3/3 | Complete    | 2026-03-13 |
-| 17. Social Sharing | 0/6 | Not started | - |
+| 17. Social Sharing | 1/6 | In Progress|  |
 | 18. Group Chat | 0/5 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
@@ -346,7 +346,7 @@ Plans:
   6. Group members can add icon-based reactions to shared items
   7. Push notifications sent to non-muted group members on new shares
   8. Body metrics are never shared
-**Plans:** 6 plans
+**Plans:** 1/6 plans executed
 
 Plans:
 - [ ] 17-01-PLAN.md — Database migration (social tables + RLS), TypeScript types, pure utility functions with tests, Zustand stores
