@@ -95,7 +95,7 @@ export function PlateCalculator() {
           onPress={() => setMode('weight-to-plates')}
         >
           <Text style={[s.toggleText, !isReverse && s.toggleTextActive]}>
-            Weight &gt; Plates
+            Calculate
           </Text>
         </Pressable>
         <Pressable
@@ -103,7 +103,7 @@ export function PlateCalculator() {
           onPress={() => setMode('plates-to-weight')}
         >
           <Text style={[s.toggleText, isReverse && s.toggleTextActive]}>
-            Plates &gt; Weight
+            Load
           </Text>
         </Pressable>
       </View>
@@ -160,6 +160,11 @@ export function PlateCalculator() {
         />
       </View>
 
+      {/* ===== PLATES-TO-WEIGHT MODE: Barbell Diagram ===== */}
+      {isReverse && (
+        <BarbellDiagram plates={reverseBreakdown} unit={unit} />
+      )}
+
       {/* ===== PLATES-TO-WEIGHT MODE: Stepper List ===== */}
       {isReverse && (
         <View style={s.pickerWrapper}>
@@ -173,11 +178,6 @@ export function PlateCalculator() {
         </View>
       )}
 
-      {/* ===== PLATES-TO-WEIGHT MODE: Barbell Diagram ===== */}
-      {isReverse && reverseBreakdown.length > 0 && (
-        <BarbellDiagram plates={reverseBreakdown} unit={unit} />
-      )}
-
       {/* ===== PLATES-TO-WEIGHT MODE: Clear All ===== */}
       {isReverse && (
         <Pressable style={s.clearBtn} onPress={handleClearAll}>
@@ -185,15 +185,17 @@ export function PlateCalculator() {
         </Pressable>
       )}
 
-      {/* My Plates Inventory (shared) */}
-      <View style={s.pickerWrapper}>
-        <MyPlatesSection
-          enabledPlates={enabledPlates}
-          allPlates={allPlates}
-          unit={unit}
-          onToggle={toggle}
-        />
-      </View>
+      {/* My Plates Inventory (Load mode — before results) */}
+      {isReverse && (
+        <View style={s.pickerWrapper}>
+          <MyPlatesSection
+            enabledPlates={enabledPlates}
+            allPlates={allPlates}
+            unit={unit}
+            onToggle={toggle}
+          />
+        </View>
+      )}
 
       {/* Empty inventory warning */}
       {enabledCount === 0 && (
@@ -213,11 +215,16 @@ export function PlateCalculator() {
         </View>
       )}
 
+      {/* ===== WEIGHT-TO-PLATES MODE: Barbell Diagram (always visible) ===== */}
+      {!isReverse && (
+        <BarbellDiagram
+          plates={breakdown && breakdown !== 'below_bar' ? breakdown.plates : []}
+          unit={unit}
+        />
+      )}
+
       {!isReverse && breakdown && breakdown !== 'below_bar' && (
         <>
-          {/* Barbell Diagram -- one side only */}
-          <BarbellDiagram plates={breakdown.plates} unit={unit} />
-
           {/* Per Side Summary */}
           {perSideSummary.length > 0 && (
             <View style={s.summaryCard}>
@@ -240,6 +247,18 @@ export function PlateCalculator() {
             </View>
           )}
         </>
+      )}
+
+      {/* My Plates Inventory (Calculate mode — after results) */}
+      {!isReverse && (
+        <View style={s.pickerWrapper}>
+          <MyPlatesSection
+            enabledPlates={enabledPlates}
+            allPlates={allPlates}
+            unit={unit}
+            onToggle={toggle}
+          />
+        </View>
       )}
     </ScrollView>
   );
