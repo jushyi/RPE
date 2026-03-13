@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 16-01-PLAN.md
-last_updated: "2026-03-13T18:34:24.213Z"
+stopped_at: Completed 16-02-PLAN.md
+last_updated: "2026-03-13T18:39:33.698Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
   completed_phases: 15
   total_plans: 72
-  completed_plans: 57
+  completed_plans: 58
 ---
 
 ---
@@ -504,6 +504,7 @@ Progress: [██████████] 100%
 | Phase 15.1 P02 | 12min | 2 tasks | 2 files |
 | Phase 16 P01 | 4 | 2 tasks | 12 files |
 | Phase 16 P01 | 4min | 2 tasks | 12 files |
+| Phase 16 P02 | 4min | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -635,6 +636,8 @@ Recent decisions affecting current work:
 - [Phase 16]: bellBadge.test.ts created as Wave 0 stubs (it.todo pattern) — will activate in Plan 02 when BellBadge component ships
 - [Phase 16]: void async IIFE pattern for fire-and-forget Supabase mutations in Zustand store actions
 - [Phase 16]: Client-side 30-day notification pruning on fetch (simpler than pg_cron)
+- [Phase 16]: BellBadge reads unreadCount directly from notificationStore; useUnreadCount in dashboard drives refresh-on-foreground cycle
+- [Phase 16]: Cold-start deep links handled in app/(app)/_layout.tsx via useLastNotificationResponse; foreground taps in root app/_layout.tsx
 
 ### Roadmap Evolution
 
@@ -702,6 +705,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:34:24.209Z
-Stopped at: Completed 16-01-PLAN.md
+Last session: 2026-03-13T18:39:33.695Z
+Stopped at: Completed 16-02-PLAN.md
 Resume file: None
