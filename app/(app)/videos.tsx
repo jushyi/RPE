@@ -15,7 +15,8 @@ import {
   Animated,
   StyleSheet,
 } from 'react-native';
-import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
 import { colors } from '@/constants/theme';
@@ -132,6 +133,7 @@ function GalleryItem({
 }
 
 export default function VideosScreen() {
+  const router = useRouter();
   const { videos, storageUsage, isLoading, refresh, deleteVideo } = useVideoGallery();
   const [refreshing, setRefreshing] = useState(false);
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
@@ -192,8 +194,18 @@ export default function VideosScreen() {
   );
 
   return (
-    <>
-      <Stack.Screen options={{ title: 'My Videos' }} />
+    <SafeAreaView style={s.safe} edges={['top']}>
+      {/* Navigation Bar */}
+      <View style={s.navBar}>
+        <Pressable onPress={() => router.back()} style={s.navButton}>
+          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+        </Pressable>
+        <View style={s.navTitle}>
+          <Text style={s.navTitleText}>My Videos</Text>
+        </View>
+        <View style={s.navButton} />
+      </View>
+
       <View style={s.container}>
         {isLoading && videos.length === 0 ? (
           <View style={s.loadingContainer}>
@@ -225,11 +237,34 @@ export default function VideosScreen() {
         visible={!!playingVideo}
         onClose={() => setPlayingVideo(null)}
       />
-    </>
+    </SafeAreaView>
   );
 }
 
 const s = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  navBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    paddingVertical: 8,
+  },
+  navButton: {
+    padding: 8,
+    width: 40,
+  },
+  navTitle: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  navTitleText: {
+    color: colors.textPrimary,
+    fontSize: 16,
+    fontWeight: '700',
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,

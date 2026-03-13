@@ -79,7 +79,7 @@ export default function AppLayout() {
         />
         <Stack.Screen
           name="videos"
-          options={{ title: 'My Videos' }}
+          options={{ headerShown: false }}
         />
     </Stack>
   );
