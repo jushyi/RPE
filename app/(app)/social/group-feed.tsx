@@ -17,6 +17,7 @@ import { SharedWorkoutCard } from '@/features/social/components/SharedWorkoutCar
 import { SharedPRCard } from '@/features/social/components/SharedPRCard';
 import { SharedVideoCard } from '@/features/social/components/SharedVideoCard';
 import { ReactionBar } from '@/features/social/components/ReactionBar';
+import { GroupTabs } from '@/features/social/components/GroupTabs';
 import { getTimeLabel } from '@/features/social/utils/timeLabel';
 import type { SharedItem, FriendProfile, Group } from '@/features/social/types';
 
@@ -29,7 +30,7 @@ export default function GroupFeedScreen() {
 
   const groups = useSocialStore((s) => s.groups);
   const group: Group | undefined = groups.find((g) => g.id === groupId);
-  const title = groupName ?? group?.name ?? 'Feed';
+  const title = groupName ?? group?.name ?? 'Group';
 
   const { items, loading, hasMore, loadMore, refresh } = useFeed(groupId ?? '');
 
@@ -67,13 +68,6 @@ export default function GroupFeedScreen() {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
-
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setCurrentUserId(session?.user?.id ?? null);
-    });
-  }, []);
 
   const renderItem = ({ item }: { item: SharedItem }) => {
     const author = profiles[item.user_id];
@@ -136,17 +130,9 @@ export default function GroupFeedScreen() {
     );
   };
 
-  return (
-    <SafeAreaView style={s.safeArea} edges={['bottom']}>
-      <Stack.Screen
-        options={{
-          title,
-          headerStyle: { backgroundColor: colors.background },
-          headerTintColor: colors.textPrimary,
-          headerTitleStyle: { color: colors.textPrimary, fontWeight: '700' },
-        }}
-      />
-
+  // Feed tab content (passed into GroupTabs)
+  const feedContent = (
+    <>
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
@@ -176,6 +162,21 @@ export default function GroupFeedScreen() {
           <ActivityIndicator size="large" color={colors.accent} />
         </View>
       ) : null}
+    </>
+  );
+
+  return (
+    <SafeAreaView style={s.safeArea} edges={['bottom']}>
+      <Stack.Screen
+        options={{
+          title,
+          headerStyle: { backgroundColor: colors.background },
+          headerTintColor: colors.textPrimary,
+          headerTitleStyle: { color: colors.textPrimary, fontWeight: '700' },
+        }}
+      />
+
+      <GroupTabs groupId={groupId ?? ''} feedContent={feedContent} />
     </SafeAreaView>
   );
 }
