@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import Svg, { Rect, Text as SvgText, Line } from 'react-native-svg';
+import Svg, { Rect, Text as SvgText } from 'react-native-svg';
 import { colors } from '@/constants/theme';
 import {
   PLATE_COLORS_LB,
@@ -18,11 +18,17 @@ const BAR_HEIGHT = 16;
 const BAR_Y = (DIAGRAM_HEIGHT - BAR_HEIGHT) / 2;
 const PLATE_WIDTH = 18;
 const PLATE_GAP = 3;
-const COLLAR_WIDTH = 10;
 const BAR_COLOR = colors.surfaceElevated;
 const MAX_PLATE_HEIGHT = 150;
 const MIN_PLATE_HEIGHT = 44;
-const BAR_LEFT_PAD = 20;
+
+const COLLAR_X = 20;
+const COLLAR_WIDTH = 8;
+const COLLAR_HEIGHT = 28;
+const COLLAR_Y = (DIAGRAM_HEIGHT - COLLAR_HEIGHT) / 2;
+const COLLAR_COLOR = '#555';
+
+const PLATE_START_X = COLLAR_X + COLLAR_WIDTH + 3;
 
 export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
   const plateColors = unit === 'kg' ? PLATE_COLORS_KG : PLATE_COLORS_LB;
@@ -36,8 +42,8 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
   }
 
   const plateAreaWidth =
-    expandedPlates.length * (PLATE_WIDTH + PLATE_GAP) + COLLAR_WIDTH;
-  const totalWidth = BAR_LEFT_PAD + plateAreaWidth + 20;
+    expandedPlates.length * (PLATE_WIDTH + PLATE_GAP);
+  const totalWidth = COLLAR_X + COLLAR_WIDTH + plateAreaWidth + 20;
 
   const renderPlates = () => {
     return expandedPlates.map((weight, idx) => {
@@ -49,8 +55,7 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
       const plateY = (DIAGRAM_HEIGHT - plateH) / 2;
       const color = plateColors[weight] ?? '#666';
 
-      const x =
-        BAR_LEFT_PAD + COLLAR_WIDTH + idx * (PLATE_WIDTH + PLATE_GAP);
+      const x = PLATE_START_X + idx * (PLATE_WIDTH + PLATE_GAP);
 
       const showLabel = plateH >= 44;
 
@@ -94,17 +99,17 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
           y={BAR_Y}
           width={totalWidth}
           height={BAR_HEIGHT}
-          rx={3}
+          rx={0}
           fill={BAR_COLOR}
         />
-        {/* Collar mark */}
-        <Line
-          x1={BAR_LEFT_PAD}
-          y1={BAR_Y - 3}
-          x2={BAR_LEFT_PAD}
-          y2={BAR_Y + BAR_HEIGHT + 3}
-          stroke={colors.textMuted}
-          strokeWidth={2}
+        {/* Collar clamp */}
+        <Rect
+          x={COLLAR_X}
+          y={COLLAR_Y}
+          width={COLLAR_WIDTH}
+          height={COLLAR_HEIGHT}
+          rx={1}
+          fill={COLLAR_COLOR}
         />
 
         {/* Plates — one side only */}
@@ -117,6 +122,5 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
 const s = StyleSheet.create({
   container: {
     paddingVertical: 8,
-    alignItems: 'center',
   },
 });
