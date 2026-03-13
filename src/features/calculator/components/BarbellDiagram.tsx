@@ -13,22 +13,27 @@ interface BarbellDiagramProps {
   unit: 'kg' | 'lbs';
 }
 
-const DIAGRAM_HEIGHT = 180;
-const BAR_HEIGHT = 16;
+const DIAGRAM_HEIGHT = 267;
+const BAR_HEIGHT = 36;
 const BAR_Y = (DIAGRAM_HEIGHT - BAR_HEIGHT) / 2;
-const PLATE_WIDTH = 18;
-const PLATE_GAP = 3;
+const PLATE_WIDTH = 29;
+const PLATE_GAP = 5;
 const BAR_COLOR = colors.surfaceElevated;
-const MAX_PLATE_HEIGHT = 150;
-const MIN_PLATE_HEIGHT = 44;
+const MAX_PLATE_HEIGHT = 253;
+const MIN_PLATE_HEIGHT = 84;
 
-const COLLAR_X = 20;
-const COLLAR_WIDTH = 8;
-const COLLAR_HEIGHT = 28;
+const COLLAR_X = 29;
+const COLLAR_WIDTH = 15;
+const COLLAR_HEIGHT = 57;
 const COLLAR_Y = (DIAGRAM_HEIGHT - COLLAR_HEIGHT) / 2;
 const COLLAR_COLOR = '#555';
 
 const PLATE_START_X = COLLAR_X + COLLAR_WIDTH + 3;
+
+// Fixed sleeve length — fits 10 plates + extra bar visible at end
+const MAX_PLATES_PER_SIDE = 10;
+const SLEEVE_WIDTH = MAX_PLATES_PER_SIDE * (PLATE_WIDTH + PLATE_GAP);
+const TOTAL_WIDTH = COLLAR_X + COLLAR_WIDTH + SLEEVE_WIDTH + 10;
 
 export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
   const plateColors = unit === 'kg' ? PLATE_COLORS_KG : PLATE_COLORS_LB;
@@ -40,10 +45,6 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
       expandedPlates.push(p.weight);
     }
   }
-
-  const plateAreaWidth =
-    expandedPlates.length * (PLATE_WIDTH + PLATE_GAP);
-  const totalWidth = COLLAR_X + COLLAR_WIDTH + plateAreaWidth + 20;
 
   const renderPlates = () => {
     return expandedPlates.map((weight, idx) => {
@@ -91,13 +92,14 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
       <Svg
         width="100%"
         height={DIAGRAM_HEIGHT}
-        viewBox={`0 0 ${totalWidth} ${DIAGRAM_HEIGHT}`}
+        viewBox={`0 0 ${TOTAL_WIDTH} ${DIAGRAM_HEIGHT}`}
+        preserveAspectRatio="xMinYMid meet"
       >
         {/* Bar — extends from left edge to end */}
         <Rect
           x={0}
           y={BAR_Y}
-          width={totalWidth}
+          width={TOTAL_WIDTH}
           height={BAR_HEIGHT}
           rx={0}
           fill={BAR_COLOR}
