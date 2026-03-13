@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 15.1-01-PLAN.md
-last_updated: "2026-03-13T18:09:31.177Z"
+stopped_at: Completed 15.1-02-PLAN.md
+last_updated: "2026-03-13T18:21:15.490Z"
 last_activity: "2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar"
 progress:
   total_phases: 19
-  completed_phases: 14
+  completed_phases: 15
   total_plans: 72
-  completed_plans: 55
+  completed_plans: 56
 ---
 
 ---
@@ -501,6 +501,7 @@ Progress: [██████████] 100%
 | Phase 15 P00 | 1min | 1 tasks | 3 files |
 | Phase 15 P01 | 3min | 2 tasks | 7 files |
 | Phase 15.1 P01 | 4min | 2 tasks | 9 files |
+| Phase 15.1 P02 | 12min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -625,6 +626,8 @@ Recent decisions affecting current work:
 - [Phase 15.1]: MMKV plate-inventory store with separate keys per unit (inventory-lb, inventory-kg)
 - [Phase 15.1]: getMissingPlateMessage finds smallest disabled plate <= remainder for targeted warnings
 - [Phase 15.1]: BarbellDiagram computes dynamic SLEEVE_WIDTH from actual plate count with minimum of 10 slots
+- [Phase 15.1]: Renamed mode toggles to Calculate/Load after UAT feedback for cleaner UX
+- [Phase 15.1]: Barbell diagram always visible (empty bar when no plates) for persistent spatial context
 
 ### Roadmap Evolution
 
@@ -692,6 +695,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:09:31.174Z
-Stopped at: Completed 15.1-01-PLAN.md
+Last session: 2026-03-13T18:21:15.487Z
+Stopped at: Completed 15.1-02-PLAN.md
 Resume file: None
