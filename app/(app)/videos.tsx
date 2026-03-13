@@ -37,6 +37,23 @@ function formatDate(dateStr: string): string {
   return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
+function renderRightActions(
+  _progress: Animated.AnimatedInterpolation<number>,
+  dragX: Animated.AnimatedInterpolation<number>,
+) {
+  const scale = dragX.interpolate({
+    inputRange: [-80, 0],
+    outputRange: [1, 0.5],
+    extrapolate: 'clamp',
+  });
+  return (
+    <Animated.View style={[s.deleteAction, { transform: [{ scale }] }]}>
+      <Ionicons name="trash-outline" size={22} color={colors.white} />
+      <Text style={s.deleteText}>Delete</Text>
+    </Animated.View>
+  );
+}
+
 function GalleryItem({
   item,
   onPlay,
@@ -47,6 +64,7 @@ function GalleryItem({
   onDelete: (item: VideoGalleryItem) => void;
 }) {
   const [thumbnailUri, setThumbnailUri] = useState<string | null>(null);
+  const swipeableRef = useRef<Swipeable>(null);
 
   useEffect(() => {
     const cached = getCachedThumbnail(item.id);
@@ -59,9 +77,13 @@ function GalleryItem({
     }
   }, [item.id, item.videoUrl]);
 
-  const handleLongPress = useCallback(() => {
+  const handleSwipeOpen = useCallback(() => {
     Alert.alert('Delete Video?', 'This will permanently remove this video.', [
-      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Cancel',
+        style: 'cancel',
+        onPress: () => swipeableRef.current?.close(),
+      },
       {
         text: 'Delete',
         style: 'destructive',
@@ -71,35 +93,41 @@ function GalleryItem({
   }, [item, onDelete]);
 
   return (
-    <Pressable
-      style={s.galleryItem}
-      onPress={() => onPlay(item)}
-      onLongPress={handleLongPress}
+    <Swipeable
+      ref={swipeableRef}
+      renderRightActions={renderRightActions}
+      onSwipeableOpen={handleSwipeOpen}
+      overshootRight={false}
     >
-      <View style={s.thumbnailCol}>
-        {thumbnailUri ? (
-          <VideoThumbnail
-            thumbnailUri={thumbnailUri}
-            onPress={() => onPlay(item)}
-            size={60}
-          />
-        ) : (
-          <View style={[s.thumbnailPlaceholder, { width: 60, height: 60 }]}>
-            <Ionicons name="videocam" size={24} color={colors.textMuted} />
-          </View>
-        )}
-      </View>
-      <View style={s.infoCol}>
-        <Text style={s.dateText}>{formatDate(item.sessionDate)}</Text>
-        <Text style={s.exerciseText} numberOfLines={1}>
-          {item.exerciseName}
-        </Text>
-        <Text style={s.setInfoText}>
-          Set {item.setNumber}: {item.weight}{item.unit} x {item.reps}
-        </Text>
-      </View>
-      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-    </Pressable>
+      <Pressable
+        style={s.galleryItem}
+        onPress={() => onPlay(item)}
+      >
+        <View style={s.thumbnailCol}>
+          {thumbnailUri ? (
+            <VideoThumbnail
+              thumbnailUri={thumbnailUri}
+              onPress={() => onPlay(item)}
+              size={60}
+            />
+          ) : (
+            <View style={[s.thumbnailPlaceholder, { width: 60, height: 60 }]}>
+              <Ionicons name="videocam" size={24} color={colors.textMuted} />
+            </View>
+          )}
+        </View>
+        <View style={s.infoCol}>
+          <Text style={s.dateText}>{formatDate(item.sessionDate)}</Text>
+          <Text style={s.exerciseText} numberOfLines={1}>
+            {item.exerciseName}
+          </Text>
+          <Text style={s.setInfoText}>
+            Set {item.setNumber}: {item.weight}{item.unit} x {item.reps}
+          </Text>
+        </View>
+        <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+      </Pressable>
+    </Swipeable>
   );
 }
 
@@ -270,5 +298,19 @@ const s = StyleSheet.create({
     color: colors.textMuted,
     fontSize: 16,
     marginTop: 12,
+  },
+  deleteAction: {
+    backgroundColor: colors.error,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    borderRadius: 12,
+    marginBottom: 10,
+  },
+  deleteText: {
+    color: colors.white,
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 4,
   },
 });
