@@ -210,6 +210,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
 | 14. Set Videos | 5/5 | Complete   | 2026-03-13 |
 | 15. Barbell Calculator | 3/3 | Complete    | 2026-03-13 |
+| 15.1. Reverse Bar Loading + Plate Inventory | 0/2 | Not started | - |
 | 16. Push Notifications | 0/3 | Not started | - |
 | 17. Social Sharing | 0/6 | Not started | - |
 | 18. Group Chat | 0/5 | Not started | - |
@@ -303,13 +304,14 @@ Plans:
 
 ### Phase 15.1: reverse bar loading for plates tab in calc. also ability to choose which plates i actually have. some users may not have the red 55 lbs or 35kg plates. adaptable for situations (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Requirements**: TBD
+**Goal:** Enhance the Plates sub-tool with reverse bar loading mode (Plates > Weight via +/- steppers) and customizable plate inventory (toggle plate sizes on/off per unit, persisted in MMKV), with dynamic barbell diagram and enhanced remainder warnings.
+**Requirements**: PCALC-01, PCALC-02, PCALC-03, PCALC-04, PCALC-05
 **Depends on:** Phase 15
-**Plans:** 0 plans
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 15.1 to break down)
+- [ ] 15.1-01-PLAN.md -- Plate inventory hook (MMKV), reverse calc utilities, MyPlatesSection component, dynamic BarbellDiagram, inventory integration in PlateCalculator
+- [ ] 15.1-02-PLAN.md -- Mode toggle segmented control, PlateStepperList component, reverse mode UI in PlateCalculator, human verification
 
 ### Phase 16: Push Notifications
 
