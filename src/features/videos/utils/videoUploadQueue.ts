@@ -13,6 +13,34 @@ import type { VideoUploadItem } from '../types';
 const storage = createMMKV({ id: 'video-upload-queue' });
 const QUEUE_KEY = 'pending';
 
+/** Max upload size in bytes (50 MB — Supabase free-tier limit) */
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
+
+// --- Upload status observable ---
+type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
+interface UploadState {
+  status: UploadStatus;
+  error?: string;
+  pending: number;
+}
+
+let _uploadState: UploadState = { status: 'idle', pending: 0 };
+const _listeners = new Set<(state: UploadState) => void>();
+
+function setUploadState(state: UploadState) {
+  _uploadState = state;
+  _listeners.forEach((fn) => fn(state));
+}
+
+export function getUploadState(): UploadState {
+  return _uploadState;
+}
+
+export function subscribeUploadState(fn: (state: UploadState) => void): () => void {
+  _listeners.add(fn);
+  return () => _listeners.delete(fn);
+}
+
 /** Read the current queue from MMKV */
 export function getVideoQueue(): VideoUploadItem[] {
   const raw = storage.getString(QUEUE_KEY);
@@ -24,8 +52,25 @@ export function getVideoQueue(): VideoUploadItem[] {
   }
 }
 
+/** Check file size. Returns size in bytes, or -1 if unreadable. */
+function getFileSize(uri: string): number {
+  try {
+    const file = new File(uri);
+    return file.size ?? -1;
+  } catch {
+    return -1;
+  }
+}
+
 /** Add a video upload item to the queue, copying to persistent storage */
 export async function enqueueVideoUpload(item: VideoUploadItem): Promise<void> {
+  // Check file size before enqueuing
+  const size = getFileSize(item.localUri);
+  if (size > MAX_VIDEO_SIZE) {
+    const sizeMB = Math.round(size / 1024 / 1024);
+    throw new Error(`Video is too large (${sizeMB} MB). Maximum size is ${MAX_VIDEO_SIZE / 1024 / 1024} MB. Try a shorter clip.`);
+  }
+
   // Copy video from cache to document directory to survive app restarts
   const ext = item.localUri.split('.').pop() || 'mp4';
   const persistentUri = `${Paths.document.uri}set-video-${item.setLogId}.${ext}`;
@@ -50,7 +95,7 @@ export async function enqueueVideoUpload(item: VideoUploadItem): Promise<void> {
   const queue = getVideoQueue();
   queue.push(queueItem);
   storage.set(QUEUE_KEY, JSON.stringify(queue));
-  console.log('[VideoQueue] Enqueued video for set:', item.setLogId, 'uri:', finalUri);
+  console.log('[VideoQueue] Enqueued video for set:', item.setLogId, 'uri:', finalUri, 'size:', size);
 }
 
 /** Remove a successfully uploaded item from the queue */
@@ -60,22 +105,22 @@ export function removeFromQueue(setLogId: string): void {
   storage.set(QUEUE_KEY, JSON.stringify(filtered));
 }
 
-/** Upload a single video to Supabase Storage */
+/** Upload a single video to Supabase Storage using Blob (no ArrayBuffer in memory) */
 async function uploadSetVideo(
   userId: string,
   setLogId: string,
   localUri: string,
 ): Promise<string> {
   const file = new File(localUri);
-  const arrayBuffer = await file.arrayBuffer();
 
   const ext = localUri.split('.').pop()?.toLowerCase() || 'mp4';
   const contentType = ext === 'mov' ? 'video/quicktime' : 'video/mp4';
   const filePath = `${userId}/${setLogId}.${ext}`;
 
+  // Pass File directly as Blob — avoids loading entire video into memory
   const { error } = await supabase.storage
     .from('set-videos')
-    .upload(filePath, arrayBuffer, {
+    .upload(filePath, file as unknown as Blob, {
       contentType,
       upsert: true,
     });
@@ -95,8 +140,13 @@ export async function flushVideoQueue(): Promise<void> {
   if (!netState.isConnected) return;
 
   const queue = getVideoQueue();
-  const failed: VideoUploadItem[] = [];
+  if (queue.length === 0) {
+    setUploadState({ status: 'idle', pending: 0 });
+    return;
+  }
 
+  const failed: VideoUploadItem[] = [];
+  setUploadState({ status: 'uploading', pending: queue.length });
   console.log('[VideoQueue] Flushing', queue.length, 'items');
 
   for (const item of queue) {
@@ -132,5 +182,11 @@ export async function flushVideoQueue(): Promise<void> {
   // Keep only failed items in the queue
   if (failed.length > 0) {
     storage.set(QUEUE_KEY, JSON.stringify(failed));
+    const errMsg = failed.length === queue.length
+      ? 'Video upload failed. The video may be too large.'
+      : `${failed.length} of ${queue.length} videos failed to upload.`;
+    setUploadState({ status: 'error', error: errMsg, pending: failed.length });
+  } else {
+    setUploadState({ status: 'success', pending: 0 });
   }
 }

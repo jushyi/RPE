@@ -225,8 +225,10 @@ export function useWorkoutSession() {
           createdAt: new Date().toISOString(),
           source,
         });
-      } catch (err) {
-        console.warn('[Video] enqueueVideoUpload failed:', err);
+      } catch (err: any) {
+        const msg = err?.message || 'Failed to save video';
+        console.warn('[Video] enqueueVideoUpload failed:', msg);
+        Alert.alert('Video Error', msg);
       }
     },
     [userId],

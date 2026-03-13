@@ -3,8 +3,8 @@
  * Shows session stats, weight target prompts for manual progression exercises,
  * and handles session sync + previous performance caching on completion.
  */
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect, useSyncExternalStore, useCallback } from 'react';
+import { View, Text, Pressable, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,14 +15,22 @@ import SessionSummaryCard, {
 import WeightTargetPrompt from '@/features/workout/components/WeightTargetPrompt';
 import { flushSyncQueue } from '@/features/workout/hooks/useSyncQueue';
 import { cachePreviousPerformance } from '@/features/workout/hooks/usePreviousPerformance';
+import { getUploadState, subscribeUploadState } from '@/features/videos/utils/videoUploadQueue';
 import { supabase } from '@/lib/supabase/client';
 import type { WorkoutSession } from '@/features/workout/types';
 import { getCompletedSession, clearCompletedSession, resetFinishingFlag } from '@/features/workout/workoutSessionBridge';
+
+function useVideoUploadStatus() {
+  const subscribe = useCallback((cb: () => void) => subscribeUploadState(cb), []);
+  return useSyncExternalStore(subscribe, getUploadState, getUploadState);
+}
 
 export default function WorkoutSummaryScreen() {
   const router = useRouter();
   const [session] = useState<WorkoutSession | null>(() => getCompletedSession());
   const [showTargets, setShowTargets] = useState(true);
+  const uploadStatus = useVideoUploadStatus();
+  const isUploading = uploadStatus.status === 'uploading';
 
   // Reset the finishing flag so workout screen redirect works normally again
   useEffect(() => {
@@ -136,11 +144,46 @@ export default function WorkoutSummaryScreen() {
             </View>
           )}
 
+        {/* Video upload status banner */}
+        {isUploading && (
+          <View style={s.uploadBanner}>
+            <ActivityIndicator size="small" color={colors.accent} />
+            <Text style={s.uploadText}>
+              Uploading {uploadStatus.pending} video{uploadStatus.pending !== 1 ? 's' : ''}...
+            </Text>
+          </View>
+        )}
+        {uploadStatus.status === 'success' && (
+          <View style={s.uploadBanner}>
+            <Ionicons name="checkmark-circle-outline" size={18} color={colors.success} />
+            <Text style={[s.uploadText, { color: colors.success }]}>Video uploaded</Text>
+          </View>
+        )}
+        {uploadStatus.status === 'error' && (
+          <View style={[s.uploadBanner, s.uploadBannerError]}>
+            <Ionicons name="alert-circle-outline" size={18} color={colors.error} />
+            <Text style={[s.uploadText, { color: colors.error }]}>
+              {uploadStatus.error || 'Video upload failed'}
+            </Text>
+          </View>
+        )}
+
         <Pressable
-          onPress={handleDone}
-          style={({ pressed }) => [s.doneButton, pressed && s.doneButtonPressed]}
+          onPress={isUploading ? undefined : handleDone}
+          style={({ pressed }) => [
+            s.doneButton,
+            isUploading && s.doneButtonDisabled,
+            !isUploading && pressed && s.doneButtonPressed,
+          ]}
         >
-          <Text style={s.doneButtonText}>Done</Text>
+          {isUploading ? (
+            <View style={s.doneButtonRow}>
+              <ActivityIndicator size="small" color={colors.textMuted} />
+              <Text style={[s.doneButtonText, s.doneButtonTextDisabled]}>Uploading video...</Text>
+            </View>
+          ) : (
+            <Text style={s.doneButtonText}>Done</Text>
+          )}
         </Pressable>
       </ScrollView>
       </KeyboardAvoidingView>
@@ -218,6 +261,25 @@ const s = StyleSheet.create({
   targetSection: {
     width: '100%',
   },
+  uploadBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    width: '100%',
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: colors.surfaceElevated,
+  },
+  uploadBannerError: {
+    borderColor: colors.error,
+  },
+  uploadText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    fontWeight: '500',
+  },
   doneButton: {
     backgroundColor: colors.accent,
     borderRadius: 12,
@@ -226,6 +288,9 @@ const s = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
+  doneButtonDisabled: {
+    backgroundColor: colors.surfaceElevated,
+  },
   doneButtonPressed: {
     opacity: 0.8,
   },
@@ -233,5 +298,13 @@ const s = StyleSheet.create({
     color: colors.white,
     fontSize: 18,
     fontWeight: '700',
+  },
+  doneButtonTextDisabled: {
+    color: colors.textMuted,
+  },
+  doneButtonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
 });
