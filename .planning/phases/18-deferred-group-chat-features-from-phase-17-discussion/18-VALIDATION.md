@@ -42,7 +42,7 @@ created: 2026-03-12
 | 18-01-02 | 01 | 0 | Wave 0 test stubs | unit | `npx jest tests/chat/readReceipts.test.ts -x` | ❌ W0 | ⬜ pending |
 | 18-01-03 | 01 | 0 | Wave 0 test stubs | unit | `npx jest tests/chat/shareContentSelection.test.ts -x` | ❌ W0 | ⬜ pending |
 | 18-01-04 | 01 | 0 | Wave 0 test stubs | unit | `npx jest tests/chat/retroactiveShare.test.ts -x` | ❌ W0 | ⬜ pending |
-| 18-01-05 | 01 | 0 | Wave 0 test stubs | unit | `npx jest tests/chat/typingDebounce.test.ts -x` | ❌ W0 | ⬜ pending |
+| 18-01-05 | 04 | 3 | Typing indicator debounce | unit | `npx jest tests/chat/typingDebounce.test.ts -x` | ❌ created in Plan 04 Task 1 | ⬜ pending |
 | 18-01-06 | 01 | 0 | Wave 0 test stubs | unit | `npx jest tests/chat/chatMediaUpload.test.ts -x` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
@@ -55,8 +55,9 @@ created: 2026-03-12
 - [ ] `tests/chat/readReceipts.test.ts` — read status computation from last_read_message_id
 - [ ] `tests/chat/shareContentSelection.test.ts` — content type checkbox selection logic
 - [ ] `tests/chat/retroactiveShare.test.ts` — retroactive share payload with both dates
-- [ ] `tests/chat/typingDebounce.test.ts` — typing indicator debounce behavior
 - [ ] `tests/chat/chatMediaUpload.test.ts` — chat media upload path construction
+
+> Note: `tests/chat/typingDebounce.test.ts` is created in Plan 04 Task 1 (Wave 3), not Wave 0.
 
 ---
 
