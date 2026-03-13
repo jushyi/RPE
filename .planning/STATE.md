@@ -415,7 +415,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 12 of 14 (Proper Onboarding)
 Plan: 2 of 2 complete
 Status: Phase 12 Complete (verified + human approved)
-Last activity: 2026-03-12 - Completed quick task 32: Trainee weekday modification on coach plans
+Last activity: 2026-03-13 - Completed quick task 37: Redesign plate calculator bar graphic to extend from left edge with plates against collar
 
 Progress: [██████████] 100%
 
@@ -669,6 +669,7 @@ None yet.
 | 34 | Fix TodaysWorkoutCard showing stale workout data after account switch | 2026-03-12 | 718c566 | [34-fix-todays-workout-card-showing-stale-wo](./quick/34-fix-todays-workout-card-showing-stale-wo/) |
 | 35 | Refactor useTodaysWorkout to fetch active plan from Supabase | 2026-03-12 | 0925632 | [35-refactor-usetodaysworkout-to-fetch-activ](./quick/35-refactor-usetodaysworkout-to-fetch-activ/) |
 | 36 | Fix fullscreen video player button layout | 2026-03-13 | c5b5179 | [36-the-video-playback-fullscreen-looks-a-li](./quick/36-the-video-playback-fullscreen-looks-a-li/) |
+| 37 | Redesign plate calculator bar graphic to extend from left edge with plates against collar | 2026-03-13 | 2d017ae | [37-redesign-plate-calculator-bar-graphic-to](./quick/37-redesign-plate-calculator-bar-graphic-to/) |
 
 ## Session Continuity
 
