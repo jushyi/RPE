@@ -238,14 +238,22 @@ export default function GroupDetailScreen() {
           </View>
         ) : null}
 
-        {/* Group Feed placeholder */}
+        {/* Group Feed link */}
         <View style={s.section}>
           <Text style={s.sectionTitle}>Group Feed</Text>
-          <View style={s.feedPlaceholder}>
-            <Text style={s.emptyText}>
-              Group sharing coming soon.
-            </Text>
-          </View>
+          <Pressable
+            style={s.feedBtn}
+            onPress={() =>
+              router.push({
+                pathname: '/(app)/social/group-feed' as any,
+                params: { groupId: group.id, groupName: group.name },
+              })
+            }
+          >
+            <Ionicons name="newspaper-outline" size={20} color={colors.accent} style={s.feedBtnIcon} />
+            <Text style={s.feedBtnText}>View Feed</Text>
+            <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+          </Pressable>
         </View>
 
         {/* Action buttons */}
@@ -316,13 +324,24 @@ const s = StyleSheet.create({
   loader: {
     marginTop: 12,
   },
-  feedPlaceholder: {
+  feedBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.surfaceElevated,
-    paddingVertical: 32,
-    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  feedBtnIcon: {
+    marginRight: 12,
+  },
+  feedBtnText: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.textPrimary,
   },
   emptyText: {
     fontSize: 14,
