@@ -17,6 +17,11 @@ export interface Message {
   created_at: string;
   edited_at: string | null;      // Non-null = message was edited
   deleted_at: string | null;     // Non-null = soft-deleted
+  /** Joined from profiles table when fetching messages */
+  profiles?: {
+    display_name: string | null;
+    avatar_url: string | null;
+  } | null;
 }
 
 /** Read receipt tracking per user per group (last_read_message_id approach) */
