@@ -210,7 +210,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 13. Coaching Options | 8/8 | Complete    | 2026-03-12 |
 | 14. Set Videos | 5/5 | Complete   | 2026-03-13 |
 | 15. Barbell Calculator | 3/3 | Complete    | 2026-03-13 |
-| 15.1. Reverse Bar Loading + Plate Inventory | 2/2 | Complete   | 2026-03-13 |
+| 15.1. Reverse Bar Loading + Plate Inventory | 2/2 | Complete    | 2026-03-13 |
 | 16. Push Notifications | 0/3 | Not started | - |
 | 17. Social Sharing | 0/6 | Not started | - |
 | 18. Group Chat | 0/5 | Not started | - |
