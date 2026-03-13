@@ -75,7 +75,7 @@ export function BarbellDiagram({ plates, unit }: BarbellDiagramProps) {
               x={x + PLATE_WIDTH / 2}
               y={DIAGRAM_HEIGHT / 2 + 5}
               fontSize={11}
-              fill={weight >= 25 || weight === 5 ? '#000' : '#fff'}
+              fill={[10, 25, 15, 35].includes(weight) ? '#000' : '#fff'}
               textAnchor="middle"
               fontWeight="bold"
             >

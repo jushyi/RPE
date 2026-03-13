@@ -21,7 +21,7 @@ export const PLATE_COLORS_LB: Record<number, string> = {
   35: '#FBBF24',   // yellow (15 kg)
   25: '#22C55E',   // green (10 kg)
   10: '#F5F5F5',   // white  (5 kg)
-  5: '#EF4444',    // red   (2.5 kg)
+  5: '#1a1a1a',    // black (2.5 kg)
   2.5: '#9CA3AF',  // gray  (1.25 kg)
 };
 
@@ -32,22 +32,23 @@ export const PLATE_COLORS_KG: Record<number, string> = {
   15: '#FBBF24',   // yellow
   10: '#22C55E',   // green
   5: '#F5F5F5',    // white
-  2.5: '#EF4444',  // red (small)
+  2.5: '#1a1a1a',  // black (small)
   1.25: '#9CA3AF', // gray
 };
 
-/** Relative plate heights (proportion of max diameter) keyed by weight */
+/** Relative plate heights (proportion of max diameter) keyed by weight.
+ *  25kg/55lb and 20kg/45lb are full competition diameter, then smaller. */
 export const PLATE_HEIGHTS: Record<number, number> = {
-  // lb plates
+  // lb plates — 55 and 45 are full size (competition bumpers)
   55: 1.0,
   45: 1.0,
-  35: 0.88,
-  25: 0.75,
-  10: 0.62,
-  5: 0.50,
-  2.5: 0.38,
-  // kg plates (same keys where overlapping use kg values)
-  20: 0.88,
-  15: 0.75,
-  1.25: 0.30,
+  35: 0.85,
+  25: 0.72,
+  10: 0.58,
+  5: 0.45,
+  2.5: 0.35,
+  // kg plates — 25 and 20 are full size (competition bumpers)
+  20: 1.0,
+  15: 0.85,
+  1.25: 0.28,
 };
