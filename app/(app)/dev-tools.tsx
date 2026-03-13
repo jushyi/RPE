@@ -9,7 +9,6 @@ import * as Notifications from 'expo-notifications';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase/client';
-import type { NotificationType } from '@/features/notifications/types';
 
 interface DebugEntry {
   type: string;
@@ -21,11 +20,9 @@ type ButtonStatus = 'idle' | 'sending' | 'success' | 'error';
 
 export default function DevToolsScreen() {
   const [debugLog, setDebugLog] = useState<DebugEntry[]>([]);
-  const [buttonStatus, setButtonStatus] = useState<Record<NotificationType, ButtonStatus>>({
+  const [buttonStatus, setButtonStatus] = useState<Record<string, ButtonStatus>>({
     alarm: 'idle',
     nudge: 'idle',
-    workout_complete: 'idle',
-    pr_achieved: 'idle',
     plan_update: 'idle',
     weekly_summary: 'idle',
   });
@@ -103,44 +100,6 @@ export default function DevToolsScreen() {
     }
   };
 
-  const triggerWorkoutComplete = async () => {
-    updateStatus('workout_complete', 'sending');
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-      await supabase.functions.invoke('send-push', {
-        body: {
-          recipient_ids: [user.id],
-          title: 'Workout Complete',
-          body: 'Test workout session finished',
-          data: { type: 'workout_complete', session_id: 'test-session' },
-        },
-      });
-      updateStatus('workout_complete', 'success');
-    } catch {
-      updateStatus('workout_complete', 'error');
-    }
-  };
-
-  const triggerPRAchieved = async () => {
-    updateStatus('pr_achieved', 'sending');
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-      await supabase.functions.invoke('send-push', {
-        body: {
-          recipient_ids: [user.id],
-          title: 'New PR',
-          body: 'Bench Press - new personal record',
-          data: { type: 'pr_achieved', exercise_id: 'test-exercise', exercise_name: 'Bench Press' },
-        },
-      });
-      updateStatus('pr_achieved', 'success');
-    } catch {
-      updateStatus('pr_achieved', 'error');
-    }
-  };
-
   const triggerPlanUpdate = async () => {
     updateStatus('plan_update', 'sending');
     try {
@@ -188,11 +147,9 @@ export default function DevToolsScreen() {
     }
   };
 
-  const buttons: { type: NotificationType; label: string; onPress: () => void; icon: keyof typeof Ionicons.glyphMap }[] = [
+  const buttons: { type: string; label: string; onPress: () => void; icon: keyof typeof Ionicons.glyphMap }[] = [
     { type: 'alarm', label: 'Alarm', onPress: triggerAlarm, icon: 'alarm-outline' },
     { type: 'nudge', label: 'Nudge', onPress: triggerNudge, icon: 'notifications-outline' },
-    { type: 'workout_complete', label: 'Workout Complete', onPress: triggerWorkoutComplete, icon: 'barbell-outline' },
-    { type: 'pr_achieved', label: 'PR Achieved', onPress: triggerPRAchieved, icon: 'trophy-outline' },
     { type: 'plan_update', label: 'Plan Update', onPress: triggerPlanUpdate, icon: 'document-text-outline' },
     { type: 'weekly_summary', label: 'Weekly Summary', onPress: triggerWeeklySummary, icon: 'stats-chart-outline' },
   ];
