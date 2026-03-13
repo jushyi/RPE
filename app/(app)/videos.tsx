@@ -12,26 +12,21 @@ import {
   Alert,
   ActivityIndicator,
   RefreshControl,
-  Modal,
+  Animated,
   StyleSheet,
 } from 'react-native';
 import { Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Swipeable } from 'react-native-gesture-handler';
 import { colors } from '@/constants/theme';
 import { VideoThumbnail } from '@/features/videos/components/VideoThumbnail';
+import { VideoPlayerModal } from '@/features/videos/components/VideoPlayerModal';
 import { useVideoGallery } from '@/features/videos/hooks/useVideoGallery';
 import {
   getCachedThumbnail,
   generateAndCacheThumbnail,
 } from '@/features/videos/utils/thumbnailCache';
 import type { VideoGalleryItem } from '@/features/videos/types';
-
-let ExpoVideo: typeof import('expo-video') | null = null;
-try {
-  ExpoVideo = require('expo-video');
-} catch {
-  // Native module not available (e.g., Expo Go)
-}
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -105,43 +100,6 @@ function GalleryItem({
       </View>
       <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
     </Pressable>
-  );
-}
-
-/** Separate component so useVideoPlayer hook is only called when ExpoVideo is available */
-function VideoPlayerModal({
-  videoUrl,
-  onClose,
-}: {
-  videoUrl: string;
-  onClose: () => void;
-}) {
-  const videoViewRef = useRef<any>(null);
-  const { useVideoPlayer, VideoView } = ExpoVideo!;
-  const player = useVideoPlayer(videoUrl, (p) => {
-    p.play();
-  });
-
-  return (
-    <Modal
-      visible
-      animationType="fade"
-      supportedOrientations={['portrait', 'landscape']}
-      onRequestClose={onClose}
-    >
-      <View style={s.playerContainer}>
-        <VideoView
-          ref={videoViewRef}
-          player={player}
-          style={s.videoView}
-          nativeControls
-          contentFit="contain"
-        />
-        <Pressable style={s.closeButton} onPress={onClose} hitSlop={12}>
-          <Ionicons name="close-circle" size={32} color={colors.white} />
-        </Pressable>
-      </View>
-    </Modal>
   );
 }
 
@@ -234,12 +192,11 @@ export default function VideosScreen() {
         )}
       </View>
 
-      {ExpoVideo && playingVideo && (
-        <VideoPlayerModal
-          videoUrl={playingVideo}
-          onClose={() => setPlayingVideo(null)}
-        />
-      )}
+      <VideoPlayerModal
+        videoUrl={playingVideo!}
+        visible={!!playingVideo}
+        onClose={() => setPlayingVideo(null)}
+      />
     </>
   );
 }
@@ -313,21 +270,5 @@ const s = StyleSheet.create({
     color: colors.textMuted,
     fontSize: 16,
     marginTop: 12,
-  },
-  playerContainer: {
-    flex: 1,
-    backgroundColor: colors.black,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  videoView: {
-    width: '100%',
-    height: '100%',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
-    zIndex: 10,
   },
 });
