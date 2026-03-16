@@ -1,15 +1,17 @@
-import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
-import { View, Keyboard, StyleSheet } from 'react-native';
+import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { View, Text, Pressable, Keyboard, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   BottomSheetModal,
   BottomSheetFlatList,
   BottomSheetTextInput,
 } from '@gorhom/bottom-sheet';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useExercises } from '@/features/exercises/hooks/useExercises';
 import { ExerciseFilterBar } from '@/features/exercises/components/ExerciseFilterBar';
 import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem';
+import { ExerciseBottomSheet } from '@/features/exercises/components/ExerciseBottomSheet';
 import type { Exercise, MuscleGroup, Equipment } from '@/features/exercises/types';
 
 interface ExercisePickerProps {
@@ -19,6 +21,7 @@ interface ExercisePickerProps {
 export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
   ({ onSelect }, ref) => {
     const { exercises, fetchExercises } = useExercises();
+    const createSheetRef = useRef<BottomSheetModal>(null);
     const insets = useSafeAreaInsets();
     const snapPoints = useMemo(() => ['75%'], []);
 
@@ -55,6 +58,10 @@ export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
       },
       [onSelect, ref]
     );
+
+    const handleExerciseCreated = useCallback(() => {
+      fetchExercises(true);
+    }, [fetchExercises]);
 
     const handleDismiss = useCallback(() => {
       Keyboard.dismiss();
@@ -93,11 +100,23 @@ export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
             TextInputComponent={BottomSheetTextInput}
           />
         </View>
+        <Pressable
+          style={s.createButton}
+          onPress={() => createSheetRef.current?.present()}
+        >
+          <Ionicons name="add-circle-outline" size={22} color={colors.accent} />
+          <Text style={s.createButtonText}>Create New Exercise</Text>
+        </Pressable>
         <BottomSheetFlatList
           data={filtered}
           keyExtractor={(item: Exercise) => item.id}
           renderItem={renderItem}
           contentContainerStyle={s.list}
+        />
+        <ExerciseBottomSheet
+          ref={createSheetRef}
+          exerciseToEdit={null}
+          onSave={handleExerciseCreated}
         />
       </BottomSheetModal>
     );
@@ -115,6 +134,20 @@ const s = StyleSheet.create({
   },
   filterContainer: {
     paddingTop: 8,
+  },
+  createButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.surfaceElevated,
+  },
+  createButtonText: {
+    color: colors.accent,
+    fontSize: 15,
+    fontWeight: '600',
   },
   list: {
     paddingBottom: 40,
