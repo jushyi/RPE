@@ -191,7 +191,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18 -> 19
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -214,6 +214,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 16. Push Notifications | 5/5 | Complete    | 2026-03-13 |
 | 17. Social Sharing | 6/6 | Complete    | 2026-03-13 |
 | 18. Group Chat | 5/5 | Complete    | 2026-03-13 |
+| 19. GitHub Actions CI/CD | 0/1 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -383,10 +384,10 @@ Plans:
 
 ### Phase 19: github actions, ci-cd pipline, builds triggers on new tags. ota update action as well to production branch
 
-**Goal:** [To be planned]
-**Requirements**: TBD
+**Goal:** Automated CI/CD via GitHub Actions: PR checks (tsc + eslint), tag-triggered iOS EAS Build with TestFlight auto-submit and GitHub Release, and tag-triggered OTA updates to the production EAS Update channel.
+**Requirements**: CICD-01, CICD-02, CICD-03, CICD-04, CICD-05
 **Depends on:** Phase 18
-**Plans:** 0 plans
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 19 to break down)
+- [ ] 19-01-PLAN.md — All three GitHub Actions workflows (ci-checks, build-ios, ota-update), package.json typecheck script, expo-env.d.ts fix
