@@ -19,9 +19,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Workout History** - Past session list, session detail view, estimated 1RM calculation (completed 2026-03-10)
 - [x] **Phase 6: Progress Charts + Dashboard** - Per-exercise progress charts, bodyweight chart, dashboard home screen (1/3 plans complete) (completed 2026-03-10)
 - [x] **Phase 7: Body Metrics** - Body measurements (chest, waist, biceps, quad, body fat %), combined dashboard card, detail screen with charts and history (gap closure in progress) (completed 2026-03-12)
-- [ ] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge
+- [x] **Phase 8: Alarms + Accountability** - Plan-day-tied alarms, real alarm delivery, missed workout nudge (completed 2026-03-12)
 - [x] **Phase 9: Polish** - Dark/bold theme refinement, edge case handling, app icon, splash screen, OTA pipeline (completed 2026-03-11)
 - [x] **Phase 10: Distribution** - EAS Build, TestFlight (iOS only), physical device verification (completed 2026-03-16)
+- [ ] **Phase 20: Integration Gap Closure** - Fix sign-out data isolation, deep link routing, video queue retry, alarm deep links, body-metrics unit defaults, missing verification reports
 
 ## Phase Details
 
@@ -191,7 +192,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18 -> 19
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15 -> 16 -> 17 -> 18 -> 19 -> 20
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -199,11 +200,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 2. Exercise Library | 2/2 | Complete   | 2026-03-09 |
 | 3. Plan Builder | 3/3 | Complete   | 2026-03-09 |
 | 4. Active Workout | 6/6 | Complete   | 2026-03-10 |
-| 5. Workout History | 0/2 | Not started | - |
+| 5. Workout History | 2/2 | Complete   | 2026-03-10 |
 | 6. Progress Charts + Dashboard | 3/3 | Complete   | 2026-03-10 |
 | 7. Body Metrics | 4/4 | Complete   | 2026-03-12 |
-| 8. Alarms + Accountability | 3/4 | In Progress|  |
-| 9. Polish | 3/4 | In Progress|  |
+| 8. Alarms + Accountability | 4/4 | Complete   | 2026-03-12 |
+| 9. Polish | 4/4 | Complete   | 2026-03-12 |
 | 10. Distribution | 2/2 | Complete   | 2026-03-16 |
 | 11. Settings + Account Management | 3/3 | Complete    | 2026-03-11 |
 | 12. Proper Onboarding | 2/2 | Complete   | 2026-03-12 |
@@ -215,6 +216,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 17. Social Sharing | 6/6 | Complete    | 2026-03-13 |
 | 18. Group Chat | 5/5 | Complete    | 2026-03-13 |
 | 19. GitHub Actions CI/CD | 1/1 | Complete    | 2026-03-16 |
+| 20. Integration Gap Closure | 0/1 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -391,3 +393,14 @@ Plans:
 
 Plans:
 - [ ] 19-01-PLAN.md — All three GitHub Actions workflows (ci-checks, build-ios, ota-update), package.json typecheck script, expo-env.d.ts fix
+
+### Phase 20: Integration Gap Closure
+
+**Goal:** Close all cross-phase integration gaps found by the v1.0 milestone audit: fix sign-out data isolation, complete deep link routing for social/chat notifications, add video upload queue retry on connectivity restore, fix alarm notification deep links, seed body-metrics with user unit preferences, and create missing VERIFICATION.md files for Phases 05 and 10.
+**Requirements**: AUTH-03, ALRM-02, VID-03, NOTIF-02, NOTIF-04
+**Depends on:** Phase 19
+**Gap Closure:** Closes gaps from v1.0-MILESTONE-AUDIT.md
+**Plans:** 0/1 plans
+
+Plans:
+- [ ] 20-01-PLAN.md — All integration fixes (clearAllUserData scope, deepLinkRouter types, video queue flush, alarm deep links, body-metrics unit defaults) + Phase 05/10 VERIFICATION.md creation

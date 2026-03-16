@@ -43,7 +43,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **HIST-02**: User can view per-exercise progress charts (max weight, estimated 1RM, volume over time)
 - [x] **HIST-03**: User can log bodyweight and view bodyweight chart over time
 - [x] **HIST-04**: User can log body measurements (circumference, body fat %)
-- [x] **HIST-05**: User can take and view progress photos (front/side/back with date)
+- [ ] **HIST-05**: ~~User can take and view progress photos (front/side/back with date)~~ — DEFERRED (removed from v1 scope per user decision 2026-03-16)
 - [x] **HIST-06**: Estimated 1RM auto-calculated from logged sets using Epley formula
 
 ### Dashboard
@@ -151,7 +151,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
-| AUTH-03 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 + Phase 20 | Pending |
 | AUTH-04 | Phase 1 | Complete |
 | AUTH-05 | Phase 1 | Complete |
 | AUTH-06 | Phase 1 | Complete |
@@ -174,60 +174,61 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-01 | Phase 6 | Complete |
 | DASH-02 | Phase 6 | Complete |
 | HIST-04 | Phase 7 | Complete |
-| HIST-05 | Phase 7 | Complete |
+| HIST-05 | Phase 7 | Deferred |
 | ALRM-01 | Phase 8 | Complete |
-| ALRM-02 | Phase 8 | Complete |
+| ALRM-02 | Phase 8 + Phase 20 | Pending |
 | ALRM-03 | Phase 8 | Complete |
-| COACH-01 | Phase 13 | Planned |
-| COACH-02 | Phase 13 | Planned |
-| COACH-03 | Phase 13 | Planned |
-| COACH-04 | Phase 13 | Planned |
-| COACH-05 | Phase 13 | Planned |
-| COACH-06 | Phase 13 | Planned |
-| COACH-07 | Phase 13 | Planned |
-| COACH-08 | Phase 13 | Planned |
-| COACH-09 | Phase 13 | Planned |
-| COACH-10 | Phase 13 | Planned |
-| COACH-11 | Phase 13 | Planned |
-| COACH-12 | Phase 13 | Planned |
-| COACH-13 | Phase 13 | Planned |
-| COACH-14 | Phase 13 | Planned |
-| COACH-15 | Phase 13 | Planned |
-| COACH-16 | Phase 13 | Planned |
-| VID-01 | Phase 14 | Planned |
-| VID-02 | Phase 14 | Planned |
-| VID-03 | Phase 14 | Planned |
-| VID-04 | Phase 14 | Planned |
-| VID-05 | Phase 14 | Planned |
-| VID-06 | Phase 14 | Planned |
-| VID-07 | Phase 14 | Planned |
-| VID-08 | Phase 14 | Planned |
-| NOTIF-01 | Phase 16 | Planned |
-| NOTIF-02 | Phase 16 | Planned |
-| NOTIF-03 | Phase 16 | Planned |
-| NOTIF-04 | Phase 16 | Planned |
-| NOTIF-05 | Phase 16 | Planned |
-| NOTIF-06 | Phase 16 | Planned |
-| CHAT-01 | Phase 18 | Planned |
-| CHAT-02 | Phase 18 | Planned |
-| CHAT-03 | Phase 18 | Planned |
-| CHAT-04 | Phase 18 | Planned |
-| CHAT-05 | Phase 18 | Planned |
-| CHAT-06 | Phase 18 | Planned |
-| CHAT-07 | Phase 18 | Planned |
-| CHAT-08 | Phase 18 | Planned |
-| CHAT-09 | Phase 18 | Planned |
-| CHAT-10 | Phase 18 | Planned |
+| COACH-01 | Phase 13 | Complete |
+| COACH-02 | Phase 13 | Complete |
+| COACH-03 | Phase 13 | Complete |
+| COACH-04 | Phase 13 | Complete |
+| COACH-05 | Phase 13 | Complete |
+| COACH-06 | Phase 13 | Complete |
+| COACH-07 | Phase 13 | Complete |
+| COACH-08 | Phase 13 | Complete |
+| COACH-09 | Phase 13 | Complete |
+| COACH-10 | Phase 13 | Complete |
+| COACH-11 | Phase 13 | Complete |
+| COACH-12 | Phase 13 | Complete |
+| COACH-13 | Phase 13 | Complete |
+| COACH-14 | Phase 13 | Complete |
+| COACH-15 | Phase 13 | Complete |
+| COACH-16 | Phase 13 | Complete |
+| VID-01 | Phase 14 | Complete |
+| VID-02 | Phase 14 | Complete |
+| VID-03 | Phase 14 + Phase 20 | Pending |
+| VID-04 | Phase 14 | Complete |
+| VID-05 | Phase 14 | Complete |
+| VID-06 | Phase 14 | Complete |
+| VID-07 | Phase 14 | Complete |
+| VID-08 | Phase 14 | Complete |
+| NOTIF-01 | Phase 16 | Complete |
+| NOTIF-02 | Phase 16 + Phase 20 | Pending |
+| NOTIF-03 | Phase 16 | Complete |
+| NOTIF-04 | Phase 16 + Phase 20 | Pending |
+| NOTIF-05 | Phase 16 | Complete |
+| NOTIF-06 | Phase 16 | Complete |
+| CHAT-01 | Phase 18 | Complete |
+| CHAT-02 | Phase 18 | Complete |
+| CHAT-03 | Phase 18 | Complete |
+| CHAT-04 | Phase 18 | Complete |
+| CHAT-05 | Phase 18 | Complete |
+| CHAT-06 | Phase 18 | Complete |
+| CHAT-07 | Phase 18 | Complete |
+| CHAT-08 | Phase 18 | Complete |
+| CHAT-09 | Phase 18 | Complete |
+| CHAT-10 | Phase 18 | Complete |
 
 **Coverage:**
-- v1 requirements: 29 total (all complete)
-- Coaching requirements: 16 total (planned)
-- Video requirements: 8 total (planned)
-- Notification requirements: 6 total (planned)
-- Chat requirements: 10 total (planned)
-- Mapped to phases: 69
+- v1 requirements: 28 total (HIST-05 deferred)
+- Coaching requirements: 16 total (complete)
+- Video requirements: 8 total (7 complete, VID-03 pending Phase 20)
+- Notification requirements: 6 total (4 complete, NOTIF-02/04 pending Phase 20)
+- Chat requirements: 10 total (complete)
+- Gap closure: AUTH-03, ALRM-02, VID-03, NOTIF-02, NOTIF-04 assigned to Phase 20
+- Mapped to phases: 68 (HIST-05 deferred)
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-09*
-*Last updated: 2026-03-12 after Phase 18 planning -- 10 chat requirements added*
+*Last updated: 2026-03-16 after milestone audit -- gap closure Phase 20 added, HIST-05 deferred, stale statuses fixed*
