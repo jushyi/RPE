@@ -9,6 +9,8 @@ import {
   TextInput,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,6 +25,7 @@ import type { DaySlot, DaySlotExercise } from '@/features/plans/components/DaySl
 import { makeTempId } from '@/features/plans/components/DaySlotEditor';
 import type { Plan, PlanDay } from '@/features/plans/types';
 import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
+import { useAuthStore } from '@/stores/authStore';
 
 /**
  * Convert a Plan's plan_days into DaySlot[] for the DaySlotEditor.
@@ -85,6 +88,7 @@ export default function PlanDetailScreen() {
   const { plan, isLoading, isSaving, error, refetch, updatePlan, updateDayWeekday } = usePlanDetail(id ?? '');
   const { deletePlan, setActivePlan } = usePlans();
   const { startFromPlan } = useWorkoutSession();
+  const userId = useAuthStore((s) => s.userId);
 
   const [isEditing, setIsEditing] = useState(false);
   const isEditingRef = useRef(false);
@@ -267,7 +271,7 @@ export default function PlanDetailScreen() {
                 <PlanDaySection
                   day={item}
                   defaultExpanded={true}
-                  onStartWorkout={startFromPlan}
+                  onStartWorkout={plan.coach_id === userId ? undefined : startFromPlan}
                   isCoachPlan={isCoachPlan}
                   onWeekdayChange={isCoachPlan ? (dayId: string, weekday: number) => updateDayWeekday(dayId, weekday) : undefined}
                 />
@@ -279,7 +283,7 @@ export default function PlanDetailScreen() {
               <Text style={s.emptyText}>No days configured</Text>
             }
             ListFooterComponent={
-              !plan.is_active ? (
+              !plan.is_active && plan.coach_id !== userId ? (
                 <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
                   <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
                   <Text style={s.setActiveText}>Set as Active Plan</Text>
