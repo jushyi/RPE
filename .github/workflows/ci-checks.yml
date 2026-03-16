@@ -1,0 +1,22 @@
+name: CI Checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  checks:
+    name: TypeScript & ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: TypeScript Check
+        run: npm run typecheck
+      - name: ESLint
+        run: npm run lint

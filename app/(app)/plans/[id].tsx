@@ -9,6 +9,8 @@ import {
   TextInput,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,6 +25,7 @@ import type { DaySlot, DaySlotExercise } from '@/features/plans/components/DaySl
 import { makeTempId } from '@/features/plans/components/DaySlotEditor';
 import type { Plan, PlanDay } from '@/features/plans/types';
 import { useWorkoutSession } from '@/features/workout/hooks/useWorkoutSession';
+import { useAuthStore } from '@/stores/authStore';
 
 /**
  * Convert a Plan's plan_days into DaySlot[] for the DaySlotEditor.
@@ -85,6 +88,7 @@ export default function PlanDetailScreen() {
   const { plan, isLoading, isSaving, error, refetch, updatePlan, updateDayWeekday } = usePlanDetail(id ?? '');
   const { deletePlan, setActivePlan } = usePlans();
   const { startFromPlan } = useWorkoutSession();
+  const userId = useAuthStore((s) => s.userId);
 
   const [isEditing, setIsEditing] = useState(false);
   const isEditingRef = useRef(false);
@@ -241,54 +245,56 @@ export default function PlanDetailScreen() {
       </View>
 
       {/* Content */}
-      {isEditing ? (
-        <Animated.View key="edit" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
-          <ScrollView
-            style={s.scroll}
-            contentContainerStyle={s.scrollContent}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            <DaySlotEditor days={draftDays} onChange={setDraftDays} />
-            <Pressable style={s.deleteBtn} onPress={handleDelete}>
-              <Ionicons name="trash-outline" size={20} color={colors.error} />
-              <Text style={s.deleteBtnText}>Delete Plan</Text>
-            </Pressable>
-          </ScrollView>
-        </Animated.View>
-      ) : (
-        <Animated.View key="view" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
-          <FlatList
-            data={plan.plan_days}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => {
-              const isCoachPlan = !!plan.coach_id;
-              return (
-                <PlanDaySection
-                  day={item}
-                  defaultExpanded={true}
-                  onStartWorkout={startFromPlan}
-                  isCoachPlan={isCoachPlan}
-                  onWeekdayChange={isCoachPlan ? (dayId: string, weekday: number) => updateDayWeekday(dayId, weekday) : undefined}
-                />
-              );
-            }}
-            contentContainerStyle={s.scrollContent}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <Text style={s.emptyText}>No days configured</Text>
-            }
-            ListFooterComponent={
-              !plan.is_active ? (
-                <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
-                  <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
-                  <Text style={s.setActiveText}>Set as Active Plan</Text>
-                </Pressable>
-              ) : null
-            }
-          />
-        </Animated.View>
-      )}
+      <KeyboardAvoidingView style={s.keyboardAvoid} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        {isEditing ? (
+          <Animated.View key="edit" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
+            <ScrollView
+              style={s.scroll}
+              contentContainerStyle={s.scrollContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <DaySlotEditor days={draftDays} onChange={setDraftDays} />
+              <Pressable style={s.deleteBtn} onPress={handleDelete}>
+                <Ionicons name="trash-outline" size={20} color={colors.error} />
+                <Text style={s.deleteBtnText}>Delete Plan</Text>
+              </Pressable>
+            </ScrollView>
+          </Animated.View>
+        ) : (
+          <Animated.View key="view" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
+            <FlatList
+              data={plan.plan_days}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => {
+                const isCoachPlan = !!plan.coach_id;
+                return (
+                  <PlanDaySection
+                    day={item}
+                    defaultExpanded={true}
+                    onStartWorkout={plan.coach_id === userId ? undefined : startFromPlan}
+                    isCoachPlan={isCoachPlan}
+                    onWeekdayChange={isCoachPlan ? (dayId: string, weekday: number) => updateDayWeekday(dayId, weekday) : undefined}
+                  />
+                );
+              }}
+              contentContainerStyle={s.scrollContent}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <Text style={s.emptyText}>No days configured</Text>
+              }
+              ListFooterComponent={
+                !plan.is_active && plan.coach_id !== userId ? (
+                  <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
+                    <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
+                    <Text style={s.setActiveText}>Set as Active Plan</Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </Animated.View>
+        )}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -368,12 +374,15 @@ const s = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
+  keyboardAvoid: {
+    flex: 1,
+  },
   scroll: {
     flex: 1,
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   center: {
     flex: 1,

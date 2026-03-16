@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test": "jest --bail",
+    "typecheck": "tsc --noEmit",
     "update:production": "eas update --channel production --message",
     "update:preview": "eas update --channel preview --message"
   },
@@ -63,6 +64,8 @@
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.2.2",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~55.0.0",
     "jest": "^29.7.0",
     "jest-expo": "^55.0.9",
     "typescript": "~5.9.2"

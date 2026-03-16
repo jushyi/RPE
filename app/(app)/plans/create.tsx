@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Pressable, Alert, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -66,23 +66,25 @@ export default function CreatePlanScreen() {
         </Pressable>
       </View>
 
-      <ScrollView
-        style={s.scroll}
-        contentContainerStyle={s.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Input
-          label="Plan Name"
-          placeholder="e.g. Push Pull Legs"
-          value={name}
-          onChangeText={(v) => { setName(v); setNameError(''); }}
-          error={nameError}
-          autoCapitalize="words"
-        />
+      <KeyboardAvoidingView style={s.keyboardAvoid} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          style={s.scroll}
+          contentContainerStyle={s.scrollContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Input
+            label="Plan Name"
+            placeholder="e.g. Push Pull Legs"
+            value={name}
+            onChangeText={(v) => { setName(v); setNameError(''); }}
+            error={nameError}
+            autoCapitalize="words"
+          />
 
-        <Text style={s.sectionTitle}>Days</Text>
-        <DaySlotEditor days={days} onChange={setDays} />
-      </ScrollView>
+          <Text style={s.sectionTitle}>Days</Text>
+          <DaySlotEditor days={days} onChange={setDays} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -120,12 +122,15 @@ const s = StyleSheet.create({
   saveTextDisabled: {
     opacity: 0.5,
   },
+  keyboardAvoid: {
+    flex: 1,
+  },
   scroll: {
     flex: 1,
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 60,
+    paddingBottom: 120,
   },
   sectionTitle: {
     color: colors.textSecondary,

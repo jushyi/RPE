@@ -3,11 +3,43 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed quick-40
-last_updated: "2026-03-13T20:38:50.105Z"
-last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
+stopped_at: Completed 19-01-PLAN.md
+last_updated: "2026-03-16T13:45:40.323Z"
+last_activity: "2026-03-16 - Completed quick task 44: Fix keyboard covering input fields on plan create and edit screens"
 progress:
   total_phases: 20
+  completed_phases: 20
+  total_plans: 75
+  completed_plans: 75
+  percent: 100
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-43
+last_updated: "2026-03-16T13:40:00.000Z"
+last_activity: "2026-03-16 - Completed quick task 43: Hide Start Workout button on coach-created trainee plans"
+progress:
+  [██████████] 100%
+  completed_phases: 19
+  total_plans: 75
+  completed_plans: 74
+  percent: 100
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed 10-01-PLAN.md
+last_updated: "2026-03-16T13:04:48.959Z"
+last_activity: "2026-03-16 - Completed quick task 41: Fix exercise selection keyboard dismiss bug in ExercisePicker"
+progress:
+  [██████████] 100%
   completed_phases: 18
   total_plans: 74
   completed_plans: 73
@@ -477,7 +509,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 12 of 14 (Proper Onboarding)
 Plan: 2 of 2 complete
 Status: Phase 12 Complete (verified + human approved)
-Last activity: 2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar
+Last activity: 2026-03-16 - Completed quick task 44: Fix keyboard covering input fields on plan create and edit screens
 
 Progress: [██████████] 100%
 
@@ -570,6 +602,8 @@ Progress: [██████████] 100%
 | Phase 10-distribution P01 | 5 | 2 tasks | 2 files |
 | Phase 18 P03 | 15 | 2 tasks | 6 files |
 | Phase 18 P04 | 3min | 2 tasks | 2 files |
+| Phase 10-distribution P02 | 5 | 1 tasks | 2 files |
+| Phase 19 P01 | 2min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -738,6 +772,12 @@ Recent decisions affecting current work:
 - [Phase 18]: createTypingDebounce returns { trigger, cancel } object for testability with cancel in tests
 - [Phase 18]: Debounce logic extracted as pure function createTypingDebounce in chatUtils.ts for unit testing with jest fake timers
 - [Phase quick-40]: --message flag left at end of eas update scripts so caller appends message string as npm run arg
+- [Phase 10-distribution]: eas submit:list does not exist in installed EAS CLI version; distribution=store on finished build confirms auto-submit success
+- [Phase 10-distribution]: Node.js readline used for verify-device.js (Windows-compatible, no external dependencies)
+- [Phase 10-distribution]: --dry-run flag in verify-device.js auto-skips all 5 tests for headless verification without a physical device
+- [Phase 10-distribution]: All 5 physical device tests passed on iPhone (TestFlight build ff59b66c): TF-01, ALM-01, OFF-01, RLS-01, HIST-01 -- app cleared for friend group distribution
+- [Phase 19]: expo-env.d.ts removed from .gitignore so tsc --noEmit works in CI
+- [Phase 19]: v* and ota/* tag patterns mutually exclusive to prevent double triggers
 
 ### Roadmap Evolution
 
@@ -806,9 +846,13 @@ None yet.
 | 38 | some input hints throughout the app have random spaces between which makes it look weird | 2026-03-13 | d4e9c9e | [38-some-input-hints-throughout-the-app-have](./quick/38-some-input-hints-throughout-the-app-have/) |
 | 39 | bar diagram collar taller and right bar slightly taller than left bar | 2026-03-13 | d3decaf | [39-bar-diagram-collar-taller-and-right-bar-](./quick/39-bar-diagram-collar-taller-and-right-bar-/) |
 | 40 | set up ota updates for production profiles | 2026-03-13 | d764a04 | [40-set-up-ota-updates-for-production-profil](./quick/40-set-up-ota-updates-for-production-profil/) |
+| 41 | Fix exercise selection keyboard dismiss bug in ExercisePicker | 2026-03-16 | 179cea5 | [41-fix-exercise-selection-keyboard-dismiss-](./quick/41-fix-exercise-selection-keyboard-dismiss-/) |
+| 42 | Add exercises from any sheet view and make admin exercises global | 2026-03-16 | 2538ff7 | [42-add-exercises-from-any-sheet-view-and-ma](./quick/42-add-exercises-from-any-sheet-view-and-ma/) |
+| 43 | Hide Start Workout button on coach-created trainee plans | 2026-03-16 | 46f5db7 | [43-hide-start-exercise-button-on-coach-crea](./quick/43-hide-start-exercise-button-on-coach-crea/) |
+| 44 | Fix keyboard covering input fields on plan create and edit screens | 2026-03-16 | e95c32f | [44-fix-keyboard-covering-input-fields-on-pl](./quick/44-fix-keyboard-covering-input-fields-on-pl/) |
 
 ## Session Continuity
 
-Last session: 2026-03-13T20:34:16.974Z
-Stopped at: Completed quick-40
+Last session: 2026-03-16T13:42:40.346Z
+Stopped at: Completed 19-01-PLAN.md
 Resume file: None
