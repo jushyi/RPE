@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: Completed 10-01-PLAN.md
 last_updated: "2026-03-16T13:04:48.959Z"
-last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
+last_activity: "2026-03-16 - Completed quick task 41: Fix exercise selection keyboard dismiss bug in ExercisePicker"
 progress:
   total_phases: 20
   completed_phases: 18
