@@ -50,7 +50,6 @@ export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
 
     const handleSelect = useCallback(
       (exercise: Exercise) => {
-        Keyboard.dismiss();
         onSelect(exercise);
         (ref as React.RefObject<BottomSheetModal>)?.current?.dismiss();
       },
@@ -81,7 +80,7 @@ export const ExercisePicker = forwardRef<BottomSheetModal, ExercisePickerProps>(
         topInset={insets.top}
         android_keyboardInputMode="adjustResize"
         keyboardBehavior="interactive"
-        keyboardBlurBehavior="restore"
+        keyboardBlurBehavior="none"
       >
         <View style={s.filterContainer}>
           <ExerciseFilterBar
