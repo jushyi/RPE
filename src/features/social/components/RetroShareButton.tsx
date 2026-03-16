@@ -86,7 +86,7 @@ interface RetroShareModalProps {
   visible: boolean;
   onClose: () => void;
   groups: Array<{ id: string; name: string }>;
-  shareToGroups: ReturnType<typeof useSocialStore>['shareToGroups'];
+  shareToGroups: (groupIds: string[], items: any[]) => Promise<void>;
 }
 
 function RetroShareModal({

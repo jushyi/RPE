@@ -59,6 +59,25 @@ export default function WorkoutSummaryScreen() {
     flushSyncQueue(supabase).catch(() => {});
   }, [session]);
 
+  // Extracted from inline IIFE so it can be shared with SharePrompt
+  // Must be before early return to satisfy rules-of-hooks
+  const prExercises = useMemo(() => {
+    if (!session) return [];
+    const summary = computeSessionSummary(session);
+    if (summary.prs_hit === 0) return [];
+    return session.exercises
+      .filter((ex) => ex.logged_sets.some((set) => set.is_pr))
+      .map((ex) => {
+        const prSets = ex.logged_sets.filter((set) => set.is_pr);
+        const maxPR = prSets.reduce((max, set) => set.weight > max.weight ? set : max, prSets[0]);
+        return {
+          name: ex.exercise_name,
+          weight: maxPR.weight,
+          unit: maxPR.unit,
+        };
+      });
+  }, [session]);
+
   const handleDone = () => {
     clearCompletedSession();
     // Navigate to dashboard, replacing the entire stack so no workout screens remain
@@ -88,22 +107,6 @@ export default function WorkoutSummaryScreen() {
   }
 
   const summary = computeSessionSummary(session);
-
-  // Extracted from inline IIFE so it can be shared with SharePrompt
-  const prExercises = useMemo(() => {
-    if (summary.prs_hit === 0) return [];
-    return session.exercises
-      .filter((ex) => ex.logged_sets.some((set) => set.is_pr))
-      .map((ex) => {
-        const prSets = ex.logged_sets.filter((set) => set.is_pr);
-        const maxPR = prSets.reduce((max, set) => set.weight > max.weight ? set : max, prSets[0]);
-        return {
-          name: ex.exercise_name,
-          weight: maxPR.weight,
-          unit: maxPR.unit,
-        };
-      });
-  }, [session, summary.prs_hit]);
 
   return (
     <SafeAreaView style={s.container}>

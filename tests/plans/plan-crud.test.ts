@@ -22,6 +22,8 @@ const mockPlanDay = (overrides: Partial<PlanDay> = {}): PlanDay => ({
   weekday: 1,
   sort_order: 0,
   created_at: '2026-01-01T00:00:00Z',
+  alarm_time: null,
+  alarm_enabled: false,
   plan_day_exercises: [mockPlanDayExercise()],
   ...overrides,
 });

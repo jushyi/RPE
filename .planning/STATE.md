@@ -3,8 +3,23 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 19-01-PLAN.md
-last_updated: "2026-03-16T13:45:40.323Z"
+stopped_at: Completed quick-46
+last_updated: "2026-03-16T15:04:50.641Z"
+last_activity: "2026-03-16 - Completed quick task 46: Fix all failing ESLint CI check errors"
+progress:
+  total_phases: 20
+  completed_phases: 20
+  total_plans: 75
+  completed_plans: 75
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: executing
+stopped_at: Completed quick-45
+last_updated: "2026-03-16T14:55:11.207Z"
 last_activity: "2026-03-16 - Completed quick task 44: Fix keyboard covering input fields on plan create and edit screens"
 progress:
   total_phases: 20
@@ -509,7 +524,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 12 of 14 (Proper Onboarding)
 Plan: 2 of 2 complete
 Status: Phase 12 Complete (verified + human approved)
-Last activity: 2026-03-16 - Completed quick task 44: Fix keyboard covering input fields on plan create and edit screens
+Last activity: 2026-03-16 - Completed quick task 45: Fix all failing TypeScript CI check errors
 
 Progress: [██████████] 100%
 
@@ -778,6 +793,8 @@ Recent decisions affecting current work:
 - [Phase 10-distribution]: All 5 physical device tests passed on iPhone (TestFlight build ff59b66c): TF-01, ALM-01, OFF-01, RLS-01, HIST-01 -- app cleared for friend group distribution
 - [Phase 19]: expo-env.d.ts removed from .gitignore so tsc --noEmit works in CI
 - [Phase 19]: v* and ota/* tag patterns mutually exclusive to prevent double triggers
+- [Phase quick-45]: Used type assertions and casts to fix TS errors without runtime changes
+- [Phase quick-46]: Used curly-brace string expression for JSX apostrophe escaping in React Native
 
 ### Roadmap Evolution
 
@@ -850,9 +867,11 @@ None yet.
 | 42 | Add exercises from any sheet view and make admin exercises global | 2026-03-16 | 2538ff7 | [42-add-exercises-from-any-sheet-view-and-ma](./quick/42-add-exercises-from-any-sheet-view-and-ma/) |
 | 43 | Hide Start Workout button on coach-created trainee plans | 2026-03-16 | 46f5db7 | [43-hide-start-exercise-button-on-coach-crea](./quick/43-hide-start-exercise-button-on-coach-crea/) |
 | 44 | Fix keyboard covering input fields on plan create and edit screens | 2026-03-16 | e95c32f | [44-fix-keyboard-covering-input-fields-on-pl](./quick/44-fix-keyboard-covering-input-fields-on-pl/) |
+| 45 | Fix all failing TypeScript CI check errors | 2026-03-16 | a3c6e9d | [45-fix-all-failing-typescript-ci-check-erro](./quick/45-fix-all-failing-typescript-ci-check-erro/) |
+| 46 | Fix all failing ESLint CI check errors | 2026-03-16 | b9aca70 | [46-fix-all-failing-eslint-ci-check-errors](./quick/46-fix-all-failing-eslint-ci-check-errors/) |
 
 ## Session Continuity
 
-Last session: 2026-03-16T13:42:40.346Z
-Stopped at: Completed 19-01-PLAN.md
+Last session: 2026-03-16T15:04:50.584Z
+Stopped at: Completed quick-46
 Resume file: None

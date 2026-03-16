@@ -60,7 +60,7 @@ export default function RootLayout() {
           }).catch((err) => console.warn('Failed to schedule snooze:', err));
         } else if (actionId === Notifications.DEFAULT_ACTION_IDENTIFIER) {
           // Foreground notification tap — route to the relevant screen
-          const data = response.notification.request.content.data as NotificationData;
+          const data = response.notification.request.content.data as unknown as NotificationData;
           const route = getDeepLinkRoute(data);
           if (route) {
             router.push(route as any);

@@ -211,7 +211,6 @@ function VideoPlayerModal({ uri, onClose }: { uri: string; onClose: () => void }
           player={player}
           style={s.videoPlayer}
           contentFit="contain"
-          allowsFullscreen
         />
       </View>
     </Modal>

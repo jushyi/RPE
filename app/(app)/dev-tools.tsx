@@ -11,6 +11,7 @@ import * as Notifications from 'expo-notifications';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase/client';
+import type { NotificationType } from '@/features/notifications/types';
 
 interface DebugEntry {
   type: string;

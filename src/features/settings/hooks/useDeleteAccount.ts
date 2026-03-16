@@ -18,7 +18,7 @@ export function useDeleteAccount() {
           .from('profiles')
           .select('deletion_scheduled_at')
           .eq('id', userId)
-          .single();
+          .single() as { data: { deletion_scheduled_at: string | null } | null };
 
         if (data?.deletion_scheduled_at) {
           setDeletionScheduledAt(data.deletion_scheduled_at);

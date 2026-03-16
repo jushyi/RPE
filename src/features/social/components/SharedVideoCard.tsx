@@ -103,7 +103,6 @@ export function SharedVideoCard({
               player={player}
               style={s.video}
               contentFit="contain"
-              allowsFullscreen={false}
               nativeControls
             />
           </View>
