@@ -142,7 +142,7 @@ export default function TraineePlansScreen() {
           <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
         </Pressable>
         <Text style={s.headerTitle} numberOfLines={1}>
-          {traineeName ?? 'Trainee'}'s Plans
+          {traineeName ?? 'Trainee'}{"'"}s Plans
         </Text>
         <View style={s.headerActions}>
           <Pressable onPress={handleHistoryPress} hitSlop={8} style={s.headerBtn}>

@@ -128,7 +128,7 @@ export default function TraineeHistoryScreen() {
           <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
         </Pressable>
         <Text style={s.headerTitle} numberOfLines={1}>
-          {traineeName ?? 'Trainee'}'s History
+          {traineeName ?? 'Trainee'}{"'"}s History
         </Text>
         <View style={s.headerSpacer} />
       </View>

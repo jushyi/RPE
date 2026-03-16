@@ -362,7 +362,7 @@ export default function DashboardScreen() {
         {/* Completed workouts for today (if any) */}
         {completedToday.length > 0 && (
           <View style={ds.completedSection}>
-            <Text style={ds.completedSectionTitle}>Today's Workouts</Text>
+            <Text style={ds.completedSectionTitle}>Today{"'"}s Workouts</Text>
             {completedToday.map((s, i) => (
               <CompletedWorkoutCard key={s.id} session={s} index={i} isOnly={completedToday.length === 1} />
             ))}
