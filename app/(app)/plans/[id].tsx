@@ -245,54 +245,56 @@ export default function PlanDetailScreen() {
       </View>
 
       {/* Content */}
-      {isEditing ? (
-        <Animated.View key="edit" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
-          <ScrollView
-            style={s.scroll}
-            contentContainerStyle={s.scrollContent}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            <DaySlotEditor days={draftDays} onChange={setDraftDays} />
-            <Pressable style={s.deleteBtn} onPress={handleDelete}>
-              <Ionicons name="trash-outline" size={20} color={colors.error} />
-              <Text style={s.deleteBtnText}>Delete Plan</Text>
-            </Pressable>
-          </ScrollView>
-        </Animated.View>
-      ) : (
-        <Animated.View key="view" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
-          <FlatList
-            data={plan.plan_days}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => {
-              const isCoachPlan = !!plan.coach_id;
-              return (
-                <PlanDaySection
-                  day={item}
-                  defaultExpanded={true}
-                  onStartWorkout={plan.coach_id === userId ? undefined : startFromPlan}
-                  isCoachPlan={isCoachPlan}
-                  onWeekdayChange={isCoachPlan ? (dayId: string, weekday: number) => updateDayWeekday(dayId, weekday) : undefined}
-                />
-              );
-            }}
-            contentContainerStyle={s.scrollContent}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <Text style={s.emptyText}>No days configured</Text>
-            }
-            ListFooterComponent={
-              !plan.is_active && plan.coach_id !== userId ? (
-                <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
-                  <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
-                  <Text style={s.setActiveText}>Set as Active Plan</Text>
-                </Pressable>
-              ) : null
-            }
-          />
-        </Animated.View>
-      )}
+      <KeyboardAvoidingView style={s.keyboardAvoid} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        {isEditing ? (
+          <Animated.View key="edit" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
+            <ScrollView
+              style={s.scroll}
+              contentContainerStyle={s.scrollContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <DaySlotEditor days={draftDays} onChange={setDraftDays} />
+              <Pressable style={s.deleteBtn} onPress={handleDelete}>
+                <Ionicons name="trash-outline" size={20} color={colors.error} />
+                <Text style={s.deleteBtnText}>Delete Plan</Text>
+              </Pressable>
+            </ScrollView>
+          </Animated.View>
+        ) : (
+          <Animated.View key="view" entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)} style={s.scroll}>
+            <FlatList
+              data={plan.plan_days}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => {
+                const isCoachPlan = !!plan.coach_id;
+                return (
+                  <PlanDaySection
+                    day={item}
+                    defaultExpanded={true}
+                    onStartWorkout={plan.coach_id === userId ? undefined : startFromPlan}
+                    isCoachPlan={isCoachPlan}
+                    onWeekdayChange={isCoachPlan ? (dayId: string, weekday: number) => updateDayWeekday(dayId, weekday) : undefined}
+                  />
+                );
+              }}
+              contentContainerStyle={s.scrollContent}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <Text style={s.emptyText}>No days configured</Text>
+              }
+              ListFooterComponent={
+                !plan.is_active && plan.coach_id !== userId ? (
+                  <Pressable style={s.setActiveBtn} onPress={handleSetActive}>
+                    <Ionicons name="checkmark-circle-outline" size={20} color={colors.accent} />
+                    <Text style={s.setActiveText}>Set as Active Plan</Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </Animated.View>
+        )}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -372,12 +374,15 @@ const s = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
+  keyboardAvoid: {
+    flex: 1,
+  },
   scroll: {
     flex: 1,
   },
   scrollContent: {
     padding: 16,
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   center: {
     flex: 1,
