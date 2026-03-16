@@ -31,7 +31,7 @@ export default function SettingsTab() {
           {
             text: 'Delete',
             style: 'destructive',
-            onPress: (pwd) => {
+            onPress: (pwd: string | undefined) => {
               if (pwd) handleScheduleDelete(pwd);
             },
           },

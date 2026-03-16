@@ -30,7 +30,7 @@ export default function AppLayout() {
   useEffect(() => {
     if (!lastResponse) return;
     if (lastResponse.actionIdentifier === Notifications.DEFAULT_ACTION_IDENTIFIER) {
-      const data = lastResponse.notification.request.content.data as NotificationData;
+      const data = lastResponse.notification.request.content.data as unknown as NotificationData;
       const route = getDeepLinkRoute(data);
       if (route) {
         router.push(route as any);

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { DimensionValue } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -8,7 +9,7 @@ import Animated, {
 import { colors } from '@/constants/theme';
 
 interface SkeletonProps {
-  width: number | string;
+  width: DimensionValue;
   height: number;
   borderRadius?: number;
 }
@@ -22,7 +23,7 @@ export function Skeleton({ width, height, borderRadius = 8 }: SkeletonProps) {
 
   const style = useAnimatedStyle(() => ({
     opacity: opacity.value,
-    width,
+    width: width as number,
     height,
     backgroundColor: colors.surfaceElevated,
     borderRadius,

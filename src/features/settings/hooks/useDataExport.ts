@@ -69,7 +69,7 @@ export function useDataExport() {
       const combinedCSV = combineExportSections(sections);
 
       // Write to cache and share
-      const fileUri = FileSystem.cacheDirectory + 'rpe-export.csv';
+      const fileUri = (FileSystem.cacheDirectory ?? '') + 'rpe-export.csv';
       await FileSystem.writeAsStringAsync(fileUri, combinedCSV);
 
       const sharingAvailable = await Sharing.isAvailableAsync();

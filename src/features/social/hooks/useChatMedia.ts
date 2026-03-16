@@ -69,8 +69,9 @@ export function useChatMedia() {
       if (!videoUrl) return null;
 
       // Generate thumbnail
-      let thumbnailUrl: string | undefined;
+      let thumbnailUrl: string | null | undefined;
       try {
+        // @ts-ignore -- expo-video-thumbnails may not have type declarations
         const { VideoThumbnails } = await import('expo-video-thumbnails');
         const thumbResult = await VideoThumbnails.getThumbnailAsync(asset.uri, {
           time: 0,

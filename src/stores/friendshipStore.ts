@@ -322,7 +322,7 @@ export const useFriendshipStore = create<FriendshipState & FriendshipActions>()(
 
       searchByHandle: async (query: string) => {
         try {
-          const { data, error } = await supabase.rpc('search_profiles_by_handle', {
+          const { data, error } = await (supabase.rpc as any)('search_profiles_by_handle', {
             query,
           });
 
@@ -345,10 +345,10 @@ export const useFriendshipStore = create<FriendshipState & FriendshipActions>()(
           } = await supabase.auth.getSession();
           if (!session?.user) return;
 
-          const { error } = await supabase
+          const { error } = await (supabase
             .from('profiles')
             .update({ handle } as any)
-            .eq('id', session.user.id);
+            .eq('id', session.user.id) as any);
 
           if (error) {
             console.warn('Failed to set handle:', error.message);

@@ -276,7 +276,7 @@ export default function DashboardScreen() {
 
   // Refresh only when re-tapping the home icon while already on dashboard
   useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', (e) => {
+    const unsubscribe = navigation.addListener('tabPress' as any, (e: any) => {
       if (navigation.isFocused()) {
         refreshAll();
       }
