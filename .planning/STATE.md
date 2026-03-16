@@ -509,7 +509,7 @@ See: .planning/PROJECT.md (updated 2026-03-09)
 Phase: 12 of 14 (Proper Onboarding)
 Plan: 2 of 2 complete
 Status: Phase 12 Complete (verified + human approved)
-Last activity: 2026-03-16 - Completed quick task 44: Fix keyboard covering input fields on plan create and edit screens
+Last activity: 2026-03-16 - Completed quick task 45: Fix all failing TypeScript CI check errors
 
 Progress: [██████████] 100%
 
@@ -851,6 +851,7 @@ None yet.
 | 42 | Add exercises from any sheet view and make admin exercises global | 2026-03-16 | 2538ff7 | [42-add-exercises-from-any-sheet-view-and-ma](./quick/42-add-exercises-from-any-sheet-view-and-ma/) |
 | 43 | Hide Start Workout button on coach-created trainee plans | 2026-03-16 | 46f5db7 | [43-hide-start-exercise-button-on-coach-crea](./quick/43-hide-start-exercise-button-on-coach-crea/) |
 | 44 | Fix keyboard covering input fields on plan create and edit screens | 2026-03-16 | e95c32f | [44-fix-keyboard-covering-input-fields-on-pl](./quick/44-fix-keyboard-covering-input-fields-on-pl/) |
+| 45 | Fix all failing TypeScript CI check errors | 2026-03-16 | a3c6e9d | [45-fix-all-failing-typescript-ci-check-erro](./quick/45-fix-all-failing-typescript-ci-check-erro/) |
 
 ## Session Continuity
 
