@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed quick-40
-last_updated: "2026-03-13T20:38:50.105Z"
+stopped_at: Completed 10-01-PLAN.md
+last_updated: "2026-03-16T13:04:48.959Z"
 last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
 progress:
   total_phases: 20
@@ -738,6 +738,7 @@ Recent decisions affecting current work:
 - [Phase 18]: createTypingDebounce returns { trigger, cancel } object for testability with cancel in tests
 - [Phase 18]: Debounce logic extracted as pure function createTypingDebounce in chatUtils.ts for unit testing with jest fake timers
 - [Phase quick-40]: --message flag left at end of eas update scripts so caller appends message string as npm run arg
+- [Phase 10-distribution]: eas submit:list does not exist in installed EAS CLI version; distribution=store on finished build confirms auto-submit success
 
 ### Roadmap Evolution
 
@@ -809,6 +810,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T20:34:16.974Z
-Stopped at: Completed quick-40
+Last session: 2026-03-16T13:04:48.955Z
+Stopped at: Completed 10-01-PLAN.md
 Resume file: None
