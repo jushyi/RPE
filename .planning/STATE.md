@@ -807,9 +807,10 @@ None yet.
 | 38 | some input hints throughout the app have random spaces between which makes it look weird | 2026-03-13 | d4e9c9e | [38-some-input-hints-throughout-the-app-have](./quick/38-some-input-hints-throughout-the-app-have/) |
 | 39 | bar diagram collar taller and right bar slightly taller than left bar | 2026-03-13 | d3decaf | [39-bar-diagram-collar-taller-and-right-bar-](./quick/39-bar-diagram-collar-taller-and-right-bar-/) |
 | 40 | set up ota updates for production profiles | 2026-03-13 | d764a04 | [40-set-up-ota-updates-for-production-profil](./quick/40-set-up-ota-updates-for-production-profil/) |
+| 41 | Fix exercise selection keyboard dismiss bug in ExercisePicker | 2026-03-16 | 179cea5 | [41-fix-exercise-selection-keyboard-dismiss-](./quick/41-fix-exercise-selection-keyboard-dismiss-/) |
 
 ## Session Continuity
 
-Last session: 2026-03-16T13:04:48.955Z
-Stopped at: Completed 10-01-PLAN.md
+Last session: 2026-03-16T13:05:00Z
+Stopped at: Completed quick-41
 Resume file: None
