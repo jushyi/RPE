@@ -10,6 +10,8 @@ function makePlanDay(overrides: Partial<PlanDay> & { weekday: number | null }): 
     weekday: overrides.weekday,
     sort_order: overrides.sort_order ?? 0,
     created_at: '2026-01-01T00:00:00Z',
+    alarm_time: null,
+    alarm_enabled: false,
     plan_day_exercises: overrides.plan_day_exercises ?? [
       { id: 'e1', plan_day_id: `day-${overrides.weekday}`, exercise_id: 'ex1', sort_order: 0, target_sets: [{weight: 100, reps: 5, rpe: null}, {weight: 100, reps: 5, rpe: null}, {weight: 100, reps: 5, rpe: null}], notes: null, unit_override: null, weight_progression: 'manual', created_at: '2026-01-01T00:00:00Z' } as PlanDayExercise,
       { id: 'e2', plan_day_id: `day-${overrides.weekday}`, exercise_id: 'ex2', sort_order: 1, target_sets: [{weight: 80, reps: 8, rpe: null}, {weight: 80, reps: 8, rpe: null}, {weight: 80, reps: 8, rpe: null}], notes: null, unit_override: null, weight_progression: 'manual', created_at: '2026-01-01T00:00:00Z' } as PlanDayExercise,
