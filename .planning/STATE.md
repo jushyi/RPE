@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: Completed quick-46
 last_updated: "2026-03-16T15:04:50.641Z"
-last_activity: "2026-03-16 - Completed quick task 45: Fix all failing TypeScript CI check errors"
+last_activity: "2026-03-16 - Completed quick task 46: Fix all failing ESLint CI check errors"
 progress:
   total_phases: 20
   completed_phases: 20
@@ -868,6 +868,7 @@ None yet.
 | 43 | Hide Start Workout button on coach-created trainee plans | 2026-03-16 | 46f5db7 | [43-hide-start-exercise-button-on-coach-crea](./quick/43-hide-start-exercise-button-on-coach-crea/) |
 | 44 | Fix keyboard covering input fields on plan create and edit screens | 2026-03-16 | e95c32f | [44-fix-keyboard-covering-input-fields-on-pl](./quick/44-fix-keyboard-covering-input-fields-on-pl/) |
 | 45 | Fix all failing TypeScript CI check errors | 2026-03-16 | a3c6e9d | [45-fix-all-failing-typescript-ci-check-erro](./quick/45-fix-all-failing-typescript-ci-check-erro/) |
+| 46 | Fix all failing ESLint CI check errors | 2026-03-16 | b9aca70 | [46-fix-all-failing-eslint-ci-check-errors](./quick/46-fix-all-failing-eslint-ci-check-errors/) |
 
 ## Session Continuity
 
