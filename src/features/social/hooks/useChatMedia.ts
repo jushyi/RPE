@@ -81,7 +81,7 @@ export function useChatMedia() {
         // Thumbnail generation is best-effort
       }
 
-      return { mediaUrl: videoUrl, mediaType: 'video', thumbnailUrl };
+      return { mediaUrl: videoUrl, mediaType: 'video', thumbnailUrl: thumbnailUrl ?? undefined };
     } finally {
       setUploading(false);
     }

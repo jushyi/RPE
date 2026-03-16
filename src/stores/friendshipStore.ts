@@ -345,10 +345,11 @@ export const useFriendshipStore = create<FriendshipState & FriendshipActions>()(
           } = await supabase.auth.getSession();
           if (!session?.user) return;
 
-          const { error } = await (supabase
-            .from('profiles')
-            .update({ handle } as any)
-            .eq('id', session.user.id) as any);
+          const result = await (supabase
+            .from('profiles') as any)
+            .update({ handle })
+            .eq('id', session.user.id);
+          const error = result?.error;
 
           if (error) {
             console.warn('Failed to set handle:', error.message);
