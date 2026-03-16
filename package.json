@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "test": "jest --bail",
+    "typecheck": "tsc --noEmit",
     "update:production": "eas update --channel production --message",
     "update:preview": "eas update --channel preview --message"
   },
