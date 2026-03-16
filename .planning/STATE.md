@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: Completed 10-02-PLAN.md -- all 5 device tests passed, app ready for distribution
 last_updated: "2026-03-16T13:13:15.625Z"
-last_activity: "2026-03-13 - Completed quick task 39: bar diagram collar taller and right bar slightly taller than left bar"
+last_activity: "2026-03-16 - Completed quick task 42: Add exercises from any sheet view and make admin exercises global"
 progress:
   total_phases: 20
   completed_phases: 19
@@ -828,9 +828,10 @@ None yet.
 | 39 | bar diagram collar taller and right bar slightly taller than left bar | 2026-03-13 | d3decaf | [39-bar-diagram-collar-taller-and-right-bar-](./quick/39-bar-diagram-collar-taller-and-right-bar-/) |
 | 40 | set up ota updates for production profiles | 2026-03-13 | d764a04 | [40-set-up-ota-updates-for-production-profil](./quick/40-set-up-ota-updates-for-production-profil/) |
 | 41 | Fix exercise selection keyboard dismiss bug in ExercisePicker | 2026-03-16 | 179cea5 | [41-fix-exercise-selection-keyboard-dismiss-](./quick/41-fix-exercise-selection-keyboard-dismiss-/) |
+| 42 | Add exercises from any sheet view and make admin exercises global | 2026-03-16 | 2538ff7 | [42-add-exercises-from-any-sheet-view-and-ma](./quick/42-add-exercises-from-any-sheet-view-and-ma/) |
 
 ## Session Continuity
 
-Last session: 2026-03-16T13:13:05.796Z
-Stopped at: Completed 10-02-PLAN.md -- all 5 device tests passed, app ready for distribution
+Last session: 2026-03-16T13:19:00.000Z
+Stopped at: Completed quick-42
 Resume file: None
