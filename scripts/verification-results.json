@@ -1,0 +1,43 @@
+{
+  "date": "2026-03-16T13:06:17.488Z",
+  "device": "Physical iPhone (TestFlight)",
+  "app_version": "1.0.0",
+  "results": [
+    {
+      "id": "TF-01",
+      "name": "App installs and launches from TestFlight",
+      "result": "skip",
+      "notes": "dry-run auto-skip"
+    },
+    {
+      "id": "ALM-01",
+      "name": "Alarm fires with sound and vibration (iOS)",
+      "result": "skip",
+      "notes": "dry-run auto-skip"
+    },
+    {
+      "id": "OFF-01",
+      "name": "Offline workout logging and sync",
+      "result": "skip",
+      "notes": "dry-run auto-skip"
+    },
+    {
+      "id": "RLS-01",
+      "name": "RLS cross-user data isolation",
+      "result": "skip",
+      "notes": "dry-run auto-skip"
+    },
+    {
+      "id": "HIST-01",
+      "name": "Plan-edit does not alter logged sessions",
+      "result": "skip",
+      "notes": "dry-run auto-skip"
+    }
+  ],
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "skip": 5,
+    "total": 5
+  }
+}
