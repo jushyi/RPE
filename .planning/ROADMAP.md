@@ -216,7 +216,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 17. Social Sharing | 6/6 | Complete    | 2026-03-13 |
 | 18. Group Chat | 5/5 | Complete    | 2026-03-13 |
 | 19. GitHub Actions CI/CD | 1/1 | Complete    | 2026-03-16 |
-| 20. Integration Gap Closure | 0/1 | Not started | - |
+| 20. Integration Gap Closure | 0/2 | Not started | - |
 
 ### Phase 11: Add settings tab, move sign out to it and have a delete account option with data export
 
@@ -400,7 +400,8 @@ Plans:
 **Requirements**: AUTH-03, ALRM-02, VID-03, NOTIF-02, NOTIF-04
 **Depends on:** Phase 19
 **Gap Closure:** Closes gaps from v1.0-MILESTONE-AUDIT.md
-**Plans:** 0/1 plans
+**Plans:** 2 plans
 
 Plans:
-- [ ] 20-01-PLAN.md — All integration fixes (clearAllUserData scope, deepLinkRouter types, video queue flush, alarm deep links, body-metrics unit defaults) + Phase 05/10 VERIFICATION.md creation
+- [ ] 20-01-PLAN.md — Sign-out data isolation, deep link router for social/chat, alarm/nudge deep links, GroupTabs initialTab prop
+- [ ] 20-02-PLAN.md — Video upload queue retry with foreground flush + failed banner, body-metrics unit defaults, Phase 05/10 VERIFICATION.md
