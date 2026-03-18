@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Stack, useRouter } from 'expo-router';
-import * as Updates from 'expo-updates';
 import * as Notifications from 'expo-notifications';
 import { colors } from '@/constants/theme';
 import { HeaderCloudIcon } from '@/components/layout/HeaderCloudIcon';
@@ -14,7 +13,7 @@ import { supabase } from '@/lib/supabase/client';
  * App layout wrapping tabs and onboarding routes.
  * HeaderCloudIcon shows connection status in all screen headers.
  * useSyncQueue auto-flushes pending sync items when connectivity is restored.
- * Checks for OTA updates on mount in production builds.
+ * OTA update checks are handled in the root app/_layout.tsx.
  */
 export default function AppLayout() {
   const router = useRouter();
@@ -37,25 +36,6 @@ export default function AppLayout() {
       }
     }
   }, [lastResponse, router]);
-
-  // Check for OTA updates on mount (production only)
-  useEffect(() => {
-    if (__DEV__) return;
-
-    async function checkForUpdates() {
-      try {
-        const update = await Updates.checkForUpdateAsync();
-        if (update.isAvailable) {
-          await Updates.fetchUpdateAsync();
-          await Updates.reloadAsync();
-        }
-      } catch {
-        // Silently fail - update check is best-effort
-      }
-    }
-
-    checkForUpdates();
-  }, []);
 
   return (
     <Stack
