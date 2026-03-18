@@ -9,29 +9,11 @@ import { useAuthStore } from '@/stores/authStore';
 import { notifyCoachPR } from '@/features/coaching/utils/notifyCoach';
 
 export interface PRBaseline {
-  exercise_id: string;
-  weight: number;
-  unit: string;
-}
-
-/** Raw row from Supabase pr_baselines (exercise_id may be null for manually-set PRs) */
-interface PRBaselineRow {
   exercise_id: string | null;
   exercise_name: string | null;
   weight: number;
   unit: string;
 }
-
-/**
- * Slug-to-display-name mapping for Big 3 exercises.
- * Manually-set PRs store exercise_name as a slug (e.g., 'squat'),
- * while the exercises table uses display names (e.g., 'Squat').
- */
-const EXERCISE_SLUG_TO_NAME: Record<string, string> = {
-  bench_press: 'Bench Press',
-  squat: 'Squat',
-  deadlift: 'Deadlift',
-};
 
 export interface PRResult {
   isPR: boolean;
@@ -50,13 +32,17 @@ export function checkForPR(
   exerciseId: string,
   loggedWeight: number,
   prBaselines: PRBaseline[],
-  tracksPR: boolean
+  tracksPR: boolean,
+  exerciseName?: string
 ): PRResult {
   if (!tracksPR) {
     return { isPR: false, previousBest: null };
   }
 
-  const baseline = prBaselines.find((b) => b.exercise_id === exerciseId);
+  // Match by exercise_id first; fall back to exercise_name for manually-set PRs
+  const baseline = prBaselines.find((b) => b.exercise_id === exerciseId)
+    ?? prBaselines.find((b) => b.exercise_name && b.exercise_id === null
+      && b.exercise_name.toLowerCase() === (exerciseName?.toLowerCase() ?? ''));
 
   if (!baseline) {
     // First time logging this PR-tracked exercise
@@ -80,8 +66,7 @@ export function usePRDetection(userId: string | undefined) {
   const sessionPRCacheRef = useRef<Map<string, number>>(new Map());
   const exercises = useExerciseStore((s) => s.exercises);
 
-  // Load PR baselines from Supabase on mount.
-  // Resolves exercise_id from exercise_name for manually-set PRs where exercise_id is null.
+  // Load PR baselines from Supabase on mount
   const loadBaselines = useCallback(async () => {
     if (!userId) return;
     try {
@@ -90,56 +75,7 @@ export function usePRDetection(userId: string | undefined) {
         .select('exercise_id, exercise_name, weight, unit')
         .eq('user_id', userId);
       if (data) {
-        const rows = data as PRBaselineRow[];
-        const currentExercises = useExerciseStore.getState().exercises;
-        const resolved: PRBaseline[] = [];
-        const seenIds = new Set<string>();
-
-        for (const row of rows) {
-          let eid = row.exercise_id;
-
-          // Resolve exercise_id from exercise_name when missing (manually-set PRs)
-          if (!eid && row.exercise_name && currentExercises.length > 0) {
-            const displayName =
-              EXERCISE_SLUG_TO_NAME[row.exercise_name] ?? row.exercise_name;
-            const match = currentExercises.find(
-              (e) =>
-                e.name.toLowerCase() === displayName.toLowerCase()
-            );
-            eid = match?.id ?? null;
-          }
-
-          if (eid) {
-            if (seenIds.has(eid)) {
-              // Duplicate exercise_id (manual + workout rows): keep the higher weight
-              const existing = resolved.find((r) => r.exercise_id === eid);
-              if (existing && row.weight > existing.weight) {
-                existing.weight = row.weight;
-              }
-            } else {
-              seenIds.add(eid);
-              resolved.push({
-                exercise_id: eid,
-                weight: row.weight,
-                unit: row.unit,
-              });
-            }
-          } else if (row.exercise_name) {
-            // Fallback: keep rows with exercise_name even if exercise_id can't be resolved yet.
-            // Use exercise_name as a synthetic key so PR data isn't silently dropped.
-            const fallbackKey = `name:${row.exercise_name}`;
-            if (!seenIds.has(fallbackKey)) {
-              seenIds.add(fallbackKey);
-              resolved.push({
-                exercise_id: row.exercise_name,
-                weight: row.weight,
-                unit: row.unit,
-              });
-            }
-          }
-        }
-
-        setBaselines(resolved);
+        setBaselines(data as PRBaseline[]);
       }
     } catch (e) {
       console.warn('PR baseline load failed:', e);
@@ -161,6 +97,7 @@ export function usePRDetection(userId: string | undefined) {
 
       // Build effective baselines: merge stored baselines with session cache
       const effectiveBaselines = baselines.map((b) => {
+        if (!b.exercise_id) return b;
         const sessionWeight = sessionPRCacheRef.current.get(b.exercise_id);
         if (sessionWeight !== undefined && sessionWeight > b.weight) {
           return { ...b, weight: sessionWeight };
@@ -176,12 +113,13 @@ export function usePRDetection(userId: string | undefined) {
       if (!hasBaseline && sessionCacheWeight !== undefined) {
         effectiveBaselines.push({
           exercise_id: exerciseId,
+          exercise_name: exercise?.name ?? null,
           weight: sessionCacheWeight,
           unit,
         });
       }
 
-      const result = checkForPR(exerciseId, weight, effectiveBaselines, tracksPR);
+      const result = checkForPR(exerciseId, weight, effectiveBaselines, tracksPR, exercise?.name);
 
       if (result.isPR) {
         // Update session PR cache
@@ -221,7 +159,7 @@ export function usePRDetection(userId: string | undefined) {
                 }
                 return [
                   ...prev,
-                  { exercise_id: exerciseId, weight, unit },
+                  { exercise_id: exerciseId, exercise_name: exercise?.name ?? null, weight, unit },
                 ];
               });
             })
