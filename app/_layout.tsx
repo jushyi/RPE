@@ -7,7 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as Notifications from 'expo-notifications';
 import * as Updates from 'expo-updates';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createMMKV } from 'react-native-mmkv';
 import { colors } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
@@ -19,7 +19,8 @@ import { SNOOZE_MINUTES } from '@/features/alarms/constants';
 import { getDeepLinkRoute } from '@/features/notifications/utils/deepLinkRouter';
 import type { NotificationData } from '@/features/notifications/types';
 
-const WHATS_NEW_KEY = '@whats_new_last_seen_id';
+const mmkv = createMMKV();
+const WHATS_NEW_KEY = 'whats_new_last_seen_id';
 
 // Configure foreground notification presentation
 Notifications.setNotificationHandler({
@@ -39,7 +40,7 @@ export default function RootLayout() {
   const router = useRouter();
   const [showWhatsNew, setShowWhatsNew] = useState(false);
 
-  // Check for OTA updates on mount (production only)
+  // Check for OTA updates on mount, download and apply in one launch (production only)
   useEffect(() => {
     if (__DEV__) return;
     Updates.checkForUpdateAsync()
@@ -57,32 +58,26 @@ export default function RootLayout() {
     const updateId = Updates.updateId;
     if (!updateId) return;
 
-    (async () => {
-      try {
-        const lastSeenId = await AsyncStorage.getItem(WHATS_NEW_KEY);
-        if (!lastSeenId) {
-          // First install — store current ID, don't show modal
-          await AsyncStorage.setItem(WHATS_NEW_KEY, updateId);
-          return;
-        }
-        if (lastSeenId === updateId) return;
-        if (WHATS_NEW.items.length === 0) {
-          // Silent patch — no modal
-          await AsyncStorage.setItem(WHATS_NEW_KEY, updateId);
-          return;
-        }
-        setShowWhatsNew(true);
-      } catch (err) {
-        console.warn("Failed to check what's new:", err);
-      }
-    })();
+    const lastSeenId = mmkv.getString(WHATS_NEW_KEY);
+    if (!lastSeenId) {
+      // First install — store current ID, don't show modal
+      mmkv.set(WHATS_NEW_KEY, updateId);
+      return;
+    }
+    if (lastSeenId === updateId) return;
+    if (WHATS_NEW.items.length === 0) {
+      // Silent patch — no modal
+      mmkv.set(WHATS_NEW_KEY, updateId);
+      return;
+    }
+    setShowWhatsNew(true);
   }, [isLoading]);
 
-  const handleDismissWhatsNew = async () => {
+  const handleDismissWhatsNew = () => {
     setShowWhatsNew(false);
     const updateId = Updates.updateId;
     if (updateId) {
-      await AsyncStorage.setItem(WHATS_NEW_KEY, updateId).catch(() => {});
+      mmkv.set(WHATS_NEW_KEY, updateId);
     }
   };
 
