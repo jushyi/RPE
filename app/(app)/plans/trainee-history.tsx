@@ -71,11 +71,11 @@ export default function TraineeHistoryScreen() {
     const duration = formatDuration(item.started_at, item.ended_at);
     const isExpanded = expandedId === item.id;
 
-    // Determine session label: plan name > day name > generic plan label > Freestyle
+    // Determine plan label and optional day subtitle
     const isPlanSession = !!item.plan_id;
-    const sessionLabel = item.workout_plans?.name
-      ?? item.plan_days?.day_name
+    const planLabel = item.workout_plans?.name
       ?? (isPlanSession ? 'Plan Workout' : 'Freestyle');
+    const dayLabel = item.plan_days?.day_name ?? null;
 
     return (
       <Pressable style={s.card} onPress={() => toggleExpand(item.id)}>
@@ -84,8 +84,13 @@ export default function TraineeHistoryScreen() {
           <View style={s.cardInfo}>
             <Text style={s.dateText}>{formatDate(item.started_at)}</Text>
             <Text style={s.titleText} numberOfLines={1}>
-              {sessionLabel}
+              {planLabel}
             </Text>
+            {dayLabel ? (
+              <Text style={s.dayText} numberOfLines={1}>
+                {dayLabel}
+              </Text>
+            ) : null}
           </View>
           <Ionicons
             name={isExpanded ? 'chevron-up' : 'chevron-down'}
@@ -222,6 +227,12 @@ const s = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: 16,
     fontWeight: '700',
+  },
+  dayText: {
+    color: colors.textSecondary,
+    fontSize: 13,
+    fontWeight: '500',
+    marginTop: 1,
   },
   summaryRow: {
     flexDirection: 'row',
