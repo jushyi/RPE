@@ -11,7 +11,10 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/8ea209dd-0ed7-4d73-9aee-3a6fe3993657"
+      "url": "https://u.expo.dev/8ea209dd-0ed7-4d73-9aee-3a6fe3993657",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
     },
     "ios": {
       "supportsTablet": false,
@@ -50,7 +53,8 @@
       "@react-native-community/datetimepicker",
       "expo-notifications",
       "expo-sharing",
-      "expo-video"
+      "expo-video",
+      "expo-updates"
     ],
     "experiments": {
       "typedRoutes": true
