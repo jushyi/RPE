@@ -49,14 +49,15 @@ Declared values (must be multiples of 4):
 | Token | Value | Usage |
 |-------|-------|-------|
 | xs | 4px | Icon gaps, inline padding |
-| sm | 8px | Compact element spacing, icon-text gap |
+| sm | 8px | Compact element spacing, icon-text gap, banner margin bottom |
 | md | 16px | Default element spacing, list horizontal padding |
 | lg | 24px | Section padding |
 | xl | 32px | Layout gaps |
 | 2xl | 48px | Major section breaks |
 | 3xl | 64px | Page-level spacing |
 
-Exceptions: none
+Exceptions:
+- **12px** -- Used for card padding and border radius throughout the videos gallery screen (`galleryItem` style uses `padding: 12`, `borderRadius: 12`; `storageHeader` uses `paddingVertical: 12`). Justified as an established codebase pattern predating this phase. The `FailedUploadBanner` uses 12px padding and 12px border radius to match adjacent `galleryItem` cards.
 
 Source: Existing codebase patterns -- `padding: 12` (cards), `paddingHorizontal: 16` (lists), `gap: 8` (inline rows), `paddingVertical: 60` (empty states).
 
@@ -71,7 +72,7 @@ Source: Existing codebase patterns -- `padding: 12` (cards), `paddingHorizontal:
 | Small caption | 12px | 400 (regular) | 1.4 |
 | Heading / Nav title | 16px | 700 (bold) | 1.2 |
 
-Source: Existing codebase -- `videos.tsx` uses 12px (date), 13px (storage/set info), 15px (exercise name), 16px (nav title). Weights: 400 default, 600 (semibold for exercise names), 700 (bold for nav titles).
+Source: Existing codebase -- `videos.tsx` uses 12px (date), 13px (storage/set info), 15px (exercise name), 16px (nav title). Weights: 400 default, 700 (bold for nav titles).
 
 ---
 
@@ -116,12 +117,12 @@ The only new UI element in this phase. Appears at the top of the videos gallery 
 | Container | `View` with `flexDirection: 'row'`, `alignItems: 'center'` | Matches `storageHeader` pattern |
 | Background | `colors.surface` (`#1a1a1a`) | Consistent with card elements |
 | Border | 1px solid `colors.warning` (`#f59e0b`) | Draws attention without overwhelming |
-| Border radius | 12px | Matches `galleryItem` radius |
-| Padding | 12px horizontal, 12px vertical | Matches `galleryItem` padding |
-| Margin bottom | 10px | Matches `galleryItem` margin |
+| Border radius | 12px (exception) | Matches `galleryItem` radius |
+| Padding | 12px horizontal, 12px vertical (exception) | Matches `galleryItem` padding |
+| Margin bottom | 8px (sm token) | Separates banner from first gallery item; aligns to spacing scale |
 | Icon | `Ionicons` name `warning-outline`, size 20, color `colors.warning` | Warning severity, not error |
 | Icon margin right | 8px | Standard sm token |
-| Text | 14px, weight 500, color `colors.warning` | Slightly smaller than body, medium weight for emphasis |
+| Text | 13px, weight 400, color `colors.warning` | Label/Caption role from type scale |
 | Pressable | Entire banner is a `Pressable` that triggers manual retry of all failed items | Single tap target |
 | Pressed state | `opacity: 0.7` | Matches existing press feedback pattern |
 | Retry behavior | On tap: reset `retryCount` to 0 for all failed items and call `flushVideoQueue()` | Per CONTEXT.md retry specification |
