@@ -7,9 +7,19 @@ describe('getDeepLinkRoute', () => {
     expect(getDeepLinkRoute(data)).toBe('/(app)/history/abc');
   });
 
-  it('returns exercise progress route for pr_achieved with exercise_id', () => {
+  it('returns exercise progress route for pr_achieved with exercise_id (trainee own context)', () => {
     const data: NotificationData = { type: 'pr_achieved', exercise_id: 'xyz', exercise_name: 'Bench' };
     expect(getDeepLinkRoute(data)).toBe('/(app)/progress/xyz');
+  });
+
+  it('returns trainee history route for pr_achieved with trainee_id (coach context)', () => {
+    const data: NotificationData = { type: 'pr_achieved', trainee_id: 't1', trainee_name: 'Jane Doe', exercise_id: 'xyz' };
+    expect(getDeepLinkRoute(data)).toBe('/(app)/plans/trainee-history?traineeId=t1&traineeName=Jane%20Doe');
+  });
+
+  it('returns trainee history route for pr_achieved with trainee_id but no trainee_name', () => {
+    const data: NotificationData = { type: 'pr_achieved', trainee_id: 't1', exercise_id: 'xyz' };
+    expect(getDeepLinkRoute(data)).toBe('/(app)/plans/trainee-history?traineeId=t1');
   });
 
   it('returns plan detail route for plan_update with plan_id', () => {

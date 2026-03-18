@@ -10,6 +10,12 @@ export function getDeepLinkRoute(data: NotificationData): string | null {
     case 'workout_complete':
       return data.session_id ? `/(app)/history/${data.session_id}` : null;
     case 'pr_achieved':
+      // Coach context: trainee_id present means this was sent to a coach — navigate to trainee's history
+      if (data.trainee_id) {
+        const name = data.trainee_name ? `&traineeName=${encodeURIComponent(data.trainee_name)}` : '';
+        return `/(app)/plans/trainee-history?traineeId=${data.trainee_id}${name}`;
+      }
+      // Trainee's own context: show their exercise progress chart
       return data.exercise_id ? `/(app)/progress/${data.exercise_id}` : null;
     case 'plan_update':
       return data.plan_id ? `/(app)/plans/${data.plan_id}` : null;
