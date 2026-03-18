@@ -54,8 +54,9 @@ export function usePlanDetail(planId: string) {
   }, [planId]);
 
   /**
-   * Saves the edited draft back to Supabase using delete-and-reinsert for days/exercises.
-   * This is simpler than diffing individual adds/removes/edits for a v1 template editor.
+   * Saves the edited draft back to Supabase using a diff strategy that preserves
+   * existing plan_day IDs. This prevents FK violations when in-flight workouts
+   * reference a plan_day_id that would otherwise be deleted and recreated.
    */
   const updatePlan = useCallback(
     async (draft: Plan) => {
@@ -70,69 +71,148 @@ export function usePlanDetail(planId: string) {
 
         if (planError) throw planError;
 
-        // 2. Delete existing plan_days (cascade deletes plan_day_exercises)
-        const { error: deleteError } = await (supabase.from('plan_days') as any)
-          .delete()
+        // 2. Fetch current day IDs from DB to diff against draft
+        const { data: existingDays, error: fetchDaysErr } = await (supabase.from('plan_days') as any)
+          .select('id')
           .eq('plan_id', planId);
 
-        if (deleteError) throw deleteError;
+        if (fetchDaysErr) throw fetchDaysErr;
 
-        // 3. Insert new plan_days from draft
-        if (draft.plan_days.length > 0) {
-          const dayInserts = draft.plan_days.map((day, index) => ({
+        const existingDayIds = new Set<string>((existingDays ?? []).map((d: any) => d.id));
+        const draftDayIds = new Set<string>(draft.plan_days.map((d) => d.id).filter(Boolean));
+
+        // 3. Delete days that were removed from the draft (cascade deletes their exercises)
+        const daysToDelete = [...existingDayIds].filter((id: string) => !draftDayIds.has(id));
+        if (daysToDelete.length > 0) {
+          const { error: deleteErr } = await (supabase.from('plan_days') as any)
+            .delete()
+            .in('id', daysToDelete);
+          if (deleteErr) throw deleteErr;
+        }
+
+        // 4. Upsert days: update existing, insert new
+        const dayUpserts: any[] = [];
+        const newDays: { index: number; data: any }[] = [];
+
+        for (let i = 0; i < draft.plan_days.length; i++) {
+          const day = draft.plan_days[i];
+          const dayPayload = {
             plan_id: planId,
             day_name: day.day_name,
             weekday: day.weekday,
             alarm_time: day.alarm_time ?? null,
             alarm_enabled: day.alarm_enabled ?? false,
-            sort_order: index,
-          }));
+            sort_order: i,
+          };
 
-          const { data: dayData, error: dayError } = await (supabase.from('plan_days') as any)
-            .insert(dayInserts)
-            .select();
-
-          if (dayError) throw dayError;
-
-          // 4. Insert plan_day_exercises for each day
-          const sortedDays = (dayData ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order);
-          const allExerciseInserts: any[] = [];
-
-          for (let i = 0; i < sortedDays.length; i++) {
-            const dayExercises = draft.plan_days[i]?.plan_day_exercises ?? [];
-            for (let j = 0; j < dayExercises.length; j++) {
-              const ex = dayExercises[j];
-              allExerciseInserts.push({
-                plan_day_id: sortedDays[i].id,
-                exercise_id: ex.exercise_id,
-                sort_order: j,
-                target_sets: ex.target_sets,
-                notes: ex.notes,
-                unit_override: ex.unit_override,
-                weight_progression: ex.weight_progression ?? 'carry_previous',
-              });
-            }
-          }
-
-          if (allExerciseInserts.length > 0) {
-            const { error: exError } = await (supabase.from('plan_day_exercises') as any)
-              .insert(allExerciseInserts)
-              .select();
-
-            if (exError) throw exError;
+          if (day.id && existingDayIds.has(day.id)) {
+            // Existing day — update in place, preserving the ID
+            dayUpserts.push({ id: day.id, ...dayPayload });
+          } else {
+            // New day — insert without ID
+            newDays.push({ index: i, data: dayPayload });
           }
         }
 
-        // 5. Update store with draft data
+        // Update existing days
+        if (dayUpserts.length > 0) {
+          const { error: upsertErr } = await (supabase.from('plan_days') as any)
+            .upsert(dayUpserts);
+          if (upsertErr) throw upsertErr;
+        }
+
+        // Insert new days and capture their generated IDs
+        const newDayIdMap = new Map<number, string>(); // draft index -> new DB id
+        if (newDays.length > 0) {
+          const { data: insertedDays, error: insertErr } = await (supabase.from('plan_days') as any)
+            .insert(newDays.map((d) => d.data))
+            .select();
+          if (insertErr) throw insertErr;
+
+          // Map by sort_order back to draft index
+          const sorted = (insertedDays ?? []).sort((a: any, b: any) => a.sort_order - b.sort_order);
+          const sortedNewDays = newDays.sort((a, b) => a.index - b.index);
+          for (let j = 0; j < sortedNewDays.length; j++) {
+            newDayIdMap.set(sortedNewDays[j].index, sorted[j].id);
+          }
+        }
+
+        // 5. Build day ID lookup for exercise upserts
+        const dayIdForIndex = (i: number): string => {
+          const day = draft.plan_days[i];
+          if (day.id && existingDayIds.has(day.id)) return day.id;
+          return newDayIdMap.get(i) ?? '';
+        };
+
+        // 6. For each day, diff exercises
+        for (let i = 0; i < draft.plan_days.length; i++) {
+          const dayId = dayIdForIndex(i);
+          if (!dayId) continue;
+
+          const draftExercises = draft.plan_days[i].plan_day_exercises ?? [];
+
+          // Fetch existing exercises for this day
+          const { data: existingExercises } = await (supabase.from('plan_day_exercises') as any)
+            .select('id')
+            .eq('plan_day_id', dayId);
+
+          const existingExIds = new Set<string>((existingExercises ?? []).map((e: any) => e.id));
+          const draftExIds = new Set<string>(draftExercises.map((e) => e.id).filter(Boolean));
+
+          // Delete removed exercises
+          const exercisesToDelete = [...existingExIds].filter((id: string) => !draftExIds.has(id));
+          if (exercisesToDelete.length > 0) {
+            await (supabase.from('plan_day_exercises') as any)
+              .delete()
+              .in('id', exercisesToDelete);
+          }
+
+          // Upsert existing + insert new exercises
+          const exUpserts: any[] = [];
+          const exInserts: any[] = [];
+
+          for (let j = 0; j < draftExercises.length; j++) {
+            const ex = draftExercises[j];
+            const exPayload = {
+              plan_day_id: dayId,
+              exercise_id: ex.exercise_id,
+              sort_order: j,
+              target_sets: ex.target_sets,
+              notes: ex.notes,
+              unit_override: ex.unit_override,
+              weight_progression: ex.weight_progression ?? 'carry_previous',
+            };
+
+            if (ex.id && existingExIds.has(ex.id)) {
+              exUpserts.push({ id: ex.id, ...exPayload });
+            } else {
+              exInserts.push(exPayload);
+            }
+          }
+
+          if (exUpserts.length > 0) {
+            const { error: exUpErr } = await (supabase.from('plan_day_exercises') as any)
+              .upsert(exUpserts);
+            if (exUpErr) throw exUpErr;
+          }
+
+          if (exInserts.length > 0) {
+            const { error: exInErr } = await (supabase.from('plan_day_exercises') as any)
+              .insert(exInserts);
+            if (exInErr) throw exInErr;
+          }
+        }
+
+        // 7. Update store with draft data
         updateInStore(planId, {
           name: draft.name,
           plan_days: draft.plan_days,
         });
 
-        // 6. Refetch to get fresh data with new IDs (silent — no loading spinner)
+        // 8. Refetch to get fresh data with correct IDs (silent — no loading spinner)
         await fetchPlan(true);
 
-        // 7. Reschedule alarms if this is the active plan
+        // 9. Reschedule alarms if this is the active plan
         try {
           const allPlans = usePlanStore.getState().plans;
           const currentPlan = allPlans.find((p) => p.id === planId);

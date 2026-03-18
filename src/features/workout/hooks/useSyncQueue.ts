@@ -45,6 +45,20 @@ export function enqueueSyncItem(item: SyncItem): void {
   syncStorage.set(PENDING_KEY, JSON.stringify(queue));
 }
 
+/**
+ * Check whether a Supabase error is a foreign key violation.
+ * Covers both the standard PostgreSQL message format and the Supabase error code.
+ */
+function isForeignKeyViolation(error: { message?: string; code?: string }): boolean {
+  const msg = error.message ?? '';
+  const code = error.code ?? '';
+  return (
+    code === '23503' ||
+    msg.includes('violates foreign key constraint') ||
+    msg.includes('is not present in table')
+  );
+}
+
 /** Process all pending items; failed items remain in queue */
 export async function flushSyncQueue(supabase: SupabaseClient): Promise<void> {
   const netState = await NetInfo.fetch();
@@ -64,6 +78,26 @@ export async function flushSyncQueue(supabase: SupabaseClient): Promise<void> {
       if (msg.includes('duplicate key value violates unique constraint')) {
         continue;
       }
+
+      // FK violation on workout_sessions (stale plan_day_id / plan_id after coach edit):
+      // Retry with null plan references so the workout data is never lost.
+      if (item.table === 'workout_sessions' && isForeignKeyViolation(error)) {
+        console.warn(
+          'Sync queue: FK violation on workout_sessions, retrying without plan references:',
+          msg,
+        );
+        const fallbackData = { ...item.data, plan_id: null, plan_day_id: null };
+        const { error: retryError } = await (supabase as any)
+          .from(item.table)
+          [item.operation](fallbackData);
+        if (retryError) {
+          console.warn('Sync queue: retry without plan refs also failed:', retryError.message);
+          failed.push(item);
+        }
+        // If retry succeeded, the session is saved (without plan link) — continue
+        continue;
+      }
+
       console.warn('Sync queue: failed to sync item to', item.table, ':', msg || error);
       failed.push(item);
     }

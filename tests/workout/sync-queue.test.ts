@@ -129,6 +129,86 @@ describe('Sync Queue', () => {
       await flushSyncQueue(mockSupabase as any);
       expect(mockSupabase.from).not.toHaveBeenCalled();
     });
+
+    it('retries workout_sessions with null plan refs on FK violation', async () => {
+      let callCount = 0;
+      const fkSupabase = {
+        from: jest.fn().mockReturnValue({
+          upsert: jest.fn().mockImplementation((data: any) => {
+            callCount++;
+            if (callCount === 1) {
+              // First call: FK violation
+              return Promise.resolve({
+                data: null,
+                error: {
+                  message: 'insert or update on table "workout_sessions" violates foreign key constraint "workout_sessions_plan_day_id_fkey"',
+                  code: '23503',
+                },
+              });
+            }
+            // Second call (retry with null plan refs): success
+            return Promise.resolve({ data: null, error: null });
+          }),
+        }),
+      };
+
+      enqueueSyncItem({
+        id: 'item-fk',
+        table: 'workout_sessions',
+        operation: 'upsert',
+        data: {
+          id: 'session-fk',
+          user_id: 'user-1',
+          plan_id: 'plan-stale',
+          plan_day_id: 'day-stale',
+          started_at: '2026-03-18T10:00:00Z',
+          ended_at: '2026-03-18T11:00:00Z',
+        },
+        created_at: '2026-03-18T10:00:00Z',
+      });
+
+      await flushSyncQueue(fkSupabase as any);
+
+      // Should have been called twice: original + retry
+      expect(callCount).toBe(2);
+
+      // Queue should be empty (retry succeeded)
+      const queue = getPendingQueue();
+      expect(queue).toHaveLength(0);
+    });
+
+    it('keeps item in queue if FK retry also fails', async () => {
+      const fkSupabase = {
+        from: jest.fn().mockReturnValue({
+          upsert: jest.fn().mockResolvedValue({
+            data: null,
+            error: {
+              message: 'violates foreign key constraint',
+              code: '23503',
+            },
+          }),
+        }),
+      };
+
+      enqueueSyncItem({
+        id: 'item-fk2',
+        table: 'workout_sessions',
+        operation: 'upsert',
+        data: {
+          id: 'session-fk2',
+          user_id: 'user-1',
+          plan_id: 'plan-bad',
+          plan_day_id: 'day-bad',
+        },
+        created_at: '2026-03-18T10:00:00Z',
+      });
+
+      await flushSyncQueue(fkSupabase as any);
+
+      // Should remain in queue since both attempts failed
+      const queue = getPendingQueue();
+      expect(queue).toHaveLength(1);
+    });
   });
 
   describe('enqueueCompletedSession', () => {
@@ -205,7 +285,7 @@ describe('Sync Queue', () => {
 
       // First item should be the workout session
       expect(queue[0].table).toBe('workout_sessions');
-      expect(queue[0].operation).toBe('insert');
+      expect(queue[0].operation).toBe('upsert');
 
       // Next items should be session exercises
       const exerciseItems = queue.filter((i) => i.table === 'session_exercises');

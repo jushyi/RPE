@@ -6,7 +6,9 @@ export interface TraineeSession {
   started_at: string;
   ended_at: string | null;
   plan_id: string | null;
+  plan_day_id: string | null;
   workout_plans: { name: string } | null;
+  plan_days: { day_name: string } | null;
   session_exercises: {
     id: string;
     exercise_id: string;
@@ -40,7 +42,7 @@ export function useTraineeHistory(traineeId: string) {
       const offset = offsetRef.current;
 
       const { data, error } = await (supabase.from('workout_sessions') as any)
-        .select('id, started_at, ended_at, plan_id, workout_plans(name), session_exercises(id, exercise_id, exercises(name), set_logs(weight, reps, unit))')
+        .select('id, started_at, ended_at, plan_id, plan_day_id, workout_plans(name), plan_days(day_name), session_exercises(id, exercise_id, exercises(name), set_logs(weight, reps, unit))')
         .eq('user_id', traineeId)
         .not('ended_at', 'is', null)
         .order('started_at', { ascending: false })

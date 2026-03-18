@@ -13,6 +13,7 @@ import { ExercisePicker } from './ExercisePicker';
 
 export interface DaySlotExercise {
   tempId: string;
+  dbId?: string; // original plan_day_exercise ID — preserved across edits
   exercise_id: string;
   exercise: { id: string; name: string; muscle_groups?: string[]; muscle_group?: string; equipment: string };
   target_sets: TargetSet[];
@@ -23,6 +24,7 @@ export interface DaySlotExercise {
 
 export interface DaySlot {
   tempId: string;
+  dbId?: string; // original plan_day ID — preserved across edits
   day_name: string;
   weekday: number | null;
   alarmEnabled: boolean;

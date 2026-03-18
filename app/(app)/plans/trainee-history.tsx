@@ -71,6 +71,12 @@ export default function TraineeHistoryScreen() {
     const duration = formatDuration(item.started_at, item.ended_at);
     const isExpanded = expandedId === item.id;
 
+    // Determine session label: plan name > day name > generic plan label > Freestyle
+    const isPlanSession = !!item.plan_id;
+    const sessionLabel = item.workout_plans?.name
+      ?? item.plan_days?.day_name
+      ?? (isPlanSession ? 'Plan Workout' : 'Freestyle');
+
     return (
       <Pressable style={s.card} onPress={() => toggleExpand(item.id)}>
         {/* Session header */}
@@ -78,7 +84,7 @@ export default function TraineeHistoryScreen() {
           <View style={s.cardInfo}>
             <Text style={s.dateText}>{formatDate(item.started_at)}</Text>
             <Text style={s.titleText} numberOfLines={1}>
-              {item.workout_plans?.name ?? 'Freestyle'}
+              {sessionLabel}
             </Text>
           </View>
           <Ionicons
