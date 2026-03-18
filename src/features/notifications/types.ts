@@ -17,6 +17,7 @@ export interface NotificationData {
   exercise_name?: string;
   plan_id?: string;
   trainee_id?: string;
+  trainee_name?: string;
 }
 
 export interface NotificationRecord {

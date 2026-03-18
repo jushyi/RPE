@@ -33,7 +33,7 @@ export async function notifyCoachWorkoutComplete(
         recipient_ids: coachIds,
         title: hasPR ? 'PR Alert' : 'Workout Complete',
         body: `${traineeName} finished ${workoutTitle}`,
-        data: { type: 'workout_complete', trainee_id: traineeId, session_id: sessionId },
+        data: { type: 'workout_complete', trainee_id: traineeId, trainee_name: traineeName, session_id: sessionId },
       },
     });
   } catch (err) {
@@ -69,7 +69,7 @@ export async function notifyCoachPR(
         recipient_ids: coachIds,
         title: 'New PR',
         body: `${traineeName} hit a PR on ${exerciseName}`,
-        data: { type: 'pr_achieved', trainee_id: traineeId, exercise_id: exerciseId, exercise_name: exerciseName },
+        data: { type: 'pr_achieved', trainee_id: traineeId, trainee_name: traineeName, exercise_id: exerciseId, exercise_name: exerciseName },
       },
     });
   } catch (err) {

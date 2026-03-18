@@ -14,6 +14,25 @@ export interface PRBaseline {
   unit: string;
 }
 
+/** Raw row from Supabase pr_baselines (exercise_id may be null for manually-set PRs) */
+interface PRBaselineRow {
+  exercise_id: string | null;
+  exercise_name: string | null;
+  weight: number;
+  unit: string;
+}
+
+/**
+ * Slug-to-display-name mapping for Big 3 exercises.
+ * Manually-set PRs store exercise_name as a slug (e.g., 'squat'),
+ * while the exercises table uses display names (e.g., 'Squat').
+ */
+const EXERCISE_SLUG_TO_NAME: Record<string, string> = {
+  bench_press: 'Bench Press',
+  squat: 'Squat',
+  deadlift: 'Deadlift',
+};
+
 export interface PRResult {
   isPR: boolean;
   previousBest: number | null;
@@ -61,16 +80,54 @@ export function usePRDetection(userId: string | undefined) {
   const sessionPRCacheRef = useRef<Map<string, number>>(new Map());
   const exercises = useExerciseStore((s) => s.exercises);
 
-  // Load PR baselines from Supabase on mount
+  // Load PR baselines from Supabase on mount.
+  // Resolves exercise_id from exercise_name for manually-set PRs where exercise_id is null.
   const loadBaselines = useCallback(async () => {
     if (!userId) return;
     try {
       const { data } = await (supabase as any)
         .from('pr_baselines')
-        .select('exercise_id, weight, unit')
+        .select('exercise_id, exercise_name, weight, unit')
         .eq('user_id', userId);
       if (data) {
-        setBaselines(data as PRBaseline[]);
+        const rows = data as PRBaselineRow[];
+        const currentExercises = useExerciseStore.getState().exercises;
+        const resolved: PRBaseline[] = [];
+        const seenIds = new Set<string>();
+
+        for (const row of rows) {
+          let eid = row.exercise_id;
+
+          // Resolve exercise_id from exercise_name when missing (manually-set PRs)
+          if (!eid && row.exercise_name) {
+            const displayName =
+              EXERCISE_SLUG_TO_NAME[row.exercise_name] ?? row.exercise_name;
+            const match = currentExercises.find(
+              (e) =>
+                e.name.toLowerCase() === displayName.toLowerCase()
+            );
+            eid = match?.id ?? null;
+          }
+
+          if (eid) {
+            if (seenIds.has(eid)) {
+              // Duplicate exercise_id (manual + workout rows): keep the higher weight
+              const existing = resolved.find((r) => r.exercise_id === eid);
+              if (existing && row.weight > existing.weight) {
+                existing.weight = row.weight;
+              }
+            } else {
+              seenIds.add(eid);
+              resolved.push({
+                exercise_id: eid,
+                weight: row.weight,
+                unit: row.unit,
+              });
+            }
+          }
+        }
+
+        setBaselines(resolved);
       }
     } catch (e) {
       console.warn('PR baseline load failed:', e);
