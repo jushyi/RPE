@@ -130,19 +130,31 @@ export const useSocialStore = create<SocialState & SocialActions>()(
 
           const group = groupData as Group;
 
-          // Auto-add creator as member (Pitfall 3 from RESEARCH.md)
-          const allMemberIds = Array.from(new Set([userId, ...memberIds]));
-          const memberInserts = allMemberIds.map((mid) => ({
-            group_id: group.id,
-            user_id: mid,
-          }));
-
-          const { error: memberError } = await (supabase as any)
+          // Auto-add creator as member first so RLS policies work for
+          // subsequent operations (Pitfall 3 from RESEARCH.md)
+          const { error: creatorMemberError } = await (supabase as any)
             .from('group_members')
-            .insert(memberInserts);
+            .insert({ group_id: group.id, user_id: userId });
 
-          if (memberError) {
-            console.warn('Failed to add members to group:', memberError.message);
+          if (creatorMemberError) {
+            console.warn('Failed to add creator as member:', creatorMemberError.message);
+          }
+
+          // Add remaining members (excluding creator who was just added)
+          const otherMemberIds = memberIds.filter((mid) => mid !== userId);
+          if (otherMemberIds.length > 0) {
+            const memberInserts = otherMemberIds.map((mid) => ({
+              group_id: group.id,
+              user_id: mid,
+            }));
+
+            const { error: memberError } = await (supabase as any)
+              .from('group_members')
+              .insert(memberInserts);
+
+            if (memberError) {
+              console.warn('Failed to add members to group:', memberError.message);
+            }
           }
 
           await get().fetchGroups();

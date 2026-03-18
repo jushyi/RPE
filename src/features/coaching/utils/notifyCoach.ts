@@ -33,7 +33,7 @@ export async function notifyCoachWorkoutComplete(
         recipient_ids: coachIds,
         title: hasPR ? 'PR Alert' : 'Workout Complete',
         body: `${traineeName} finished ${workoutTitle}`,
-        data: { type: 'workout_complete', trainee_id: traineeId, session_id: sessionId },
+        data: { type: 'workout_complete', trainee_id: traineeId, trainee_name: traineeName, session_id: sessionId },
       },
     });
   } catch (err) {
