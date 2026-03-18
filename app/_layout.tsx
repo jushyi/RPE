@@ -40,13 +40,15 @@ export default function RootLayout() {
   const router = useRouter();
   const [showWhatsNew, setShowWhatsNew] = useState(false);
 
-  // Check for OTA updates on mount, download and apply in one launch (production only)
+  // Check for OTA updates on mount (production only)
+  // Downloads update in background; applies automatically on next launch via ON_LOAD config.
+  // Avoiding reloadAsync() here — it crashes Expo Router during layout initialization.
   useEffect(() => {
     if (__DEV__) return;
     Updates.checkForUpdateAsync()
       .then((update) => {
         if (update.isAvailable) {
-          return Updates.fetchUpdateAsync().then(() => Updates.reloadAsync());
+          return Updates.fetchUpdateAsync();
         }
       })
       .catch((err) => console.warn('OTA update check failed:', err));

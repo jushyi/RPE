@@ -7,9 +7,9 @@
 export const WHATS_NEW = {
   title: "What's New",
   items: [
+    'OTA updates now work properly',
     'Fixed coach notification routing to trainee history',
     'Resolved false PR detection flags on tracked exercises',
-    'Weekly summary notifications now open dashboard',
     'Fixed admin exercise save and group creation RLS policies',
   ],
 };
