@@ -6,7 +6,5 @@
  */
 export const WHATS_NEW = {
   title: "What's New",
-  items: [
-    'OTA test #2 — if you see this and data is intact, we are golden',
-  ],
+  items: [],
 };
