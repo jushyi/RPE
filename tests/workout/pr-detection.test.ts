@@ -48,6 +48,17 @@ describe('checkForPR', () => {
     expect(result.previousBest).toBe(225);
   });
 
+  it('returns isPR false when manually-set baseline (resolved by ID) exceeds logged weight', () => {
+    // Simulates the scenario: user set 227.5kg squat as their PR,
+    // then logs 200kg. The resolved baseline should prevent false PR detection.
+    const baselines: PRBaseline[] = [
+      { exercise_id: 'squat-uuid', weight: 227.5, unit: 'kg' },
+    ];
+    const result = checkForPR('squat-uuid', 200, baselines, true);
+    expect(result.isPR).toBe(false);
+    expect(result.previousBest).toBe(227.5);
+  });
+
   it('handles session PR cache - second higher weight still detects PR', () => {
     const baselines: PRBaseline[] = [
       { exercise_id: 'ex-1', weight: 185, unit: 'lbs' },
