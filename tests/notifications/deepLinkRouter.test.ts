@@ -47,9 +47,9 @@ describe('getDeepLinkRoute', () => {
     expect(getDeepLinkRoute(data)).toBe('/(app)/workout');
   });
 
-  it('returns weekly-stats route for weekly_summary', () => {
+  it('returns dashboard route for weekly_summary', () => {
     const data: NotificationData = { type: 'weekly_summary' };
-    expect(getDeepLinkRoute(data)).toBe('/(app)/weekly-stats');
+    expect(getDeepLinkRoute(data)).toBe('/(app)/(tabs)/dashboard');
   });
 
   it('returns null for workout_complete without session_id and without trainee_id', () => {

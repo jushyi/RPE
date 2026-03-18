@@ -28,7 +28,7 @@ export function getDeepLinkRoute(data: NotificationData): string | null {
     case 'nudge':
       return '/(app)/workout';
     case 'weekly_summary':
-      return '/(app)/weekly-stats';
+      return '/(app)/(tabs)/dashboard';
     default:
       return null;
   }

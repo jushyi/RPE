@@ -99,7 +99,7 @@ export function usePRDetection(userId: string | undefined) {
           let eid = row.exercise_id;
 
           // Resolve exercise_id from exercise_name when missing (manually-set PRs)
-          if (!eid && row.exercise_name) {
+          if (!eid && row.exercise_name && currentExercises.length > 0) {
             const displayName =
               EXERCISE_SLUG_TO_NAME[row.exercise_name] ?? row.exercise_name;
             const match = currentExercises.find(
@@ -120,6 +120,18 @@ export function usePRDetection(userId: string | undefined) {
               seenIds.add(eid);
               resolved.push({
                 exercise_id: eid,
+                weight: row.weight,
+                unit: row.unit,
+              });
+            }
+          } else if (row.exercise_name) {
+            // Fallback: keep rows with exercise_name even if exercise_id can't be resolved yet.
+            // Use exercise_name as a synthetic key so PR data isn't silently dropped.
+            const fallbackKey = `name:${row.exercise_name}`;
+            if (!seenIds.has(fallbackKey)) {
+              seenIds.add(fallbackKey);
+              resolved.push({
+                exercise_id: row.exercise_name,
                 weight: row.weight,
                 unit: row.unit,
               });

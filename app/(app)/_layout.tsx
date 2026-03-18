@@ -108,10 +108,6 @@ export default function AppLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="weekly-stats"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
           name="dev-tools"
           options={{ headerShown: false }}
         />
