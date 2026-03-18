@@ -1,26 +1,19 @@
 import '../global.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as Notifications from 'expo-notifications';
-import * as Updates from 'expo-updates';
-import { createMMKV } from 'react-native-mmkv';
 import { colors } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
 import { ConnectivityBanner } from '@/components/layout/ConnectivityBanner';
-import { WhatsNewModal } from '@/components/WhatsNewModal';
-import { WHATS_NEW } from '@/config/whatsNew';
 import { setupAlarmChannel, registerAlarmCategory } from '@/features/alarms/utils/notificationSetup';
 import { SNOOZE_MINUTES } from '@/features/alarms/constants';
 import { getDeepLinkRoute } from '@/features/notifications/utils/deepLinkRouter';
 import type { NotificationData } from '@/features/notifications/types';
-
-const mmkv = createMMKV();
-const WHATS_NEW_KEY = 'whats_new_last_seen_id';
 
 // Configure foreground notification presentation
 Notifications.setNotificationHandler({
@@ -38,50 +31,6 @@ export default function RootLayout() {
   const hasCompletedOnboarding = useAuthStore((s) => s.hasCompletedOnboarding);
   const segments = useSegments();
   const router = useRouter();
-  const [showWhatsNew, setShowWhatsNew] = useState(false);
-
-  // Check for OTA updates on mount (production only)
-  // Downloads update in background; applies automatically on next launch via ON_LOAD config.
-  // Avoiding reloadAsync() here — it crashes Expo Router during layout initialization.
-  useEffect(() => {
-    if (__DEV__) return;
-    Updates.checkForUpdateAsync()
-      .then((update) => {
-        if (update.isAvailable) {
-          return Updates.fetchUpdateAsync();
-        }
-      })
-      .catch((err) => console.warn('OTA update check failed:', err));
-  }, []);
-
-  // Show "What's New" modal after an OTA update is applied
-  useEffect(() => {
-    if (__DEV__ || isLoading) return;
-    const updateId = Updates.updateId;
-    if (!updateId) return;
-
-    const lastSeenId = mmkv.getString(WHATS_NEW_KEY);
-    if (!lastSeenId) {
-      // First install — store current ID, don't show modal
-      mmkv.set(WHATS_NEW_KEY, updateId);
-      return;
-    }
-    if (lastSeenId === updateId) return;
-    if (WHATS_NEW.items.length === 0) {
-      // Silent patch — no modal
-      mmkv.set(WHATS_NEW_KEY, updateId);
-      return;
-    }
-    setShowWhatsNew(true);
-  }, [isLoading]);
-
-  const handleDismissWhatsNew = () => {
-    setShowWhatsNew(false);
-    const updateId = Updates.updateId;
-    if (updateId) {
-      mmkv.set(WHATS_NEW_KEY, updateId);
-    }
-  };
 
   // Set up notification channels, categories, and snooze handler on mount
   useEffect(() => {
@@ -156,12 +105,6 @@ export default function RootLayout() {
         <StatusBar style="light" />
         <ConnectivityBanner />
         <Slot />
-        <WhatsNewModal
-          visible={showWhatsNew}
-          title={WHATS_NEW.title}
-          items={WHATS_NEW.items}
-          onDismiss={handleDismissWhatsNew}
-        />
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
