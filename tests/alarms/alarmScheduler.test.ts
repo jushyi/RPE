@@ -17,7 +17,7 @@ beforeEach(() => {
 describe('scheduleAlarm', () => {
   const config: AlarmConfig = {
     planDayId: 'day-1',
-    weekday: 0, // Monday
+    weekday: 1, // Monday (plan uses 0=Sun, 1=Mon, ...)
     hour: 6,
     minute: 30,
     dayName: 'Push',
