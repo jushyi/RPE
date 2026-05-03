@@ -36,7 +36,7 @@ describe('scheduleAlarm', () => {
           categoryIdentifier: 'alarm',
         }),
         trigger: expect.objectContaining({
-          weekday: 2, // Monday in expo = 2
+          weekday: 1, // Monday in expo (ISO) = 1
           hour: 6,
           minute: 30,
         }),
